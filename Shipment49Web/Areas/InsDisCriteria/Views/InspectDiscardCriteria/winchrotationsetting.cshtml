@@ -1,0 +1,244 @@
+﻿
+
+
+@model Shipment49Web.Areas.InsDisCriteria.Models.WinchRotationClass
+@{
+    ViewBag.Title = "winchrotationsetting";
+    Layout = "~/Views/Shared/_LayoutOthers.cshtml";
+}
+
+
+
+
+
+@*<div class="content">
+    <div class="container-fluid">
+        <div class="row">
+
+            <div class="col-md-12">
+
+
+                <div class="form-group">
+                    <label class="bmd-label-floating">Winch Rotation</label>
+
+                
+
+
+                </div>
+                <label>The values are set by your office for inspection, discard, end to end and winch rotation settings. Where value = '0', it means the field is either not defined or infinite. </label>
+                <div class="card">
+
+
+
+                    <div class="card-body">
+
+                        <div class="form-group">
+
+                        </div>
+                        <div id="tbl" class="table-responsive">
+                            <table class="table">
+                                <thead class=" text-primary">
+                                    <tr>
+                                        <th>Manufacturer Name</th>
+                                        <th>Rope Type</th>
+                                        <th>Maximum Running Hrs.</th>
+                                        <th>Maximum Months Allowed</th>
+                                        
+                                        <th>Lead From</th>
+                                        <th>Lead To</th>
+                                        
+
+                                    </tr>
+                                </thead>
+                                <tbody>
+
+                                    @foreach (var item in Model.WinchRotationList)
+                                    {
+
+
+                                        <tr>
+
+                                            <td> @Html.DisplayFor(modelItem => item.Name)</td>
+                                            <td> @Html.DisplayFor(modelItem => item.RopeType)</td>
+                                            <td> @Html.DisplayFor(modelItem => item.MaximumRunningHours)</td>
+                                            <td> @Html.DisplayFor(modelItem => item.MaximumMonthsAllowed)</td>
+                                         
+                                            <td> @Html.DisplayFor(modelItem => item.LeadFrom)</td>
+                                            <td> @Html.DisplayFor(modelItem => item.LeadFrom)</td>
+                                           
+
+
+
+
+                                        </tr>
+                                    }
+
+                                </tbody>
+                            </table>
+                        </div>
+
+
+                        
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>*@
+
+
+<div class="content">
+
+
+
+    <div class="page-heading page-header-flex">
+        <div>
+            <h1 class="page-title">
+                Winch Rotation Settings
+            </h1>
+            @*<ol class="breadcrumb">
+                <li><a href="">Home</a></li>
+                <li><a href="">Form</a></li>
+                <li><a>Create</a></li>
+            </ol>*@
+        </div>
+
+
+    </div>
+
+    <label>The values are set by your office for inspection, discard, end to end and winch rotation settings. Where value = '0', it means the field is either not defined or infinite. </label>
+
+    <div>
+
+        <div class="wrapper wrapper-content">
+            <div class="container-fluid">
+
+                <div class="form-body">
+                    <div id="tbl" class="table-responsive">
+                        <table class="table">
+                            <thead class=" text-primary">
+                                <tr>
+                                    <th>Manufacturer Name</th>
+                                    <th>Rope Type</th>
+                                    <th>Maximum Running Hrs.</th>
+                                    <th>Maximum Months Allowed</th>
+
+                                    <th>Lead From</th>
+                                    <th>Lead To</th>
+
+
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                                @foreach (var item in Model.WinchRotationList)
+                                {
+
+
+                                    <tr>
+
+                                        <td> @Html.DisplayFor(modelItem => item.Name)</td>
+                                        <td> @Html.DisplayFor(modelItem => item.RopeType)</td>
+                                        <td> @Html.DisplayFor(modelItem => item.MaximumRunningHours)</td>
+                                        <td> @Html.DisplayFor(modelItem => item.MaximumMonthsAllowed)</td>
+
+                                        <td> @Html.DisplayFor(modelItem => item.LeadFrom)</td>
+                                        <td> @Html.DisplayFor(modelItem => item.LeadFrom)</td>
+
+
+
+
+
+                                    </tr>
+                                }
+
+                            </tbody>
+
+
+
+
+
+                        </table>
+
+                    </div>
+
+                    
+                </div>
+                
+                <nav class="text-right">
+
+                    <ul class="pagination">
+                        @{
+
+
+                            int totalRecords = Convert.ToInt32(TempData.Peek("TotalRecords"));
+
+                            int tot_pages = totalRecords / Shipment49Web.Common.CommonMethods.PAGESIZE;
+                            int remainder = totalRecords % Shipment49Web.Common.CommonMethods.PAGESIZE;
+
+                            tot_pages = remainder > 0 ? (tot_pages + 1) : tot_pages;
+
+                            int currPage = Convert.ToInt32(TempData.Peek("CurrentPage"));
+
+                            if (totalRecords > 0)
+                            {
+                                if (currPage == 0)
+                                {
+                                    currPage = 1;
+                                }
+
+                                if (currPage != 1)
+                                {
+                                    <li class="page-item"><a class="page-link" href="@Url.Action("winchrotationsetting", "InspectDiscardCriteria" ,new { page = 1 })">First</a> </li>
+                                }
+
+                                if (currPage != tot_pages)
+                                {
+                                    for (int cnt = currPage; cnt < (currPage + 10); cnt++)
+                                    {
+                                        if (cnt == currPage)
+                                        {
+                                            <li class="page-item active"><a class="page-link" href="#">@cnt</a></li>
+                                        }
+                                        else
+                                        {
+                                            <li class="page-item"><a class="page-link" href="@Url.Action("winchrotationsetting", "InspectDiscardCriteria" ,new { page = cnt })">@cnt.ToString()</a> </li>
+                                        }
+
+                                        if (cnt == tot_pages)
+                                        {
+                                            break;
+                                        }
+                                    }
+                                }
+
+
+                                if (currPage == tot_pages)
+                                {
+                                    <li class="page-item active"><a class="page-link" href="#">@tot_pages</a></li>
+                                }
+                                else
+                                {
+
+                                    <li class="page-item"><a class="page-link" href="@Url.Action("winchrotationsetting", "InspectDiscardCriteria" ,new { page = tot_pages })">Last</a> </li>
+                                }
+                            }
+                        }
+                    </ul>
+
+                </nav>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $("#precrtID").show();
+    $("#precrtID1").show();
+    $("#precrtID2").show();
+    $("#precrtID3").show();
+</script>
+
+
+
+

@@ -1,0 +1,126 @@
+﻿@model Shipment49Web.Areas.CrewReport.Controllers.FilterModel
+
+@{
+    ViewBag.Title = "Rope Discard List";
+    Layout = "~/Views/Shared/_LeftSideBar.cshtml";
+}
+
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+
+<script>
+    $(function () {
+        $('.dtpicker').datepicker({
+            autoclose: true
+        })
+    });
+</script>
+
+<div class="content-wrapper">
+    <section class="content-header">
+        <h1>
+            Rope Discard List
+        </h1>
+    </section>
+
+    <section class="content">
+        <div class="box box-info">
+            <div class="box-body">
+                <div class="row">
+                    @using (Html.BeginForm("RopeDiscard", "data", FormMethod.Post, new { area = "Reports" }))
+                    {
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                @Html.DropDownListFor(m => m.FleetID, new SelectList((List<Reports.tblFleetName>)Model.FleetNames, "Fid", "FleetName"), "Fleet Name", htmlAttributes: new { @class = "form-control" })
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                @Html.DropDownListFor(m => m.FleetTypeID, new SelectList((List<Reports.tblFleetType>)Model.FleetTypes, "Tid", "FleetType"), "Fleet Type", htmlAttributes: new { @class = "form-control" })
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                @Html.DropDownListFor(m => m.VesselID, new SelectList((List<Reports.VesselDetail>)Model.Vessels, "Id", "VesselName"), "Vessel Name", htmlAttributes: new { @class = "form-control" })
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                @Html.DropDownListFor(m => m.TradeID, new SelectList((List<Reports.tblCommon>)Model.TradePlatforms, "Id", "Name"), "Trade", htmlAttributes: new { @class = "form-control" })
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                @Html.DropDownListFor(m => m.VesselID, new SelectList((List<Reports.VesselDetail>)Model.Vessels, "Id", "VesselName"), "Age Range", htmlAttributes: new { @class = "form-control" })
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                @Html.DropDownListFor(m => m.VesselID, new SelectList((List<Reports.VesselDetail>)Model.Vessels, "Id", "VesselName"), "Running Hours", htmlAttributes: new { @class = "form-control" })
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                @Html.TextBox("DateFrom", "", new { @class = "form-control dtpicker", @placeholder = "Date From" })
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                @Html.TextBox("DateTo", "", new { @class = "form-control dtpicker", @placeholder = "Date To" })
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <div style="float:right">
+                                    <button type="submit" class="btn btn-danger">Search</button>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="box box-default">
+                    <div class="box-body">
+                        <div class="table-responsive table-striped">
+                            <table class="table no-margin" id="dataTable" width="100%" cellspacing="0">
+                                <thead>
+                                    <tr>
+                                        <th>Assigned Location</th>
+                                        <th>Assigned Number</th>
+                                        <th>Certificate Number</th>
+                                        <th>Current Running Hours</th>
+                                        <th>Outboard</th>
+                                        <th>Out of Service Date</th>
+                                        <th>Reason Out of Service</th>
+                                        <th>Rope ID</th>
+                                        <th>Rope Type</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @{
+                                        foreach (var record in Model.ListRopeDiscardList)
+                                        {
+                                            <tr>
+                                                <td>@record.AssignedLocation</td>
+                                                <td>@record.AssignedNumber</td>
+                                                <td>@record.certificatenumber</td>
+                                                <td>@record.currentrunninghours</td>
+                                                <td>@record.Outboard</td>
+                                                <td>@record.outofservicedate</td>
+                                                <td>@record.reasonoutofservice</td>
+                                                <td>@record.RopeId</td>
+                                                <td>@record.ropetype</td>
+                                            </tr>
+                                        }
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>

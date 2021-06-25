@@ -1,0 +1,36 @@
+﻿@model Shipment49Web.Common.GraphData
+
+<div class="col-md-6">
+    <canvas id="@string.Format("myChart{0}", Model.chartId)"></canvas>
+    <input type="hidden" id="@string.Format("hdn{0}", Model.chartId)" class="hdn" value="@Model.data" />
+    <hr />
+</div>
+
+<script>
+
+    var data = $("@string.Format("#hdn{0}", Model.chartId)").val();
+       
+    data = JSON.parse(data);
+    console.log(data);
+   
+    var ctx = $("@string.Format("#myChart{0}", Model.chartId)");
+
+    var myChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+            datasets: data
+        },
+        options: {
+                title: {
+                    display: true,
+                    text: 'Bar Chart'
+                },
+                legend: {
+                    position: 'bottom',
+                    align: 'center'
+                }
+            }
+    });
+
+</script>

@@ -1,0 +1,220 @@
+﻿@model Shipment49Web.Areas.MSPS.Models.ApproveIndex
+@*@model MSMPmodule.DocsPages*@
+@using System.Text.RegularExpressions;
+
+@{
+    ViewBag.Title = "Index";
+    //Layout = "~/Views/Shared/_Layout.cshtml";
+    Layout = "~/Views/Shared/_LeftSideBar.cshtml";
+
+}
+
+<h2>Check Content</h2>
+
+<div class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+
+                @*<div class="card">
+                        <div class="card-content viewem_list">
+                            <div class="row">
+                                <div class="col-md-3">
+
+                                    <div class="form-group">
+                                        <input class="form-control" placeholder="Search" id="txtsearch" onkeyup="return searchUser(this.value)" type="text">
+
+                                    </div>
+
+                                </div>
+
+                                <div class="col-md-3">
+                                    <button type="button" onclick="searchData(1)" class="btn btn-info btn-round add_member waves-effect waves-light">Search<div class="ripple-container"></div></button>
+                                    <a type="button" href="@Url.Action("Index","introduction")" class="btn btn-info btn-round add_member waves-effect waves-light">Refresh<div class="ripple-container"></div></a>
+                                </div>
+                                <div class="col-md-3">
+
+                                </div>
+                            </div>
+
+
+
+                        </div>
+                    </div>*@
+
+
+
+                <div class="card">
+
+                    @{int listcount = Model.Pager.CurrentPage == 1 ? 0 : (Model.Pager.PageSize * Model.Pager.CurrentPage) - (Model.Pager.PageSize); }
+                    @*<div class="card-header card-header-text" data-background-color="rose">
+
+                            <h4 class="card-title">Revision Status</h4>
+                        </div>*@
+
+                    <div class="card-content user_listingtbl">
+
+
+                        <div class="table-responsive" id="dvListing">
+
+
+                            @*@if (ViewBag.TotalCount != null)
+                                {
+                                    <span style="font-size:medium; margin-left:1050px">
+                                        <b> Total Member :- @ViewBag.TotalCount</b>
+                                    </span>
+                                }*@
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th class="text-center">Rev.No.</th>
+
+                                        <th>Revise Date</th>
+
+                                        <th>Section</th>
+
+                                        <th>Created By</th>
+                                        <th>Approve Date</th>
+                                        <th>Status</th>
+
+                                        <th>View Details</th>
+
+
+
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @{Int32 count = 0; string correctContent = "";}
+                                    @foreach (var m in Model.contentListing)
+                                    {
+                                        //correctContent = Regex.Replace(@m.Content, "<.*?>", String.Empty);
+
+                                        <tr>
+                                            @*<td>@(count += 1)</td>*@
+
+                                            @*<td>@m.RNumber</td>*@
+                                            <td>
+                                                @string.Format("{0}{1}", m.RPrefix, m.RNumber)
+                                            </td>
+
+                                            @*<td title="@correctContent">@(correctContent == null ? "" : correctContent.Length > 50 ? correctContent.Substring(0, 50) + "..." : correctContent )</td>*@
+
+                                            <td>@m.ReviseDate</td>
+                                            <td><a href="#"> @m.ContentPath</a></td>
+                                            <td>@m.CreateBy</td>
+                                            <td>@m.ApproveDate</td>
+                                            <td>@m.Status</td>
+
+
+
+                                            <td>
+
+
+                                                <a href="@Url.Action("CheckContent",new {id=m.Id })">
+                                                    View Details
+                                                </a>
+                                            </td>
+
+
+                                        </tr>
+
+                                    }
+
+                                </tbody>
+                            </table>
+
+                            @if (Model.contentListing.Count() > 0)
+                            {
+                                if (Model.Pager.EndPage > 1)
+                                {
+                                    <ul class="pagination">
+                                        @if (Model.Pager.CurrentPage > 1)
+                                        {
+                                            <li>
+                                                <a onclick="return searchData(1)">First</a>
+                                            </li>
+                                            <li>
+                                                <a onclick="return searchData(@(Model.Pager.CurrentPage - 1))">Previous</a>
+                                            </li>
+                                        }
+
+                                        @for (var page = Model.Pager.StartPage; page <= Model.Pager.EndPage; page++)
+                                        {
+                                            <li class="@(page == Model.Pager.CurrentPage ? "active" : "")">
+                                                <a onclick="return searchData(@page)">@page</a>
+                                            </li>
+                                        }
+
+                                        @if (Model.Pager.CurrentPage < Model.Pager.TotalPages)
+                                        {
+                                            <li>
+                                                <a onclick="return searchData(@(Model.Pager.CurrentPage + 1))">Next</a>
+                                            </li>
+                                            <li>
+                                                <a onclick="return searchData(@(Model.Pager.TotalPages))">Last</a>
+                                            </li>
+                                        }
+                                    </ul>
+                                }
+                            }
+
+
+                        </div>
+                    </div>
+                </div>
+
+
+
+
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script>
+
+    function searchData(page) {
+
+        debugger;
+        //var searchby1 = $("#ddlSearchBy :selected").text();
+
+        //var searchby = $("#ddlSearchBy :selected").val();
+        //var search = $("#txtsearch").val();
+        //  var date = $("#datepicker").val();
+        $("#dvListing").html("");
+        $("#dvListing").html("<div class='loader_overlay'><div class='idencard_loader'><div class='item0 item-1'></div><div class='item0 item-2'></div><div class='item0 item-3'></div><div class='item0 item-4'></div></div></div>");
+        var ai = {
+            //search: search,
+            //searchby: searchby,
+            page: page
+            //type: $("#drpaccount").val() != "" ? $("#drpaccount").val() : "5"
+
+
+        }
+        debugger;
+        $.ajax({
+            type: "post",
+            url: '/introduction/GetRevision/',
+            data: JSON.stringify(ai),
+            datatype: "json",
+            contentType: 'application/json; charset=utf-8',
+            success: function (data) {
+                debugger;
+                if (data.trim() != "") {
+                    $("#dvListing").fadeIn("fast");
+                    $("#dvListing").html("");
+                    $("#dvListing").html(data);
+                }
+                else {
+                    $("#dvListing").html("");
+                    $("#dvListing").html('<div class="text-danger card-avatar text-center"><img class="imgnorecord" src="../Include/Admin/img/norecord.png"/><br/>no record found</div>');
+                }
+            },
+            error: function (data) {
+                $("#dvListing").html("");
+                $("#dvListing").html(data);
+            }
+        });
+    }
+</script>

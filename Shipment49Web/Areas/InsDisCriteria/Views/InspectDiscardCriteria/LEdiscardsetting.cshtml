@@ -1,0 +1,246 @@
+﻿@model Shipment49Web.Areas.InsDisCriteria.Models.LEdiscardsettingClass
+@{
+    ViewBag.Title = "LEdiscardsetting";
+    Layout = "~/Views/Shared/_LayoutOthers.cshtml";
+}
+
+
+
+
+
+
+<div class="page-heading page-header-flex">
+    <div>
+        <h1 class="page-title">
+            Inspection Discard Criteria
+        </h1>
+        @*<ol class="breadcrumb">
+            <li><a href="">Home</a></li>
+            <li><a href="">Form</a></li>
+            <li><a>Create</a></li>
+        </ol>*@
+    </div>
+    @if (TempData["Error"] != null)
+    {
+        <p class="alert alert-danger" id="errorMessage">@TempData["Error"]</p>
+    }
+    @if (TempData["Success"] != null)
+    {
+        <p class="alert alert-success" id="successMessage">@TempData["Success"]</p>
+    }
+
+</div>
+
+<div class="wrapper wrapper-content">
+    <div class="container">
+        <div class="panel panel-default mb-6">
+
+            <div class="panel-body">
+                <div class="row form-group">
+                    <label class="col-md-2 col-sm-3 col-form-label mt-0 mt-sm-3">
+                        <label class="control-label">Line Type</label>
+                    </label>
+                    <div class="col-md-3 col-sm-5">
+
+                        <select class="form-control select2"  name="linetype" onchange="checkcontent()" id="linetype" required>
+                            <option value="1">Joining Shackle</option>
+                            <option value="3">Messenger Rope</option>
+                            <option value="4">Rope Stopper</option>
+                            <option value="5">Chain Stopper</option>
+                            <option value="6">FireWire</option>
+                            <option value="7">Chafe Guard</option>
+                            <option value="8">Winch Brake Test Kit</option>
+
+                        </select>
+                    </div>
+                </div>
+
+
+            </div>
+
+        </div>
+
+        <label>The values are set by your office for inspection, discard, end to end and winch rotation settings. Where value = '0', it means the field is either not defined or infinite. </label>
+        <div id="tbl" class="table-responsive">
+            <table class="table">
+                <thead class=" text-primary">
+                    <tr>
+                        <th>Equipment Type</th>
+                        <th>Inspection Frequency(in months)</th>
+
+                        <th>Max Duration Allowed(months)</th>
+
+
+
+                    </tr>
+                </thead>
+                <tbody id="sData"></tbody>
+                @*<tbody>
+
+                        @foreach (var item in Model.LEdiscardsettingList)
+                        {
+
+
+                            <tr>
+
+                                <td> @Html.DisplayFor(modelItem => item.looseequipmenttype)</td>
+                                <td> @Html.DisplayFor(modelItem => item.InspectionFrequency)</td>
+
+                                <td> @Html.DisplayFor(modelItem => item.MaximumMonthsAllowed)</td>
+
+
+
+
+
+                            </tr>
+                        }
+
+                    </tbody>*@
+            </table>
+        </div>
+
+
+
+
+    </div>
+</div>
+
+
+
+
+<script>
+    function checkcontent5() {
+
+        debugger;
+        var valC = $("#linetype option:selected").text();
+        if (valC == "Line") {
+            $("#tbl").show();
+            $("#tbl1").hide();
+        }
+        else {
+            $("#tbl").hide();
+            $("#tbl1").show();
+        }
+
+
+    }
+</script>
+
+
+
+<script>
+    window.onload = function () {
+
+        checkcontent();
+    }
+</script>
+
+<script>
+
+    //var valC1 = $("#linetype option:selected").val();
+    
+
+    function checkcontent() {
+
+
+        var valC = $("#linetype option:selected").val();
+        //alert(valC);
+
+
+        $.ajax({
+            type: 'GET',
+            url: '/InspectDiscardCriteria/test?type=' + valC,
+            //url: '/MSMP/_searchData',
+            //data: { 'searchText': 'and' },
+            // dataType: 'json',
+            cache: false,
+            contentType: false,
+            processData: false,
+            success: function (response) {
+                //debugger;
+                //alert(response);
+                if (response.Result == true) {
+
+
+                    $('#sData').empty();
+                    var tr; var sno = 0; var mid = 0;
+                    for (var i = 0; i < response.Data.length; i++) {
+                        tr = $('<tr/>');
+
+
+
+                        tr.append("<td class='col-md-3'>" + response.Data[i].looseequipmenttype + "</td>");
+                        tr.append("<td class='col-md-3'>" + response.Data[i].InspectionFrequency + "</td>");
+                        tr.append("<td class='col-md-3'>" + response.Data[i].MaximumMonthsAllowed + "</td>");
+
+
+                        $('#sData').append(tr);
+                    }
+
+                    //$("#divLoader").hide();
+                    //$('#addModal').modal('show');
+                }
+                else {
+                    // toastr["error"](response.Message);
+                }
+            },
+            failure: function (response) {
+                //toastr["error"](response.Message);
+            }
+        });
+
+
+    }
+</script>
+<script>
+    //$(document).ready(function () {
+    //    $selectElement = $('#linetype').select2({
+    //        placeholder: "Please select an skill",
+    //        allowClear: true
+    //    });
+    //});
+
+
+    $("#linetype").each(function () {
+        $(this).select2({
+            placeholder: $(this).attr('placeholder')
+        });
+    });
+
+    //$("#linetype").attr("data-placeholder", "klk");
+
+</script>
+<script>
+
+    function checkcontent755() {
+
+
+        var valC = $("#linetype option:selected").val();
+        alert(valC);
+        $.ajax({
+            type: 'POST',
+            url: 'InsDisCriteria/InspectDiscardCriteria/test',
+            dataType: 'json',
+            data: { 'type': valC },
+            success: function (pagetitle) {
+                var ss = pagetitle;
+                //debugger;
+                $('#Content').summernote('code', ss);
+
+            },
+            error: function (ex) {
+                $('#Content').summernote('code', "");
+
+            }
+        });
+        return false;
+    }
+
+</script>
+
+<script>
+    $("#precrtID").show();
+    $("#precrtID1").show();
+    $("#precrtID2").show();
+    $("#precrtID3").show();
+</script>

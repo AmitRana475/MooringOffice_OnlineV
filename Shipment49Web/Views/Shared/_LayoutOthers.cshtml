@@ -1,0 +1,437 @@
+﻿
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Digimoor-X7</title>
+    <link href="~/css/bootstrap.min.css" rel="stylesheet">
+    <link href="~/font-awesome/css/font-awesome.css" rel="stylesheet">
+    <link href="~/css/select2.min.css" rel="stylesheet">
+    <link href="~/css/animate.css" rel="stylesheet">
+    <link href="~/css/style.css" rel="stylesheet">
+
+    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"> -->
+    @*<link rel="stylesheet" href="~/css/data-table/dataTables.bootstrap.min.css">
+        <link rel="stylesheet" href="~/css/data-table/buttons.dataTables.min.css">*@
+    <link rel="stylesheet" href="https://unicons.iconscout.com/release/v3.0.6/css/line.css">
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+  
+
+    <link href="~/Datepicker/datepicker.min.css" rel="stylesheet" />
+    <script src="~/assetsV/js/jquery-3.2.1.min.js"></script>
+    <script src="~/Datepicker/datepicker.min.js"></script>
+
+</head>
+<body class="mini-navbar">
+    <input type="hidden" id="ipadd" />
+    <div id="wrapper">
+
+
+        @*<nav id="lmprSide" class="navbar-default navbar-static-side" role="navigation">
+            <div class="sidebar-collapse">
+            <ul class="nav metismenu" id="side-menu">
+
+            <li style="display:none" id="notiId">
+            <a class="top-menu-btn count-info" href="@Url.Action("Index", "ShipNotification" ,new { area= "NotificationInfos"} )">
+
+            <i class="uil uil-envelope-open"></i> <label class="nav-label">Notifications </label>
+            </a>
+            </li>
+            <li style="display:none" id="trainID">
+            <a class="top-menu-btn" href="@Url.Action("Index", "TrainingC" ,new { area= "TrainingContent"} )">
+
+            <i class="uil uil-clipboard-notes"></i> <label class="nav-label">Training Content</label>
+            </a>
+            </li>
+            </ul>
+            </div>
+            </nav>*@
+
+
+        <nav id="lmprSide" class="navbar-default navbar-static-side" role="navigation">
+            <div class="sidebar-collapse">
+                <ul class="nav metismenu">
+
+
+
+                    <li class="nav-header">
+                        <div class="dropdown profile-element">
+                            <span>
+                                <img alt="image" class="img-circle" style="background-color:white" src="~/images/49web.png" />
+                            </span>
+                            <a data-toggle="dropdown" class="dropdown-toggle" href="#">
+                                <span class="clear">
+                                    <span class="block m-t-xs">
+                                        Welcome,<strong class="font-bold">  @HttpContext.Current.User.Identity.Name</strong>
+                                    </span> <span class="text-muted text-xs block"> <b class="caret"></b></span>
+                                </span>
+                            </a>
+                            <ul class="dropdown-menu animated fadeInRight m-t-xs">
+                                <li class="divider"></li>
+                                @*<li><a href="javascript:void(0)">Logout</a></li>*@
+
+                                <li>
+                                    <a href="/Account/SignOut">
+                                        <i class="ti-power-off pdd-right-10"></i>
+                                        <span>Logout</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="logo-element">
+                            <img src="~/images/49web.png" style="background-color:white" alt="img">
+                        </div>
+                    </li>
+
+
+                    <li style="display:none" id="notiId">
+                        <a class="top-menu-btn count-info" href="@Url.Action("Index", "ShipNotification" ,new { area= "NotificationInfos"} )">
+
+                            <i class="uil uil-envelope-open"></i> <label class="nav-label">Notifications </label>
+                        </a>
+                    </li>
+                    <li style="display:none" id="trainID">
+                        <a class="top-menu-btn" href="@Url.Action("Index", "TrainingC" ,new { area= "TrainingContent"} )">
+
+                            <i class="uil uil-clipboard-notes"></i> <label class="nav-label">Training Content</label>
+                        </a>
+                    </li>
+                    @*<li style="display:none" id="precrtID">
+            <a href="javascript:void(0)"><i class="fa fa-flask"></i> <label class="nav-label">Inspect Discard Criteria</label><span class="fa arrow"></span></a>
+            <ul class="nav nav-second-level collapse">
+                <li>
+
+                    <a href="@Url.Action("Index", "InspectDiscardCriteria" ,new { area= "InsDisCriteria"} )">Line Creteria</a>
+                </li>
+                <li>
+
+                    <a href="@Url.Action("taildiscardsetting", "InspectDiscardCriteria" ,new { area= "InsDisCriteria"} )">Rope Tail Creteria</a>
+                </li>
+
+                <li>
+
+                    <a href="@Url.Action("LEdiscardsetting", "InspectDiscardCriteria" ,new { area= "InsDisCriteria"} )">Loose Equipment</a>
+                </li>
+                <li>
+
+                    <a href="@Url.Action("winchrotationsetting", "InspectDiscardCriteria" ,new { area= "InsDisCriteria"} )">Winch Rotation</a>
+                </li>
+            </ul>
+        </li>*@
+
+
+                    <li style="display:none" id="precrtID">
+                        <a href="@Url.Action("Index", "InspectDiscardCriteria" ,new { area= "InsDisCriteria"} )">
+
+                            <i class="uil uil-layer-group"></i> <label class="nav-label">Line Criteria</label>
+                        </a>
+                    </li>
+                    <li style="display:none" id="precrtID1">
+                        <a href="@Url.Action("taildiscardsetting", "InspectDiscardCriteria" ,new { area= "InsDisCriteria"} )">
+
+                            <i class="uil uil-layer-group"></i> <label class="nav-label">Rope Tail Criteria</label>
+                        </a>
+                    </li>
+                    <li style="display:none" id="precrtID2">
+                        <a href="@Url.Action("LEdiscardsetting", "InspectDiscardCriteria" ,new { area= "InsDisCriteria"} )">
+
+                            <i class="uil uil-layer-group"></i> <label class="nav-label">Loose Equipment</label>
+                        </a>
+                    </li>
+                    <li style="display:none" id="precrtID3">
+                        <a href="@Url.Action("winchrotationsetting", "InspectDiscardCriteria" ,new { area= "InsDisCriteria"} )">
+
+                            <i class="uil uil-layer-group"></i> <label class="nav-label">Winch Rotation</label>
+                        </a>
+                    </li>
+
+                      
+                    <!--<li class="active">
+
+        <ul class="nav nav-second-level collapse" id="ulLeftMenu"></ul>
+    </li>-->
+
+
+                </ul>
+
+                <ul class="nav metismenu" id="side-menu">
+                </ul>
+
+
+            </div>
+        </nav>
+
+
+
+        @*<aside class="main-sidebar">
+            <section class="sidebar">
+            <ul class="sidebar-menu" id="ulLeftMenu"></ul>
+            </section>
+            </aside>*@
+
+
+        <div id="page-wrapper">
+            <header class="row border-bottom">
+                <nav class="navbar navbar-static-top" role="navigation" style="margin-bottom: 0">
+                    <div class="navbar-header">
+
+                        <a class="navbar-minimalize minimalize-styl-2" href="javascript:void(0)"><i class="fa fa-bars"></i> </a>
+                        <div class="navbar-form-custom mt-4">
+                            <img src="~/images/Digimoor-color-logo.png" height="35">
+
+                            @{
+
+                                <p>@Session["VesselNames"].ToString()</p>
+                            }
+
+
+                        </div>
+
+                    </div>
+                    @Html.Partial("_VesselTopMenu")
+                </nav>
+            </header>
+
+            @*Body section*@
+
+            @RenderBody()
+        </div>
+    </div>
+
+
+
+<script>
+
+var isMobile = false;
+
+$(document).ready(function ()
+{
+var ss = "@ViewBag.MenuContent1";
+var gg = ss.replace(/&quot;/g, '"');
+var items = JSON.parse(gg);
+    
+isMobile = checkMobile();
+//alert(isMobile);
+    if (isMobile)
+    {
+    $("#side-menu").attr("data-widget", "tree");
+    }
+    var li = '';
+li += createLi(items);
+    $('#side-menu').append(li);
+
+});
+
+        function createLi(child)
+        {
+var lichild = '';
+    for (var j = 0; j < child.length; j++)
+    {
+        var subchild = child[j].children;
+
+
+        if (subchild)
+        {
+            debugger;
+
+            if (isMobile)
+            {
+
+                //var currentURL = window.location.href;
+                //var url = currentURL + "/CheckMid?Mid=4";
+                //var ssd = child[j].href;
+                lichild += '<li class="active"><a id="' + child[j].href + '" href="#" onclick="urlcheck(this.id)" ><i class="fa fa-flask"></i>';
+                if (subchild.length > 0) {
+                    lichild += '<span class="fa arrow"></span>';
+                }
+                lichild += '<label class="nav-label">' + child[j].text + '</label>';
+                lichild += '</a>';
+                lichild += '<ul class="nav nav-second-level collapse in">';
+            }
+            else
+            {
+
+
+                 //var currentURL = window.location.href;
+                //var url = currentURL + "/CheckMid?Mid=4";
+                //var ssd = child[j].href;
+                lichild += '<li ><a id="' + child[j].href + '" href="#" onclick="urlcheck(this.id)" ><i class="fa fa-flask"></i>';
+                if (subchild.length > 0) {
+                    lichild += '<span class="fa arrow"></span>';
+                }
+                lichild += '<label class="nav-label">' + child[j].text + '</label>';
+                lichild += '</a>';
+                lichild += '<ul class="nav nav-second-level collapse">';
+            }
+
+             lichild += createLi(subchild);
+             lichild += '</ul></li>';
+
+        }
+        else
+        {
+
+
+          //var currentURL = window.location.href;
+            //var url = currentURL + "/CheckMid?Mid=4";
+            //var ssd = child[j].href;
+
+            lichild += '<li class="active"><a id="' + child[j].href + '" href="#" onclick="urlcheck(this.id)"><i class="fa fa-flask"></i>' + child[j].text + '</a></li>';
+
+
+        }
+    }
+return lichild;
+}
+
+function checkMobile() {
+var isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+if (isMobile) {
+return true;
+}
+else {
+return false;
+}
+}
+
+
+    </script>
+
+    <script>
+        function urlcheck(clicked_id) {
+
+
+            var url = clicked_id, retObject = {}, parameters;
+
+            if (url.indexOf('?') === -1) {
+                return null;
+            }
+
+            url = url.split('?')[1];
+
+            //  var currentURL = "http://localhost:14652/MooringManual/MSMP";
+
+            var currentURL = window.location.href = window.location.protocol + "//" + window.location.host + "/MooringManual/MSMP";
+            window.location.href = currentURL + "?" + url;
+            //parameters = url.split('&');
+
+            //for (var i = 0; i < parameters.length; i++) {
+            // retObject[parameters[i].split('=')[0]] = parameters[i].split('=')[1];
+            //}
+
+            //alert(clicked_id);
+
+        }
+    </script>
+    <!-- <footer class="footer">
+        <div>
+            <strong>Copyright</strong> &copy; Digimoor. All Rights Reserved 2021.
+        </div>
+    </footer> -->
+    @*<script src="~/js/jquery-2.1.1.js"></script>*@
+    @*<script src="~/assetsV/js/jquery-3.2.1.min.js"></script>*@
+    <script src="~/js/bootstrap.min.js"></script>
+    <script src="~/js/plugins/metisMenu/jquery.metisMenu.js"></script>
+    <script src="~/js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+    <script src="~/js/select2.full.min.js"></script>
+    <script src="~/js/navAdmin.js"></script>
+    <!-- <script src="~/js/plugins/pace/pace.min.html"></script> -->
+    <script src="~/js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+    @*<script>
+            $(function () {
+                $(".select2").select2({
+                    placeholder: "Select an option",
+                    allowClear: false
+                });
+                $(".select-control").select2({
+                    minimumResultsForSearch: -1,
+                    allowClear: false
+                });
+            });
+        </script>*@
+
+
+    <script>
+        $(function () {
+            $(".select2").select2({
+                placeholder: "Select an option",
+                allowClear: false
+            });
+            $(".select-control").select2({
+                minimumResultsForSearch: -1,
+                allowClear: false
+            });
+            //$(".datepicker").datepicker({
+            //    dateFormat: 'yy-mm-dd'
+            //});
+        });
+    </script>
+
+
+    <script>
+        function GetIPAdd() {
+            $.getJSON("https://api.ipify.org?format=json",
+                function (data) {
+                    $("#ipadd").val(data.ip);
+                })
+        }
+    </script>
+    <script type="text/javascript">
+        var interval = 10000;
+        setInterval(function () { GetIPAdd(), Update() }, interval);
+
+        function Update() {
+            //$.get("/[ControllerName]/ActualizarPrecios", function () {
+            // alert("Load was performed.")
+            //}
+            //);
+            //$.ajax({
+            // url: '/Account/AutoLogout',
+            // //data: formData,
+            // processData: false,
+            // contentType: false,
+            // type: 'POST',
+            // success: function (data) {
+            // //alert(data);
+            // window.location.href = "/Account/Login/"
+            // }
+            //});
+            var Ip = $('#ipadd').val();
+            $.ajax({
+                type: 'POST',
+                dataType: 'json',
+                url: '/Account/AutoLogout',
+                data: { 'Ip': Ip },
+                success: function (response) {
+                    if (response.Result == true) {
+
+
+                        var check = response.lgn;
+                        if (check == 1) {
+                            //alert(response.AnotherLog);
+                        }
+                        if (check == 2) {
+                            // alert(response.AnotherLog);
+                            window.location.href = "/Account/Login/"
+                        }
+
+
+
+                    }
+                    else {
+                        //alert('An Error has occured. Please try again.');
+                    }
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+
+                    // alert('An Error has occured. Please try again.');
+                }
+            });
+        }
+    </script>
+
+</body>
+</html>

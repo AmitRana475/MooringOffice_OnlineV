@@ -1,0 +1,72 @@
+﻿@model Shipment49Web.Areas.MSPS.Models.DocumentIndex
+
+<table class="table table-striped">
+	<thead>
+		<tr>
+			<th class="text-center">S.No.</th>
+
+			<th>Revision Title</th>
+			<th>Revision Number</th>
+
+			<th>View Details</th>
+
+
+
+		</tr>
+	</thead>
+	<tbody>
+		@{Int32 count = 0;}
+		@foreach (var m in Model.docListing)
+		{
+
+			<tr>
+				<td>@(count += 1)</td>
+				<td>@m.PageTitle</td>
+				<td>@m.RNumber</td>
+
+
+
+				<td></td>
+
+
+			</tr>
+
+		}
+
+	</tbody>
+</table>
+
+@if (Model.docListing.Count() > 0)
+{
+	if (Model.Pager.EndPage > 1)
+	{
+		<ul class="pagination">
+			@if (Model.Pager.CurrentPage > 1)
+			{
+				<li>
+					<a onclick="return searchData(1)">First</a>
+				</li>
+				<li>
+					<a onclick="return searchData(@(Model.Pager.CurrentPage - 1))">Previous</a>
+				</li>
+			}
+
+			@for (var page = Model.Pager.StartPage; page <= Model.Pager.EndPage; page++)
+			{
+				<li class="@(page == Model.Pager.CurrentPage ? "active" : "")">
+					<a onclick="return searchData(@page)">@page</a>
+				</li>
+			}
+
+			@if (Model.Pager.CurrentPage < Model.Pager.TotalPages)
+			{
+				<li>
+					<a onclick="return searchData(@(Model.Pager.CurrentPage + 1))">Next</a>
+				</li>
+				<li>
+					<a onclick="return searchData(@(Model.Pager.TotalPages))">Last</a>
+				</li>
+			}
+		</ul>
+	}
+}

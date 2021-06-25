@@ -1,0 +1,158 @@
+﻿@model UserLayer.UserClass
+
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+@*<script src="~/ScriptBMS/angular.js"></script>
+    <script src="~/ScriptBMS/lodash.js"></script>
+    <script src="~/ScriptBMS/angularjs-dropdown-multiselect.js"></script>
+    <script src="~/Scripts/MyApp.js"></script>*@
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#vesselnames').multiselect({
+
+            filterPlaceholder: 'Search',
+            enableCaseInsensitiveFiltering: true,
+            maxHeight: 250,
+            //buttonWidth: '150px',
+            numberDisplayed: 2,
+            nonSelectedText: 'Select Vessels'
+
+
+        });
+
+        $('#btnsubmit').click(function () {
+            var selected = $("#vesselnames option:selected");
+            var message = "";
+            selected.each(function () {
+                message += $(this).val() + ",";
+
+            });
+            $('#VesselName').val(message);
+            //alert(message);
+        });
+    });
+</script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+
+        var values2 = '@ViewBag.vesselnamebm1';
+        $('#vesselnames option').filter(function () {
+            return values2.indexOf($(this).text()) > -1; //Options text exists in array
+        }).prop('selected', true);
+
+        $("#vesselnames").multiselect("refresh");
+
+
+    });
+</script>
+
+
+
+<div id="formContainer">
+    <div id="formHeader">
+        <h3>Edit User</h3>
+    </div>
+    <div id="formHeader" class="FlowupLabels">
+
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+
+
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            @Html.HiddenFor(model => model.UserId)
+
+            <div class="fl_wrap focused">
+                @Html.LabelFor(model => model.FullName, new { @class = "fl_label" })
+
+                @Html.TextBoxFor(model => model.FullName, new { @class = "fl_input" })
+                @Html.ValidationMessageFor(model => model.FullName, "", new { @class = "text-danger" })
+
+            </div>
+
+            <div class="fl_wrap focused">
+                @Html.LabelFor(model => model.EmailId, new { @class = "fl_label" })
+
+                @Html.TextBoxFor(model => model.EmailId, new { @class = "fl_input" })
+                @Html.ValidationMessageFor(model => model.EmailId, "", new { @class = "text-danger" })
+                @Html.Hidden("initialProductCode", Model.EmailId)
+
+            </div>
+
+            <div class="fl_wrap focused">
+                @Html.LabelFor(model => model.Password, new { @class = "fl_label" })
+
+                @Html.TextBoxFor(model => model.Password, new { @class = "fl_input", @type = "password" })
+                @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
+
+            </div>
+
+            <div class="fl_wrap focused">
+                @Html.LabelFor(model => model.ConfirmPassowrd, new { @class = "fl_label" })
+
+                @Html.TextBoxFor(model => model.ConfirmPassowrd, new { @class = "fl_input", @type = "password" })
+                @Html.ValidationMessageFor(model => model.ConfirmPassowrd, "", new { @class = "text-danger" })
+
+            </div>
+
+                <div class="fl_wrap focused">
+                    @Html.LabelFor(model => model.ContactNo, new { @class = "fl_label" })
+
+                    @Html.TextBoxFor(model => model.ContactNo, new { @class = "fl_input" })
+                    @Html.ValidationMessageFor(model => model.ContactNo, "", new { @class = "text-danger" })
+
+                </div>
+
+                <div class="fl_wrap focused">
+                    @Html.LabelFor(model => model.Designation, new { @class = "fl_label" })
+
+                    @Html.TextBoxFor(model => model.Designation, new { @class = "fl_input" })
+                    @Html.ValidationMessageFor(model => model.Designation, "", new { @class = "text-danger" })
+
+                </div>
+
+
+
+                @*<div ng-app="CombineModule" class="fl_wrap focused">*@
+                <div class="fl_wrap focused">
+
+                    <label> Select to Assign Vessel</label>
+                    <div>
+
+                        @Html.ListBox("vesselnames", new SelectList(ViewBag.vesselnamebm, "Value", "Text"))
+                        <input id="VesselName" name="VesselName" type="hidden" />
+
+                        @Html.ValidationMessageFor(model => model.VesselName, "", new { @class = "text-danger" })
+                    </div>
+
+
+                    @*<div ng-controller="multiselecteddropdown" data-ng-model="VesselName">
+                            <div ng-dropdown-multiselect="" options="Categories" selected-model="Skillsets" extra-settings="dropdownSetting" width="100%"></div>
+                            <input id="VesselName" name="VesselName" type="hidden" value="{{Skillsets}}" />
+
+                            @Html.ValidationMessageFor(model => model.VesselName, "", new { @class = "text-danger" })
+
+                        </div>*@
+                </div>
+
+                <div class="form-group">
+
+                    <input id="btnsubmit" type="submit" value="Update" class="rf_submit" />
+
+                </div>
+
+        }
+
+    </div>
+
+    <div>
+        @Html.ActionLink("Back to List", "Index")
+    </div>
+</div>

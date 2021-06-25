@@ -1,0 +1,202 @@
+﻿@model IEnumerable<NotificationLayer.NotificationClass>
+
+@{
+    var grid = new WebGrid(canPage: true, rowsPerPage: 10);
+    grid.Bind(source: Model, rowCount: ViewBag.TotalRows, autoSortAndPage: false);
+}
+
+@{
+    if (!string.IsNullOrWhiteSpace(grid.SortColumn))
+    {
+        <script type="text/javascript">
+            $(document).ready(function () {
+
+                $('#gridMapping > thead > tr > th > a[href*="sort=@grid.SortColumn"]').parent().append('@(grid.SortDirection == SortDirection.Ascending ? "▲" : "▼")');
+
+            });
+        </script>
+    }
+}
+
+
+
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        $('#gridMapping > tbody > tr').each(function (index) {
+            var bb = $(this).children('td:nth-child(9)').text();
+            var values1 = bb.split("|");
+            if (values1[1].trim('') == 'Acknowledge') {
+
+                $(this).children('td').css("color", "Red");
+            }
+
+        });
+    });
+</script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        // 1st replace first column header text with checkbox
+
+        $('#gridMapping th').each(function (index) {
+            if ($.trim($(this).text().toString().toLowerCase()) === "{checkall}") {
+                $(this).text('');
+                $("<input/>", { type: "checkbox", id: "cbSelectAll", value: "" }).appendTo($(this));
+                //$(this).append("<span>All</span>");
+            }
+        });
+
+        //2nd click event for header checkbox for select /deselect all
+        $("#cbSelectAll").click(function () {
+            var ischecked = this.checked;
+            //var hdntxt = '';
+            $('#gridMapping').find("input:checkbox").each(function () {
+                this.checked = ischecked;
+
+                //if ($(this).val() != '' && ischecked)
+                //hdntxt += $(this).val() + ",";
+                //alert(hdntxt);
+
+            });
+
+
+
+        });
+
+
+        //3rd click event for checkbox of each row
+
+        $("input[name='ids']").click(function () {
+
+            var totalRows = $("#gridMapping td :checkbox").length;
+            var checked = $("#gridMapping td :checkbox:checked").length;
+
+
+
+
+            if (checked == totalRows) {
+                $("#gridMapping").find("input:checkbox").each(function () {
+
+                    this.checked = true;
+
+                });
+            }
+            else {
+                $("#cbSelectAll").removeAttr("checked");
+
+            }
+        });
+
+    });
+</script>
+
+@*<script type="text/javascript">
+        $(document).ready(
+            function () {
+                $("#btn").click(
+
+
+                    function () {
+                        $("#loading").show();
+                        debugger;
+                        $.get('<%= Url.Action("../workhours/Reports") %>', {},
+                            function (data) {
+                                $('#result').html(data);
+                                $('#loading').hide();
+                            });
+                    }
+                );
+            }
+
+
+        );
+    </script>*@
+
+
+<script type="text/javascript">
+    $(document).ready(
+        function () {
+            $(".loader4").click(
+                function () {
+                    $("#loading").show();
+                    debugger;
+                    $.get('<%= Url.Action("../workhours/Reports") %>', {},
+                        function (data) {
+                            $('#result').html(data);
+                            $('#loading').hide();
+                        });
+                }
+            );
+        }
+
+    );
+</script>
+
+
+<div>
+    @grid.Table(
+
+           htmlAttributes: new
+           {
+               id = "gridMapping"
+           },
+
+           tableStyle: "table table-responsive table-borderd",
+           columns:
+              grid.Columns(
+
+
+                 grid.Column(header: "{checkall}", format: @<text><input class="check-box" id="ids" type="checkbox" value="@item.Nid" name="ids" /></text>),
+
+                 grid.Column(columnName: "NcDate", header: "Date", format: item => item.NcDate.ToString("dd-MMM-yyyy")),
+                  grid.Column(columnName: "VesselName", header: "Vessel Name"),
+                  grid.Column(columnName: "NonConfirmity", header: "Deviation"),
+                  grid.Column(columnName: "FullName", header: "Name"),
+                  grid.Column(columnName: "Rank", header: "Rank"),
+                  grid.Column(columnName: "MasterAkn", header: "Master Ack"),
+                  grid.Column(columnName: "HODAkn", header: "HOD Ack"),
+                  grid.Column("", style: "button action_text", header: "Action",
+                        format:
+                        @<text >
+
+                        @Ajax.ActionLink("Comment (" + ((object)item.Comment1.Count) + ")", "comment", new { area = "notification", id = item.Nid }, null) |
+
+
+                        @if (item.Acknowledge == null || item.Acknowledge == string.Empty)
+                        {
+                            @Ajax.ActionLink("Acknowledge", "acknowledge", new { area = "notification", Page, datefrom = @ViewBag.datefrom, dateto = @ViewBag.dateto, search = @ViewBag.vname, fleetname = @ViewBag.fleetname, fleettype = @ViewBag.fleettype, id = item.Nid }, null)
+                        }
+                        else
+                        {
+                            <label style="color:green">@item.Acknowledge</label>
+                        }
+
+                        </text>),
+
+                   grid.Column("", style: "button action_text", header: "Detail",
+                          format:
+                        @<text >
+
+                        @Html.ActionLink("Work-Hours Report", "index", "workhours", new { area = "reports", search = item.VesselName, username = item.FullName, FullDate = item.NcDate }, new { @class = "loader4" })
+
+
+                        </text>)
+
+               ))
+
+
+    <div class="row">
+        <div class="col-xs-12 text-right">
+            @grid.PagerList(mode: WebGridPagerModes.All, paginationStyle: "pagination pagination-small pagination-small")
+        </div>
+    </div>
+    @*@Html.Hidden("dir", grid.SortDirection)
+        @Html.Hidden("col", grid.SortColumn)*@
+
+   
+
+</div>
+

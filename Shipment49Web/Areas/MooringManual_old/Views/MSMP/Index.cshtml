@@ -1,0 +1,310 @@
+﻿@model Shipment49Web.Areas.MSPS.Models.DetailsViewModel
+@{
+    /**/
+
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_LayoutOthers.cshtml";
+}
+
+<div class="content-wrapper">
+    <section class="content-header">
+        <h1>
+            @*@Model.BreadCrumb*@
+        </h1>
+    </section>
+
+    <section class="content">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="nav-tabs-custom">
+                    <ul class="nav nav-tabs">
+                        <li class="active"><a href="#generaldata" class="tablinks" data-toggle="tab" onclick="openCity(event, 'generaldata')">General Data</a></li>
+                        <li><a href="#shipspecificdata" class="tablinks" data-toggle="tab" onclick="openCity(event, 'shipspecificdata')">Ship Specific Data</a></li>
+                        <li><a href="#shipspecificattachments" class="tablinks" data-toggle="tab" onclick="openCity(event, 'shipspecificattachments')">Ship Specific Attachment</a></li>
+                        <li><a href="#revisiondetails" class="tablinks" data-toggle="tab" onclick="openCity(event, 'revisiondetails')">Revision</a></li>
+                    </ul>
+                    <div></div>
+                    <div class="tab-content" style="min-height: 650px">
+                        <div class="tab-pane active" id="generaldata">
+                            <div class="form-group">
+                                <div class="col-md-10">
+                                    <div class="input-group">
+                                        @Html.TextAreaFor(m => m.Content, new { rows = "20", style = "resize:none;width:770px;", @class = "form-control input-lg textarea-editor" })
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane" id="shipspecificdata">
+                            <section id="loginForm">
+                                <div class="form-horizontal">
+                                    <div class="form-group">
+                                        <div class="col-md-12">
+                                            @*@Html.DropDownListFor(p => p.ShipId, new SelectList(ViewBag.ShipList, "Value", "Text"), "--Select Vessel--", new { @class = "form-control", style = "width:400px;" })*@
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="col-md-10">
+                                            <div class="pull-left">
+                                                @Html.TextAreaFor(m => m.Content1, new { rows = "20", style = "resize:none;width:770px;", @class = "form-control input-lg textarea-editor" })
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                </div>
+                            </section>
+                        </div>
+                        <div class="tab-pane" id="shipspecificattachments">
+                            <div id="indextab">
+                                <div class="form-horizontal">
+                                    <div id="addattachment" class="row">
+                                        <div class="col-sm-12 col-xs-12">
+            <a class="btn btn-success btn-block">Add Attachment</a>
+        </div>
+                                        @*<button name="Submit" type="submit" class="btn btn-success btn-width"><i class="uil mr-2"></i>Submit</button>*@
+                                    </div>
+                                    <div class="content">
+                                        <div class="container-fluid">
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <div class="card">
+                                                        <div class="card-content user_listingtbl">
+                                                            <div class="table-responsive" id="dvListing">
+                                                                <table class="table table-striped">
+                                                                    <thead>
+                                                                        <tr>
+                                                                            <th class="col-md-10">Attachment Name</th>
+                                                                            <th class="col-md-2">Download</th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody id="attachmentBody"></tbody>
+
+                                                                </table>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div style="display:none" id="dvAddatt">
+                                @Html.Partial("_addattchment")
+                            </div>
+                        </div>
+                        <div class="tab-pane" id="revisiondetails">
+                            <div id="indextab2">
+                                <div class="content">
+                                    <div class="container-fluid">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="card">
+                                                    <div class="card-content user_listingtbl">
+                                                        <div class="table-responsive" id="dvListing6">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+<script>
+    function openCity(evt, cityName) {
+        debugger;
+        var i, tabcontent, tablinks;
+        tabcontent = document.getElementsByClassName("tab-pane");
+
+        for (i = 0; i < tabcontent.length; i++) {
+            tabcontent[i].style.display = "none";
+        }
+
+        tablinks = document.getElementsByClassName("tablinks");
+        for (i = 0; i < tablinks.length; i++) {
+            tablinks[i].className = tablinks[i].className.replace(" active", "");
+        }
+
+        document.getElementById(cityName).style.display = "block";
+        evt.currentTarget.className += " active";
+
+        if (cityName == "revision") {
+            searchindex('1');
+        }
+        if (cityName == "revisiondetails") {
+            searchindex1('1');
+        }
+        if (cityName == "generaldata") {
+            getGeneralData();
+        }
+        if (cityName == "shipspecificattachments") {
+            getattachments();
+        }
+        if (cityName == "shipspecificdata") {
+            getcontent();
+        }
+
+
+
+    }
+</script>
+
+<script>
+
+    function searchindex1(page) {
+        $("#dvListing6").html("");
+        var mid = 16;
+        var ai = {
+            page: page,
+        }
+        $.ajax({
+            type: "post",
+            url: 'MSMP/_revisiondetails?mid=' + mid + "&page=" + page,
+            data: JSON.stringify(ai),
+            datatype: "json",
+            success: function (data) {
+                if (data.trim() != "") {
+                    $("#dvListing6").fadeIn("fast");
+                    $("#dvListing6").html("");
+                    $("#dvListing6").html(data);
+                }
+                else {
+                    $("#dvListing6").html("");
+                    $("#dvListing6").html('<div class="text-danger card-avatar text-center"><img class="imgnorecord" src="../Include/Admin/img/norecord.png"/><br/>no record found</div>');
+                }
+            },
+            error: function (data) {
+                $("#dvListing6").html("");
+                $("#dvListing6").html(data);
+            }
+        });
+    }
+</script>
+
+<script>
+    function getattachments() {
+
+
+        $.ajax({
+            type: 'GET',
+            url: '/MSMP/Viewattachments',
+            cache: false,
+            contentType: false,
+            processData: false,
+            success: function (response) {
+                if (response.Result == true) {
+                    $('#attachmentBody').empty();
+                    var tr;
+                    for (var i = 0; i < response.Data.length; i++) {
+                        tr = $('<tr/>');
+                        debugger;
+                        tr.append("<td class='col-md-6'>" + response.Data[i].AttachmentName + "</td>");
+                        //tr.append("<td class='col-md-2'>" + response.Data[i].Attachment + "</td>");
+                        tr.append("<td class='col-md-4'> <a  href='/images/AttachFiles/filepath/" + response.Data[i].ShipId + "/" + response.Data[i].Attachment + "'>Download Attachment</a></td>");
+                        $('#attachmentBody').append(tr);
+                    }
+                    // $('#addModal').modal('show');
+                }
+                else {
+                    // toastr["error"](response.Message);
+                }
+            },
+            failure: function (response) {
+                //toastr["error"](response.Message);
+            }
+        });
+
+
+    }
+</script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.2/summernote.js"></script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('.textarea-editor').summernote(
+            {
+                height: 550,
+                width: 900,
+                minHeight: null,
+                maxHeight: null,
+                focus: true,
+                toolbar: [],
+            });
+    });
+</script>
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.2/summernote.css" rel="stylesheet">
+
+<script>
+
+    function getcontent() {
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("GetSpecificContent")',
+            dataType: 'json',
+            //data: { id: id, textval: seltext },
+            success: function (pagetitle) {
+                var ss = pagetitle;
+                debugger;
+                $('#Content1').summernote('code', ss);
+
+            },
+            error: function (ex) {
+                $('#Content1').summernote('code', "");
+
+            }
+        });
+        return false;
+    }
+
+</script>
+
+
+<script>
+
+    function getGeneralData() {
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("GetGdata")',
+            dataType: 'json',
+            //data: { id: id, textval: seltext },
+            success: function (pagetitle) {
+                var ss = pagetitle;
+                debugger;
+                $('#Content').summernote('code', ss);
+
+            },
+            error: function (ex) {
+                $('#Content').summernote('code', "");
+
+            }
+        });
+        return false;
+    }
+
+</script>
+
+<script>
+    $('#addattachment').click(function (e) {
+        $('#indextab').hide();
+        $('#dvAddatt').show();
+    });
+</script>
+
+<script>
+    window.onload = function () {
+        getGeneralData();
+    };
+</script>
+<script>
+    $("#moorId").show();
+</script>

@@ -1,0 +1,92 @@
+﻿@model Shipment49Web.Areas.MSPS.Models.DetailsViewModel
+<div class="page_title margin-3-bot">
+	<h2>ADD REVISION</h2>
+</div>
+
+
+
+<div id="formHeader" class="FlowupLabels">
+
+	@using (Ajax.BeginForm("_createrevision", "DetailsView", new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "contactUsPartial" }))
+	{
+		@Html.AntiForgeryToken()
+
+		@*@Html.HiddenFor(x => x.Mid)*@
+	<div class="fl_wrap focused">
+			@Html.LabelFor(model => model.masterrivisionmodel.MasterRevisionNo, new { @class = "fl_label" })
+			@Html.TextBoxFor(model => model.masterrivisionmodel.MasterRevisionNo, new { @class = "fl_input" })
+			@Html.ValidationMessageFor(model => model.masterrivisionmodel.MasterRevisionNo, "", new { @class = "text-danger" })
+		</div>
+
+		<div class="fl_wrap focused">
+			@*@Html.LabelFor(model => model.masterrivisionmodel.RevisionsIncluded, new { @class = "fl_label" })*@
+
+			<label class="col-md-4 control-label">Add Revision Group : </label>
+			<br />
+			@if (Model.RevList != null)
+			{
+				for (int i = 0; i < Model.RevList.Count; i++)
+				{
+
+					<div class="checkbox">
+						<label>
+
+							@Html.CheckBoxFor(m => Model.RevList[i].Selected)
+							@Model.RevList[i].Text
+							@Html.HiddenFor(m => Model.RevList[i].Value)
+							@Html.HiddenFor(m => Model.RevList[i].Text)
+						</label>
+					</div>
+
+
+
+				}
+			}
+			@Html.ValidationMessageFor(model => model.masterrivisionmodel.MasterRevisionNo, "", new { @class = "text-danger" })
+		</div>
+
+		<div style="margin-top:150px" class="small-gutter row">
+			<div class="col-sm-3 col-xs-6 form-group">
+				<input type="submit" id="btnSave5g" name="btnSave5" value="Save" class="btn peach-btn btn-block btn-block" />
+			</div>
+            <div class="col-sm-4 col-xs-6 back_text margin-1-top">
+                <i class="fa fa-chevron-left"></i>&nbsp;
+
+                <a href="@Request.Url">Back</a>
+                @*@Html.ActionLink("Back to List", "Index")*@
+            </div>
+		</div>
+
+	}
+</div>
+
+
+
+<script>
+	//$(document).ready(function () {
+		//function will be called on button click having id btnsave
+		$("#btnSave5").click(function () {
+
+			debugger;
+			var STRMS = [];
+			$('input:checked').each(function () {
+				STRMS.push($(this).attr("value"));
+			});
+
+			$.ajax(
+				{
+					type: "POST", //HTTP POST Method
+					url: "Detailsview/_createrevision", // Controller/View
+					data: JSON.stringify({ STRMSelected: STRMS }),
+					//data: { //Passing data
+					//	Name: 'dfgfg', //Reading text box values using Jquery
+					//	City: 'fgfg',
+					//	Address: 'ffgfg'
+					//}
+
+				});
+
+		});
+	//});
+
+</script>

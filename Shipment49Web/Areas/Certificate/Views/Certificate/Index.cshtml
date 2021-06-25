@@ -1,0 +1,250 @@
+﻿@model IEnumerable<CertificationLayer.CertificateList>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    var grid = new WebGrid(canPage: true, rowsPerPage: 10);
+    grid.Bind(source: Model, rowCount: ViewBag.TotalRows, autoSortAndPage: false);
+}
+
+@*<link href="~/Content/themes/jquery-ui.css" rel="stylesheet" />
+<script src="~/Scripts/jquery-1.12.4.js"></script>
+
+
+<script src="~/ScriptBMS/angular.js"></script>
+<script src="~/ScriptBMS/lodash.js"></script>
+<script src="~/ScriptBMS/angularjs-dropdown-multiselect.js"></script>
+<script src="~/Scripts/MyApp.js"></script>*@
+
+@*<script type="text/javascript">
+    $(function () {
+        $("#search").autocomplete({
+            source: '@Url.Action("AutoCompletecel", "certificate", "certificate")',
+            minLength: 1
+        });
+    });
+
+</script>*@
+
+@{
+    if (!string.IsNullOrWhiteSpace(grid.SortColumn))
+    {
+        <script type="text/javascript">
+            $(document).ready(function () {
+
+                $('thead > tr > th > a[href*="sort=@grid.SortColumn"]').parent().append('@(grid.SortDirection == SortDirection.Ascending ? "▲" : "▼")');
+
+            });
+        </script>
+    }
+}
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        $("#datefrom").datepicker();
+    });
+</script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        $("#dateto").datepicker();
+    });
+</script>
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#vesselnames').multiselect( {
+
+            filterPlaceholder: 'Search',
+            enableCaseInsensitiveFiltering: true,
+            maxHeight: 250,
+            //buttonWidth: '150px',
+            numberDisplayed: 2,
+            nonSelectedText: 'Select Vessels'
+
+
+        });
+
+        $('#btnSelected').click(function () {
+            var selected = $("#vesselnames option:selected");
+            var message = "";
+            selected.each(function () {
+                message += $(this).val() + ",";
+
+            });
+            $('#search').val(message);
+            //alert(message);
+        });
+    });
+</script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#fleettypes').multiselect({
+
+            filterPlaceholder: 'Search',
+            enableCaseInsensitiveFiltering: true,
+            maxHeight: 250,
+            numberDisplayed: 2,
+            nonSelectedText: 'Select FleetType'
+
+        });
+        $('#btnSelected').click(function () {
+            var selected = $("#fleettypes option:selected");
+            var message = "";
+            selected.each(function () {
+                message += $(this).val() + ",";
+            });
+            $('#fleettype').val(message);
+            //alert(message);
+        });
+    });
+</script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#fleetnames').multiselect({
+            filterPlaceholder: 'Search',
+            enableCaseInsensitiveFiltering: true,
+            maxHeight: 250,
+            numberDisplayed: 2,
+            nonSelectedText: 'Select FleetName'
+
+        });
+        $('#btnSelected').click(function () {
+            var selected = $("#fleetnames option:selected");
+            var message = "";
+            selected.each(function () {
+                message += $(this).val() + ",";
+            });
+            $('#fleetname').val(message);
+            //alert(message);
+        });
+    });
+</script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        var values2 = '@ViewBag.fleettypebm1';
+        $('#fleettypes option').filter(function () {
+            return values2.indexOf($(this).text()) > -1; //Options text exists in array
+        }).prop('selected', true);
+
+        $("#fleettypes").multiselect("refresh");
+
+        //........................
+
+        var values2 = '@ViewBag.fleetnamebm1';
+        $('#fleetnames option').filter(function () {
+            return values2.indexOf($(this).text()) > -1; //Options text exists in array
+        }).prop('selected', true);
+
+        $("#fleetnames").multiselect("refresh");
+
+        //................
+
+        var values2 = '@ViewBag.vesselnamebm1';
+        $('#vesselnames option').filter(function () {
+            return values2.indexOf($(this).text()) > -1; //Options text exists in array
+        }).prop('selected', true);
+
+        $("#vesselnames").multiselect("refresh");
+
+
+    });
+</script>
+
+
+
+<div  class="container">
+    <h2> Certificate List</h2>
+
+    <nav class="navbar navbar-default">
+
+        <div class="container-fluid-right">
+
+            <div>
+                @using (Html.BeginForm("index", "Certificate", FormMethod.Get, new { controller = "Certificate", area = "Certificate", @class = "navbar-form navbar-left" }))
+                {
+
+                    <div class="form-group">
+
+                        @Html.ListBox("fleettypes", new SelectList(ViewBag.fleettypebm, "Value", "Text"))
+                        <input id="fleettype" name="fleettype" type="hidden" />
+
+                        @Html.ListBox("fleetnames", new SelectList(ViewBag.fleetnamebm, "Value", "Text"))
+                        <input id="fleetname" name="fleetname" type="hidden" />
+
+                        @Html.ListBox("vesselnames", new SelectList(ViewBag.vesselnamebm, "Value", "Text"))
+                        <input id="search" name="search" type="hidden" />
+
+                        @*<div ng-controller="multiselecteddropdown5" data-ng-model="fleettype">
+                            <div ng-dropdown-multiselect="" options="CategoriesT" selected-model="SkillsetsFleetType" extra-settings="dropdownSetting" width="100%"></div>
+                            <input id="fleettype" name="fleettype" type="hidden" value="{{SkillsetsFleetType}}" />
+                        </div>
+
+                        <div ng-controller="multiselecteddropdown4" data-ng-model="fleetname">
+                            <div ng-dropdown-multiselect="" options="CategoriesF" selected-model="SkillsetsFleetName" extra-settings="dropdownSetting" width="100%"></div>
+                            <input id="fleetname" name="fleetname" type="hidden" value="{{SkillsetsFleetName}}" />
+                        </div>
+
+                        <div ng-controller="multiselecteddropdown6" data-ng-model="search">
+                            <div ng-dropdown-multiselect="" options="Categories" selected-model="Skillsets" extra-settings="dropdownSetting" width="100%"></div>
+                            <input id="search" name="search" type="hidden" value="{{Skillsets}}" />
+                        </div>*@
+
+                        @*<input type="text" name="search" id="search"  value="@ViewBag.vname" class="form-control" placeholder="vessel Name" />&ensp;*@
+                        <input type="text" name="datefrom" id="datefrom" value="@ViewBag.datefrom" class="form-control" placeholder="Select Date From" />&ensp;
+                        <input type="text" name="dateto" id="dateto" value="@ViewBag.dateto" class="form-control" placeholder="Select Date To" />
+
+                    </div>
+                    <button id="btnSelected" type="submit" value="Search" name="Searchbtn" class="btn btn-success">Search</button>
+
+                }
+            </div>
+            @*<div class="navbar-form navbar-right">
+
+                NCs : <label style="color:green">@ViewBag.Ack</label> / <label style="color:red">@ViewBag.UnAck</label>
+
+            </div>*@
+        </div>
+    </nav>
+
+    <div>
+
+        @grid.Table(
+           tableStyle: "table table-responsive table-borderd",
+           columns:
+              grid.Columns(
+
+            grid.Column(columnName: "ImportDate", header: "Import Date", format: item => item.ImportDate.ToString("dd-MMM-yyyy")),
+                  grid.Column(columnName: "VesselName", header: "Vessel Name"),
+                  grid.Column(columnName: "CName", header: "Certificate Name"),
+                  grid.Column(columnName: "DOI", header: "Issue Date", format: item => item.DOI.ToString("dd-MMM-yyyy")),
+                  grid.Column(columnName: "DOS", header: "Expiry Date", format: item => item.DOS.ToString("dd-MMM-yyyy")),
+                  grid.Column(columnName: "DOE", header: "Survey Due", format: item => item.DOE.ToString("dd-MMM-yyyy")),
+                  grid.Column(columnName: "Remarks", header: "Remarks")
+                   
+
+               ))
+
+        <div class="row">
+            <div class="col-sm-6">
+                @grid.PagerList(mode: WebGridPagerModes.All, paginationStyle: "pagination pagination-small pagination-small")
+            </div>
+        </div>
+        @Html.Hidden("dir", grid.SortDirection)
+        @Html.Hidden("col", grid.SortColumn)
+
+    </div>
+    <div id="message-listbm">
+        <font>@ViewBag.Messagegrid</font>
+    </div>
+
+</div>
+

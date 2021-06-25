@@ -1,0 +1,69 @@
+﻿@model Shipment49Web.Areas.MSPS.Models.DetailsViewModel
+
+<div class="table-responsive" id="dvListing5">
+	<table class="table table-striped">
+		<thead>
+			<tr>
+				<th>Master Revision-No.</th>
+				<th>Revisions Included</th>
+				<th>Action</th>
+			</tr>
+		</thead>
+		<tbody>
+			@{Int32 count = 0; }
+			@foreach (var m in Model.masterrivision)
+			{
+
+
+			<tr>
+
+				<td>@m.MasterRevisionNo</td>
+				<td>@m.RevisionsIncluded</td>
+				<td onclick="detailRev('@m.RevisionsIncluded')"> <a href="#"> Details</a></td>
+			</tr>
+			}
+			</tbody>
+
+	</table>
+</div>
+
+<div style="display:none" class="table-responsive" id="dvListing6">
+	<table class="table table-striped">
+		
+
+	</table>
+</div>
+
+<script>
+	function detailRev(revincl) {
+		//alert(revincl);
+		$("#dvListing6").html("");
+		
+		var ai = {
+			revincl: revincl,
+		
+		}
+		$.ajax({
+			type: "post",
+			url: 'DetailsView/_masterrevisiondetails/',
+			data: JSON.stringify(ai),
+			datatype: "json",
+			contentType: 'application/json; charset=utf-8',
+			success: function (data) {
+				if (data.trim() != "") {
+					$("#dvListing6").fadeIn("fast");
+					$("#dvListing6").html("");
+					$("#dvListing6").html(data);
+				}
+				else {
+					$("#dvListing6").html("");
+					$("#dvListing6").html('<div class="text-danger card-avatar text-center"><img class="imgnorecord" src="../Include/Admin/img/norecord.png"/><br/>no record found</div>');
+				}
+			},
+			error: function (data) {
+				$("#dvListing6").html("");
+				$("#dvListing6").html(data);
+			}
+		});
+	}
+</script>

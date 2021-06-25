@@ -1,0 +1,149 @@
+﻿@model Shipment49Web.Areas.MooringLine.Models.RopeEndtoEnd
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_LayoutVessel7.cshtml";
+}
+
+
+<div class="content" id="page-wrapper" style="margin-left:-15px;">
+
+    <div class="page-heading page-header-flex">
+        <div>
+            <h1 class="page-title">
+                Line End to End
+            </h1>
+            @*<ol class="breadcrumb">
+                <li><a href="">Home</a></li>
+                <li><a href="">Form</a></li>
+                <li><a>Create</a></li>
+            </ol>*@
+        </div>
+        <div>
+
+
+            <a class="btn btn-info" href="@Url.Action("addlineendtoend", "LineEndtoEnd")">
+                <i class="fa fa-plus-circle mr-2"></i>Add Line End to End
+            </a>
+            <a name="back" id="btnBack" onclick="goBack()" class="btn btn-primary btn-width"> << Go Back</a>
+        </div>
+    </div>
+    <div class="wrapper wrapper-content">
+        <div class="container">
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th style="display:none">Id</th>
+                            <th>Unique Ident. No.</th>
+                            <th>Certificate No.</th>
+                            <th>Assigned Winch</th>
+                            <th>Assigned Location</th>
+                            <th>End to end done date</th>
+                            <th>Outboard End in use</th>
+                            @*<th width="100px">View</th>*@
+                            <th width="100px">Delete</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.RopeEndtoEndList)
+                        {
+
+
+                        <tr>
+                            <td style="display:none"> @Html.DisplayFor(modelItem => item.Id)</td>
+                            <td> @Html.DisplayFor(modelItem => item.UniqueId)</td>
+                            <td> @Html.DisplayFor(modelItem => item.CertificateNumber)</td>
+
+                            @if (item.AssignedNumber != null)
+                            {
+                                <td> @Html.DisplayFor(modelItem => item.AssignedNumber)</td>
+                            }
+                            else
+                            {
+                                <td>Not Assigned</td>
+                            }
+                            @if (item.AssignedLocation != null)
+                            {
+
+                                <td> @Html.DisplayFor(modelItem => item.AssignedLocation)</td>
+                            }
+                            else
+                            {
+                                <td>Not Assigned</td>
+                            }
+
+                            <td>
+                                @Html.DisplayFor(modelItem => item.EndtoEndDoneDate)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.CurrentOutboadEndinUse1)
+                            </td>
+
+                            @*<td width="100px">
+            <a href="#" class="btn btn-sm btn-light btn-view" data-toggle="modal" data-target="#viewModal">
+                <i class="uil uil-eye mr-2"></i>View
+            </a>
+        </td>*@
+                            <td width="100px">
+                                <button type="button" class="btn btn-sm btn-light btn-delete">
+                                    @Html.ActionLink("Delete", "Delete", "LineEndtoEnd", new { id = item.Id }, new { onclick = "return confirm('Are sure wants to delete?');" })
+                                    <i class="uil uil-trash-alt mr-2"></i>
+                                </button>
+                            </td>
+
+
+                        </tr>
+                        }
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+</div>
+<script>
+    function goBack() {
+        window.history.back();
+    }
+</script>
+<script>
+    function BtnUpdateStatus(Id) {
+
+        $.ajax({
+            type: 'POST',
+            dataType: 'json',
+            url: '/AssignLine/Shifttoinactive',
+            data: { 'Id': Id },
+            success: function (response) {
+                if (response.Result == true) {
+                    alert('Status Updated successfully.');
+                    //toastr["success"]('Status Updated successfully.');
+                    window.location.reload();
+
+                }
+                else {
+                    alert('An Error has occured. Please try again.');
+                    // toastr["error"]('An Error has occured. Please try again.');
+                }
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                //toastr["error"]('An Error has occured. Please try again.');
+                alert('An Error has occured. Please try again.');
+            }
+        });
+
+    };
+    //}
+</script>
+
+<script type="text/javascript">
+
+    setTimeout(function () {
+
+        $('#successMessage').fadeOut('fast');
+        $('#errorMessage').fadeOut('fast');
+    }, 3000);
+
+
+</script>

@@ -1,0 +1,200 @@
+﻿@model UserLayer.UserClass
+
+@using Microsoft.AspNet.Identity
+@if (Request.IsAuthenticated)
+{
+
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+}
+@*<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+        <link rel="stylesheet" href="/resources/demos/style.css">
+        <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+        <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/lodash.js/2.4.1/lodash.js"></script>*@
+
+@*<script src="~/ScriptBMS/angular.js"></script>
+    <script src="~/ScriptBMS/lodash.js"></script>
+    <script src="~/ScriptBMS/angularjs-dropdown-multiselect.js"></script>
+    <script src="~/Scripts/MyApp.js"></script>*@
+
+@*<script src="~/Scripts/jquery-1.12.4.js"></script>*@
+
+@*<script type="text/javascript">
+        $(document).ready(function () {
+            $("#VesselName").autocomplete({
+                source: function (request, response) {
+                    $.ajax({
+                        url: "/user/AutoCompletebm",
+                        area: 'setting',
+                        type: "POST", dataType: "json",
+                        data: { prefix: request.term },
+                        success: function (data) {
+                            response($.map(data, function (item) {
+                                //alert(item.vesselname);
+                                return { label: item.vesselname, value: item.vesselname };
+                            }));
+                        }
+                    });
+                },
+                messages: {
+                    noResults: "No results",
+                    results: function (count) {
+                        return count + (count == 0 ? ' result' : ' results');
+                    }
+                }
+            });
+
+        })
+    </script>*@
+
+<script type="text/javascript">
+    $(window).load(function () {
+
+        $("#EmailId").val("");
+        $("#Password").val("");
+    });
+
+</script>
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#vesselnames').multiselect({
+
+            filterPlaceholder: 'Search',
+            enableCaseInsensitiveFiltering: true,
+            maxHeight: 250,
+            //buttonWidth: '150px',
+            numberDisplayed: 2,
+            nonSelectedText: 'Select Vessels'
+
+
+        });
+
+        $('#btnsubmit').click(function () {
+            var selected = $("#vesselnames option:selected");
+            var message = "";
+            selected.each(function () {
+                message += $(this).val() + ",";
+
+            });
+            $('#VesselName').val(message);
+            //alert(message);
+        });
+    });
+</script>
+
+
+
+<div id="formContainer">
+
+    <div id="formHeader">
+        <h3>Create User</h3>
+    </div>
+
+    <div id="formHeader" class="FlowupLabels">
+
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+
+
+
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+            <div class="fl_wrap focused">
+                @Html.LabelFor(model => model.FullName, new { @class = "fl_label" })
+
+                @Html.TextBoxFor(model => model.FullName, new { @class = "fl_input" })
+                @Html.ValidationMessageFor(model => model.FullName, "", new { @class = "text-danger" })
+
+            </div>
+
+            <div class="fl_wrap focused">
+                @Html.LabelFor(model => model.EmailId, new { @class = "fl_label" })
+
+                @Html.TextBoxFor(model => model.EmailId, new { @class = "fl_input" })
+                @Html.ValidationMessageFor(model => model.EmailId, "", new { @class = "text-danger" })
+
+            </div>
+
+
+            <div class="fl_wrap focused">
+                @Html.LabelFor(model => model.Password, new { @class = "fl_label" })
+
+                @Html.TextBoxFor(model => model.Password, new { @class = "fl_input", @type = "password" })
+                @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
+
+            </div>
+
+            <div class="fl_wrap focused">
+                <label class="fl_label" for="rf_Password">Confirm Password</label>
+
+                @Html.TextBoxFor(model => model.ConfirmPassowrd, new { @class = "fl_input", @type = "password" })
+                @Html.ValidationMessageFor(model => model.ConfirmPassowrd, "", new { @class = "text-danger" })
+
+            </div>
+
+            <div class="fl_wrap focused">
+                @Html.LabelFor(model => model.ContactNo, new { @class = "fl_label" })
+
+                @Html.TextBoxFor(model => model.ContactNo, new { @class = "fl_input" })
+                @Html.ValidationMessageFor(model => model.ContactNo, "", new { @class = "text-danger" })
+
+            </div>
+
+            <div class="fl_wrap focused">
+                @Html.LabelFor(model => model.Designation, new { @class = "fl_label" })
+
+                @Html.TextBoxFor(model => model.Designation, new { @class = "fl_input" })
+                @Html.ValidationMessageFor(model => model.Designation, "", new { @class = "text-danger" })
+
+            </div>
+
+
+            <div class="fl_wrap focused">
+
+                @*<div ng-app="CombineModule" class="fl_wrap focused">*@
+                @*@Html.LabelFor(model => model.VesselName)*@
+
+                <label> Select to Assign Vessel</label>
+                <div>
+
+                    @Html.ListBox("vesselnames", new SelectList(ViewBag.vesselnamebm, "Value", "Text"))
+                    <input id="VesselName" name="VesselName" type="hidden" />
+
+                    @Html.ValidationMessageFor(model => model.VesselName, "", new { @class = "text-danger" })
+                </div>
+
+                @*<div ng-controller="multiselecteddropdown" data-ng-model="VesselName">
+                        <div ng-dropdown-multiselect="" options="Categories" selected-model="Skillsets" extra-settings="dropdownSetting" width="100%"></div>
+                        <input id="VesselName" name="VesselName" type="hidden" value="{{Skillsets}}" />
+
+
+
+                           @Html.ValidationMessageFor(model => model.VesselName, "", new { @class = "text-danger" })
+
+                    </div>*@
+
+            </div>
+            <br />
+            <div class="form-group">
+
+                <input type="submit" id="btnsubmit" value="Create" class="rf_submit" />
+
+
+            </div>
+
+
+        }
+    </div>
+    <div>
+        @Html.ActionLink("Back to List", "Index")
+    </div>
+
+</div>
+
+
+

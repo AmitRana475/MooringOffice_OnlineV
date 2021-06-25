@@ -1,0 +1,38 @@
+﻿@model Shipment49Web.Areas.MSPS.Models.DynamicMenuModel
+@{
+	ViewBag.Title = "Add";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Add Menu</h2>
+
+<div class="white-bg margin-3 fleet clearfix">
+	<div class="row">
+		<div class="col-sm-6">
+			@using (Html.BeginForm("Add", "Menus", new { area = "DynamicMenus" }, FormMethod.Post))
+			{
+				@Html.AntiForgeryToken()
+				@Html.HiddenFor(x=> x.SubMenus.SubId)
+
+				@Html.ValidationSummary(true, "", new { @class = "text-danger" })
+				<div class="form-group">
+					<label class="col-md-4 control-label">MenuName </label>
+					<div class="col-md-8">
+						<div class="input-group">
+							@Html.TextBoxFor(m => m.Menuss.MenuName, new { @class = "fl_input" })
+
+						</div>
+					</div>
+				</div>
+				<div class="small-gutter row">
+					<div class="col-sm-3 col-xs-6 form-group">
+						<input type="submit" value="Save" class="btn peach-btn btn-block" />
+					</div>
+					<div class="col-sm-4 col-xs-6 back_text margin-1-top">
+						<i class="fa fa-chevron-left"></i>&nbsp; @Html.ActionLink("Back to List", "Edit")
+					</div>
+				</div>
+			}
+		</div>
+	</div>
+</div>

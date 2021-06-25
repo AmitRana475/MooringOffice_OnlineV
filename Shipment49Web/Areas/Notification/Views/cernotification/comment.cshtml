@@ -1,0 +1,56 @@
+﻿
+@{
+    ViewBag.Title = "comment";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+@*<script type="text/javascript">
+    $(document).ready(function () {
+        var dir = $('#dir').val();
+        var col = $('#col').val();
+
+        var header = $('th a[href*=' + col + ']');
+        if (dir == 'Ascending') {
+            header.text(header.text() + ' ▲');
+        }
+        if (dir == 'Descending') {
+            header.text(header.text() + ' ▼');
+        }
+
+    });
+</script>*@
+
+
+
+<div class="container">
+    <h2> Comment List</h2>
+    <nav class="navbar navbar-default">
+        <div class="container-fluid-right">
+            <div class="navbar-header">
+                @Ajax.ActionLink("Comment New", "create", "cernotification", new { area = "notification", id = ViewBag.Nid , @class = "navbar-brand" },null)
+            </div>
+            <div class="collapse navbar-collapse">
+                @using (Html.BeginForm("comment", "cernotification", FormMethod.Get, new { area = "notification", @class = "navbar-form navbar-right" }))
+                {
+                    <div class="form-group">
+                        <input type="text" name="search" class="form-control" placeholder="Comment By" />
+                    </div>
+                    <button type="submit" value="search" class="btn btn-success">Search</button>
+                }
+
+            </div>
+        </div>
+
+    </nav>
+
+    @Html.Partial("_certicomment")
+
+    <div id="message-listbm">
+        <font>@ViewBag.Messagegrid</font>
+    </div>
+
+</div>
+
+
+

@@ -1,0 +1,115 @@
+﻿@model List<VesselLayer.Vessel>
+@using Microsoft.AspNet.Identity;
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    var grid = new WebGrid(canPage: true, canSort: true, rowsPerPage: 10);
+    grid.Bind(source: Model, rowCount: ViewBag.TotalRows, autoSortAndPage: false);
+}
+
+@*<link href="~/Content/themes/jquery-ui.css" rel="stylesheet" />
+<script src="~/Scripts/jquery-1.12.4.js"></script>*@
+
+@*<script src="~/Scripts/bootstrap.min.js"></script>*@
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        var dir = $('#dir').val();
+        var col = $('#col').val();
+
+        var header = $('th a[href*=' + col + ']');
+        if (dir == 'Ascending') {
+            header.text(header.text() + ' ▲');
+        }
+        if (dir == 'Descending') {
+            header.text(header.text() + ' ▼');
+        }
+
+
+    });
+</script>
+
+<script type="text/javascript">
+    $(function () {
+        $("#search").autocomplete({
+            source: '@Url.Action("AutoCompletevs", "vesseldetails", "setting")',
+            minLength: 1
+        });
+    });
+
+</script>
+<div class="page_title margin-3-bot">
+    <h2>Vessel Details</h2>
+</div>
+<div class="white-bg margin-3 fleet">
+    <div class="row margin-4-bot">
+        <div class="col-sm-2 col-xs-12">
+            @if (User.IsInRole("admin"))
+            {
+                <a href="/setting/vesseldetails/create" class="btn btn-success btn-block">Create New</a>
+                @*@Html.ActionLink("Create New", "create",new { @class="navbar-brand"})*@
+            }
+        </div>
+        <div class="col-sm-6 col-xs-12 pull-right">
+            <div class="navbar-collapse">
+                @using (Html.BeginForm("index", "vesseldetails", FormMethod.Get, new { area = "setting", @class = "navbar-form navbar-right" }))
+                {
+                    @*<label style="font-size:medium">Search</label>*@
+                    <div class="form-group">
+                        <input type="text" name="search" id="search" value="@ViewBag.search" class="form-control" placeholder="Vessel Name" />
+                    </div>
+                    <button type="submit" value="Search" class="btn peach-btn">Search</button>
+
+                    @*@ViewBag.TotalRows*@
+                }
+            </div>
+        </div>
+    </div>
+    @grid.Table(
+          tableStyle: "table table-responsive table-borderd",
+          columns:
+          grid.Columns(
+
+              grid.Column(columnName: "VesselName", header: "Vessel Name"),
+              grid.Column(columnName: "ImoNo", header: "ImoNo"),
+              grid.Column(columnName: "Flag", header: "Flag"),
+               grid.Column(columnName: "FleetName", header: "Fleet Name"),
+                grid.Column(columnName: "FleetType", header: "Fleet Type"),
+              grid.Column("", style: "button action_text", header: "Action",
+                      format:
+
+                                    @<text >
+
+
+
+                                    @Ajax.ActionLink("View", "Detail", new { id = item.Id }, null)
+                                    @if (User.IsInRole("admin"))
+                                                {
+                                        <span>|</span> @Ajax.ActionLink("Edit", "Edit", new { id = item.Id }, null)
+                                        <span>|</span> @Html.ActionLink("Delete", "delete", new { area = "setting", id = item.Id }, new { onclick = "return confirm('This vessel may have associated data, Are you sure you want to delete this permanently ?');" })
+                                                }
+                                   
+
+
+
+                                    </text>)
+                                                           ))
+
+    <div class="row">
+        <div class="col-xs-12 text-right">
+            @grid.PagerList(mode: WebGridPagerModes.All, paginationStyle: "pagination pagination-small pagination-small")
+        </div>
+    </div>
+    @Html.Hidden("dir", grid.SortDirection)
+    @Html.Hidden("col", grid.SortColumn)
+
+    <div id="message-listbm">
+        <font>@ViewBag.Messagegrid</font>
+    </div>
+
+</div>
+
+
+

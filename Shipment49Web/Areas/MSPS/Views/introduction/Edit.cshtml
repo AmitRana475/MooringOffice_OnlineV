@@ -1,0 +1,193 @@
+﻿@model Shipment49Web.Areas.MSPS.Models.TempDocsPageModel
+
+@{
+	/**/
+
+	ViewBag.Title = "Edit";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<h2>@ViewBag.Title.</h2>
+
+<div class="row">
+	<div class="col-md-12">
+		<section id="loginForm">
+			@using (Html.BeginForm("Edit", "introduction", new { area = "MSMP" }, FormMethod.Post))
+			{
+				@Html.AntiForgeryToken()
+
+
+				<hr />
+
+
+				<div class="form-group">
+					<label class="col-md-4 control-label">Documnet Name </label>
+					<div class="col-md-8">
+						<div class="input-group">
+
+							@*@Html.DropDownListFor(p => p.Revisions.DocumentID, new SelectList(ViewBag.Doclist, "Value", "Text"), "Select Document", new { @class = "form-control" })*@
+
+							@*@Html.DropDownListFor(p => p.tempdoc.DocsId, new SelectList(ViewBag.Doclist, "Value", "Text"), new { @class = "form-control" })*@
+
+
+							@*@Html.DropDownList("drpUser", new SelectList(Model.Revisions.DocumentID, "value", "text"), new { @style = "width:50%", multiple = "multiple" })*@
+						</div>
+					</div>
+
+				</div>
+				
+				@*<div class="form-group">
+				<label class="col-md-4 control-label">Page Title </label>
+				<div class="col-md-8">
+					<div class="input-group">
+						@Html.TextBoxFor(m => m.DocumentPages.PageTitle, new { @class = "fl_input" })
+
+					</div>
+				</div>
+			</div>*@
+
+				<div class="form-group">
+					<label class="col-md-4 control-label">Page Title</label>
+					<div class="col-md-8">
+						<div class="input-group">
+
+							@*@Html.DropDownListFor(model => model.tempdoc.PageTitle, new SelectList(" "), new { @class = "form-control" })*@
+
+							@*@Html.DropDownListFor(p => p.DocumentPages.PageTitle, new SelectList(ViewBag.Doclist, "Value", "Text"), "Select Document")*@
+						</div>
+					</div>
+
+				</div>
+
+				<div class="form-group">
+					<label class="col-md-4 control-label">Message </label>
+					<div class="col-md-8">
+						<div class="input-group">
+
+							@*@Html.TextAreaFor(m => m.tempdoc.Content)*@
+							@*@Html.TextAreaFor(m => m.DocumentPages.Content, new { rows = "20", style = "resize:none;width:700px;", placeholder = Html.DisplayNameFor(m => m.DocumentPages.Content), @class = "form-control input-lg textarea-editor" })*@
+							@Html.TextAreaFor(m => m.tempdoc.Content, new { rows = "20", style = "resize:none;width:700px;", @class = "form-control input-lg textarea-editor" })
+						</div>
+					</div>
+				</div>
+
+
+
+				<div class="small-gutter row">
+					<div class="col-sm-3 col-xs-6 form-group">
+						<input type="submit" value="Update" class="btn peach-btn btn-block" />
+					</div>
+					<div class="col-sm-4 col-xs-6 back_text margin-1-top">
+						<i class="fa fa-chevron-left"></i>&nbsp; @Html.ActionLink("Back to List", "Index")
+					</div>
+				</div>
+			}
+		</section>
+	</div>
+</div>
+
+
+@section Scripts
+{
+	<script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.2/summernote.js"></script>
+	
+
+	<script type="text/javascript">
+		$(document).ready(function () {
+			// Initialize Editor
+			//$('.textarea-editor').wysihtml5();
+			$('.textarea-editor').summernote(
+				{
+					height: 300,                 // set editor height
+					minHeight: null,             // set minimum height of editor
+					maxHeight: null,             // set maximum height of editor
+					focus: true                  // set focus to editable area after initializing summernote
+				});
+		});
+	</script>
+
+
+	<link href="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.2/summernote.css" rel="stylesheet">
+
+}
+
+
+
+
+@*<script src="~/Scripts/jquery-1.7.1.js"></script>
+<script src="~/Scripts/jquery-1.7.1.min.js"></script>*@
+
+<script type="text/javascript">
+
+	//var content = "<p>Hello World</p>";
+	//$("#DocumentPages_Content").val(content);
+	
+    $(document).ready(function () {
+        //Document Dropdown Selectedchange event
+		$("#tempdoc_DocsId").change(function () {
+			debugger;
+			$("#tempdoc_PageTitle").empty();
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("GetDocument")', // Calling json method
+                dataType: 'json',
+				data: { id: $("#tempdoc_DocsId").val() },
+                // Get Selected Document ID.
+				success: function (pagetitle) {
+					debugger;
+					$.each(pagetitle, function (i, pagetitle) {
+						$("#tempdoc_PageTitle").append('<option value="' + pagetitle.Value + '">' +
+							pagetitle.Text + '</option>');
+                    });
+                },
+                error: function (ex) {
+                    alert('Failed to retrieve document.' + ex);
+                }
+            });
+            return false;
+		})
+
+
+
+		$("#tempdoc_PageTitle").change(function () {
+
+			debugger;
+			var seltext = $("#tempdoc_PageTitle option:selected").text();
+			var id = $("#tempdoc_DocsId").val();
+			//$("#DocumentPages_Content").empty();
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("GetContent")', // Calling json method
+                dataType: 'json',
+				data: { id: id, textval:seltext },
+                // Get Selected Document ID.
+				success: function (pagetitle) {	
+					debugger;
+					var ss = pagetitle;	
+					$('#tempdoc_Content').summernote('code', ss);
+					//$("#tempdoc_Content").val(ss);
+					//debugger;
+				
+                },
+                error: function (ex) {
+                    alert('Failed to retrieve document.' + ex);
+                }
+            });
+            return false;
+        })
+
+
+
+    });
+</script>
+
+<script>
+	$(document).ready(function () {
+	var values2 = '@ViewBag.SelectedidDoc';	
+		$('#tempdoc_DocsId option').filter(function () {
+            return values2.indexOf($(this).text()) > -1; //Options text exists in array
+	}).prop('selected', true);
+		$("#tempdoc_DocsId").change();	
+	});
+</script>

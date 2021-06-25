@@ -1,0 +1,266 @@
+﻿
+@model Reports.LooseEquipmentDiscard
+@{
+    /**/
+
+    ViewBag.Title = "AddDiscard";
+    Layout = "~/Views/Shared/_LayoutVessel7.cshtml";
+}
+
+
+<div class="content">
+
+    @using (Html.BeginForm("AddDiscard", "LEDamaged"))
+    {
+        <div class="page-heading page-header-flex">
+            <div>
+                <h1 class="page-title">
+                    Add Loose Equipment Discard / @ViewBag.LooseEquipmentType
+                </h1>
+                <ol class="breadcrumb">
+                    <li><a href="">Home</a></li>
+                    <li><a href="">Form</a></li>
+                    <li><a>Create</a></li>
+                </ol>
+            </div>
+            <div class="form-actions">
+                <button name="Submit" type="submit" class="btn btn-success btn-width"><i class="uil uil-check mr-2"></i>Submit</button>
+                <button name="Reset" type="reset" id="btnReset" class="btn btn-danger btn-width"><i class="uil uil-redo mr-2"></i>Reset</button>
+            </div>
+        </div>
+
+
+        <div class="wrapper wrapper-content">
+            <div class="container">
+                @if (TempData["Error"] != null)
+                {
+                    <p class="alert alert-danger" id="errorMessage">@TempData["Error"]</p>
+                }
+                @if (TempData["Success"] != null)
+                {
+                    <p class="alert alert-success" id="successMessage">@TempData["Success"]</p>
+                }
+                <div class="form-body">
+                    <div class="row">
+                        @Html.AntiForgeryToken()
+
+
+                        <div class="col-md-8 mx-auto">
+
+                            <div style="display:none">
+                                @Html.EditorFor(model => model.LooseETypeId, new { htmlAttributes = new { @class = "form-control", @required = "true", } })
+
+                            </div>
+
+                            <div style="display:none">
+                                @Html.EditorFor(model => model.CertificateNumber, new { htmlAttributes = new { @class = "form-control", @required = "false", } })
+
+                            </div>
+
+                            <div class="row form-group ">
+                                <label class="col-sm-4 col-form-label">
+                                    <label class="control-label">Select @ViewBag.LooseEquipmentType<sup>*</sup></label>
+                                </label>
+                                <div class="col-sm-8">
+                                    @Html.DropDownListFor(model => model.LEQuipID, new SelectList(Model.GetAllLE_Detail, "Value", "Text"), "", new { @class = "form-control select2", @required = "true", @onchange = "FindCertificate()" })
+                                    <div class="error"></div>
+                                </div>
+                            </div>
+
+                            <div class="row form-group">
+                                <label class="col-sm-4 col-form-label">
+                                    <label class="control-label">Out of Service Date<sup>*</sup></label>
+                                </label>
+                                <div class="col-sm-8">
+                                    @Html.TextBoxFor(x => x.OutofServiceDate, "{0:yyyy-MM-dd}", new { @class = "form-control datepicker", @placeholder = "yyyy-mm-dd", @autocomplete = "Off", @required = "true" })
+                                    <div class="error"></div>
+                                </div>
+                            </div>
+
+
+
+                            <div class="row form-group">
+                                <label class="col-sm-4 col-form-label">
+                                    <label class="control-label">Reason Out of Service<sup>*</sup></label>
+                                </label>
+                                <div class="col-sm-8">
+                                    @Html.DropDownListFor(model => model.ReasonOutofService, new SelectList(Model.ReasonOutofServices, "Reason", "Reason"), "", htmlAttributes: new { @class = "form-control select2", @required = "true", @onchange = "OthReason(this)" })
+
+                                    <div class="error"></div>
+                                </div>
+                            </div>
+
+
+                            <div style="display:none" id="othR" class="row form-group">
+                                <label class="col-sm-4 col-form-label">
+                                    <label class="control-label">Other Reason<sup>*</sup></label>
+                                </label>
+                                <div class="col-sm-8">
+                                    @Html.EditorFor(x => x.OtherReason, new { htmlAttributes = new { @class = "form-control" } })
+
+                                    <div class="error"></div>
+                                </div>
+                            </div>
+
+
+                            <div class="row form-group">
+                                <label class="col-sm-4 col-form-label">
+                                    <label class="control-label">Reason Observed<sup>*</sup></label>
+                                </label>
+                                <div class="col-sm-8">
+                                    @Html.DropDownListFor(model => model.DamageObserved, new SelectList(Model.DamageObservedLists, "DamageObserved1", "DamageObserved1"), "", htmlAttributes: new { @class = "form-control select2", @required = "true", @onchange = "damageOb(this)" })
+
+                                    <div class="error"></div>
+                                </div>
+                            </div>
+
+
+                            <div style="display:none" id="mopr" class="row form-group">
+                                <label class="col-sm-4 col-form-label">
+                                    <label class="control-label">Mooring Operation<sup>*</sup></label>
+                                </label>
+                                <div class="col-sm-8">
+                                    @Html.DropDownListFor(model => model.MooringOperationID, new SelectList(Model.MooringOperationsLists, "OPId", "Operation"), "", htmlAttributes: new { @class = "form-control select2", @required = "true", })
+                                </div>
+                            </div>
+                                                      
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    }
+
+
+</div>
+
+
+
+<script>
+    $("#OutofServiceDate").keydown(function (e) {
+        e.preventDefault();
+    });
+
+    function damageOb(t) {
+        var Id = t.value;
+        if (Id != "Mooring Operation") {
+            
+            $('#mopr').hide();
+            document.getElementById("MooringOperationID").required = false;
+        }
+        if (Id == "Mooring Operation") {
+            $('#mopr').show();
+            document.getElementById("MooringOperationID").required = true;
+        }
+    }
+
+
+    function FindCertificate() {
+
+        var cc = $("#LEQuipID option:selected").text();
+
+        $('#CertificateNumber').val(cc);
+        //$("#LEQuipID").change(function () {
+        //    var cur_value = $('option:selected', this).text();
+        //    alert(cur_value);
+        //});
+
+    }
+
+    var cc = $("#LEQuipID option:selected").text();
+    $('#CertificateNumber').val(cc);
+
+</script>
+<script>
+
+    function OthReason(t) {
+        var Id = t.value;
+        //alert(Id);
+
+        if (Id != "Other") {
+            $('#othR').hide();
+            document.getElementById("OtherReason").required = false;
+        }
+        if (Id == "Other") {
+            $('#othR').show();
+            document.getElementById("OtherReason").required = true;
+        }
+    }
+
+
+</script>
+<script>
+    function checkdata(t) {
+        var Id = t.value;
+
+        $.ajax({
+            type: 'POST',
+            dataType: 'json',
+            url: '/LineDiscard/GetWinchlocation',
+            data: { 'Id': Id },
+            success: function (response) {
+                if (response.Result == true) {
+
+                    debugger;
+                    $("#location").text(response.location);
+                    $("#currentOutb").text(response.outboard);
+                    $("#asswinch").text(response.asswinch);
+                    $("#currentOutb1").text(response.outboard1);
+                    $("#noofOp").text(response.noofOp);
+                    $("#rnghrs").text(response.rnghrs);
+
+                    if (response.msgdiv != "") {
+                        $("#msgDiv").show();
+                        $('#myModal').modal('show');
+                        var data = response.msgdiv;
+                        $('#messageID').text(data);
+
+                        $("#btnSubmit").attr("disabled", true);
+                    }
+                    else {
+                        $("#msgDiv").hide();
+                        $("#btnSubmit").attr("disabled", false);
+                    }
+                }
+                else {
+                    alert('An Error has occured. Please try again.');
+                }
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                //toastr["error"]('An Error has occured. Please try again.');
+                alert('An Error has occured. Please try again.');
+            }
+        });
+
+    }
+</script>
+<script type="text/javascript">
+
+    setTimeout(function () {
+
+        $('#successMessage').fadeOut('fast');
+        $('#errorMessage').fadeOut('fast');
+    }, 3000);
+
+
+</script>
+
+<script>
+    $('#btnReset').click(function () {
+        $("#LooseETypeId").val(null).trigger("change");
+        $("#LEQuipID").val(null).trigger("change");
+        $("#ReasonOutofService").val(null).trigger("change");
+        $("#DamageObserved").val(null).trigger("change");
+        $("#MooringOperationID").val(null).trigger("change");
+        
+    });
+</script>
+
+<script type="text/javascript">
+    $('.datepicker').datepicker();
+</script>
+
+

@@ -1,0 +1,296 @@
+﻿@model Shipment49Web.Common.RopeAnalysis
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_LeftSideBar.cshtml";
+}
+
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+
+
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+<script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.0.3/js/bootstrap.min.js"></script>
+<script src="http://cdn.rawgit.com/davidstutz/bootstrap-multiselect/master/dist/js/bootstrap-multiselect.js" type="text/javascript"></script>
+
+<script src="~/js/CommonScriptFunctions.js"></script>
+
+<script src="~/Scripts/Chart.min.js"></script>
+<link href="~/Content/Chart.css" rel="stylesheet" />
+
+<style>
+    th {
+        text-align: center !important;
+    }
+
+    .clsmonth {
+        background-color: #0e3876;
+        color: white;
+    }
+</style>
+
+<div class="content-wrapper">
+    <section class="content-header">
+        <h1>
+            Analysis
+        </h1>
+    </section>
+
+    <section class="content">
+        <div class="box box-info">
+            <div class="box-body">
+                @using (Html.BeginForm("Index", "RopeAnalysis", FormMethod.Post, new { area = "data" }))
+                {
+                    <input type="hidden" id="ZoneAData" value="@ViewBag.ZoneA" />
+                    <div class="row">
+                        <div class="col-md-3">
+                            @Html.LabelFor(m => m.FleetNameIDs, "Fleet Name")
+                            <div class="form-group">
+                                @Html.ListBoxFor(m => m.FleetNameIDs, new SelectList(Model.FleetNames, "Id", "Name"), new { @class = "form-control listbox" })
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            @Html.LabelFor(m => m.FleetTypeIDs, "Fleet Type")
+                            <div class="form-group">
+                                @Html.ListBoxFor(m => m.FleetTypeIDs, new SelectList(Model.FleetTypes, "Id", "Name"), new { @class = "form-control listbox" })
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            @Html.LabelFor(m => m.TradeIDs, "Trade Name")
+                            <div class="form-group">
+                                @Html.ListBoxFor(m => m.TradeIDs, new SelectList(Model.TradePlatforms, "Id", "Name"), new { @class = "form-control listbox" })
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            @Html.LabelFor(m => m.AgeRangeFrom, "Age Range From")
+                            <div class="form-group">
+                                @Html.EditorFor(m => m.AgeRangeFrom, new { htmlAttributes = new { @class = "form-control" } })
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            @Html.LabelFor(m => m.AgeRangeTo, "Age Range To")
+                            <div class="form-group">
+                                @Html.EditorFor(m => m.AgeRangeTo, new { htmlAttributes = new { @class = "form-control" } })
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            @Html.LabelFor(m => m.VesselIDs, "Vessel Name")
+                            <div class="form-group">
+                                @Html.ListBoxFor(m => m.VesselIDs, new SelectList(Model.Vessels, "Id", "VesselName"), new { @class = "form-control listbox" })
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            @Html.LabelFor(m => m.ManufacturerIDs, "Manufacturer")
+                            <div class="form-group">
+                                @Html.ListBoxFor(m => m.ManufacturerIDs, new SelectList(Model.ManufacturerList, "Id", "Name"), new { @class = "form-control listbox" })
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            @Html.LabelFor(m => m.RopeTypeIDs, "Rope Type")
+                            <div class="form-group">
+                                @Html.ListBoxFor(m => m.RopeTypeIDs, new SelectList(Model.RopeType, "Id", "RopeType"), new { @class = "form-control listbox" })
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            @Html.LabelFor(m => m.InspectionRatingIDs, "Inspection Rating")
+                            <div class="form-group">
+                                @Html.ListBoxFor(m => m.InspectionRatingIDs, new SelectList(Model.InspectionRatingList, "Value", "Text"), new { @class = "form-control listbox" })
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            @Html.LabelFor(m => m.Year, "Choose Year")
+                            <div class="form-group">
+                                @Html.DropDownListFor(m => m.Year, new SelectList(Model.YearList, "Value", "Text"), new { @class = "form-control" })
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            @Html.LabelFor(m => m.RunningHoursFrom, "Running Hours From")
+                            <div class="form-group">
+                                @Html.EditorFor(m => m.RunningHoursFrom, new { htmlAttributes = new { @class = "form-control" } })
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            @Html.LabelFor(m => m.RunningHoursTo, "Running Hours To")
+                            <div class="form-group">
+                                @Html.EditorFor(m => m.RunningHoursTo, new { htmlAttributes = new { @class = "form-control" } })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <div class="pull-right">
+                                    <button type="submit" class="btn btn-danger">Search</button>
+                                </div>
+                                @*<div class="pull-left">
+                                        <button type="submit" class="btn btn-dark btnswitch" data-type="1">Statistical</button>
+                                        <button type="submit" class="btn btn-default btnswitch" data-type="2">Graphical</button>
+                                    </div>*@
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="box box-default">
+                    <div class="box-body">
+                        <div class="nav-tabs-custom">
+                            <ul class="nav nav-tabs">
+                                <li class="active"><a href="#statistical" class="tablinks" data-toggle="tab">Statistical - [@Model.Year]</a></li>
+                                <li><a href="#graphical" class="tablinks" data-toggle="tab">Graphical - [@Model.Year]</a></li>
+                            </ul>
+                            <div class="tab-content" style="min-height: 350px">
+                                <div class="tab-pane active" id="statistical">
+                                    <div class="table-responsive table-striped">
+                                        <table class="table no-margin" id="dataTable" width="100%" cellspacing="0">
+                                            <thead>
+                                                <tr>
+                                                    <th style="vertical-align: middle; color: #0e3876">Duration</th>
+                                                    <th style="color: green">External Abrasion<br />1</th>
+                                                    <th style="color: green">Internal Abrasion<br />1</th>
+                                                    <th style="color: green">External Abrasion<br />2</th>
+                                                    <th style="color: green">Internal Abrasion<br />2</th>
+                                                    <th style="color: green">External Abrasion<br />3</th>
+                                                    <th style="color: green">Internal Abrasion<br />3</th>
+                                                    <th style="color: orange">External Abrasion<br />4</th>
+                                                    <th style="color: orange">Internal Abrasion<br />4</th>
+                                                    <th style="color: orange">External Abrasion<br />5</th>
+                                                    <th style="color: orange">Internal Abrasion<br />5</th>
+                                                    <th style="color: red">External Abrasion<br />6</th>
+                                                    <th style="color: red">Internal Abrasion<br />6</th>
+                                                    <th style="color: red">External Abrasion<br />7</th>
+                                                    <th style="color: red">Internal Abrasion<br />7</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @{
+                                                    foreach (System.Data.DataRow row in Model.RopeAnalysis.Rows)
+                                                    {
+                                                        <tr>
+                                                            <td class="clsmonth">@row["Month"]</td>
+                                                            <td style="text-align: center">@row["A_1"]</td>
+                                                            <td style="text-align: center">@row["B_1"]</td>
+                                                            <td style="text-align: center">@row["A_2"]</td>
+                                                            <td style="text-align: center">@row["B_2"]</td>
+                                                            <td style="text-align: center">@row["A_3"]</td>
+                                                            <td style="text-align: center">@row["B_3"]</td>
+                                                            <td style="text-align: center">@row["A_4"]</td>
+                                                            <td style="text-align: center">@row["B_4"]</td>
+                                                            <td style="text-align: center">@row["A_5"]</td>
+                                                            <td style="text-align: center">@row["B_5"]</td>
+                                                            <td style="text-align: center">@row["A_6"]</td>
+                                                            <td style="text-align: center">@row["B_6"]</td>
+                                                            <td style="text-align: center">@row["A_7"]</td>
+                                                            <td style="text-align: center">@row["B_7"]</td>
+                                                        </tr>
+                                                    }
+                                                }
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                <div class="tab-pane" id="graphical">
+                                    <div class="row">
+                                        @for (int i = 0; i < 7; i++)
+                                        {
+                                            @Html.Partial("_ropeanalysischart", Model.ChartData[i])
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+
+
+@*<link href="~/assets/plugins/barchart/nv.d3.css" rel="stylesheet" />
+
+    <script src="~/assets/plugins/gauge/gauge.js"></script>
+    <script src="~/assets/plugins/barchart/d3.min.js"></script>
+    <script src="~/assets/plugins/barchart/nv.d3.min.js"></script>
+
+    <script>
+
+        var data = $('#ZoneAData').val();
+        data = JSON.parse(data);
+        console.log(data);
+
+        nv.addGraph(function () {
+            var chart = nv.models.multiBarChart()
+                .reduceXTicks(true)   //If 'false', every single x-axis tick label will be rendered.
+                .rotateLabels(0)      //Angle to rotate x-axis labels.
+                .showControls(false)   //Allow user to switch between 'Grouped' and 'Stacked' mode.
+                .groupSpacing(0.1)    //Distance between each group of bars.
+                ;
+
+            chart.xAxis
+                .tickFormat(d3.format(',f'));
+
+            chart.yAxis
+                .tickFormat(d3.format(',.1f'));
+
+            var data = $('#ZoneAData').val();
+            data = JSON.parse(data);
+            console.log(data);
+
+            d3.select('#ropeanalysischart1 svg')
+                .datum(data)
+                .call(chart);
+
+            nv.utils.windowResize(chart.update);
+
+            return chart;
+        });
+
+        ////Generate some nice data.
+        //function exampleData() {
+        //    return stream_layers(3, 10 + Math.random() * 100, .1).map(function (data, i) {
+        //        return {
+        //            key: 'Stream #' + i,
+        //            values: data
+        //        };
+        //    });
+        //}
+
+        ///* Inspired by Lee Byron's test data generator. */
+        //function stream_layers(n, m, o) {
+        //    if (arguments.length < 3) o = 0;
+        //    function bump(a) {
+        //        var x = 1 / (.1 + Math.random()),
+        //            y = 2 * Math.random() - .5,
+        //            z = 10 / (.1 + Math.random());
+        //        for (var i = 0; i < m; i++) {
+        //            var w = (i / m - y) * z;
+        //            a[i] += x * Math.exp(-w * w);
+        //        }
+        //    }
+        //    return d3.range(n).map(function () {
+        //        var a = [], i;
+        //        for (i = 0; i < m; i++) a[i] = o + o * Math.random();
+        //        for (i = 0; i < 5; i++) bump(a);
+        //        return a.map(stream_index);
+        //    });
+        //}
+
+        ///* Another layer generator using gamma distributions. */
+        //function stream_waves(n, m) {
+        //    return d3.range(n).map(function (i) {
+        //        return d3.range(m).map(function (j) {
+        //            var x = 20 * j / m - i / 3;
+        //            return 2 * x * Math.exp(-.5 * x);
+        //        }).map(stream_index);
+        //    });
+        //}
+
+        //function stream_index(d, i) {
+        //    return { x: i, y: Math.max(0, d) };
+        //}
+
+    </script>*@

@@ -1,0 +1,182 @@
+﻿
+@model Shipment49Web.Areas.MooringLine.Models.RopeDamage
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_LayoutVessel7.cshtml";
+}
+
+
+
+<div class="page-heading page-header-flex">
+    <div>
+        <h1 class="page-title">
+            Line Damage
+        </h1>
+        @*<ol class="breadcrumb">
+            <li><a href="">Home</a></li>
+            <li><a href="">Form</a></li>
+            <li><a>Create</a></li>
+        </ol>*@
+    </div>
+    @if (TempData["Error"] != null)
+    {
+        <p class="alert alert-danger" id="errorMessage">@TempData["Error"]</p>
+    }
+    @if (TempData["Success"] != null)
+    {
+        <p class="alert alert-success" id="successMessage">@TempData["Success"]</p>
+    }
+        <div>
+
+            <a class="btn btn-info" href="@Url.Action("addlinedamage", "LineDamage")">
+                <i class="fa fa-plus-circle mr-2"></i>Add Line Damage
+            </a>
+            <a name="back" id="btnBack" onclick="goBack()" class="btn btn-primary btn-width"> << Go Back</a>
+
+        </div>
+</div>
+<div class="wrapper wrapper-content">
+    <div class="container">
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th style="display:none">Id</th>
+                        <th>Unique ID</th>
+                        <th>Cert.No.</th>
+                        <th>Assigned Winch</th>
+                        <th>Assigned Location</th>
+                        <th>Damage Date</th>
+                        <th>Damage Reason</th>
+                        <th>Damage Location</th>
+                        <th>Damage Observerd During</th>
+                        <th>Incident Report</th>
+                        @*<th width="100px">View</th>*@
+                        <th width="100px">Delete</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    
+
+
+                    @foreach (var item in Model.RopeDamageList)
+                    {
+
+
+                    <tr>
+                        <td style="display:none"> @Html.DisplayFor(modelItem => item.Id)</td>
+                        <td> @Html.DisplayFor(modelItem => item.UniqueId)</td>
+                        <td> @Html.DisplayFor(modelItem => item.CertificateNumber)</td>
+                        
+
+                        @if (item.AssignedNumber != null)
+                        {
+                            <td> @Html.DisplayFor(modelItem => item.AssignedNumber)</td>
+                        }
+                        else
+                        {
+                            <td>Not Assigned</td>
+                        }
+                        @if (item.AssignedLocation != null)
+                        {
+
+                            <td> @Html.DisplayFor(modelItem => item.AssignedLocation)</td>
+                        }
+                        else
+                        {
+                            <td>Not Assigned</td>
+                        }
+
+                        <td>
+                            @Html.DisplayFor(modelItem => item.DamageDate)
+                        </td>
+
+                        <td>
+                            @Html.DisplayFor(modelItem => item.DamageReason)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.DamageLocation)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.DamageObserved)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.IncidentReport)
+                        </td>
+                        @*<td width="100px">
+            <a href="#" class="btn btn-sm btn-light btn-view" data-toggle="modal" data-target="#viewModal">
+                <i class="uil uil-eye mr-2"></i>View
+            </a>
+        </td>*@
+
+                        <td width="100px">
+                            <button type="button" class="btn btn-sm btn-light btn-delete">
+                                @Html.ActionLink("Delete", "Delete", "LineDamage", new { id = item.Id }, new { onclick = "return confirm('Are sure wants to delete?');" })
+                                <i class="uil uil-trash-alt mr-2"></i>
+                            </button>
+                        </td>
+
+                    </tr>
+                    }
+
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+
+<script>
+    function goBack() {
+        window.history.back();
+    }
+</script>
+
+<script>
+    function BtnUpdateStatus(Id) {
+
+        $.ajax({
+            type: 'POST',
+            dataType: 'json',
+            url: '/AssignLine/Shifttoinactive',
+            data: { 'Id': Id },
+            success: function (response) {
+                if (response.Result == true) {
+                    alert('Status Updated successfully.');
+                    //toastr["success"]('Status Updated successfully.');
+                    window.location.reload();
+
+                }
+                else {
+                    alert('An Error has occured. Please try again.');
+                    // toastr["error"]('An Error has occured. Please try again.');
+                }
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                //toastr["error"]('An Error has occured. Please try again.');
+                alert('An Error has occured. Please try again.');
+            }
+        });
+
+    };
+    //}
+</script>
+
+<script type="text/javascript">
+
+    setTimeout(function () {
+
+        $('#successMessage').fadeOut('fast');
+        $('#errorMessage').fadeOut('fast');
+    }, 3000);
+
+
+</script>
+
+
+
+
+
+

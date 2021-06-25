@@ -1,0 +1,74 @@
+﻿
+@model Shipment49Web.Areas.MSPS.Models.DetailsViewModel
+
+
+<div class="container">
+    @using (Html.BeginForm("addattachment", "MSMP", new { area = "MooringManual" }, FormMethod.Post, htmlAttributes: new { enctype = "multipart/form-data", @class = "form-horizontal" }))
+    {
+        @Html.AntiForgeryToken()
+        @Html.HiddenFor(x => x.Mid)
+
+        <div class="form-group">
+            <div class="row">
+                <div class="col-md-12">
+                    @Html.Label("Add Attachment")
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="row">
+                <div class="col-md-6">
+                    @Html.TextBoxFor(model => model.shipmodel.AttachmentName, new { @class = "form-control", @placeholder = "Attachment Name" })
+                    @Html.ValidationMessageFor(model => model.shipmodel.AttachmentName, "", new { @class = "text-danger" })
+                </div>
+                <div class="col-md-6">
+                    <input name="file" type="file" id="fileToUpload" onchange="ValidateSize(this)" class="form-control" multiple />
+                    <label style="font-size:13px;font-style:italic">Acceptable file types : Image (jpg, jpeg, png), PDF, MS Word (doc, docx), Excel (xls, xlsx)</label>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="small-gutter row">
+            <div class="col-sm-3 col-xs-6 form-group">
+                <input type="submit" id="btnSave" value="Save" class="btn peach-btn btn-block btn-primary" />
+            </div>
+            <div class="col-sm-4 col-xs-6 back_text margin-1-top">
+                <i class="fa fa-chevron-left"></i>&nbsp;
+                @*@Html.ActionLink("Back to List", "Index")*@
+
+                <a href="@Request.Url">Back</a>
+            </div>
+        </div>
+    }
+</div>
+
+<script>
+    function ValidateSize(file) {
+        debugger;
+
+        // str1 = new string[26] { "jpg", "jpeg", "png", "pps", "ppt", "pptx", "xls", "xlsm", "xlsx", "doc", "docx", "pdf", "rtf", "txt", "GIF", "WAV", "MID", "MIDI", "WMA", "MP3", "OGG", "RMA", "AVI", "MP4", "DIVX", "WMV" };
+        var fileInput = document.getElementById('fileToUpload');
+        var filePath = fileInput.value;
+        var allowedExtensions = /(\.jpg|\.jpeg|\.png|\.pps|\.ppt|\.pptx|\.xls|\.xlsm|\.xlsx|\.doc|\.docx|\.pdf|\.rtf|\.txt|\.GIF|\.WAV|\.MID|\.MIDI|\.WMA|\.MP3|\.OGG|\.RMA|\.AVI|\.MP4|\.DIVX|\.WMV|\.gif)$/i;
+        if (!allowedExtensions.exec(filePath)) {
+            // alert('Please upload file having extensions .jpeg/.jpg/.png/.gif only.');
+            alert('This file type not allowed !');
+            fileInput.value = '';
+            return false;
+        }
+        else {
+
+            var FileSize = file.files[0].size / 1024 / 1024; // in MiB
+            if (FileSize > 10) {
+                alert('File size must not be more than 10 MiB');
+                document.getElementById('fileToUpload').value = '';
+                return false;
+                // $(file).val(''); //for clearing with Jquery
+            } else {
+
+            }
+        }
+    }
+</script>

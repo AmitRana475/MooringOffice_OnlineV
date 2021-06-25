@@ -1,0 +1,229 @@
+﻿@{
+    ViewBag.Title = "Certificate";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    var grid = new WebGrid(canPage: true, rowsPerPage: 10);
+    grid.Bind(source: Model, rowCount: ViewBag.TotalRows, autoSortAndPage: false);
+}
+
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        $("#datefrom").datepicker();
+    });
+</script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        $("#dateto").datepicker();
+    });
+</script>
+
+
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        //......make condition for get check value....
+        $('#btnAck').click(function () {
+            var getid = "";
+            $('#gridMappings').find("input:checkbox").each(function () {
+
+                var ischecked = this.checked;
+                if ($(this).val() != '' && ischecked) {
+
+                    getid += $(this).val() + ",";
+                }
+
+            });
+
+            $('#ids').val(getid);
+
+        });
+
+    });
+</script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#vesselnames').multiselect({
+            includeSelectAllOption: true,
+
+            filterPlaceholder: 'Search',
+            enableCaseInsensitiveFiltering: true,
+            maxHeight: 250,
+            //buttonWidth: '150px',
+            numberDisplayed: 1,
+            nonSelectedText: 'Vessel'
+
+
+        });
+
+        $('#btnSelected').click(function () {
+            var selected = $("#vesselnames option:selected");
+            var message = "";
+            selected.each(function () {
+                message += $(this).val() + ",";
+
+            });
+            $('#search').val(message);
+            //alert(message);
+        });
+    });
+</script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#fleettypes').multiselect({
+
+            includeSelectAllOption: true,
+            filterPlaceholder: 'Search',
+            enableCaseInsensitiveFiltering: true,
+            maxHeight: 250,
+            numberDisplayed: 1,
+            nonSelectedText: 'FleetType'
+
+        });
+        $('#btnSelected').click(function () {
+            var selected = $("#fleettypes option:selected");
+            var message = "";
+            selected.each(function () {
+                message += $(this).val() + ",";
+            });
+            $('#fleettype').val(message);
+            //alert(message);
+        });
+    });
+</script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#fleetnames').multiselect({
+            includeSelectAllOption: true,
+
+            filterPlaceholder: 'Search',
+            enableCaseInsensitiveFiltering: true,
+            maxHeight: 250,
+            numberDisplayed: 1,
+            nonSelectedText: 'FleetName'
+
+        });
+        $('#btnSelected').click(function () {
+            var selected = $("#fleetnames option:selected");
+            var message = "";
+            selected.each(function () {
+                message += $(this).val() + ",";
+            });
+            $('#fleetname').val(message);
+            //alert(message);
+        });
+    });
+</script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        var values2 = '@ViewBag.fleettypebm1';
+        $('#fleettypes option').filter(function () {
+            return values2.indexOf($(this).text()) > -1; //Options text exists in array
+        }).prop('selected', true);
+
+        $("#fleettypes").multiselect("refresh");
+
+        //........................
+
+        var values2 = '@ViewBag.fleetnamebm1';
+        $('#fleetnames option').filter(function () {
+            return values2.indexOf($(this).text()) > -1; //Options text exists in array
+        }).prop('selected', true);
+
+        $("#fleetnames").multiselect("refresh");
+
+        //................
+
+        var values2 = '@ViewBag.vesselnamebm1';
+        $('#vesselnames option').filter(function () {
+            return values2.indexOf($(this).text()) > -1; //Options text exists in array
+        }).prop('selected', true);
+
+        $("#vesselnames").multiselect("refresh");
+
+
+
+    });
+</script>
+<div class="page_title margin-3-bot">
+    <h2> Certificates Notification</h2>
+</div>
+<div class="white-bg margin-3 fleet">
+    <div class="container-fluid-right">
+        @using (Html.BeginForm("index", "certificates", FormMethod.Get, new { controller = "certificates", area = "notification" }))
+    {
+
+        <div class="small-gutter row">
+            <div class="col-sm-4 col-xs-6 form-group">
+                @Html.ListBox("fleettypes", new SelectList(ViewBag.fleettypebm, "Value", "Text"))
+                <input id="fleettype" name="fleettype" type="hidden" />
+            </div>
+            <div class="col-sm-4 col-xs-6 form-group">
+                @Html.ListBox("fleetnames", new SelectList(ViewBag.fleetnamebm, "Value", "Text"))
+                <input id="fleetname" name="fleetname" type="hidden" />
+            </div>
+            <div class="col-sm-4 col-xs-6 form-group">
+                @Html.ListBox("vesselnames", new SelectList(ViewBag.vesselnamebm, "Value", "Text"))
+                <input id="search" name="search" type="hidden" />
+                <input id="ids" name="ids" type="hidden" />
+            </div>
+            <div class="col-sm-4 col-xs-6 form-group">
+                <input type="text" name="datefrom" id="datefrom" value="@ViewBag.datefrom" class="form-control" placeholder="Select Date From" />
+            </div>
+            <div class="col-sm-4 col-xs-6 form-group">
+                <input type="text" name="dateto" id="dateto" value="@ViewBag.dateto" class="form-control" placeholder="Select Date To" />
+            </div>
+            <div class="col-sm-4 col-xs-12 form-group">
+                <button id="btnSelected" type="submit" name="Searchbtn" value="Search" class="btn peach-btn btn-block">Search</button>
+            </div>
+        </div>
+        <div class="small-gutter row">
+            <div class="col-sm-2 col-xs-12 form-group">
+                <button id="btnAck" type="submit" value="Acknowledge" name="Acknowledge" class="btn btn-success btn-block">Acknowledge</button>
+            </div>
+            <div class="col-sm-4 margin-1-top">
+                NCs : <label style="color:green">@ViewBag.Ack</label> / <label style="color:red">@ViewBag.UnAck</label>
+            </div>
+        </div>
+        @*<div ng-controller="multiselecteddropdown5" data-ng-model="fleettype">
+            <div ng-dropdown-multiselect="" options="CategoriesT" selected-model="SkillsetsFleetType" extra-settings="dropdownSetting" width="100%"></div>
+            <input id="fleettype" name="fleettype" type="hidden" value="{{SkillsetsFleetType}}" />
+        </div>
+
+        <div ng-controller="multiselecteddropdown4" data-ng-model="fleetname">
+            <div ng-dropdown-multiselect="" options="CategoriesF" selected-model="SkillsetsFleetName" extra-settings="dropdownSetting" width="100%"></div>
+            <input id="fleetname" name="fleetname" type="hidden" value="{{SkillsetsFleetName}}" />
+        </div>
+
+        <div ng-controller="multiselecteddropdown6" data-ng-model="search">
+            <div ng-dropdown-multiselect="" options="Categories" selected-model="Skillsets" extra-settings="dropdownSetting" width="100%"></div>
+            <input id="search" name="search" type="hidden" value="{{Skillsets}}" />
+        </div>*@
+
+        @*<input type="text" name="search" id="search" value="@ViewBag.vname" class="form-control" placeholder="vessel Name" />&ensp;*@
+
+
+
+
+
+}
+    </div>
+
+    @Html.Partial("_certificationgrid")
+
+    <div id="message-listbm">
+        <font>@ViewBag.Messagegrid</font>
+    </div>
+
+</div>

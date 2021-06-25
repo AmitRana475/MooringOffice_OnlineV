@@ -1,0 +1,93 @@
+﻿@model List<Reports.tblRopeTailInspectionSetting>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_LeftSideBar.cshtml";
+}
+
+
+<div class="content-wrapper">
+    <section class="content-header">
+        <h1>
+            Rope Tail Inspection
+        </h1>
+        <p class="pull-right">
+            @Html.ActionLink("Create New", "Create")
+        </p>
+    </section>
+
+    <section class="content">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="box box-info">
+                    <div class="box-body">
+                        <div class="table-responsive table-striped">
+                            <table class="table no-margin" id="dataTable" width="100%" cellspacing="0">
+                                <tr>
+                                    <th>Mooring RopeType</th>
+                                    <th>Manufacturer Type</th>
+                                    <th>Max Running Hours</th>
+                                    <th>Max Months Allowed</th>
+                                    <th>End to End Month</th>
+                                    <th>Rating 1</th>
+                                    <th>Rating 2</th>
+                                    <th>Rating 3</th>
+                                    <th>Rating 4</th>
+                                    <th>Rating 5</th>
+                                    <th>Rating 6</th>
+                                    <th>Rating 7</th>
+                                    <th>Options</th>
+                                </tr>
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.MooringRopeTypeName)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.ManufacturerTypeName)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.MaximumRunningHours)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.MaximumMonthsAllowed)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.EndToEndMonth)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Rating1)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Rating2)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Rating3)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Rating4)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Rating5)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Rating6)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Rating7)
+                                        </td>
+                                        <td>
+                                            @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
+                                            @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+                                        </td>
+                                    </tr>
+                                }
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>

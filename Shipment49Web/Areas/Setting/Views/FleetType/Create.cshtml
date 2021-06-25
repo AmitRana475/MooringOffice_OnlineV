@@ -1,0 +1,32 @@
+﻿@model VesselLayer.FleetTypeClass
+
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="white-bg margin-3 fleet clearfix">
+    <div class="col-sm-6 col-sm-offset-3">
+        <div id="formHeader" class="margin-3-bot">
+            <h3>Create FleetType</h3>
+        </div>
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+            <div class="form-group">
+                @Html.LabelFor(model => model.FleetType, htmlAttributes: new { })
+                @Html.EditorFor(model => model.FleetType, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.FleetType, "", new { @class = "text-danger" })
+            </div>
+            <div class="form-group text-center">
+                <input type="submit" value="Save" class="btn peach-btn" style="padding:6px 30px;" />
+            </div>
+            <div class="col-xs-12 text-center back_text">
+                <i class="fa fa-chevron-left"></i>&nbsp; @Html.ActionLink("Go Back", "index")
+            </div>
+        }
+    </div>
+</div>
+
+
+

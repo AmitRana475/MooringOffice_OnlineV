@@ -1,0 +1,72 @@
+﻿@model List<VesselLayer.Vessel>
+@using Shipment49Web.Helpers
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_LeftSideBar.cshtml";
+}
+
+<div class="content-wrapper">
+    <section class="content-header">
+        <h1>
+            Vessels
+        </h1>
+        <p class="pull-right">
+            @Html.ActionLink("Create New", "Create")
+        </p>
+    </section>
+
+    <section class="content">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="box box-info">
+                    <div class="box-body">
+                        <div class="table-responsive table-striped">
+                            <table class="table no-margin" id="dataTable" width="100%" cellspacing="0">
+                                <tr>
+                                    <th>Name</th>
+                                    <th>ImoNo</th>
+                                    <th>Flag</th>
+                                    <th>DateBuilt</th>
+                                    <th>FleetName</th>
+                                    <th>FleetType</th>
+                                    <th>TradePlatform</th>
+                                    <th>Options</th>
+                                </tr>
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.VesselName)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.ImoNo)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Flag)
+                                        </td>
+                                        <td>
+                                            @Html.Raw(item.DateBuilt.ToString("dd-MMM-yyyy"))
+                                        </td>
+                                        <td>
+                                            @Html.GetCommonType(item.FleetNameID)
+                                        </td>
+                                        <td>
+                                            @Html.GetCommonType(item.FleetTypeID)
+                                        </td>
+                                        <td>
+                                            @Html.GetCommonType(item.TradeAreaID)
+                                        </td>
+                                        <td>
+                                            @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
+                                            @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+                                        </td>
+                                    </tr>
+                                }
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>

@@ -1,0 +1,792 @@
+﻿@model Shipment49Web.Common.LooseEquDetailsList
+
+@{
+    ViewBag.Title = "LooseEquDetail";
+    Layout = "~/Views/Shared/_LeftSideBar.cshtml";
+}
+
+
+
+<div class="content-wrapper">
+    <section class="content-header">
+
+        <h2>Loose Equipment Detail</h2>
+
+    </section>
+    @{
+        int count = 0;
+    }
+    <section class="content">
+
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="box box-default">
+                    <div class="box-body">
+                        <div class="nav-tabs-custom">
+                            <ul class="nav nav-tabs">
+                                <li class="active"><a href="#JoiningShackle" class="tablinks" data-toggle="tab">Joining Shackle</a></li>
+
+                                <li><a href="#RopeStopper" class="tablinks" data-toggle="tab">Rope Stopper</a></li>
+                                <li><a href="#ChainStopper" class="tablinks" data-toggle="tab">Chain Stopper</a></li>
+
+                                <li><a href="#MessengerRope" class="tablinks" data-toggle="tab">Messenger Rope</a></li>
+                                <li><a href="#FireWire" class="tablinks" data-toggle="tab">Fire Wire</a></li>
+                                <li><a href="#ChafeGuard" class="tablinks" data-toggle="tab">Chafe Guard</a></li>
+                                <li><a href="#WinchBreakTestKit" class="tablinks" data-toggle="tab">Winch Break Test Kit</a></li>
+                                <li><a href="#TowingRope" class="tablinks" data-toggle="tab">Towing Rope</a></li>
+                                <li><a href="#SuezRope" class="tablinks" data-toggle="tab">Suez Rope</a></li>
+                            </ul>
+                            <div class="tab-content" style="min-height: 650px">
+                                <div class="tab-pane active" id="JoiningShackle">
+                                    @{
+                                        count = Model.JoiningShackle.Count;
+                                        if (count == 0)
+                                        {
+                                            <div class="panel-group">
+                                                <div class="panel panel-info">
+                                                    <div class="panel-body">
+                                                        <p class="text-center">
+                                                            No Records Found!
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <div class="table-responsive table-striped">
+                                                <table class="table no-margin" id="dataTable" width="100%" cellspacing="0">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>VesselName</th>
+                                                            <th>Manufacture</th>
+                                                            <th>Certificate Number</th>
+                                                            <th>Type</th>
+                                                            <th>MBL</th>
+                                                            <th>Received Date</th>
+                                                            <th>Installed Date</th>
+                                                            <th>Inspection Due Date</th>
+
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        @{
+                                                            foreach (var record in Model.JoiningShackle)
+                                                            {
+                                                                <tr>
+                                                                    <td>@record.VesselName</td>
+                                                                    <td>@record.ManufactureName</td>
+                                                                    <td>@record.CertificateNumber</td>
+                                                                    <td>@record.Type</td>
+                                                                    <td>@record.MBL</td>
+
+                                                                    <td>
+                                                                        @{
+                                                                            DateTime? dt1 = record.ReceivedDate;
+                                                                            if (dt1 != null)
+                                                                            {
+                                                                                @Html.Raw(dt1.Value.ToString("dd-MMM-yyyy"))
+                                                                            }
+                                                                        }
+                                                                    </td>
+                                                                    <td>
+                                                                        @{
+                                                                            DateTime? dt2 = record.InstalledDate;
+                                                                            if (dt2 != null)
+                                                                            {
+                                                                                @Html.Raw(dt2.Value.ToString("dd-MMM-yyyy"))
+                                                                            }
+                                                                        }
+                                                                    </td>
+                                                                    <td>
+                                                                        @{
+                                                                            DateTime? dt3 = record.InspectionDueDate;
+                                                                            if (dt3 != null)
+                                                                            {
+                                                                                @Html.Raw(dt3.Value.ToString("dd-MMM-yyyy"))
+                                                                            }
+                                                                        }
+                                                                    </td>
+
+                                                                </tr>
+                                                            }
+                                                        }
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        }
+                                    }
+                                </div>
+
+
+                                <div class="tab-pane" id="RopeStopper">
+                                    @{
+                                        count = Model.RopeStopper.Count;
+                                        if (count == 0)
+                                        {
+                                            <div class="panel-group">
+                                                <div class="panel panel-info">
+                                                    <div class="panel-body">
+                                                        <p class="text-center">
+                                                            No Records Found!
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <div class="table-responsive table-striped">
+                                                <table class="table no-margin" id="dataTable" width="100%" cellspacing="0">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Vessel</th>
+                                                            <th>Manufacture Name</th>
+                                                            <th>Certificate Number</th>
+                                                            <th>Rope Construction</th>
+                                                            <th>Diameter</th>
+                                                            <th>MBL</th>
+                                                            <th>LDBF</th>
+                                                            <th>WLL</th>
+                                                            <th>Tagging</th>
+                                                            <th>Received Date</th>
+                                                            <th>Installed Date</th>
+                                                            <th>Inspection Due Date</th>
+
+                                                            @*<th>Fast Datetime</th>*@
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        @{
+                                                            foreach (var record in Model.RopeStopper)
+                                                            {
+                                                                <tr>
+                                                                    <td>@record.VesselName</td>
+                                                                    <td>@record.ManufactureName</td>
+                                                                    <td>@record.CertificateNumber</td>
+                                                                    <td>@record.RopeConstruction</td>
+                                                                    <td>@record.Diameter</td>
+                                                                    <td>@record.MBL</td>
+                                                                    <td>@record.LDBF</td>
+                                                                    <td>@record.WLL</td>
+                                                                    <td>@record.RopeTagging</td>
+                                                                    <td>
+                                                                        @{
+                                                                            DateTime? dt1 = record.ReceivedDate;
+                                                                            if (dt1 != null)
+                                                                            {
+                                                                                @Html.Raw(dt1.Value.ToString("dd-MMM-yyyy"))
+                                                                            }
+                                                                        }
+                                                                    </td>
+                                                                    <td>
+                                                                        @{
+                                                                            DateTime? dt2 = record.InstalledDate;
+                                                                            if (dt2 != null)
+                                                                            {
+                                                                                @Html.Raw(dt2.Value.ToString("dd-MMM-yyyy"))
+                                                                            }
+                                                                        }
+                                                                    </td>
+                                                                    <td>
+                                                                        @{
+                                                                            DateTime? dt3 = record.InspectionDueDate;
+                                                                            if (dt3 != null)
+                                                                            {
+                                                                                @Html.Raw(dt3.Value.ToString("dd-MMM-yyyy"))
+                                                                            }
+                                                                        }
+                                                                    </td>
+                                                                </tr>
+                                                            }
+                                                        }
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        }
+                                    }
+                                </div>
+
+                                <div class="tab-pane" id="ChainStopper">
+                                    @{
+                                        count = Model.ChainStopper.Count;
+                                        if (count == 0)
+                                        {
+                                            <div class="panel-group">
+                                                <div class="panel panel-info">
+                                                    <div class="panel-body">
+                                                        <p class="text-center">
+                                                            No Records Found!
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <div class="table-responsive table-striped">
+                                                <table class="table no-margin" id="dataTable" width="100%" cellspacing="0">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Vessel</th>
+                                                            <th>Manufacture</th>
+                                                            <th>Certificate Number</th>
+                                                            <th>Length</th>
+                                                            <th>MBL</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        @{
+                                                            foreach (var record in Model.ChainStopper)
+                                                            {
+                                                                <tr>
+                                                                    <td>@record.ManufactureName</td>
+                                                                    <td>@record.CertificateNumber</td>
+                                                                    <td>@record.Length</td>
+                                                                    <td>@record.MBL</td>
+                                                                    <td>
+                                                                        @{
+                                                                            DateTime? dt1 = record.ReceivedDate;
+                                                                            if (dt1 != null)
+                                                                            {
+                                                                                @Html.Raw(dt1.Value.ToString("dd-MMM-yyyy"))
+                                                                            }
+                                                                        }
+                                                                    </td>
+                                                                    <td>
+                                                                        @{
+                                                                            DateTime? dt2 = record.InstalledDate;
+                                                                            if (dt2 != null)
+                                                                            {
+                                                                                @Html.Raw(dt2.Value.ToString("dd-MMM-yyyy"))
+                                                                            }
+                                                                        }
+                                                                    </td>
+                                                                    <td>
+                                                                        @{
+                                                                            DateTime? dt3 = record.InspectionDueDate;
+                                                                            if (dt3 != null)
+                                                                            {
+                                                                                @Html.Raw(dt3.Value.ToString("dd-MMM-yyyy"))
+                                                                            }
+                                                                        }
+                                                                    </td>
+                                                                </tr>
+                                                            }
+                                                        }
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        }
+                                    }
+                                </div>
+
+
+                                <div class="tab-pane" id="MessengerRope">
+                                    @{
+                                        count = Model.MessengerRope.Count;
+                                        if (count == 0)
+                                        {
+                                            <div class="panel-group">
+                                                <div class="panel panel-info">
+                                                    <div class="panel-body">
+                                                        <p class="text-center">
+                                                            No Records Found!
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <div class="table-responsive table-striped">
+                                                <table class="table no-margin" id="dataTable" width="100%" cellspacing="0">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Vessel</th>
+                                                            <th>Manufacture Name</th>
+                                                            <th>Certificate Number</th>
+                                                            <th>Rope Construction</th>
+                                                            <th>Diameter</th>
+                                                            <th>MBL</th>
+                                                            <th>LDBF</th>
+                                                            <th>WLL</th>
+                                                            <th>Tagging</th>
+                                                            <th>Received Date</th>
+                                                            <th>Installed Date</th>
+                                                            <th>Inspection Due Date</th>
+
+                                                            @*<th>Fast Datetime</th>*@
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        @{
+                                                            foreach (var record in Model.MessengerRope)
+                                                            {
+                                                                <tr>
+                                                                    <td>@record.VesselName</td>
+                                                                    <td>@record.ManufactureName</td>
+                                                                    <td>@record.CertificateNumber</td>
+                                                                    <td>@record.RopeConstruction</td>
+                                                                    <td>@record.Diameter</td>
+                                                                    <td>@record.MBL</td>
+                                                                    <td>@record.LDBF</td>
+                                                                    <td>@record.WLL</td>
+                                                                    <td>@record.RopeTagging</td>
+                                                                    <td>
+                                                                        @{
+                                                                            DateTime? dt1 = record.ReceivedDate;
+                                                                            if (dt1 != null)
+                                                                            {
+                                                                                @Html.Raw(dt1.Value.ToString("dd-MMM-yyyy"))
+                                                                            }
+                                                                        }
+                                                                    </td>
+                                                                    <td>
+                                                                        @{
+                                                                            DateTime? dt2 = record.InstalledDate;
+                                                                            if (dt2 != null)
+                                                                            {
+                                                                                @Html.Raw(dt2.Value.ToString("dd-MMM-yyyy"))
+                                                                            }
+                                                                        }
+                                                                    </td>
+                                                                    <td>
+                                                                        @{
+                                                                            DateTime? dt3 = record.InspectionDueDate;
+                                                                            if (dt3 != null)
+                                                                            {
+                                                                                @Html.Raw(dt3.Value.ToString("dd-MMM-yyyy"))
+                                                                            }
+                                                                        }
+                                                                    </td>
+                                                                </tr>
+                                                            }
+                                                        }
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        }
+                                    }
+                                </div>
+                                <div class="tab-pane" id="FireWire">
+                                    @{
+                                        count = Model.FireWire.Count;
+                                        if (count == 0)
+                                        {
+                                            <div class="panel-group">
+                                                <div class="panel panel-info">
+                                                    <div class="panel-body">
+                                                        <p class="text-center">
+                                                            No Records Found!
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <div class="table-responsive table-striped">
+                                                <table class="table no-margin" id="dataTable" width="100%" cellspacing="0">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Vessel</th>
+                                                            <th>Manufacture Name</th>
+                                                            <th>Certificate Number</th>
+                                                            <th>Rope Construction</th>
+                                                            <th>Diameter</th>
+                                                            <th>MBL</th>
+                                                            <th>LDBF</th>
+                                                            <th>WLL</th>
+                                                            <th>Tagging</th>
+                                                            <th>Received Date</th>
+                                                            <th>Installed Date</th>
+                                                            <th>Inspection Due Date</th>
+
+                                                            @*<th>Fast Datetime</th>*@
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        @{
+                                                            foreach (var record in Model.FireWire)
+                                                            {
+                                                                <tr>
+                                                                    <td>@record.VesselName</td>
+                                                                    <td>@record.ManufactureName</td>
+                                                                    <td>@record.CertificateNumber</td>
+                                                                    <td>@record.RopeConstruction</td>
+                                                                    <td>@record.Diameter</td>
+                                                                    <td>@record.MBL</td>
+                                                                    <td>@record.LDBF</td>
+                                                                    <td>@record.WLL</td>
+                                                                    <td>@record.RopeTagging</td>
+                                                                    <td>
+                                                                        @{
+                                                                            DateTime? dt1 = record.ReceivedDate;
+                                                                            if (dt1 != null)
+                                                                            {
+                                                                                @Html.Raw(dt1.Value.ToString("dd-MMM-yyyy"))
+                                                                            }
+                                                                        }
+                                                                    </td>
+                                                                    <td>
+                                                                        @{
+                                                                            DateTime? dt2 = record.InstalledDate;
+                                                                            if (dt2 != null)
+                                                                            {
+                                                                                @Html.Raw(dt2.Value.ToString("dd-MMM-yyyy"))
+                                                                            }
+                                                                        }
+                                                                    </td>
+                                                                    <td>
+                                                                        @{
+                                                                            DateTime? dt3 = record.InspectionDueDate;
+                                                                            if (dt3 != null)
+                                                                            {
+                                                                                @Html.Raw(dt3.Value.ToString("dd-MMM-yyyy"))
+                                                                            }
+                                                                        }
+                                                                    </td>
+                                                                </tr>
+                                                            }
+                                                        }
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        }
+                                    }
+                                </div>
+                                <div class="tab-pane" id="ChafeGuard">
+                                    @{
+                                        count = Model.ChafeGuard.Count;
+                                        if (count == 0)
+                                        {
+                                            <div class="panel-group">
+                                                <div class="panel panel-info">
+                                                    <div class="panel-body">
+                                                        <p class="text-center">
+                                                            No Records Found!
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <div class="table-responsive table-striped">
+                                                <table class="table no-margin" id="dataTable" width="100%" cellspacing="0">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Vessel</th>
+                                                            <th>Manufacture</th>
+                                                            <th>Received Date</th>
+                                                            <th>Installed Date</th>
+                                                            <th>Inspection Due Date</th>
+
+
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        @{
+                                                            foreach (var record in Model.ChafeGuard)
+                                                            {
+                                                                <tr>
+                                                                    <td>@record.VesselName</td>
+                                                                    <td>@record.ManufactureName</td>
+                                                                    <td>
+                                                                        @{
+                                                                            DateTime? dt1 = record.ReceivedDate;
+                                                                            if (dt1 != null)
+                                                                            {
+                                                                                @Html.Raw(dt1.Value.ToString("dd-MMM-yyyy"))
+                                                                            }
+                                                                        }
+                                                                    </td>
+                                                                    <td>
+                                                                        @{
+                                                                            DateTime? dt2 = record.InstalledDate;
+                                                                            if (dt2 != null)
+                                                                            {
+                                                                                @Html.Raw(dt2.Value.ToString("dd-MMM-yyyy"))
+                                                                            }
+                                                                        }
+                                                                    </td>
+                                                                    <td>
+                                                                        @{
+                                                                            DateTime? dt3 = record.InspectionDueDate;
+                                                                            if (dt3 != null)
+                                                                            {
+                                                                                @Html.Raw(dt3.Value.ToString("dd-MMM-yyyy"))
+                                                                            }
+                                                                        }
+                                                                    </td>
+
+
+                                                                </tr>
+                                                            }
+                                                        }
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        }
+                                    }
+                                </div>
+                                <div class="tab-pane" id="WinchBreakTestKit">
+                                    @{
+                                        count = Model.WinchBreakTestKit.Count;
+                                        if (count == 0)
+                                        {
+                                            <div class="panel-group">
+                                                <div class="panel panel-info">
+                                                    <div class="panel-body">
+                                                        <p class="text-center">
+                                                            No Records Found!
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <div class="table-responsive table-striped">
+                                                <table class="table no-margin" id="dataTable" width="100%" cellspacing="0">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Vessel</th>
+                                                            <th>Manufacture</th>
+                                                            <th>Received Date</th>
+                                                            <th>Installed Date</th>
+                                                            <th>Inspection Due Date</th>
+
+
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        @{
+                                                            foreach (var record in Model.WinchBreakTestKit)
+                                                            {
+                                                                <tr>
+                                                                    <td>@record.VesselName</td>
+                                                                    <td>@record.ManufactureName</td>
+                                                                    <td>
+                                                                        @{
+                                                                            DateTime? dt1 = record.ReceivedDate;
+                                                                            if (dt1 != null)
+                                                                            {
+                                                                                @Html.Raw(dt1.Value.ToString("dd-MMM-yyyy"))
+                                                                            }
+                                                                        }
+                                                                    </td>
+                                                                    <td>
+                                                                        @{
+                                                                            DateTime? dt2 = record.InstalledDate;
+                                                                            if (dt2 != null)
+                                                                            {
+                                                                                @Html.Raw(dt2.Value.ToString("dd-MMM-yyyy"))
+                                                                            }
+                                                                        }
+                                                                    </td>
+                                                                    <td>
+                                                                        @{
+                                                                            DateTime? dt3 = record.InspectionDueDate;
+                                                                            if (dt3 != null)
+                                                                            {
+                                                                                @Html.Raw(dt3.Value.ToString("dd-MMM-yyyy"))
+                                                                            }
+                                                                        }
+                                                                    </td>
+
+
+                                                                </tr>
+                                                            }
+                                                        }
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        }
+                                    }
+                                </div>
+
+                                <div class="tab-pane" id="TowingRope">
+                                    @{
+                                        count = Model.TowingRope.Count;
+                                        if (count == 0)
+                                        {
+                                            <div class="panel-group">
+                                                <div class="panel panel-info">
+                                                    <div class="panel-body">
+                                                        <p class="text-center">
+                                                            No Records Found!
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <div class="table-responsive table-striped">
+                                                <table class="table no-margin" id="dataTable" width="100%" cellspacing="0">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Vessel</th>
+                                                            <th>Manufacture Name</th>
+                                                            <th>Certificate Number</th>
+                                                            <th>Rope Construction</th>
+                                                            <th>Diameter</th>
+                                                            <th>MBL</th>
+                                                            <th>LDBF</th>
+                                                            <th>WLL</th>
+                                                            <th>Tagging</th>
+                                                            <th>Received Date</th>
+                                                            <th>Installed Date</th>
+                                                            <th>Inspection Due Date</th>
+
+                                                            @*<th>Fast Datetime</th>*@
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        @{
+                                                            foreach (var record in Model.TowingRope)
+                                                            {
+                                                                <tr>
+                                                                    <td>@record.VesselName</td>
+                                                                    <td>@record.ManufactureName</td>
+                                                                    <td>@record.CertificateNumber</td>
+                                                                    <td>@record.RopeConstruction</td>
+                                                                    <td>@record.Diameter</td>
+                                                                    <td>@record.MBL</td>
+                                                                    <td>@record.LDBF</td>
+                                                                    <td>@record.WLL</td>
+                                                                    <td>@record.RopeTagging</td>
+                                                                    <td>
+                                                                        @{
+                                                                            DateTime? dt1 = record.ReceivedDate;
+                                                                            if (dt1 != null)
+                                                                            {
+                                                                                @Html.Raw(dt1.Value.ToString("dd-MMM-yyyy"))
+                                                                            }
+                                                                        }
+                                                                    </td>
+                                                                    <td>
+                                                                        @{
+                                                                            DateTime? dt2 = record.InstalledDate;
+                                                                            if (dt2 != null)
+                                                                            {
+                                                                                @Html.Raw(dt2.Value.ToString("dd-MMM-yyyy"))
+                                                                            }
+                                                                        }
+                                                                    </td>
+                                                                    <td>
+                                                                        @{
+                                                                            DateTime? dt3 = record.InspectionDueDate;
+                                                                            if (dt3 != null)
+                                                                            {
+                                                                                @Html.Raw(dt3.Value.ToString("dd-MMM-yyyy"))
+                                                                            }
+                                                                        }
+                                                                    </td>
+                                                                </tr>
+                                                            }
+                                                        }
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        }
+                                    }
+                                </div>
+                                <div class="tab-pane" id="SuezRope">
+                                    @{
+                                        count = Model.SuezRope.Count;
+                                        if (count == 0)
+                                        {
+                                            <div class="panel-group">
+                                                <div class="panel panel-info">
+                                                    <div class="panel-body">
+                                                        <p class="text-center">
+                                                            No Records Found!
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <div class="table-responsive table-striped">
+                                                <table class="table no-margin" id="dataTable" width="100%" cellspacing="0">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Vessel</th>
+                                                            <th>Manufacture Name</th>
+                                                            <th>Certificate Number</th>
+                                                            <th>Rope Construction</th>
+                                                            <th>Diameter</th>
+                                                            <th>MBL</th>
+                                                            <th>LDBF</th>
+                                                            <th>WLL</th>
+                                                            <th>Tagging</th>
+                                                            <th>Received Date</th>
+                                                            <th>Installed Date</th>
+                                                            <th>Inspection Due Date</th>
+
+                                                            @*<th>Fast Datetime</th>*@
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        @{
+                                                            foreach (var record in Model.SuezRope)
+                                                            {
+                                                                <tr>
+                                                                    <td>@record.VesselName</td>
+                                                                    <td>@record.ManufactureName</td>
+                                                                    <td>@record.CertificateNumber</td>
+                                                                    <td>@record.RopeConstruction</td>
+                                                                    <td>@record.Diameter</td>
+                                                                    <td>@record.MBL</td>
+                                                                    <td>@record.LDBF</td>
+                                                                    <td>@record.WLL</td>
+                                                                    <td>@record.RopeTagging</td>
+                                                                    <td>
+                                                                        @{
+                                                                            DateTime? dt1 = record.ReceivedDate;
+                                                                            if (dt1 != null)
+                                                                            {
+                                                                                @Html.Raw(dt1.Value.ToString("dd-MMM-yyyy"))
+                                                                            }
+                                                                        }
+                                                                    </td>
+                                                                    <td>
+                                                                        @{
+                                                                            DateTime? dt2 = record.InstalledDate;
+                                                                            if (dt2 != null)
+                                                                            {
+                                                                                @Html.Raw(dt2.Value.ToString("dd-MMM-yyyy"))
+                                                                            }
+                                                                        }
+                                                                    </td>
+                                                                    <td>
+                                                                        @{
+                                                                            DateTime? dt3 = record.InspectionDueDate;
+                                                                            if (dt3 != null)
+                                                                            {
+                                                                                @Html.Raw(dt3.Value.ToString("dd-MMM-yyyy"))
+                                                                            }
+                                                                        }
+                                                                    </td>
+                                                                </tr>
+                                                            }
+                                                        }
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        }
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>

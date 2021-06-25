@@ -1,0 +1,474 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+}
+
+@*<script src="~/Scripts/jquery-1.12.4.js"></script>
+    <link href="~/Content/themes/jquery-ui.css" rel="stylesheet" />
+
+
+    <script src="~/ScriptBMS/angular.js"></script>
+    <script src="~/ScriptBMS/lodash.js"></script>
+    <script src="~/ScriptBMS/angularjs-dropdown-multiselect.js"></script>
+    <script src="~/Scripts/MyApp.js"></script>*@
+
+
+@*<script type="text/javascript">
+
+        $(document).ready(function () {
+            var dir = $('#dir').val();
+            var col = $('#col').val();
+
+            var header = $('th a[href*=' + col + ']');
+            if (dir == 'Ascending') {
+                header.text(header.text() + ' ▲');
+            }
+            if (dir == 'Descending') {
+                header.text(header.text() + ' ▼');
+            }
+
+
+        });
+    </script>*@
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        $("#datefrom").datepicker();
+    });
+</script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        $("#dateto").datepicker();
+
+        //$("#dateto").datepicker({
+        //    dateFormat: "dd/MM/yy",
+        //    maxDate: 0
+        //});
+    });
+</script>
+
+
+
+@*<script type="text/javascript">
+        $(function () {
+            $("#search").autocomplete({
+                source: '@Url.Action("AutoComplete4", "notification", "notification")',
+                minLength: 1
+            });
+        });
+
+    </script>*@
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        //......make condition for get check value....
+        $('#btnAck').click(function () {
+            var getid = "";
+            $('#gridMapping').find("input:checkbox").each(function () {
+
+                var ischecked = this.checked;
+                if ($(this).val() != '' && ischecked) {
+
+                    getid += $(this).val() + ",";
+                }
+
+            });
+
+            $('#ids').val(getid);
+            //alert(getid);
+        });
+
+    });
+</script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#Ranks').multiselect({
+
+            filterPlaceholder: 'Search',
+            enableCaseInsensitiveFiltering: true,
+            maxHeight: 250,
+            numberDisplayed: 1,
+            nonSelectedText: 'Select Rank'
+
+        });
+        $('#btnSelected').click(function () {
+            var selected = $("#Ranks option:selected");
+            var message = "";
+            selected.each(function () {
+                message += $(this).val() + ",";
+            });
+            $('#Rank').val(message);
+            //alert(message);
+        });
+    });
+</script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#vesselnames').multiselect( {
+
+            //includeSelectAllOption: true,
+            //setSelects: @ViewBag.vesselname1,
+            filterPlaceholder: 'Search',
+            enableCaseInsensitiveFiltering: true,
+            maxHeight: 250,
+            //buttonWidth: '150px',
+            numberDisplayed: 1,
+            nonSelectedText: 'Select Vessels'
+            //selectAllValue: 'multiselect-all',
+            //selectAllText: "true",
+
+        });
+
+        $('#btnSelected').click(function () {
+            var selected = $("#vesselnames option:selected");
+            var message = "";
+            selected.each(function () {
+                message += $(this).val() + ",";
+
+            });
+            $('#search').val(message);
+
+            
+        });
+
+
+        
+
+
+    });
+</script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#fleettypes').multiselect({
+
+            filterPlaceholder: 'Search',
+            enableCaseInsensitiveFiltering: true,
+            maxHeight: 250,
+            numberDisplayed: 1,
+            nonSelectedText: 'Select FleetType'
+
+        });
+        $('#btnSelected').click(function () {
+            var selected = $("#fleettypes option:selected");
+            var message = "";
+            selected.each(function () {
+                message += $(this).val() + ",";
+            });
+            $('#fleettype').val(message);
+            //alert(message);
+        });
+    });
+</script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#fleetnames').multiselect({
+            filterPlaceholder: 'Search',
+            enableCaseInsensitiveFiltering: true,
+            maxHeight: 250,
+            numberDisplayed: 1,
+            nonSelectedText: 'Select FleetName'
+
+        });
+        $('#btnSelected').click(function () {
+            var selected = $("#fleetnames option:selected");
+            var message = "";
+            selected.each(function () {
+                message += $(this).val() + ",";
+            });
+            $('#fleetname').val(message);
+            //alert(message);
+        });
+    });
+</script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        //var groups = ["Sanmar Sonnet", "Sanmar Majesty"];
+        //var values = "Sanmar Sonnet, Sanmar Majesty";
+        //var values1 = values.split(",");
+
+
+
+        var values2 = '@ViewBag.fleettypebm1';
+        $('#fleettypes option').filter(function () {
+            return values2.indexOf($(this).text()) > -1; //Options text exists in array
+        }).prop('selected', true);
+
+        $("#fleettypes").multiselect("refresh");
+
+        //........................
+
+        var values2 = '@ViewBag.fleetnamebm1';
+        $('#fleetnames option').filter(function () {
+            return values2.indexOf($(this).text()) > -1; //Options text exists in array
+        }).prop('selected', true);
+
+        $("#fleetnames").multiselect("refresh");
+
+        //................
+
+        var values2 = '@ViewBag.vesselnamebm1';
+        $('#vesselnames option').filter(function () {
+            return values2.indexOf($(this).text()) > -1; //Options text exists in array
+        }).prop('selected', true);
+
+        $("#vesselnames").multiselect("refresh");
+
+        //................
+
+        var values2 = '@ViewBag.rankbm1';
+        $('#Ranks option').filter(function () {
+            return values2.indexOf($(this).text()) > -1; //Options text exists in array
+        }).prop('selected', true);
+
+        $("#Ranks").multiselect("refresh");
+
+
+
+    });
+</script>
+
+<div  class="container">
+    <h2> Deviations</h2>
+
+    <nav class="navbar navbar-default">
+
+        <div class="container-fluid-right">
+
+            <div>
+                @using (Html.BeginForm("index", "Notification", FormMethod.Get, new { area = "notification", @class = "navbar-form navbar-left" }))
+                {
+                    <button id="btnAck" type="submit" value="Acknowledge" name="Acknowledge" class="btn btn-success">Acknowledge</button>
+                    <div class="form-group">
+
+                        @Html.ListBox("fleettypes", new SelectList(ViewBag.fleettypebm, "Value", "Text"))
+                        <input id="fleettype" name="fleettype" type="hidden" />
+
+                        @Html.ListBox("fleetnames", new SelectList(ViewBag.fleetnamebm, "Value", "Text"))
+                        <input id="fleetname" name="fleetname" type="hidden" />
+
+                        @Html.ListBox("vesselnames", new SelectList(ViewBag.vesselnamebm, "Value", "Text"), new { multiple = "multiple" })
+                        <input id="search" name="search" type="hidden" />
+                        <input id="ids" name="ids" type="hidden" />
+
+                        @Html.ListBox("Ranks", new SelectList(ViewBag.rankebm, "Value", "Text"))
+                        <input id="Rank" name="Rank" type="hidden" />
+
+
+                        @*<div ng-controller="multiselecteddropdown5" data-ng-model="fleettype">
+                                <div ng-dropdown-multiselect="" options="CategoriesT" selected-model="SkillsetsFleetType" extra-settings="dropdownSetting" width="100%"></div>
+                                <input id="fleettype" name="fleettype" type="hidden" value="{{SkillsetsFleetType}}" />
+                            </div>
+
+                            <div ng-controller="multiselecteddropdown4" data-ng-model="fleetname">
+                                <div ng-dropdown-multiselect="" options="CategoriesF" selected-model="SkillsetsFleetName" extra-settings="dropdownSetting" width="100%"></div>
+                                <input id="fleetname" name="fleetname" type="hidden" value="{{SkillsetsFleetName}}" />
+                            </div>
+
+                            <div ng-controller="multiselecteddropdown6" data-ng-model="search">
+                                <div ng-dropdown-multiselect="" options="Categories" selected-model="Skillsets" extra-settings="dropdownSetting" width="100%"></div>
+                                <input id="search" name="search" type="hidden" value="{{Skillsets}}" />
+                            </div>*@
+
+                        @*<input type="text" name="search" id="search" value="@ViewBag.vname"  class="form-control" placeholder="vessel Name" />&ensp;*@
+                        <input type="text" name="datefrom" id="datefrom" value="@ViewBag.datefrom" class="form-control" placeholder="Select Date From" />&ensp;
+                        <input type="text" name="dateto" id="dateto" value="@ViewBag.dateto" class="form-control" placeholder="Select Date To" />
+
+
+
+                    </div>
+                    <button id="btnSelected" type="submit" name="Searchbtn" value="Search" class="btn btn-success">Search</button>
+
+                }
+            </div>
+            <div class="navbar-form navbar-right">
+
+                NCs : <label style="color:green">@ViewBag.Ack</label> / <label style="color:red">@ViewBag.UnAck</label>
+
+            </div>
+            
+        </div>
+    </nav>
+
+
+
+    @Html.Partial("_notificationgrid")
+
+
+
+    @*<div>
+
+            <table class="table">
+                <tr>
+                    <th>
+                        Date
+                    </th>
+
+                    <th>
+                        Vessel Name
+                    </th>
+
+                    <th>
+                        Deviation
+                    </th>
+                    <th>
+                        Name
+                    </th>
+
+                    <th>
+                        Rank
+                    </th>
+
+                    <th>
+                        Master Ack
+                    </th>
+                    <th>
+                        HOD Ack
+                    </th>
+
+                    <th>Action</th>
+                    <th>Detail</th>
+                </tr>
+
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.NcDate)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.VesselName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.NonConfirmity)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.FullName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Rank)
+                        </td>
+
+                        <td>
+                            @Html.DisplayFor(modelItem => item.MasterAkn)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.HODAkn)
+                        </td>
+
+                        <td>
+                            @Html.ActionLink("Edit", "Edit", new { id = item.Nid }) |
+                            @Html.ActionLink("Comment (" + item.Comment1.Count() + ")", "comment", new { id = item.Nid }) |
+                            @Html.ActionLink("Delete", "Delete", new { id = item.Nid })
+                        </td>
+                    </tr>
+                }
+
+            </table>
+
+            <div class="row">
+                <div class="col-sm-6">
+                    @grid.PagerList(mode: WebGridPagerModes.All, paginationStyle: "pagination pagination-small pagination-small")
+                </div>
+            </div>
+            @Html.Hidden("dir", grid.SortDirection)
+            @Html.Hidden("col", grid.SortColumn)
+
+        </div>*@
+
+
+    <div id="message-listbm">
+        <font>@ViewBag.Messagegrid</font>
+    </div>
+
+</div>
+
+
+
+
+@*<h2>Index</h2>
+
+    <p>
+        @Html.ActionLink("Create New", "Create")
+    </p>
+    <table class="table">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.NcDate)
+            </th>
+
+            <th>
+                @Html.DisplayNameFor(model => model.VesselName)
+            </th>
+
+            <th>
+                @Html.DisplayNameFor(model => model.NonConfirmity)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FullName)
+            </th>
+
+            <th>
+                @Html.DisplayNameFor(model => model.Rank)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.AdminAkn)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.MasterAkn)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.HODAkn)
+            </th>
+
+            <th>Action</th>
+        </tr>
+
+    @foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.NcDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.VesselName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.NonConfirmity)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FullName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Rank)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.AdminAkn)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.MasterAkn)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.HODAkn)
+            </td>
+
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id=item.Nid }) |
+                @Html.ActionLink("Comment ("+ item.Comment1.Count()+ ")", "comment", new { id=item.Nid }) |
+                @Html.ActionLink("Delete", "Delete", new { id=item.Nid })
+            </td>
+        </tr>
+    }
+
+    </table>*@

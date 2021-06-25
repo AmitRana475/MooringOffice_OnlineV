@@ -1,0 +1,425 @@
+﻿
+@model Shipment49Web.Areas.TrainingContent.Models.TrainingAttachmentClass
+
+
+@{
+    /**/
+
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_LayoutOthers.cshtml";
+}
+
+
+
+
+<style>
+    iframe {
+        height: 500px;
+        width: 500px;
+    }
+</style>
+
+<div class="page-heading page-header-flex">
+    <div>
+        <h1 class="page-title">
+            Training Content
+        </h1>
+        @*<ol class="breadcrumb">
+            <li><a href="">Home</a></li>
+            <li><a href="">Form</a></li>
+            <li><a>Create</a></li>
+        </ol>*@
+    </div>
+    @if (TempData["Error"] != null)
+    {
+        <p class="alert alert-danger" id="errorMessage">@TempData["Error"]</p>
+    }
+    @if (TempData["Success"] != null)
+    {
+        <p class="alert alert-success" id="successMessage">@TempData["Success"]</p>
+    }
+    <div>
+        <a class="btn btn-info" href="#" data-toggle="modal" data-target="#addModal">
+            <i class="fa fa-plus-circle mr-2"></i>Add Attachment
+        </a>
+    </div>
+</div>
+
+@*<iframe  src="~/images/AttachFiles/_49 Web Street, Grey Box Web Application Vulnerability Assessment Report3798.pdf"></iframe>*@
+<div class="wrapper wrapper-content">
+    <div class="container">
+        <div class="table-responsive">
+            @{
+                int count = 1;
+            }
+            <table class="table">
+                <thead>
+                    <tr>
+
+
+                        <th style="display:none">Id</th>
+                        <th>S.No.</th>
+                        <th>Training Attachment Content Name</th>
+                        <th>Created Date</th>
+                        <th>Attachments</th>
+
+                        @*<th width="100px">View</th>*@
+                        <th width="100px">Delete</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+
+
+                    @foreach (var item in Model.TrainingContentList)
+                    {
+                        <tr>
+                            <td style="display:none"> @Html.DisplayFor(modelItem => item.Id)</td>
+                            <td>@count </td>
+
+
+                            <td> @Html.DisplayFor(modelItem => item.AttachmentName)</td>
+                            <td> @Html.DisplayFor(modelItem => item.AttachmentDate)</td>
+                            <td>
+                                @{var extn = item.AttachmentPath.Split('.').Last();}
+
+                                @if (extn == "mp4" || extn == "mkv" || extn == "flv" || extn == "gif" || extn == "wmv" || extn == "avi" || extn == "amv" || extn == "mpg" || extn == "3gp")
+                                {
+                                    <a onclick='return showVd(this.id)' id="~/images/AttachFiles/@item.AttachmentPath">View Attachment</a>
+                                }
+                                else if (extn == "jpg" || extn == "JPG" || extn == "jpeg" || extn == "JPEG" || extn == "png" || extn == "PNG" || extn == "TIFF" || extn == "RAW" || extn == "BMP" || extn == "SVG" || extn == "PSD")
+                                {
+
+                                    <a onclick='return showImages(this.id)' id="~/images/AttachFiles/@item.AttachmentPath">View Attachment</a>
+                                }
+                                else if (extn == "pdf" || extn == "PDF")
+                                {
+                                    <a onclick='return showpdf(this.id)' id="~/images/AttachFiles/@item.AttachmentPath">View Attachment</a>
+
+                                }
+                                else
+                                {
+                                    <a target="_blank" href="~/images/AttachFiles/@item.AttachmentPath">View Attachment</a>
+                                }
+
+                            </td>
+
+                            @*<td width="100px">
+                                    <a href="#" class="btn btn-sm btn-light btn-view" data-toggle="modal" data-target="#viewModal">
+                                        <i class="uil uil-eye mr-2"></i>View
+                                    </a>
+                                </td>*@
+
+
+                            <td width="100px">
+                                <button type="button" class="btn btn-sm btn-light btn-delete">
+                                    <i class="uil uil-trash-alt mr-2"></i>
+                                    @Html.ActionLink("Delete", "Delete", "TrainingC", new { id = item.Id }, new { onclick = "return confirm('Are you sure you want to delete this?');" })
+
+                                </button>
+                            </td>
+
+
+                            @{ count++; }
+                        </tr>
+                    }
+
+                </tbody>
+            </table>
+
+            <nav class="text-right">
+
+                <ul class="pagination">
+                    @{
+
+
+                        int totalRecords = Convert.ToInt32(TempData.Peek("TotalRecords"));
+
+                        int tot_pages = totalRecords / Shipment49Web.Common.CommonMethods.PAGESIZE;
+                        int remainder = totalRecords % Shipment49Web.Common.CommonMethods.PAGESIZE;
+
+                        tot_pages = remainder > 0 ? (tot_pages + 1) : tot_pages;
+
+                        int currPage = Convert.ToInt32(TempData.Peek("CurrentPage"));
+
+                        if (totalRecords > 0)
+                        {
+                            if (currPage == 0)
+                            {
+                                currPage = 1;
+                            }
+
+                            if (currPage != 1)
+                            {
+                                <li class="page-item"><a class="page-link" href="@Url.Action("Index", "TrainingC" ,new { page = 1 })">First</a> </li>
+                            }
+
+                            if (currPage != tot_pages)
+                            {
+                                for (int cnt = currPage; cnt < (currPage + 10); cnt++)
+                                {
+                                    if (cnt == currPage)
+                                    {
+                                        <li class="page-item active"><a class="page-link" href="#">@cnt</a></li>
+                                    }
+                                    else
+                                    {
+                                        <li class="page-item"><a class="page-link" href="@Url.Action("Index", "TrainingC" ,new { page = cnt })">@cnt.ToString()</a> </li>
+                                    }
+
+                                    if (cnt == tot_pages)
+                                    {
+                                        break;
+                                    }
+                                }
+                            }
+
+
+                            if (currPage == tot_pages)
+                            {
+                                <li class="page-item active"><a class="page-link" href="#">@tot_pages</a></li>
+                            }
+                            else
+                            {
+
+                                <li class="page-item"><a class="page-link" href="@Url.Action("Index", "TrainingC" ,new { page = tot_pages })">Last</a> </li>
+                            }
+                        }
+                    }
+                </ul>
+
+            </nav>
+        </div>
+    </div>
+</div>
+
+
+<div id="showVideo" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title"></h4>
+            </div>
+            <div class="modal-body">
+                <div class="box-body">
+                    <div class="col-md-12 align-items-center">
+                        @*<img id="imgNameIns" />*@
+                        <video id="videoID" controls>
+                            @*/images/AttachFiles/sample-mp4-file8590.mp4*@
+                            <source type="video/mp4" src=" ">
+                        </video>
+
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="ImageModal" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title"></h4>
+            </div>
+            <div class="modal-body">
+                <div class="box-body">
+                    <div style="text-align:center;  ">
+                        <img style="max-width:100%" id="imgName" />
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="PdfModal" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title"></h4>
+            </div>
+            <div class="modal-body">
+                <div class="box-body">
+                    <div style="text-align:center">
+                        <iframe id="myFrame" style="display:none;width:100%"></iframe>
+
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@*<iframe id="myFrame1" style="display:none" width="600" height="300"></iframe>
+    <input type="button" value="Open PDF" onclick="openPdf()" />
+
+    <script type="text/javascript">
+        function openPdf() {
+            var omyFrame = document.getElementById("myFrame1");
+            omyFrame.style.display = "block";
+            omyFrame.src = "/images/AttachFiles/_49 Web Street, Grey Box Web Application Vulnerability Assessment Report3798.pdf";
+        }
+
+
+    </script>*@
+
+<div class="modal fade" id="addModal" role="dialog">
+    <div class="modal-dialog">
+        @using (Html.BeginForm("addtrainingattachment", "TrainingC", FormMethod.Post, new { enctype = "multipart/form-data" }))
+        {
+            @Html.AntiForgeryToken()
+            @Html.HiddenFor(e => e.Id)
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Add Attachment</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row form-group">
+                        <label class="col-md-3 col-sm-5 col-form-label">
+                            <label class="control-label">File Name</label>
+                        </label>
+                        <div class="col-md-9 col-sm-7">
+                            @*<input type="text" class="form-control" name="">*@
+                            @Html.TextBoxFor(x => x.AttachmentName, new { @class = "form-control",@maxlength=90, @required = "true" })
+
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <label class="col-md-3 col-sm-5 col-form-label">
+                            <label class="control-label">Upload</label>
+                        </label>
+                        <div class="col-md-9 col-sm-7">
+                            <input class="form-group" type="file" id="file" onchange="ValidateSize(this)" name="ImageFile" required />
+                            <label style="font-size:13px;font-style:italic">Acceptable file types : Video (mp4, mpeg, mpg, vlc), Image (jpg, jpeg, png), PDF, MS Word (doc, docx), Excel (xls, xlsx), PPT (ppt, pptx)</label>
+                        </div>
+                    </div>
+                    <div class="form-actions">
+                        <button name="Submit" type="submit" class="btn btn-success btn-width"><i class="uil uil-check mr-2"></i>Submit</button>
+                        <button name="Reset" type="reset" class="btn btn-danger btn-width"><i class="uil uil-redo mr-2"></i>Reset</button>
+                    </div>
+
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+
+<script>
+    function showVd(param) {
+        var video = document.getElementById('videoID');
+        video.src = param;
+        video.load();
+        //$('#videoID').attr('src', param);
+        $('#showVideo').modal('show');
+    }
+</script>
+
+
+<script>
+    function showImages(param) {
+        // var imgSrc = $(param).attr("src");
+        //alert(imgSrc);
+        $('#imgName').attr('src', param);
+        $('#ImageModal').modal('show');
+    }
+</script>
+
+<script>
+    function showpdf(param) {
+        // var imgSrc = $(param).attr("src");
+        // alert(param);
+
+        // /images/AttachFiles / _49 Web Street, Grey Box Web Application Vulnerability Assessment Report3798.pdf
+        var omyFrame = document.getElementById("myFrame");
+        omyFrame.style.display = "block";
+        omyFrame.src = param;
+        // omyFrame.load();
+        // $('#ifrID').attr('src', param);
+        $('#PdfModal').modal('show');
+    }
+</script>
+
+
+@*<script type="text/javascript">
+
+        function showPDF() {
+            $.ajax({
+                type: 'POST',
+                dataType: 'json',
+                url: '/TrainingContent/TrainingC/ShowPDF',
+                //data: { 'Ip': Ip },
+                success: function (response) {
+                    if (response.Result == true) {
+                    }
+                }
+            });
+        }
+    </script>*@
+
+
+
+<script type="text/javascript">
+    function openTab(th) {
+        window.open(th.name, '_blank');
+    }
+</script>
+
+<script>
+    function ValidateSize(file) {
+        debugger;
+
+        // str1 = new string[26] { "jpg", "jpeg", "png", "pps", "ppt", "pptx", "xls", "xlsm", "xlsx", "doc", "docx", "pdf", "rtf", "txt", "GIF", "WAV", "MID", "MIDI", "WMA", "MP3", "OGG", "RMA", "AVI", "MP4", "DIVX", "WMV" };
+        var fileInput = document.getElementById('file');
+        var filePath = fileInput.value;
+        var allowedExtensions = /(\.jpg|\.jpeg|\.png|\.pps|\.ppt|\.pptx|\.xls|\.xlsm|\.xlsx|\.doc|\.docx|\.pdf|\.rtf|\.txt|\.GIF|\.WAV|\.MID|\.MIDI|\.WMA|\.MP3|\.MP4|\.OGG|\.RMA|\.AVI|\.MP4|\.DIVX|\.WMV|\.gif)$/i;
+        if (!allowedExtensions.exec(filePath)) {
+            // alert('Please upload file having extensions .jpeg/.jpg/.png/.gif only.');
+            alert('This file type not allowed !');
+            fileInput.value = '';
+            return false;
+        }
+        else {
+
+            var FileSize = file.files[0].size / 1024 / 1024; // in MiB
+            if (FileSize > 15) {
+                alert('File size exceeds 5 MiB');
+                document.getElementById('file').value = '';
+                return false;
+                // $(file).val(''); //for clearing with Jquery
+            } else {
+
+            }
+        }
+    }
+</script>
+
+<script type="text/javascript">
+
+    setTimeout(function () {
+
+        $('#successMessage').fadeOut('fast');
+        $('#errorMessage').fadeOut('fast');
+    }, 3000);
+
+
+</script>
+
+<script>
+    $("#trainID").show();
+</script>
+
+

@@ -1,0 +1,231 @@
+﻿@{
+    ViewBag.Title = "Main Dashboard";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+}
+
+@*<link href="~/Content/themes/jquery-ui.css" rel="stylesheet" />
+    <script src="~/Scripts/jquery-1.12.4.js"></script>
+
+    <script src="~/ScriptBMS/angular.js"></script>
+    <script src="~/ScriptBMS/lodash.js"></script>
+    <script src="~/ScriptBMS/angularjs-dropdown-multiselect.js"></script>
+    <script src="~/Scripts/MyApp.js"></script>*@
+
+@*<link href="~/MultiselectDropdown/jquerysctipttop.css" rel="stylesheet" />*@
+@*<link href="~/MultiselectDropdown/prettify.css" rel="stylesheet" />*@
+@*<script src="~/MultiselectDropdown/prettify.js"></script>*@
+
+
+@*<script type="text/javascript">
+        $(document).ready(function () {
+
+            $('#fleetnames').multiselect({
+                filterPlaceholder: 'Search',
+                enableCaseInsensitiveFiltering: true,
+                maxHeight: 250,
+                numberDisplayed: 2,
+                nonSelectedText: 'Select FleetName'
+
+            })
+
+
+            $("#fleettypes").change(function () {
+                var countryId = $("#fleettypes").val();
+                $.ajax({
+                    type: 'GET',
+                    url: '/Home/AutocompletedFleetName/' + countryId,
+                    success: function (result) {
+                        $("#fleetnames").empty();
+                        // $("#City").empty();
+                        //$('#fleetnames').multiselect('destroy');
+
+
+                        $.each(result, function (i, state) {
+                            $("#fleetnames").append('<option value="' + state.Value + '">' +
+                                state.Text + '</option>');
+                        });
+
+
+
+                        $('#fleetnames').multiselect('rebuild');
+                        $('#fleetnames').multiselect('refresh');
+                    }
+                });
+            });
+
+            $('#btnSelected').click(function () {
+                var selected = $("#fleetnames option:selected");
+                var message = "";
+                selected.each(function () {
+                    message += $(this).val() + ",";
+                    $('#fleetname').val(message);
+                });
+
+
+
+            });
+
+        });
+    </script>*@
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#vesselnames').multiselect({
+
+            includeSelectAllOption: true,
+
+            //setSelects: @ViewBag.vesselname1,
+            filterPlaceholder: 'Search',
+            enableCaseInsensitiveFiltering: true,
+            maxHeight: 200,
+            //buttonWidth: '150px',
+            numberDisplayed: 1,
+            nonSelectedText: 'Vessel'
+
+
+
+        });
+
+        $('#btnSelected').click(function () {
+            var selected = $("#vesselnames option:selected");
+            var message = "";
+            selected.each(function () {
+                message += $(this).val() + ",";
+
+            });
+            $('#search').val(message);
+
+
+        });
+
+
+
+
+
+    });
+</script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#fleettypes').multiselect({
+            includeSelectAllOption: true,
+
+            filterPlaceholder: 'Search',
+            enableCaseInsensitiveFiltering: true,
+            maxHeight: 200,
+            numberDisplayed: 1,
+            nonSelectedText: 'FleetType'
+
+
+
+        });
+        $('#btnSelected').click(function () {
+            var selected = $("#fleettypes option:selected");
+            var message = "";
+            selected.each(function () {
+                message += $(this).val() + ",";
+            });
+            $('#fleettype').val(message);
+            //alert(message);
+        });
+    });
+</script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#fleetnames').multiselect({
+            includeSelectAllOption: true,
+
+            filterPlaceholder: 'Search',
+            enableCaseInsensitiveFiltering: true,
+            maxHeight: 200,
+            numberDisplayed: 1,
+            nonSelectedText: 'FleetName'
+
+
+        });
+        $('#btnSelected').click(function () {
+            var selected = $("#fleetnames option:selected");
+            var message = "";
+            selected.each(function () {
+                message += $(this).val() + ",";
+            });
+            $('#fleetname').val(message);
+            //alert(message);
+        });
+    });
+</script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+
+
+        var values2 = '@ViewBag.fleettypebm1';
+        $('#fleettypes option').filter(function () {
+            return values2.indexOf($(this).text()) > -1; //Options text exists in array
+        }).prop('selected', true);
+
+        $("#fleettypes").multiselect("refresh");
+
+        //........................
+
+        var values2 = '@ViewBag.fleetnamebm1';
+        $('#fleetnames option').filter(function () {
+            return values2.indexOf($(this).text()) > -1; //Options text exists in array
+        }).prop('selected', true);
+
+        $("#fleetnames").multiselect("refresh");
+
+        //................
+
+        var values2 = '@ViewBag.vesselnamebm1';
+        $('#vesselnames option').filter(function () {
+            return values2.indexOf($(this).text()) > -1; //Options text exists in array
+        }).prop('selected', true);
+
+        $("#vesselnames").multiselect("refresh");
+
+
+
+
+
+    });
+</script>
+<div class="page_title margin-3-bot">
+    <h2> Main Dashboard</h2>
+</div>
+<div class="margin-3">
+    <div class="white-bg margin-3-bot fleet clearfix">
+
+        @using (Html.BeginForm("index", "home", FormMethod.Get, new { controller = "home", area = "home" }))
+    {
+        <div class="small-gutter row">
+            <div class="col-sm-3 col-xs-6">
+                @Html.ListBox("fleettypes", new SelectList(ViewBag.fleettypebm, "Value", "Text"))
+                <input id="fleettype" name="fleettype" type="hidden" />
+            </div>
+            <div class="col-sm-3 col-xs-6 ">
+                @Html.ListBox("fleetnames", new SelectList(ViewBag.fleetnamebm, "Value", "Text"))
+                <input id="fleetname" name="fleetname" type="hidden" />
+            </div>
+            <div class="col-sm-3 col-xs-6">
+                @Html.ListBox("vesselnames", new SelectList(ViewBag.vesselnamebm, "Value", "Text"), new { multiple = "multiple" })
+                <input id="search" name="search" type="hidden" />
+            </div>
+            <div class="col-sm-3 col-xs-6">
+                <button type="submit" id="btnSelected" value="Search" class="btn peach-btn btn-block">Search</button>
+            </div>
+        </div>
+}
+
+    </div>
+    @Html.Partial("_dashboardgrid")
+</div>
+
+<div id="message-listbm">
+    <font>@ViewBag.Messagegrid</font>
+</div>
+

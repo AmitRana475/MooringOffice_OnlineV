@@ -1,0 +1,46 @@
+﻿@using System.Collections.Generic;
+
+<h3 class="heading-s2">
+    Export File
+</h3>
+<div class="form-group">
+    <div class="col-md-12">
+        <label> Vessel Name</label>
+        <div class="form-group">
+            @*@Html.TextBox("searchTerm", null, new { id = "search", placeholder = "Vessel Name", value = @ViewBag.vname, @class = "form-control" })*@
+            @Html.ListBox("searchTerm", new SelectList((List<Reports.VesselDetail>)(ViewData["VesselList"]), "ImoNo", "VesselName"), new { @class = "form-control importexport" })
+        </div>
+    </div>
+    <div class="col-md-6">
+        <label>From Date</label>
+        <div class="form-group">
+            <input type="text" class="date form-control dtpicker" name="ServiceFrom" id="ServiceFrom" value="@ViewBag.datefrom" />
+        </div>
+    </div>
+    <div class="col-md-6">
+        <label>To Date</label>
+        <div class="form-group">
+            <input type="text" class="date form-control dtpicker" name="ServiceTo" id="ServiceTo" value="@ViewBag.dateto" />
+        </div>
+    </div>
+    <div class="col-md-12">
+        <label>Choose Tables to Export text data</label>
+        <div class="form-group checkbox">
+            <div class="col-md-6"><label><input type="checkbox" name="docsPages" id="docsPages" />General Content</label></div>
+            <div class="col-md-6"><label><input type="checkbox" name="shipSpecificContent" id="shipSpecificContent" />Ship Specific Content</label></div>
+            <div class="col-md-6"><label><input type="checkbox" name="shipSpecificAttachments" id="shipSpecificAttachments" />Ship Specific Attachments</label></div>
+            <div class="col-md-6"><label><input type="checkbox" name="revisionTable" id="revisionTable" />Revisions Listing</label></div>
+            <div class="col-md-6"><label><input type="checkbox" name="notificationCommentSettings" id="notificationCommentSettings" />Notification Comment</label></div>
+            <div class="col-md-6"><label><input type="checkbox" name="ropeInspectionSettings" id="ropeInspectionSettings" />Rope Inspection Settings</label></div>
+            <div class="col-md-6"><label><input type="checkbox" name="ropeTailInspectionSettings" id="ropeTailInspectionSettings" />Rope Tail Inspection Settings</label></div>
+            <div class="col-md-6"><label><input type="checkbox" name="looseEquipInspectionSettings" id="looseEquipInspectionSettings" />Loose Equip Inspection Settings</label></div>
+            <div class="col-md-6"><label><input type="checkbox" name="WinchRotationSettings" id="WinchRotationSettings" />Winch Rotation Settings</label></div>
+        </div>
+    </div>
+    <div class="col-sm-4">
+        <input name="submit" type="submit" value="Export Text" id="Export" class="btn peach-btn btn-block btn-info" />
+    </div>
+    <div class="col-sm-4">
+        <input name="submit" type="submit" value="Export Attachments" id="Zip" class="btn peach-btn btn-block btn-warning" />
+    </div>
+</div>

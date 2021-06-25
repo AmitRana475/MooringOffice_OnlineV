@@ -1,0 +1,661 @@
+﻿@model Reports.MooringLooseEquipInspection
+@{
+    ViewBag.Title = "AddLeInspection";
+    Layout = "~/Views/Shared/_LayoutVessel7.cshtml";
+}
+
+
+
+
+@*<h2>html5-file upload drag and drop</h2>
+    <div id="dZUpload" class="dropzone">
+        <div class="dz-defaultdz-message"></div>
+    </div>*@
+
+@*<style>
+
+        .dropZoneExternal > div,
+        .dropZoneExternal > img {
+            position: absolute;
+        }
+
+        .dropZoneExternal {
+            position: relative;
+            border: 1px dashed #f17f21 !important;
+            cursor: pointer;
+        }
+
+        .dropZoneExternal,
+        .dragZoneText {
+            width: 100%;
+            max-width: 350px;
+            min-width: 286px;
+            height: 350px;
+        }
+
+        #dragZone {
+            width: 100%;
+            display: table;
+        }
+
+        #uploadedImage {
+            width: 100%;
+        }
+
+        .dropZoneText {
+            width: 300px;
+            height: 150px;
+            color: #fff;
+            background-color: #888;
+        }
+
+        #dropZone {
+            top: 0;
+            padding: 100px 25px;
+        }
+
+        .uploadControlDropZone {
+            display: none;
+        }
+
+        .dropZoneText,
+        .dragZoneText {
+            display: table-cell;
+            vertical-align: middle;
+            text-align: center;
+            font-size: 20pt;
+        }
+
+        .dragZoneText {
+            color: #808080;
+        }
+
+        .dxucInlineDropZoneSys span {
+            color: #fff !important;
+            font-size: 10pt;
+            font-weight: normal !important;
+        }
+
+        .validationMessage {
+            padding: 0 20px;
+            text-align: center;
+        }
+
+        .uploadContainer {
+            width: 100%;
+            max-width: 350px;
+            min-width: 286px;
+            margin-top: 10px;
+        }
+
+        .Note {
+            max-width: 500px;
+        }
+    </style>*@
+
+<script type="text/javascript">
+    function onUploadControlFileUploadComplete(s, e) {
+        if (e.isValid)
+            $("#uploadedImage").attr("src", e.callbackData);
+        setElementVisible("uploadedImage", e.isValid);
+    }
+    function onImageLoad() {
+        var externalDropZone = $("#externalDropZone");
+        var uploadedImage = $("#uploadedImage");
+        uploadedImage.css({
+            left: (externalDropZone.width() - uploadedImage.width()) / 2,
+            top: (externalDropZone.height() - uploadedImage.height()) / 2
+        });
+        setElementVisible("dragZone", false);
+    }
+    function setElementVisible(elementId, visible) {
+        var el = $("#" + elementId);
+        if (visible)
+            el.show();
+        else
+            el.hide();
+    }
+</script>
+
+@*<script src="~/Scripts/dropzone/dropzone.min.js"></script>
+
+    <script src = "~/Scripts/bootstrap.min.js"></script>
+    <link href = "~/Scripts/dropzone/dropzone.min.css" rel = "stylesheet" />*@
+@*<div class = "jumbotron" >
+    <form action = "~/Home/Upload" class = "dropzone" id = "dropzoneJsForm" style = "background-color:#00BFFF" ></form>
+    <button id = "submit-all" >
+     Submit All Files
+       </button></div>*@
+
+
+@*<script type="text/javascript" src="~/assetsV/js/function.js"></script>*@
+
+@*<script src="http://code.jquery.com/jquery-1.12.4.min.js"></script>
+    <script src="http://netdna.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>*@
+@*<link href="~/assetsV/css/imageuploadify.min.css" rel="stylesheet" />
+    <script type="text/javascript" src="~/assetsV/js/imageuploadify.min.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('input[type="file"]').imageuploadify();
+        })
+    </script>*@
+
+@*<script type="text/javascript" src="dist/imageuploadify.min.js"></script>
+    <link href="dist/imageuploadify.min.css" rel="stylesheet">*@
+@*<script type="text/javascript">
+        $(document).ready(function () {
+            $("#selectall").click(function () {
+                //debugger;
+                if (this.checked) {
+                    //alert('checked');
+                    //if ($('.case1').prop("checked") == true) {
+                    //    alert("Checkbox is checked.");
+                    //}
+                    $('.case1').attr('checked', true);
+                }
+                if (!this.checked) {
+
+                    $(".case1").prop("checked", false);
+                    //if ($('.case1').prop("checked") == true) {
+                    //    alert("Checkbox is checked.");
+                    //}
+                    //$('.case1').attr('checked', false);
+                   // alert('Unchecked');
+                }
+
+                //$('.case1').attr('checked', this.checked);
+            });
+            // if all checkbox are selected, check the selectall checkbox  also
+
+            $(".case1").click(function () {
+                if ($(".case1").length == $(".case1:checked").length) {
+                    $("#selectall").attr("checked", "checked");
+                }
+                else {
+                    $("#selectall").removeAttr("checked");
+                }
+            });
+        });
+    </script>*@
+
+<script>
+    function selectall(source) {
+        checkboxes = document.getElementsByName('case1');
+        for (var i = 0, n = checkboxes.length; i < n; i++) {
+            checkboxes[i].checked = source.checked;
+        }
+    }
+</script>
+
+
+<style>
+
+    div#Mydiv {
+        /*background-color: lightblue;*/
+        height: 450px;
+        /*width: 200px;*/
+        overflow-y: scroll;
+    }
+
+    th, td {
+        border: 1px solid black;
+    }
+    /*.table {
+        width: 500px;
+        height: 200px;
+        border-collapse: collapse;
+    }
+
+    .table-wrap {
+        max-height: 200px;
+        width: 100%;
+        overflow-y: auto;
+        overflow-x: hidden;
+    }
+
+    .table-dalam {
+        height: 300px;
+        width: 500px;
+        border-collapse: collapse;
+    }
+
+    .td-nya {
+        border-left: 1px solid white;
+        border-right: 1px solid grey;
+        border-bottom: 1px solid grey;
+    }*/
+</style>
+
+
+<div class="content">
+
+    <div class="page-heading page-header-flex">
+        <div>
+            <h1 class="page-title">
+                Add Loose Equipment Inspection / @ViewBag.LooseEqType
+            </h1>
+            <ol class="breadcrumb">
+                <li><a href="">Home</a></li>
+                <li><a href="">Form</a></li>
+                <li><a>Create</a></li>
+            </ol>
+        </div>
+        <div class="form-actions">
+            @*<input class="btn btn-success btn-width" id="btnSubmit" onclick="SaveData()" type="button" name="btnSubmit" style="width: 12%;cursor:pointer;" value="Save" />*@
+            <button id="btnSubmit" onclick="SaveData()" type="button" name="btnSubmit" class="btn btn-success btn-width"><i class="uil uil-check mr-2"></i>Submit</button>
+            <button name="Reset" type="reset" id="btnReset" class="btn btn-danger btn-width"><i class="uil uil-redo mr-2"></i>Reset</button>
+        </div>
+    </div>
+
+
+    <div class="wrapper wrapper-content">
+        @if (TempData["Error"] != null)
+        {
+            <p class="alert alert-danger" id="errorMessage">@TempData["Error"]</p>
+        }
+        @if (TempData["Success"] != null)
+        {
+            <p class="alert alert-success" id="successMessage">@TempData["Success"]</p>
+        }
+        <div class="container">
+            <div class="row">
+                <div class="col-md-offset-2 col-md-8">
+
+                    <div class="download-btn text-center mb-5">
+                        @*<button type="reset" class="btn btn-info"><i class="uil uil-import mr-2"></i>Inspection Excel Sheet</button>*@
+                        <button type="button" onclick="location.href='@Url.Action("DownloadExcelSheet", "LEInspection")'" class="btn btn-info"><i class="uil uil-import mr-2"></i>Inspection Excel</button>
+
+
+                    </div>
+
+                    <div class="panel panel-default mb-6">
+                        <div class="panel-body">
+                            <div class="row form-group">
+                                <label class="col-md-3 col-sm-4 col-form-label mt-0 mt-sm-3">
+                                    <label class="control-label">Inspection by<sup>*</sup></label>
+                                </label>
+                                <div class="col-md-5 col-sm-6">
+                                    @Html.EditorFor(model => model.InspectBy, new { htmlAttributes = new { @class = "form-control", @required = "true", } })
+                                    <span id="messageInsby"></span>
+                                </div>
+                            </div>
+                            <div class="row form-group">
+                                <label class="col-md-3 col-sm-4 col-form-label mt-0 mt-sm-3">
+                                    <label class="control-label">Inspection Date<sup>*</sup></label>
+                                </label>
+                                <div class="col-md-5 col-sm-6">
+                                    @Html.TextBoxFor(x => x.InspectDate, "{0:yyyy-MM-dd}", new { @autocomplete = "off", @readonly = "true", @class = "form-control datepicker", @placeholder = "yyyy-mm-dd", @required = "true" })
+                                    <span id="messageInsdt"></span>
+                                </div>
+                            </div>
+                            @*<div class="row form-group">
+                                    <label class="col-md-3 col-sm-4 col-form-label mt-0 mt-sm-3">
+                                        <label class="control-label">Loose Equip Type<sup>*</sup></label>
+                                    </label>
+                                    <div class="col-md-5 col-sm-6">
+                                        <select class="select-control">
+                                            <option value="1">Joining Shakle</option>
+                                            <option value="2">Rope Stopper</option>
+                                        </select>
+                                    </div>
+                                </div>*@
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="Mydiv" class="card-body">
+
+
+                @{
+                    int count = 1;
+                }
+
+
+
+                <div class="table-responsive">
+                    <table id="tbl1" class="table table-bordered" height="50">
+                        <thead style="overflow-x:auto;overflow-y:auto" class=" text-primary">
+                            <tr>
+
+                                <th><input type="checkbox" id="selectall" name="case1" onClick="selectall(this)" />Select All</th>
+                                <th style="display:none">Id</th>
+                                <th style="display:none">LEType</th>
+                                <th style="display:none">LeId</th>
+                                <th>Cert.No.</th>
+                                <th>Condition</th>
+                                <th>Remarks</th>
+                                <th>Photo1</th>
+                                <th>Photo2</th>
+                                <th style="display:none">S.No</th>
+
+
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                            @foreach (var item in Model.AddLeInspectionList)
+                            {
+                                <tr>
+                                    <td><input class="case1" name="case1" type="checkbox" />    &nbsp; </td>
+                                    <td style="display:none"> @Html.DisplayFor(modelItem => item.Id)</td>
+                                    <td style="display:none"> @Html.DisplayFor(modelItem => item.LooseETypeId)</td>
+                                    <td style="display:none"> @Html.DisplayFor(modelItem => item.LooseEtbPK)</td>
+                                    <td> @Html.DisplayFor(modelItem => item.Number)</td>
+                                    <td>
+                                        @Html.DropDownListFor(model => model.Condition, new SelectList(Model.LooseConditions, "Value", "Text"), new { @class = "form-control" })
+
+                                    </td>
+                                    <td>
+                                        @Html.EditorFor(model => model.Remarks, new { htmlAttributes = new { @class = "form-control", @required = "false" } })
+                                    </td>
+
+                                    <td>
+                                        <div id="dZUpload" class="dropzone">
+                                            <div class="dz-defaultdz-message"></div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div id="dZUpload1" class="dropzone">
+                                            <div class="dz-defaultdz-message"></div>
+                                        </div>
+                                    </td>
+                                    <td style="display:none">@count </td>
+
+                                    @{ count++; }
+                                </tr>
+                            }
+
+                        </tbody>
+                    </table>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+
+
+
+
+    @*<div class="btn-next-con">
+
+            <input class="btn btn-primary pull-right" id="btnSubmit" onclick="SaveData()" type="button" name="btnSubmit" style="width: 12%;cursor:pointer;" value="Save" />
+
+        </div>*@
+</div>
+
+
+
+<script language=Javascript>
+      <!--
+
+    function isNumberKey(evt) {
+
+        var charCode = (evt.which) ? evt.which : event.keyCode
+        if (charCode != 46 && charCode > 31 && (charCode < 48 || charCode > 57))
+            return false;
+
+        return true;
+    }
+
+    //-->
+</script>
+
+
+<script type="text/javascript">
+
+    setTimeout(function () {
+
+        $('#successMessage').fadeOut('fast');
+        $('#errorMessage').fadeOut('fast');
+    }, 3000);
+
+
+</script>
+<script type="text/javascript">
+    $('.datepicker').datepicker();
+</script>
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/4.3.0/min/dropzone.min.css" rel="stylesheet" type="text/css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/4.3.0/min/dropzone.min.js" type="text/javascript"></script>
+@*<script type="text/javascript">
+        $(document).ready(function () {
+            Dropzone.autoDiscover = false;
+            $(".dropzone").dropzone({
+                url: "hn_SimpeFileUploader.ashx",
+                addRemoveLinks: true,
+                maxFilesize: 2, // MB
+                acceptedFiles: ".png, .jpeg, .jpg, .gif",
+                data: "data-dz",
+                success: function (file, response) {
+                    var imgName = response;
+                    file.previewElement.classList.add("data-dz-thumbnail");
+                    file.previewElement.classList.add("dz-success");
+                    console.log("Successfully uploaded :" + imgName);
+                },
+                error: function (file, response) {
+                    file.previewElement.classList.add("dz-error");
+                }
+            });
+        });
+    </script>*@
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        Dropzone.autoDiscover = false;
+
+
+        //var myDropzone = new Dropzone(".dropzone", {
+        //    //maxFilesize: 10,
+        //    acceptedFiles: ".jpeg,.jpg,.png,.gif"
+        //});
+
+        $(".dropzone").dropzone({
+
+            acceptedFiles: 'image/*',
+            url: "GenericHandler.ashx",
+            maxFiles: 1,
+            maxFilesize: .20,
+            thumbnailWidth: null,
+            thumbnailHeight: null,
+            init: function () {
+                this.on("thumbnail", function (file, dataUrl) {
+                    $('.dz-image').last().find('img').attr({ width: '100%', height: '100%' });
+                }),
+                    this.on("success", function (file) {
+                        $('.dz-image').css({ "width": "100%", "height": "auto" });
+                    }),
+                    this.on("error", function (file, errorMessage) {
+                        var check = file.accepted;
+                        if (check == false) {
+                            alert("error : " + errorMessage);
+                            this.removeFile(file);
+
+                        }
+                    });
+            },
+            addRemoveLinks: true,
+
+            //acceptedFiles: ".jpeg,.jpg,.png,.gif",
+            //acceptedFiles: 'image/jpeg,image/png,image/gif,image/jpg,application/pdf',
+            success: function (file, response) {
+
+                var imgName = response;
+                file.previewElement.classList.add("dz-success");
+                console.log("Successfully uploaded :" + imgName);
+            },
+            error: function (file, response) {
+                file.previewElement.classList.add("dz-error");
+            }
+        });
+    });
+</script>
+
+
+
+<script>
+
+
+
+    function SaveData() {
+
+        debugger;
+        var Insby = $("#InspectBy").val();
+        var Insdt = $("#InspectDate").val();
+        if (Insby == "") {
+
+            var msg = "Inspect By can not be null !"
+            $('#messageInsby').text(msg);
+            $('#messageInsby').css("color", "red");
+
+            return;
+        }
+        else { $('#messageInsby').text(""); }
+        if (Insdt == "") {
+
+            var msg = "Inspected Date can not be null !"
+            $('#messageInsdt').text(msg);
+            $('#messageInsdt').css("color", "red");
+
+
+            return;
+        }
+        else { $('#messageInsdt').text("");}
+
+        debugger;
+
+        var inspections = []; // list object case1
+       // 'input[name="chk[]"]:checked'
+
+        $("#tbl1 input[name='case1']:checked").each(function () {
+
+            var image1 = ""; var image2 = ""; var photo1 = ""; var photo2 = "";
+
+            var MooringLooseEquipInspection = {};
+            var row = $(this).closest("tr")[0];
+            //var row1 = $(this).closest("tr").find('input');
+            var cells = $(this).closest('tr').children('td');
+
+
+
+
+            var cntSrNo = row.cells[9].innerHTML;
+
+
+            var count = (cntSrNo - 1) * 2;
+            var count1 = count + 1;
+
+            $('.dropzone')[count].dropzone.files.forEach(function (file) {
+                debugger;
+                image1 = file.name;
+                photo1 = file.previewElement.querySelector("img").src;
+            });
+
+            $('.dropzone')[count1].dropzone.files.forEach(function (file) {
+                debugger;
+                image2 = file.name;
+                photo2 = file.previewElement.querySelector("img").src;
+            });
+
+            debugger;
+
+            var Certificate = row.cells[4].innerHTML;
+            var NA_Condition = cells.eq(5).find('select').val();
+            if (NA_Condition == "Not Acceptable" && image1 == "" && image2 == "") {
+                var msgs = "Photo Can not be blank for Certificate number '" + Certificate + "' !";
+                alert(msgs);
+                return;
+            }
+
+
+            MooringLooseEquipInspection.InspectBy = $("#InspectBy").val();
+            MooringLooseEquipInspection.InspectDate = $("#InspectDate").val();
+            MooringLooseEquipInspection.LooseETypeId = row.cells[2].innerHTML;
+            MooringLooseEquipInspection.LooseEtbPK = row.cells[3].innerHTML;
+            MooringLooseEquipInspection.Number = row.cells[4].innerHTML;
+            MooringLooseEquipInspection.Condition = cells.eq(5).find('select').val();
+            MooringLooseEquipInspection.Remarks = cells.eq(6).find('input').val();
+
+
+            MooringLooseEquipInspection.Image1 = image1;
+            MooringLooseEquipInspection.Image2 = image2;
+            MooringLooseEquipInspection.Photo1 = photo1;
+            MooringLooseEquipInspection.Photo2 = photo2;
+
+
+            inspections.push(MooringLooseEquipInspection);
+        });
+
+
+        debugger;
+       // alert(inspections);
+
+
+        inspections = JSON.stringify(inspections);
+
+        if (inspections == "[]") {
+            alert("Please Choose atleast one Loose Equipment for inspection !");
+            return;
+        }
+
+        $.ajax({
+            url: '@Url.Action("InsertInspection", "LEInspection")',
+            type: "POST",
+            data: { 'inspections': inspections },
+            dataType: "json",
+            beforeSend: function (x) {
+                if (x && x.overrideMimeType) {
+                    x.overrideMimeType("application/j-son;charset=UTF-8");
+                }
+            },
+            success: function (result) {
+                //Write your code here
+               // alert(result);
+                window.location.href = result;
+            }
+        });
+
+
+
+        //$.ajax({
+        //    type: 'POST',
+        //    dataType: 'json',
+        //    url: '/LineInspection/InsertInspection',
+        //    //data: JSON.stringify(inspections),
+        //    data: { 'inspections': JSON.stringify(inspections) },
+        //    //contentType: "application/json; charset=utf-8",
+        //    //contentType: "application/json;",
+
+        //    success: function (r) {
+        //       // alert("Record(s) inserted.");
+        //    },
+        //    error: function (r) {
+        //        //alert(r.responseText);
+        //    }
+        //});
+
+    }
+
+</script>
+
+<script>
+    $('#btnReset').click(function () {
+
+        $("#InspectDate").val('');
+        $("#InspectBy").val('');
+        var ele = document.getElementsByName('case1');
+        for (var i = 0; i < ele.length; i++) {
+            if (ele[i].type == 'checkbox')
+                ele[i].checked = false;
+        }
+        $("#selectall").prop("checked", false);      
+
+        $('#Mydiv').find('input:text, input:password,input:file, select')
+            .each(function () {
+                $(this).val('');                
+            });
+    });
+</script>

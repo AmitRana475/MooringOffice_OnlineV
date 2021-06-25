@@ -1,0 +1,353 @@
+﻿@model IEnumerable<AnalysisLayer.ChartData>
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+
+<script src="~/Scripts/canvasjs.min.js"></script>
+@*<script src="~/Scripts/jquery-1.10.2.min.js"></script>
+<link href="~/Content/themes/jquery-ui.css" rel="stylesheet" />
+
+
+<script src="~/ScriptBMS/angular.js"></script>
+<script src="~/ScriptBMS/lodash.js"></script>
+<script src="~/ScriptBMS/angularjs-dropdown-multiselect.js"></script>
+<script src="~/Scripts/MyApp.js"></script>*@
+
+@*<script type="text/javascript">
+    $(document).ready(function () {
+
+        $("#searchbtn").click(function () {
+
+            $('option', $('.multiselect')).each(function (element) {
+                $(this).Attr('selected').prop('selected', false);
+
+            });
+            $('Id').multiselect('selectAll', true);
+        });
+    });
+</script>*@
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        $("#datefrom").datepicker();
+    });
+</script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        $("#dateto").datepicker();
+
+    });
+</script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#Ranks').multiselect({
+
+            filterPlaceholder: 'Search',
+            enableCaseInsensitiveFiltering: true,
+            maxHeight: 250,
+            numberDisplayed: 1,
+            nonSelectedText: 'Select Rank'
+
+        });
+        $('#searchbtn').click(function () {
+            var selected = $("#Ranks option:selected");
+            var message = "";
+            selected.each(function () {
+                message += $(this).val() + ",";
+            });
+            $('#Rank').val(message);
+            //alert(message);
+        });
+    });
+</script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#vesselnames').multiselect( {
+
+            filterPlaceholder: 'Search',
+            enableCaseInsensitiveFiltering: true,
+            maxHeight: 250,
+            //buttonWidth: '150px',
+            numberDisplayed: 1,
+            nonSelectedText: 'Select Vessels'
+
+
+        });
+
+        $('#searchbtn').click(function () {
+            var selected = $("#vesselnames option:selected");
+            var message = "";
+            selected.each(function () {
+                message += $(this).val() + ",";
+
+            });
+            $('#VesselName').val(message);
+            //alert(message);
+        });
+
+
+    });
+</script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#fleettypes').multiselect({
+
+            filterPlaceholder: 'Search',
+            enableCaseInsensitiveFiltering: true,
+            maxHeight: 250,
+            numberDisplayed: 1,
+            nonSelectedText: 'Select FleetType'
+
+        });
+        $('#searchbtn').click(function () {
+            var selected = $("#fleettypes option:selected");
+            var message = "";
+            selected.each(function () {
+                message += $(this).val() + ",";
+            });
+            $('#fleettype').val(message);
+            //alert(message);
+        });
+    });
+</script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#fleetnames').multiselect({
+            filterPlaceholder: 'Search',
+            enableCaseInsensitiveFiltering: true,
+            maxHeight: 250,
+            numberDisplayed: 1,
+            nonSelectedText: 'Select FleetName'
+
+        });
+        $('#searchbtn').click(function () {
+            var selected = $("#fleetnames option:selected");
+            var message = "";
+            selected.each(function () {
+                message += $(this).val() + ",";
+            });
+            $('#fleetname').val(message);
+            //alert(message);
+        });
+    });
+</script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        var values2 = '@ViewBag.fleettypebm1';
+        $('#fleettypes option').filter(function () {
+            return values2.indexOf($(this).text()) > -1; //Options text exists in array
+        }).prop('selected', true);
+
+        $("#fleettypes").multiselect("refresh");
+
+        //........................
+
+        var values2 = '@ViewBag.fleetnamebm1';
+        $('#fleetnames option').filter(function () {
+            return values2.indexOf($(this).text()) > -1; //Options text exists in array
+        }).prop('selected', true);
+
+        $("#fleetnames").multiselect("refresh");
+
+        //................
+
+        var values2 = '@ViewBag.vesselnamebm1';
+        $('#vesselnames option').filter(function () {
+            return values2.indexOf($(this).text()) > -1; //Options text exists in array
+        }).prop('selected', true);
+
+        $("#vesselnames").multiselect("refresh");
+
+        //................
+
+        var values2 = '@ViewBag.rankbm1';
+        $('#Ranks option').filter(function () {
+            return values2.indexOf($(this).text()) > -1; //Options text exists in array
+        }).prop('selected', true);
+
+        $("#Ranks").multiselect("refresh");
+
+
+    });
+</script>
+
+
+
+<div  class="container">
+    <h2> Graphical Trend View</h2>
+    <nav class="navbar navbar-default">
+
+        <div class="container-fluid-right">
+
+            <div>
+                @using (Html.BeginForm("index", "Analysis", FormMethod.Get, new { area = "Analysis", @class = "navbar-form navbar-left" }))
+                {
+
+                    <div class="form-group">
+
+                       
+                        @Html.ListBox("fleettypes", new SelectList(ViewBag.fleettypebm, "Value", "Text"))
+                        <input id="fleettype" name="fleettype" type="hidden" />
+
+                        @Html.ListBox("fleetnames", new SelectList(ViewBag.fleetnamebm, "Value", "Text"))
+                        <input id="fleetname" name="fleetname" type="hidden" />
+
+                        @Html.ListBox("vesselnames", new SelectList(ViewBag.vesselnamebm, "Value", "Text"))
+                        <input id="VesselName" name="VesselName" type="hidden" />
+
+                        @Html.ListBox("Ranks", new SelectList(ViewBag.rankebm, "Value", "Text"))
+                        <input id="Rank" name="Rank" type="hidden" />
+
+                        @*<div ng-controller="multiselecteddropdown5" data-ng-model="fleettype">
+                            <div ng-dropdown-multiselect="" options="CategoriesT" selected-model="SkillsetsFleetType" extra-settings="dropdownSetting" width="100%"></div>
+                            <input id="fleettype" name="fleettype" type="hidden" value="{{SkillsetsFleetType}}" />
+                        </div>
+
+                        <div ng-controller="multiselecteddropdown4" data-ng-model="fleetname">
+                            <div ng-dropdown-multiselect="" options="CategoriesF" selected-model="SkillsetsFleetName" extra-settings="dropdownSetting" width="100%"></div>
+                            <input id="fleetname" name="fleetname" type="hidden" value="{{SkillsetsFleetName}}" />
+                        </div>
+
+                        <div ng-controller="multiselecteddropdown6" data-ng-model="VesselName">
+                            <div ng-dropdown-multiselect="" options="Categories" selected-model="Skillsets" extra-settings="dropdownSetting" width="100%"></div>
+                            <input id="VesselName" name="VesselName" type="hidden" value="{{Skillsets}}" />
+                        </div>
+
+                        <div ng-controller="multiselectedrank" data-ng-model="Ranks">
+                            <div ng-dropdown-multiselect="" options="Categories1" selected-model="Ranks" extra-settings="dropdownSetting" width="100%"></div>
+                            <input type="hidden" name="Rank" id="Rank" value="{{Ranks}}" />
+                        </div>*@
+
+
+
+
+
+
+                        <input type="text" name="datefrom" id="datefrom" value="@ViewBag.datefrom" class="form-control" placeholder="Select Date From" />&ensp;
+                        <input type="text" name="dateto" id="dateto" value="@ViewBag.dateto" class="form-control" placeholder="Select Date To" />
+
+                    </div>
+                        <button type="submit" value="Search" id="searchbtn" name="Searchbtn"  class="btn btn-success">Search</button>
+
+                }
+            </div>
+
+        </div>
+    </nav>
+
+</div>
+
+
+@Html.Partial("_index")
+
+
+
+<script type="text/javascript">
+
+    var result =  @Html.Raw(ViewBag.DataPoints);
+    var dataPoints =[];
+    var dataPoints1 =[];
+    var dataPoints2 =[];
+    for(var i = 0; i < result.length; i++){
+        dataPoints.push({label:result[i].Months, y:result[i].Work});
+        dataPoints1.push({label:result[i].Months, y:result[i].Rest});
+        dataPoints2.push({label:result[i].Months, y:result[i].Deviation});
+    }
+
+    $(function () {
+        var chart = new CanvasJS.Chart("chartContainer", {
+            title: {
+                text: "@ViewBag.Datacount"
+            },
+            exportEnabled: true,
+            animationEnabled: true,
+            axisX: {
+                //valueFormatString: "dd",
+                interval: 1,
+                //title: "Day wise",
+                title: "Vessels :   @ViewBag.vesselname     "+ " Ranks : @ViewBag.rank"+"        Range : @ViewBag.datefrom1  To @ViewBag.dateto1",
+                labelFontColor: "black",
+                titleFontColor: "black",
+                titleFontSize: 14
+                //intervalType: "date"
+
+            },
+            axisY: {
+                includeZero: true,
+                title: "Hours",
+                labelFontColor: "black",
+                titleFontColor: "black"
+                //valueFormatString: "#0.#,."
+                //prefix: "Hrs "
+            },
+
+            toolTip: {
+                shared: true,
+
+                //content: function (e) {
+                //    var body;
+                //    var head;
+                //    head = "<span style = 'color:DodgerBlue; '><strong>" + (e.entries[0].dataPoint.x) + " sec</strong></span><br/>";
+
+                //    body = "<span style= 'color:" + e.entries[0].dataSeries.color + "'> " + e.entries[0].dataSeries.name + "</span>: <strong>" + e.entries[0].dataPoint.y + "</strong>  m/s<br/> <span style= 'color:" + e.entries[1].dataSeries.color + "'> " + e.entries[1].dataSeries.name + "</span>: <strong>" + e.entries[1].dataPoint.y + "</strong>  m";
+
+                //    return (head.concat(body));
+                //}
+                content: "<span style='\"'color: {color};'\"'><strong>{name}</strong></span> <span style='\"'color: Black;'\"'>{y}</span> "
+            },
+            legend: {
+                fontSize: 18
+
+            },
+            data: [
+            {
+                type: "spline",
+                showInLegend: true,
+                name: "Work Hours",
+
+                //markerSize: 0,
+                color: "rgba(96,17,227,.8)",
+
+                dataPoints:dataPoints
+
+            },
+            {
+                type: "spline",
+                name: "Rest Hours",
+                showInLegend: true,
+                //markerSize: 0,
+                color: "rgba(134,180,2,.8)",
+                dataPoints:dataPoints1
+            },
+            {
+                type: "spline",
+                name: "Deviation",
+                showInLegend: true,
+                //markerSize: 0,
+                color: "rgba(250, 45, 4,.8)",
+                dataPoints:dataPoints2
+
+            }
+
+
+            ]
+        });
+
+        chart.render();
+    });
+</script>
+
+
+

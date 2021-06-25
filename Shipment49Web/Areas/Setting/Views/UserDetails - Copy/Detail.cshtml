@@ -1,0 +1,68 @@
+﻿@model UserLayer.UserClass
+
+@{
+    ViewBag.Title = "Detail";
+    Layout = "~/Views/Shared/_LeftSideBar.cshtml";
+}
+<div class="page_title margin-3-bot">
+    <h2>User Detail</h2>
+</div>
+<div class="white-bg margin-3 fleet">
+    <div class="row">
+        <div class="col-sm-2 form-group">
+            <b>@Html.DisplayNameFor(model => model.FullName)</b>
+        </div>
+        <div class="col-sm-4 form-group">
+            @Html.DisplayFor(model => model.FullName)
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-2 form-group">
+            <b>@Html.DisplayNameFor(model => model.Password)</b>
+        </div>
+        <div class="col-sm-4 form-group">
+            @Html.DisplayFor(model => model.Password)
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-2 form-group">
+            <b>@Html.DisplayNameFor(model => model.ContactNo)</b>
+        </div>
+        <div class="col-sm-4 form-group">
+            @Html.DisplayFor(model => model.ContactNo)
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-2 form-group">
+            <b>@Html.DisplayNameFor(model => model.Designation)</b>
+        </div>
+        <div class="col-sm-4 form-group">
+            @Html.DisplayFor(model => model.Designation)
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-2 form-group">
+            <b>@Html.DisplayNameFor(model => model.EmailId)</b>
+        </div>
+        <div class="col-sm-4 form-group">
+            @Html.DisplayFor(model => model.EmailId)
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-2 form-group">
+            <b>@Html.DisplayNameFor(model => model.VesselName)</b>
+        </div>
+        <div class="col-sm-4 form-group">
+            @Html.DisplayFor(model => model.VesselName)
+        </div>
+    </div>
+    <div class="row margin-3-top">
+        <div class="col-sm-1">
+            @Ajax.ActionLink("Edit", "Edit", new { id = Model.UserId }, null, new { @class = "btn peach-btn btn-block" })
+        </div>
+        <div class="col-sm-2 back_text margin-1-top">
+            <i class="fa fa-chevron-left"></i>&nbsp;  @Html.ActionLink("Back to List", "Index")
+        </div>
+    </div>
+</div>
+

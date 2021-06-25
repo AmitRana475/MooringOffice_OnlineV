@@ -1,0 +1,237 @@
+﻿@model Shipment49Web.Areas.MooringLine.Models.MooringRopeDetails
+@{
+                /**/
+
+                ViewBag.Title = "Index";
+                Layout = "~/Views/Shared/_LayoutVessel7.cshtml";
+}
+
+<div class="content">
+    <div class="page-heading page-header-flex">
+        <div>
+            <h1 class="page-title">
+                Line Status
+            </h1>
+            @*<ol class="breadcrumb">
+                <li><a href="">Home</a></li>
+                <li><a href="">Form</a></li>
+                <li><a>Create</a></li>
+            </ol>*@
+        </div>
+    </div>
+
+
+
+    <div class="wrapper wrapper-content">
+        <div class="container-fluid">
+            <h3 class="card-title">Active Records</h3>
+            <div class="form-body">
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead class=" text-primary">
+                            <tr>
+                                <th style="display:none">Id</th>
+                                <th>Unique Ident. No.</th>
+                                <th>Certificate No.</th>
+                                <th>Winch Assigned</th>
+                                <th>Location</th>
+                                <th>Manufacturer</th>
+                                <th>Installed Date</th>
+                                <th>Inspection due date</th>
+                                @*<th>Current Length</th>*@
+                                <th width="120px">View Details</th>
+
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                            @foreach (var item in Model.MooringLineList)
+                            {
+                            <tr>
+                                <td style="display:none"> @Html.DisplayFor(modelItem => item.Id)</td>
+                                <td> @Html.DisplayFor(modelItem => item.UniqueID)</td>
+                                <td> @Html.DisplayFor(modelItem => item.CertificateNumber)</td>
+                                @if (item.AssignedWinch != null)
+                                {
+                                    <td> @Html.DisplayFor(modelItem => item.AssignedWinch)</td>
+                                }
+                                else
+                                {
+                                    <td>Not Assigned</td>
+                                }
+                                @if (item.Location != null)
+                                {
+                                    <td> @Html.DisplayFor(modelItem => item.Location)</td>
+                                }
+                                else
+                                {
+                                    <td>Not Assigned</td>
+                                }
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.ManufacturerName)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.InstalledDate1)
+                                </td>
+
+                                <td> @Html.DisplayFor(modelItem => item.InspectionDueDate)</td>
+
+
+                                <td width="120px">
+
+                                    <a class="btn btn-sm btn-light btn-view" href="@Url.Action("viewdetails", "LineStatus", new { id = item.RopeId })">
+                                        <i class="uil uil-eye mr-2"></i> View
+                                    </a>
+
+
+                                </td>
+
+
+                            </tr>
+                            }
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <h3 class="card-title">Past Records</h3>
+            <div class="form-body">
+                <div class="table-responsive">
+                    
+
+                    <table class="table">
+                        <thead class=" text-primary">
+                            <tr>
+                                <th style="display:none">Id</th>
+                                <th>Unique Ident. No.</th>
+                                <th>Certificate No.</th>
+                                <th>Winch Assigned</th>
+                                <th>Location</th>
+                                <th>Manufacturer</th>
+                                <th>Installed Date</th>
+                                <th>Inspection due date</th>
+                                @*<th>Current Length</th>*@
+                                <th width="120px">View</th>
+
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                            @foreach (var item in Model.MooringLineList1)
+                            {
+                            <tr>
+                                <td style="display:none"> @Html.DisplayFor(modelItem => item.Id)</td>
+                                <td> @Html.DisplayFor(modelItem => item.UniqueID)</td>
+                                <td> @Html.DisplayFor(modelItem => item.CertificateNumber)</td>
+                                @if (item.AssignedWinch != null)
+                                {
+                                    <td> @Html.DisplayFor(modelItem => item.AssignedWinch)</td>
+                                }
+                                else
+                                {
+                                    <td>Not Assigned</td>
+                                }
+                                @if (item.Location != null)
+                                {
+                                    <td> @Html.DisplayFor(modelItem => item.Location)</td>
+                                }
+                                else
+                                {
+                                    <td>Not Assigned</td>
+                                }
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.ManufacturerName)
+                                </td>
+
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.InstalledDate1)
+                                </td>
+
+                                <td> @Html.DisplayFor(modelItem => item.InspectionDueDate)</td>
+
+
+                                <td width="120px">
+
+                                    <a class="btn btn-sm btn-light btn-view" href="@Url.Action("viewdetails", "LineStatus", new { id = item.RopeId })">
+                                        <i class="uil uil-eye mr-2"></i> View
+                                    </a>
+
+
+                                </td>
+
+
+                            </tr>
+                            }
+
+                        </tbody>
+                    </table>
+                
+                    <nav class="text-right">
+
+                        <ul class="pagination">
+                            @{
+                                
+
+                                int totalRecords = Convert.ToInt32(TempData.Peek("TotalRecords"));
+
+                                int tot_pages = totalRecords / Shipment49Web.Common.CommonMethods.PAGESIZE;
+                                int remainder = totalRecords % Shipment49Web.Common.CommonMethods.PAGESIZE;
+
+                                tot_pages = remainder > 0 ? (tot_pages + 1) : tot_pages;
+
+                                int currPage = Convert.ToInt32(TempData.Peek("CurrentPage"));
+
+                                if (totalRecords > 0)
+                                {
+                                    if (currPage == 0)
+                                    {
+                                        currPage = 1;
+                                    }
+
+                                    if (currPage != 1)
+                                    {
+                                        <li class="page-item"><a class="page-link" href="@Url.Action("Index", "LineStatus" ,new { page = 1 })">First</a> </li>
+                                    }
+
+                                    if (currPage != tot_pages)
+                                    {
+                                        for (int cnt = currPage; cnt < (currPage + 10); cnt++)
+                                        {
+                                            if (cnt == currPage)
+                                            {
+                                                <li class="page-item active"><a class="page-link" href="#">@cnt</a></li>
+                                            }
+                                            else
+                                            {
+                                                <li class="page-item"><a class="page-link" href="@Url.Action("Index", "LineStatus" ,new { page = cnt })">@cnt.ToString()</a> </li>
+                                            }
+
+                                            if (cnt == tot_pages)
+                                            {
+                                                break;
+                                            }
+                                        }
+                                    }
+
+
+                                    if (currPage == tot_pages)
+                                    {
+                                        <li class="page-item active"><a class="page-link" href="#">@tot_pages</a></li>
+                                    }
+                                    else
+                                    {
+
+                                        <li class="page-item"><a class="page-link" href="@Url.Action("Index", "LineStatus" ,new { page = tot_pages })">Last</a> </li>
+                                    }
+                                }
+                            }
+                        </ul>
+
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

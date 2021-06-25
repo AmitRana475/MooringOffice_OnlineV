@@ -1,0 +1,67 @@
+﻿@model UserLayer.UserClass
+
+@{
+    ViewBag.Title = "Detail";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>User Detail</h2>
+
+<div  class="panel panel-default">
+    
+    <dl class="dl-horizontal">
+        <dt >
+            @Html.DisplayNameFor(model => model.FullName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.FullName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Password)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Password)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ContactNo)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ContactNo)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Designation)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Designation)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.EmailId)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.EmailId)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.VesselName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.VesselName)
+        </dd>
+
+
+    </dl>
+</div>
+<p>
+    @Ajax.ActionLink("Edit", "Edit", new { id = Model.UserId },null) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

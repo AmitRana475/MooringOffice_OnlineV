@@ -1,0 +1,331 @@
+﻿input::-webkit-input-placeholder, textarea::-webkit-input-placeholder {
+    color: #999;
+}
+
+input:focus::-webkit-input-placeholder, textarea:focus::-webkit-input-placeholder {
+    color: #333;
+}
+
+input:-moz-placeholder, textarea:-moz-placeholder {
+    color: #999;
+}
+
+input:focus:-moz-placeholder, textarea:focus:-moz-placeholder {
+    color: #333;
+}
+
+input::-moz-placeholder, textarea::-moz-placeholder {
+    opacity: 1;
+    color: #999;
+}
+
+input:focus::-moz-placeholder, textarea:focus::-moz-placeholder {
+    opacity: 1;
+    color: #333;
+}
+
+input:-ms-input-placeholder, textarea:-ms-input-placeholder {
+    color: #999;
+}
+
+input:focus:-ms-input-placeholder, textarea:focus:-ms-input-placeholder {
+    color: #333;
+}
+
+.extra-small-gutter > [class*='col-'] {
+    padding-right: 5px;
+    padding-left: 5px;
+}
+
+.extra-small-gutter.row {
+    margin-right: -5px;
+    margin-left: -5px;
+}
+
+.small-gutter > [class*='col-'] {
+    padding-right: 10px;
+    padding-left: 10px;
+}
+
+.small-gutter.row {
+    margin-right: -10px;
+    margin-left: -10px;
+}
+
+.no-gutter > [class*='col-'] {
+    padding-right: 0px;
+    padding-left: 0px;
+}
+
+.no-gutter.row {
+    margin-right: 0px;
+    margin-left: 0px;
+}
+
+.margin-n {
+    margin: 0 !important;
+}
+
+.margin-n-top {
+    margin-top: 0;
+}
+
+.margin-n-bot {
+    margin-bottom: 0;
+}
+
+.margin-n-left {
+    margin-left: 0;
+}
+
+.margin-0 {
+    margin: 5px !important;
+}
+
+.margin-0-top {
+    margin-top: 5px;
+}
+
+.margin-0-bot {
+    margin-bottom: 5px;
+}
+
+.margin-0-left {
+    margin-left: 5px;
+}
+
+.margin-1 {
+    margin: 10px !important;
+}
+
+.margin-1-top {
+    margin-top: 10px;
+}
+
+.margin-1-bot {
+    margin-bottom: 10px;
+}
+
+.margin-1-left {
+    margin-left: 10px;
+}
+
+.margin-2 {
+    margin: 15px !important;
+}
+
+.margin-2-top {
+    margin-top: 15px;
+}
+
+.margin-2-bot {
+    margin-bottom: 15px;
+}
+
+.margin-2-left {
+    margin-left: 15px;
+}
+
+.margin-3 {
+    margin: 20px;
+}
+
+.margin-3-top {
+    margin-top: 20px;
+}
+
+.margin-3-bot {
+    margin-bottom: 20px;
+}
+
+.margin-3-left {
+    margin-left: 20px;
+}
+
+.margin-4 {
+    margin: 25px !important;
+}
+
+.margin-4-top {
+    margin-top: 25px;
+}
+
+.margin-4-bot {
+    margin-bottom: 25px;
+}
+
+.margin-4-left {
+    margin-left: 25px;
+}
+
+.margin-5 {
+    margin: 30px !important;
+}
+
+.margin-5-top {
+    margin-top: 30px;
+}
+
+.margin-5-bot {
+    margin-bottom: 30px;
+}
+
+.margin-5-left {
+    margin-left: 30px;
+}
+
+.margin-6 {
+    margin: 35px !important;
+}
+
+.margin-6-top {
+    margin-top: 35px;
+}
+
+.margin-6-bot {
+    margin-bottom: 35px;
+}
+
+.margin-6-left {
+    margin-left: 35px;
+}
+
+.margin-7 {
+    margin: 40px !important;
+}
+
+.margin-7-top {
+    margin-top: 40px;
+}
+
+.margin-7-bot {
+    margin-bottom: 40px;
+}
+
+.margin-7-left {
+    margin-left: 40px;
+}
+
+.margin-8 {
+    margin: 45px !important;
+}
+
+.margin-8-top {
+    margin-top: 45px;
+}
+
+.margin-8-bot {
+    margin-bottom: 45px;
+}
+
+.margin-8-left {
+    margin-left: 45px;
+}
+
+.pad-0 {
+    padding: 0;
+}
+
+.pad-0-top {
+    padding-top: 0;
+}
+
+.pad-0-bot {
+    padding-bottom: 0;
+}
+
+.pad-1 {
+    padding: 10px;
+}
+
+.pad-1-top {
+    padding-top: 10px;
+}
+
+.pad-1-bot {
+    padding-bottom: 10px;
+}
+
+.pad-2 {
+    padding: 15px;
+}
+
+.pad-2-top {
+    padding-top: 15px;
+}
+
+.pad-2-bot {
+    padding-bottom: 15px;
+}
+
+.pad-3 {
+    padding: 20px;
+}
+
+.pad-3-top {
+    padding-top: 20px;
+}
+
+.pad-3-bot {
+    padding-bottom: 20px;
+}
+
+.pad-4 {
+    padding: 25px;
+}
+
+.pad-4-top {
+    padding-top: 25px;
+}
+
+.pad-4-bot {
+    padding-bottom: 25px;
+}
+
+.pad-5 {
+    padding: 30px;
+}
+
+.pad-5-top {
+    padding-top: 30px;
+}
+
+.pad-5-bot {
+    padding-bottom: 30px;
+}
+
+.pad-6 {
+    padding: 35px;
+}
+
+.pad-6-top {
+    padding-top: 35px;
+}
+
+.pad-6-bot {
+    padding-bottom: 35px;
+}
+
+.pad-7 {
+    padding: 40px;
+}
+
+.pad-7-top {
+    padding-top: 40px;
+}
+
+.pad-7-bot {
+    padding-bottom: 40px;
+}
+
+.pad-8 {
+    padding: 45px;
+}
+
+.pad-8-top {
+    padding-top: 45px;
+}
+
+.pad-8-bot {
+    padding-bottom: 45px;
+}

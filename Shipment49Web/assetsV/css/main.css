@@ -1,0 +1,34 @@
+body {
+  margin: 0;
+  font-family: sans-serif;
+}
+
+main {
+  height: 100vh;
+  display: grid;
+  grid-template-areas:
+    'aside header'
+    'aside contenido';
+  grid-template-rows: 100px 1fr;
+  grid-template-columns: auto 1fr;
+}
+
+main > * {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}
+
+header {
+  grid-area: header;
+  background-color: lightgrey;
+}
+
+aside {
+  grid-area: aside;
+}
+
+article {
+  grid-area: contenido;
+  background-color: lightslategrey;
+}

@@ -1,0 +1,320 @@
+﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Frameset//EN" "http://www.w3.org/TR/html4/frameset.dtd">
+<!-- saved from url=(0014)about:internet -->
+<html>
+<head>
+<title>DIGIMOORX7 HELP</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<style type="text/css"> 
+<!-- 
+.selected {font-weight: normal;background-color: #E2E2E2;padding:0px,2px,0px,2px;}
+.unselected { font-weight: normal;padding:0px,2px,0px,2px;}
+.hand { cursor: hand; }
+.p {height: 16px;width: 16px;vertical-align: middle;border: 0;}
+div,body { font-family: Tahoma, Verdana; font-size: 11px; }
+A:link {text-decoration: none; color:#000000}
+A:visited {text-decoration: none; color: #000000}
+A:active {text-decoration: none; color: #000000 }
+A:hover {text-decoration: none; color: #FF0000 }
+
+-->
+</style>
+
+<SCRIPT LANGUAGE="JavaScript">
+<!--
+var cl,pn,pm,bl;
+var path = 'icons/';
+var pos = 0;
+var icon;
+var tar = 'content';
+var display;
+var imgi;
+var AutoCollapse;
+var LastSelected = -1;
+var loaded = false;
+var max;
+var divlist;
+
+function SetEnv(v,a){
+
+if(v==0){ 
+	pn = [['daplus.gif','daminus.gif'],['tplus.gif','tminus.gif'],['uaplus.gif','uaminus.gif'],['splus.gif','sminus.gif']];
+	PreloadImg('downangle.gif','tshaped.gif','upangle.gif','sline.gif','daplus.gif','daminus.gif','tplus.gif','tminus.gif','uaplus.gif','uaminus.gif','splus.gif','sminus.gif','blank.gif','line.gif');
+}else{
+	pn = [['plus.gif','minus.gif']];
+	PreloadImg('plus.gif','minus.gif','blank.gif');
+
+}
+AutoCollapse = a;
+}
+
+ function PreloadImg(){
+if (document.images) { 
+	var imgs = PreloadImg.arguments; 
+	var pload = new Array();
+	for (var i=0; i<imgs.length; i++) { 
+		pload[i] = new Image; 
+		pload[i].src = path + imgs[i]; 
+	} 
+} 
+ } 
+
+function get(o){
+var x;
+if(document.all) x=document.all[o]; 
+if(document.getElementById) x=document.getElementById(o);
+
+return x;
+}
+
+
+function pnImg(img){
+var i,j;
+for(i=0;i<=3;i++){
+	for(j=0;j<=1;j++){
+	if(img.substr(img.lastIndexOf('/') + 1)== pn[i][j]){
+		return i;
+	}
+	}
+}
+}
+function icon(img){
+var f;
+f = img.substr(img.lastIndexOf('/') + 1);
+if( f=='1.gif' || f=='2.gif'){
+	return ['1.gif','2.gif'];
+}
+if( f=='3.gif' || f=='4.gif'){
+	return ['3.gif','4.gif'];
+}
+if( f=='5.gif' || f=='6.gif'){
+	return ['5.gif','6.gif'];
+}
+if( f=='7.gif' || f=='8.gif'){
+	return ['7.gif','8.gif'];
+}
+return [f,f];
+}
+
+function show(id){
+get('d' + id).style.display='block';
+if(get('imgn' + id )) get('imgn' + id ).src= path + pn[pnImg(get('imgn' + id ).src)][1];
+get('img' + id ).src= path + icon(get('img' + id ).src)[1];
+
+}
+
+function collapse(id){
+get('d' + id ).style.display='none';
+if(get('imgn' + id )) get('imgn' + id ).src= path + pn[pnImg(get('imgn' + id ).src)][0];
+get('img' + id ).src= path + icon(get('img' + id ).src)[0];
+
+}
+
+function collapseAll(){
+var i;
+var o;
+for(i=0;i<=divlist.length-1;i++){
+	if(o=get('d' + divlist[i])){
+		if(o.style.display!='none'){ 
+			collapse(divlist[i]);
+		}
+	}
+}
+}
+
+function showAll(){
+var i;
+var o;
+for(i=0;i<=divlist.length-1;i++){
+	if(o=get('d' + divlist[i])){
+		if(o.style.display!='block'){ 
+			show(divlist[i]);
+		}
+	}
+}
+}
+
+function unselectAll(){
+var i=0;
+while(get("l" + i)){
+	get("l" + i).className = "unselected";
+	i++;
+}
+}
+
+function clickNode(index){
+var e;
+
+e = get("l" + index);
+if(e==null) return;
+e = e.parentNode;
+if(e.nodeName == 'A'){
+	if(e.href!= window.location.href + '#'){
+		parent.parent.content.location.href = e.href;
+	}else{
+		selectNode(index);
+	}
+	e.onclick;
+}
+}
+
+function showParent(ele){
+var e;
+e = ele.parentNode;
+
+if(e==null) return;
+
+if(e.nodeName == 'DIV'){
+	if(e.id!='') show(e.id.substring(1,e.id.length ));
+}else if(e.nodeName == 'A'){
+
+}
+showParent(e);
+}
+
+function showNode(index){
+showParent(get("l" + index));
+LinkClick(index);
+}
+
+function selectNode(index){
+if(LastSelected!=index){
+//collapseAll();
+showParent(get("l" + index));
+LinkClick(index);
+get('l' + index).scrollIntoView(true);
+
+
+//alert(get('l' + index).offsetHeight + '|' + document.body.clientHeight + '|' + document.body.offsetHeight);
+window.scrollTo(0,document.body.scrollTop); // - document.body.clientHeight /3);
+}
+}
+
+
+function NodeClick(id){
+if(get('d' + id ).style.display=='none'){
+	show(id);
+}else{
+	collapse(id);
+}
+return false;
+}
+
+function LinkDblClick(id){
+if(!AutoCollapse){
+	if(get('d' + id ).style.display=='none'){
+		show(id);
+	}else{
+		collapse(id);
+	}
+}
+return false;
+}
+
+function LinkClick(index,hasChild,r){
+if(AutoCollapse && hasChild){
+	if(get('d' + index ).style.display=='none'){
+		collapseAll()
+		showParent(get('l' + index));
+		show(index);
+	}else{
+		collapseAll()
+		showParent(get('l' + index));	
+		collapse(index);
+	}
+}
+if(LastSelected!=-1){
+	get('l' + LastSelected).className = "unselected";
+}
+get('l' + index).className = "selected";
+LastSelected = index;
+return r;
+}
+
+function body_onmousemove(event){
+if(typeof(document.body.scrollTop)!='undefined'){
+if(parseInt(event.clientX)<5){
+window.scroll(0,document.body.scrollTop);}}
+if(typeof(window.scrollY)!='undefined'){
+if(parseInt(event.clientX)<5){
+window.scrollTo(0,window.scrollY);}}
+}
+
+window.defaultStatus = '';
+
+function body_onload(){
+get('loading').style.display='none';
+loaded = true;
+if(parent.parent.content.document.readyState){
+	if(parent.parent.content.document.readyState == 'complete'){
+		try{parent.parent.content.syn();}catch(e){};
+	}
+}else{
+	if(parent.parent.contentLoaded){
+		try{parent.parent.content.syn();}catch(e){};
+	}
+}
+}
+
+//-->
+</SCRIPT>
+<script language="JavaScript" src="languages.js"></script>
+
+</head>
+
+<body bgcolor="#ffffff" leftmargin="5" topmargin="5" marginwidth="5" marginheight="5" onmousemove="body_onmousemove(event);" onload="body_onload();">
+<div id="loading"><font color="#FF0000" size="1"> Loading table of contents... 
+</font><br><br></div>
+<script>SetEnv(0,false)</script><div><nobr><a href="#" onClick="return NodeClick('0')"><img id="imgn0" src="icons/splus.gif" class="p"></a><a href="#" onclick="return LinkClick('0',true,false)" onDblClick="return LinkDblClick('0')" target="content" title="DIGIMOORX7 Online" onmousemove="window.status='DIGIMOORX7 Online'"><img id="img0" src="icons/1.gif" class="p"> <span id="l0" class="unselected">DIGIMOORX7 Online</span></a></nobr></div>
+<div id="d0" style="display:none"><div><nobr><img src="icons/blank.gif" class="p"><a href="#" onClick="return NodeClick('1')"><img id="imgn1" src="icons/tplus.gif" class="p"></a><a href="topics/1.0_ABOUT.htm" onclick="return LinkClick('1',true,true)" onDblClick="return LinkDblClick('1')" target="content" title="1.0 ABOUT" onmousemove="window.status='1.0 ABOUT'"><img id="img1" src="icons/1.gif" class="p"> <span id="l1" class="unselected">1.0 ABOUT</span></a></nobr></div>
+<div id="d1" style="display:none"><div><nobr><img src="icons/blank.gif" class="p"><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="topics/1.0.1_GENERAL_TERMS_&_POLICIES_OF_USE.htm" onclick="return LinkClick('2',false,true)" target="content" title="1.0.1 GENERAL TERMS &amp; POLICIES OF USE" onmousemove="window.status='1.0.1 GENERAL TERMS &amp; POLICIES OF USE'"><img src="icons/11.gif" class="p"> <span id="l2" class="unselected">1.0.1 GENERAL TERMS &amp; POLICIES OF USE</span></a></nobr></div>
+<div><nobr><img src="icons/blank.gif" class="p"><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="topics/1.0.2_DISCLAIMER.htm" onclick="return LinkClick('3',false,true)" target="content" title="1.0.2 DISCLAIMER" onmousemove="window.status='1.0.2 DISCLAIMER'"><img src="icons/11.gif" class="p"> <span id="l3" class="unselected">1.0.2 DISCLAIMER</span></a></nobr></div>
+<div><nobr><img src="icons/blank.gif" class="p"><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="topics/1.0.3_COPYRIGHT_NOTICE.htm" onclick="return LinkClick('4',false,true)" target="content" title="1.0.3 COPYRIGHT NOTICE" onmousemove="window.status='1.0.3 COPYRIGHT NOTICE'"><img src="icons/11.gif" class="p"> <span id="l4" class="unselected">1.0.3 COPYRIGHT NOTICE</span></a></nobr></div>
+<div><nobr><img src="icons/blank.gif" class="p"><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="topics/1.0.4_TERMS_OF_USE.htm" onclick="return LinkClick('5',false,true)" target="content" title="1.0.4 TERMS OF USE" onmousemove="window.status='1.0.4 TERMS OF USE'"><img src="icons/11.gif" class="p"> <span id="l5" class="unselected">1.0.4 TERMS OF USE</span></a></nobr></div>
+<div><nobr><img src="icons/blank.gif" class="p"><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="topics/1.0.5_VERSIONS.htm" onclick="return LinkClick('6',false,true)" target="content" title="1.0.5 VERSIONS" onmousemove="window.status='1.0.5 VERSIONS'"><img src="icons/11.gif" class="p"> <span id="l6" class="unselected">1.0.5 VERSIONS</span></a></nobr></div>
+<div><nobr><img src="icons/blank.gif" class="p"><img src="icons/line.gif" class="p"><img src="icons/upangle.gif" class="p"><a href="topics/1.0.6_LOGIN.htm" onclick="return LinkClick('7',false,true)" target="content" title="1.0.6 LOGIN" onmousemove="window.status='1.0.6 LOGIN'"><img src="icons/11.gif" class="p"> <span id="l7" class="unselected">1.0.6 LOGIN</span></a></nobr></div>
+</div><div><nobr><img src="icons/blank.gif" class="p"><a href="#" onClick="return NodeClick('8')"><img id="imgn8" src="icons/tplus.gif" class="p"></a><a href="topics/2.0_NOTIFICATION.htm" onclick="return LinkClick('8',true,true)" onDblClick="return LinkDblClick('8')" target="content" title="2.0 NOTIFICATION" onmousemove="window.status='2.0 NOTIFICATION'"><img id="img8" src="icons/1.gif" class="p"> <span id="l8" class="unselected">2.0 NOTIFICATION</span></a></nobr></div>
+<div id="d8" style="display:none"><div><nobr><img src="icons/blank.gif" class="p"><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="topics/2.1_NOTIFICATIONS.htm" onclick="return LinkClick('9',false,true)" target="content" title="2.1 NOTIFICATIONS" onmousemove="window.status='2.1 NOTIFICATIONS'"><img src="icons/11.gif" class="p"> <span id="l9" class="unselected">2.1 NOTIFICATIONS</span></a></nobr></div>
+<div><nobr><img src="icons/blank.gif" class="p"><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="topics/2.2_SHIP_AND_OFFICE_COMMENTS.htm" onclick="return LinkClick('10',false,true)" target="content" title="2.2 SHIP AND OFFICE COMMENTS" onmousemove="window.status='2.2 SHIP AND OFFICE COMMENTS'"><img src="icons/11.gif" class="p"> <span id="l10" class="unselected">2.2 SHIP AND OFFICE COMMENTS</span></a></nobr></div>
+<div><nobr><img src="icons/blank.gif" class="p"><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="topics/2.3_ACKNOWLEDGE.htm" onclick="return LinkClick('11',false,true)" target="content" title="2.3 ACKNOWLEDGE" onmousemove="window.status='2.3 ACKNOWLEDGE'"><img src="icons/11.gif" class="p"> <span id="l11" class="unselected">2.3 ACKNOWLEDGE</span></a></nobr></div>
+<div><nobr><img src="icons/blank.gif" class="p"><img src="icons/line.gif" class="p"><img src="icons/upangle.gif" class="p"><a href="topics/2.4_ARCHIVES.htm" onclick="return LinkClick('12',false,true)" target="content" title="2.4 ARCHIVES" onmousemove="window.status='2.4 ARCHIVES'"><img src="icons/11.gif" class="p"> <span id="l12" class="unselected">2.4 ARCHIVES</span></a></nobr></div>
+</div><div><nobr><img src="icons/blank.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="topics/3.0_MOORING_MANUAL.htm" onclick="return LinkClick('13',false,true)" target="content" title="3.0 MOORING MANUAL" onmousemove="window.status='3.0 MOORING MANUAL'"><img src="icons/11.gif" class="p"> <span id="l13" class="unselected">3.0 MOORING MANUAL</span></a></nobr></div>
+<div><nobr><img src="icons/blank.gif" class="p"><a href="#" onClick="return NodeClick('14')"><img id="imgn14" src="icons/tplus.gif" class="p"></a><a href="topics/4.0_LINE_MANAGEMENT_PLAN_REGISTER.htm" onclick="return LinkClick('14',true,true)" onDblClick="return LinkDblClick('14')" target="content" title="4.0 LINE MANAGEMENT PLAN REGISTER" onmousemove="window.status='4.0 LINE MANAGEMENT PLAN REGISTER'"><img id="img14" src="icons/1.gif" class="p"> <span id="l14" class="unselected">4.0 LINE MANAGEMENT PLAN REGISTER</span></a></nobr></div>
+<div id="d14" style="display:none"><div><nobr><img src="icons/blank.gif" class="p"><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="topics/4.1_MOORING_OPERATION.htm" onclick="return LinkClick('15',false,true)" target="content" title="4.1 MOORING OPERATION" onmousemove="window.status='4.1 MOORING OPERATION'"><img src="icons/11.gif" class="p"> <span id="l15" class="unselected">4.1 MOORING OPERATION</span></a></nobr></div>
+<div><nobr><img src="icons/blank.gif" class="p"><img src="icons/line.gif" class="p"><a href="#" onClick="return NodeClick('16')"><img id="imgn16" src="icons/tplus.gif" class="p"></a><a href="topics/4.2_MOORING_LINE.htm" onclick="return LinkClick('16',true,true)" onDblClick="return LinkDblClick('16')" target="content" title="4.2 MOORING LINE" onmousemove="window.status='4.2 MOORING LINE'"><img id="img16" src="icons/1.gif" class="p"> <span id="l16" class="unselected">4.2 MOORING LINE</span></a></nobr></div>
+<div id="d16" style="display:none"><div><nobr><img src="icons/blank.gif" class="p"><img src="icons/line.gif" class="p"><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="topics/4.2.1_MOORING_LINE_INSPECTION.htm" onclick="return LinkClick('17',false,true)" target="content" title="4.2.1 MOORING LINE INSPECTION" onmousemove="window.status='4.2.1 MOORING LINE INSPECTION'"><img src="icons/11.gif" class="p"> <span id="l17" class="unselected">4.2.1 MOORING LINE INSPECTION</span></a></nobr></div>
+<div><nobr><img src="icons/blank.gif" class="p"><img src="icons/line.gif" class="p"><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="topics/4.2.2_MOORING_LINE_DETAILS.htm" onclick="return LinkClick('18',false,true)" target="content" title="4.2.2 MOORING LINE DETAILS" onmousemove="window.status='4.2.2 MOORING LINE DETAILS'"><img src="icons/11.gif" class="p"> <span id="l18" class="unselected">4.2.2 MOORING LINE DETAILS</span></a></nobr></div>
+<div><nobr><img src="icons/blank.gif" class="p"><img src="icons/line.gif" class="p"><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="topics/4.2.3_ASSIGN_LINE_TO_WINCH.htm" onclick="return LinkClick('19',false,true)" target="content" title="4.2.3 ASSIGN LINE TO WINCH" onmousemove="window.status='4.2.3 ASSIGN LINE TO WINCH'"><img src="icons/11.gif" class="p"> <span id="l19" class="unselected">4.2.3 ASSIGN LINE TO WINCH</span></a></nobr></div>
+<div><nobr><img src="icons/blank.gif" class="p"><img src="icons/line.gif" class="p"><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="topics/4.2.4_LINE_END_TO_END.htm" onclick="return LinkClick('20',false,true)" target="content" title="4.2.4 LINE END TO END" onmousemove="window.status='4.2.4 LINE END TO END'"><img src="icons/11.gif" class="p"> <span id="l20" class="unselected">4.2.4 LINE END TO END</span></a></nobr></div>
+<div><nobr><img src="icons/blank.gif" class="p"><img src="icons/line.gif" class="p"><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="topics/4.2.5_LINE_SPLICING.htm" onclick="return LinkClick('21',false,true)" target="content" title="4.2.5 LINE SPLICING" onmousemove="window.status='4.2.5 LINE SPLICING'"><img src="icons/11.gif" class="p"> <span id="l21" class="unselected">4.2.5 LINE SPLICING</span></a></nobr></div>
+<div><nobr><img src="icons/blank.gif" class="p"><img src="icons/line.gif" class="p"><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="topics/4.2.6_LINE_CROPPING.htm" onclick="return LinkClick('22',false,true)" target="content" title="4.2.6 LINE CROPPING" onmousemove="window.status='4.2.6 LINE CROPPING'"><img src="icons/11.gif" class="p"> <span id="l22" class="unselected">4.2.6 LINE CROPPING</span></a></nobr></div>
+<div><nobr><img src="icons/blank.gif" class="p"><img src="icons/line.gif" class="p"><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="topics/4.2.7_LINE_DAMAGE.htm" onclick="return LinkClick('23',false,true)" target="content" title="4.2.7 LINE DAMAGE" onmousemove="window.status='4.2.7 LINE DAMAGE'"><img src="icons/11.gif" class="p"> <span id="l23" class="unselected">4.2.7 LINE DAMAGE</span></a></nobr></div>
+<div><nobr><img src="icons/blank.gif" class="p"><img src="icons/line.gif" class="p"><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="topics/4.2.8_LINE_DISCARD.htm" onclick="return LinkClick('24',false,true)" target="content" title="4.2.8 LINE DISCARD" onmousemove="window.status='4.2.8 LINE DISCARD'"><img src="icons/11.gif" class="p"> <span id="l24" class="unselected">4.2.8 LINE DISCARD</span></a></nobr></div>
+<div><nobr><img src="icons/blank.gif" class="p"><img src="icons/line.gif" class="p"><img src="icons/line.gif" class="p"><img src="icons/upangle.gif" class="p"><a href="topics/4.2.9_LINE_DISPOSAL.htm" onclick="return LinkClick('25',false,true)" target="content" title="4.2.9 LINE DISPOSAL" onmousemove="window.status='4.2.9 LINE DISPOSAL'"><img src="icons/11.gif" class="p"> <span id="l25" class="unselected">4.2.9 LINE DISPOSAL</span></a></nobr></div>
+</div><div><nobr><img src="icons/blank.gif" class="p"><img src="icons/line.gif" class="p"><a href="#" onClick="return NodeClick('26')"><img id="imgn26" src="icons/tplus.gif" class="p"></a><a href="topics/4.3_MOORING_ROPE_TAIL.htm" onclick="return LinkClick('26',true,true)" onDblClick="return LinkDblClick('26')" target="content" title="4.3 MOORING ROPE TAIL" onmousemove="window.status='4.3 MOORING ROPE TAIL'"><img id="img26" src="icons/1.gif" class="p"> <span id="l26" class="unselected">4.3 MOORING ROPE TAIL</span></a></nobr></div>
+<div id="d26" style="display:none"><div><nobr><img src="icons/blank.gif" class="p"><img src="icons/line.gif" class="p"><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="topics/4.3.1_MOORING_ROPE_TAIL_INSPECTION.htm" onclick="return LinkClick('27',false,true)" target="content" title="4.3.1 MOORING ROPE TAIL INSPECTION" onmousemove="window.status='4.3.1 MOORING ROPE TAIL INSPECTION'"><img src="icons/11.gif" class="p"> <span id="l27" class="unselected">4.3.1 MOORING ROPE TAIL INSPECTION</span></a></nobr></div>
+<div><nobr><img src="icons/blank.gif" class="p"><img src="icons/line.gif" class="p"><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="topics/4.3.2_MOORING_ROPE_TAIL_DETAILS.htm" onclick="return LinkClick('28',false,true)" target="content" title="4.3.2 MOORING ROPE TAIL DETAILS" onmousemove="window.status='4.3.2 MOORING ROPE TAIL DETAILS'"><img src="icons/11.gif" class="p"> <span id="l28" class="unselected">4.3.2 MOORING ROPE TAIL DETAILS</span></a></nobr></div>
+<div><nobr><img src="icons/blank.gif" class="p"><img src="icons/line.gif" class="p"><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="topics/4.3.3_ASSIGN_ROPE_TAIL_TO_WINCH.htm" onclick="return LinkClick('29',false,true)" target="content" title="4.3.3 ASSIGN ROPE TAIL TO WINCH" onmousemove="window.status='4.3.3 ASSIGN ROPE TAIL TO WINCH'"><img src="icons/11.gif" class="p"> <span id="l29" class="unselected">4.3.3 ASSIGN ROPE TAIL TO WINCH</span></a></nobr></div>
+<div><nobr><img src="icons/blank.gif" class="p"><img src="icons/line.gif" class="p"><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="topics/4.3.4_ROPE_TAIL_SPLICING.htm" onclick="return LinkClick('30',false,true)" target="content" title="4.3.4 ROPE TAIL SPLICING" onmousemove="window.status='4.3.4 ROPE TAIL SPLICING'"><img src="icons/11.gif" class="p"> <span id="l30" class="unselected">4.3.4 ROPE TAIL SPLICING</span></a></nobr></div>
+<div><nobr><img src="icons/blank.gif" class="p"><img src="icons/line.gif" class="p"><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="topics/4.3.5_ROPE_TAIL_CROPPING.htm" onclick="return LinkClick('31',false,true)" target="content" title="4.3.5 ROPE TAIL CROPPING" onmousemove="window.status='4.3.5 ROPE TAIL CROPPING'"><img src="icons/11.gif" class="p"> <span id="l31" class="unselected">4.3.5 ROPE TAIL CROPPING</span></a></nobr></div>
+<div><nobr><img src="icons/blank.gif" class="p"><img src="icons/line.gif" class="p"><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="topics/4.3.6_ROPE_TAIL_DAMAGE.htm" onclick="return LinkClick('32',false,true)" target="content" title="4.3.6 ROPE TAIL DAMAGE" onmousemove="window.status='4.3.6 ROPE TAIL DAMAGE'"><img src="icons/11.gif" class="p"> <span id="l32" class="unselected">4.3.6 ROPE TAIL DAMAGE</span></a></nobr></div>
+<div><nobr><img src="icons/blank.gif" class="p"><img src="icons/line.gif" class="p"><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="topics/4.3.7_ROPE_TAIL_DISCARD.htm" onclick="return LinkClick('33',false,true)" target="content" title="4.3.7 ROPE TAIL DISCARD" onmousemove="window.status='4.3.7 ROPE TAIL DISCARD'"><img src="icons/11.gif" class="p"> <span id="l33" class="unselected">4.3.7 ROPE TAIL DISCARD</span></a></nobr></div>
+<div><nobr><img src="icons/blank.gif" class="p"><img src="icons/line.gif" class="p"><img src="icons/line.gif" class="p"><img src="icons/upangle.gif" class="p"><a href="topics/4.3.8_ROPE_TAIL_DISPOSAL.htm" onclick="return LinkClick('34',false,true)" target="content" title="4.3.8 ROPE TAIL DISPOSAL" onmousemove="window.status='4.3.8 ROPE TAIL DISPOSAL'"><img src="icons/11.gif" class="p"> <span id="l34" class="unselected">4.3.8 ROPE TAIL DISPOSAL</span></a></nobr></div>
+</div><div><nobr><img src="icons/blank.gif" class="p"><img src="icons/line.gif" class="p"><a href="#" onClick="return NodeClick('35')"><img id="imgn35" src="icons/tplus.gif" class="p"></a><a href="topics/4.4_MOORING_LOOSE_EQUIPMENT.htm" onclick="return LinkClick('35',true,true)" onDblClick="return LinkDblClick('35')" target="content" title="4.4 MOORING LOOSE EQUIPMENT" onmousemove="window.status='4.4 MOORING LOOSE EQUIPMENT'"><img id="img35" src="icons/1.gif" class="p"> <span id="l35" class="unselected">4.4 MOORING LOOSE EQUIPMENT</span></a></nobr></div>
+<div id="d35" style="display:none"><div><nobr><img src="icons/blank.gif" class="p"><img src="icons/line.gif" class="p"><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="topics/4.4.1_LOOSE_EQUIPMENT_INSPECTION.htm" onclick="return LinkClick('36',false,true)" target="content" title="4.4.1 LOOSE EQUIPMENT INSPECTION" onmousemove="window.status='4.4.1 LOOSE EQUIPMENT INSPECTION'"><img src="icons/11.gif" class="p"> <span id="l36" class="unselected">4.4.1 LOOSE EQUIPMENT INSPECTION</span></a></nobr></div>
+<div><nobr><img src="icons/blank.gif" class="p"><img src="icons/line.gif" class="p"><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="topics/4.4.2_LOOSE_EQUIPMENT_DETAILS.htm" onclick="return LinkClick('37',false,true)" target="content" title="4.4.2 LOOSE EQUIPMENT DETAILS" onmousemove="window.status='4.4.2 LOOSE EQUIPMENT DETAILS'"><img src="icons/11.gif" class="p"> <span id="l37" class="unselected">4.4.2 LOOSE EQUIPMENT DETAILS</span></a></nobr></div>
+<div><nobr><img src="icons/blank.gif" class="p"><img src="icons/line.gif" class="p"><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="topics/4.4.3_LOOSE_EQUIPMENT_DAMAGE.htm" onclick="return LinkClick('38',false,true)" target="content" title="4.4.3 LOOSE EQUIPMENT DAMAGE" onmousemove="window.status='4.4.3 LOOSE EQUIPMENT DAMAGE'"><img src="icons/11.gif" class="p"> <span id="l38" class="unselected">4.4.3 LOOSE EQUIPMENT DAMAGE</span></a></nobr></div>
+<div><nobr><img src="icons/blank.gif" class="p"><img src="icons/line.gif" class="p"><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="topics/4.4.4_LOOSE_EQUIPMENT_DISCARD.htm" onclick="return LinkClick('39',false,true)" target="content" title="4.4.4 LOOSE EQUIPMENT DISCARD" onmousemove="window.status='4.4.4 LOOSE EQUIPMENT DISCARD'"><img src="icons/11.gif" class="p"> <span id="l39" class="unselected">4.4.4 LOOSE EQUIPMENT DISCARD</span></a></nobr></div>
+<div><nobr><img src="icons/blank.gif" class="p"><img src="icons/line.gif" class="p"><img src="icons/line.gif" class="p"><img src="icons/upangle.gif" class="p"><a href="topics/4.4.5_LOOSE_EQUIPMENT_DISPOSAL.htm" onclick="return LinkClick('40',false,true)" target="content" title="4.4.5 LOOSE EQUIPMENT DISPOSAL" onmousemove="window.status='4.4.5 LOOSE EQUIPMENT DISPOSAL'"><img src="icons/11.gif" class="p"> <span id="l40" class="unselected">4.4.5 LOOSE EQUIPMENT DISPOSAL</span></a></nobr></div>
+</div><div><nobr><img src="icons/blank.gif" class="p"><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="topics/4.5_MOORING_WINCH.htm" onclick="return LinkClick('41',false,true)" target="content" title="4.5 MOORING WINCH" onmousemove="window.status='4.5 MOORING WINCH'"><img src="icons/11.gif" class="p"> <span id="l41" class="unselected">4.5 MOORING WINCH</span></a></nobr></div>
+<div><nobr><img src="icons/blank.gif" class="p"><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="topics/4.6_LINE_STATUS.htm" onclick="return LinkClick('42',false,true)" target="content" title="4.6 LINE STATUS" onmousemove="window.status='4.6 LINE STATUS'"><img src="icons/11.gif" class="p"> <span id="l42" class="unselected">4.6 LINE STATUS</span></a></nobr></div>
+<div><nobr><img src="icons/blank.gif" class="p"><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="topics/4.7_ROPE_TAIL_STATUS.htm" onclick="return LinkClick('43',false,true)" target="content" title="4.7 ROPE TAIL STATUS" onmousemove="window.status='4.7 ROPE TAIL STATUS'"><img src="icons/11.gif" class="p"> <span id="l43" class="unselected">4.7 ROPE TAIL STATUS</span></a></nobr></div>
+<div><nobr><img src="icons/blank.gif" class="p"><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="topics/4.8_INSPECTION_DISCARD_CRITERIA.htm" onclick="return LinkClick('44',false,true)" target="content" title="4.8 INSPECTION DISCARD CRITERIA" onmousemove="window.status='4.8 INSPECTION DISCARD CRITERIA'"><img src="icons/11.gif" class="p"> <span id="l44" class="unselected">4.8 INSPECTION DISCARD CRITERIA</span></a></nobr></div>
+<div><nobr><img src="icons/blank.gif" class="p"><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="topics/4.9_LINE_RESIDUAL_LAB_TEST.htm" onclick="return LinkClick('45',false,true)" target="content" title="4.9 LINE RESIDUAL LAB TEST" onmousemove="window.status='4.9 LINE RESIDUAL LAB TEST'"><img src="icons/11.gif" class="p"> <span id="l45" class="unselected">4.9 LINE RESIDUAL LAB TEST</span></a></nobr></div>
+<div><nobr><img src="icons/blank.gif" class="p"><img src="icons/line.gif" class="p"><img src="icons/upangle.gif" class="p"><a href="topics/4.10_TAIL_RESIDUAL_LAB_TEST.htm" onclick="return LinkClick('46',false,true)" target="content" title="4.10 TAIL RESIDUAL LAB TEST" onmousemove="window.status='4.10 TAIL RESIDUAL LAB TEST'"><img src="icons/11.gif" class="p"> <span id="l46" class="unselected">4.10 TAIL RESIDUAL LAB TEST</span></a></nobr></div>
+</div><div><nobr><img src="icons/blank.gif" class="p"><a href="#" onClick="return NodeClick('47')"><img id="imgn47" src="icons/uaplus.gif" class="p"></a><a href="topics/5.0_TRAINING_CONTENT.htm" onclick="return LinkClick('47',true,true)" onDblClick="return LinkDblClick('47')" target="content" title="5.0 TRAINING CONTENT" onmousemove="window.status='5.0 TRAINING CONTENT'"><img id="img47" src="icons/1.gif" class="p"> <span id="l47" class="unselected">5.0 TRAINING CONTENT</span></a></nobr></div>
+<div id="d47" style="display:none"><div><nobr><img src="icons/blank.gif" class="p"><img src="icons/blank.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="topics/5.1_TYPES_OF_FILES_ALLOWED_TO_BE_UPLOADED.htm" onclick="return LinkClick('48',false,true)" target="content" title="5.1 TYPES OF FILES ALLOWED TO BE UPLOADED" onmousemove="window.status='5.1 TYPES OF FILES ALLOWED TO BE UPLOADED'"><img src="icons/11.gif" class="p"> <span id="l48" class="unselected">5.1 TYPES OF FILES ALLOWED TO BE UPLOADED</span></a></nobr></div>
+<div><nobr><img src="icons/blank.gif" class="p"><img src="icons/blank.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="topics/5.2_USING_TRAINING_CONTENT_MODULE.htm" onclick="return LinkClick('49',false,true)" target="content" title="5.2 USING TRAINING CONTENT MODULE" onmousemove="window.status='5.2 USING TRAINING CONTENT MODULE'"><img src="icons/11.gif" class="p"> <span id="l49" class="unselected">5.2 USING TRAINING CONTENT MODULE</span></a></nobr></div>
+<div><nobr><img src="icons/blank.gif" class="p"><img src="icons/blank.gif" class="p"><img src="icons/upangle.gif" class="p"><a href="topics/5.3_ADDING_TRAINING_CONTENT.htm" onclick="return LinkClick('50',false,true)" target="content" title="5.3 ADDING TRAINING CONTENT" onmousemove="window.status='5.3 ADDING TRAINING CONTENT'"><img src="icons/11.gif" class="p"> <span id="l50" class="unselected">5.3 ADDING TRAINING CONTENT</span></a></nobr></div>
+</div></div><script>divlist = [0,1,8,14,16,26,35,47]</script>
+</body>
+</html>

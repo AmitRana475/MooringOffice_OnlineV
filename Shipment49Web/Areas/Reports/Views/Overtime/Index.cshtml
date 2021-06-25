@@ -1,0 +1,118 @@
+﻿@{
+    ViewBag.Title = "Reports";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<script type="text/javascript">
+    $(function () {
+        $("#search").autocomplete({
+            source: '@Url.Action("AutoCompletecrew", "Overtime", "reports")',
+            minLength: 1
+        });
+    });
+
+</script>
+<script type="text/javascript">
+    $(function () {
+        $("#username").autocomplete({
+            source: '@Url.Action("AutoCompletecrew1", "Overtime", "reports")',
+            minLength: 1
+
+        });
+    });
+
+</script>
+<script type="text/javascript">
+    $(function () {
+
+        $("#search").autocomplete({
+            change: function (event, ui) {
+                var bla = $('#search').val();
+                $.ajax({
+                    type: 'Get',
+                    data: { id: bla },
+                    url: '@Url.Action("AutoCompletecrewbm", "Overtime")'
+
+                    //success: function (result)
+                    //{
+                    //    alert('hi');
+                    //}
+                })
+
+            }
+        });
+    });
+
+
+</script>
+
+<script type="text/javascript">
+    $(document).ready(
+        function () {
+            $("#btn").click(
+
+                function () {
+                    $("#loading").show();
+                    $(".bms").hide();
+                    debugger;
+                    $.get('<%= Url.Action("../Overtime/Reports") %>', {},
+                        function (data) {
+                            $('#result').html(data);
+                            $('#loading').hide();
+                            $(".bms").show();
+                        });
+                }
+            );
+        }
+    );
+</script>
+<div class="page_title margin-3-bot" style="height:51px">
+    <h2> OverTime Report</h2>
+
+    <p id="loading" style="display: none; margin-top:-33px; text-align-last:right;" height="Auto">
+        <img src="~/images/loader4.gif" height="40" />&nbsp;&nbsp; Please Wait...
+    </p>
+</div>
+<div class="white-bg margin-3 fleet">
+    @using (Html.BeginForm("index", "Overtime", FormMethod.Get, new { area = "reports" }))
+    {
+
+        <div class="small-gutter row">
+            <div class="col-sm-3 col-xs-6 form-group">
+                <input type="text" name="search" id="search" value="@ViewBag.vname" class="form-control" placeholder="Vessel Name" />
+            </div>
+            <div class="col-sm-3 col-xs-6 form-group">
+                <input type="text" name="username" id="username" value="@ViewBag.username" class="form-control" placeholder="Crew Name" />
+            </div>
+            <div class="col-sm-2 col-xs-6 form-group">
+                @Html.DropDownList("datefrom", (SelectList)@ViewBag.month, new { @class = "form-control" })
+            </div>
+            <div class="col-sm-2 col-xs-6 form-group">
+                @Html.DropDownList("dateto", (SelectList)@ViewBag.year as IEnumerable<SelectListItem>, new { @class = "form-control" })
+            </div>
+            <div class="col-sm-2 col-xs-12 form-group">
+                <button type="submit" id="btn" value="Search" class="btn peach-btn btn-block">Search</button>
+            </div>
+        </div>
+    }
+
+
+
+    @if (ViewBag.vname != "" && ViewBag.username != "")
+    {
+        @Html.Partial("_OvertimeReportViewer")
+        <div id="message-listbm" class="bms">
+            <font> @TempData["barmala"]</font>
+        </div>
+    }
+    else
+    {
+        <div id="message-listbm" class="bms">
+            <font>@ViewBag.Messagegrid</font>
+        </div>
+    }
+
+
+   
+
+</div>

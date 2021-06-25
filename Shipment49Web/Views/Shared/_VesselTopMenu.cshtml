@@ -1,0 +1,138 @@
+﻿@using Shipment49Web.Common
+
+<ul id="topmenu" class="nav navbar-top-links navbar-right">
+
+
+    <li id="Menu1" class="">
+
+
+        <a class="top-menu-btn count-info" href="@Url.Action("Index", "ShipNotification" ,new { area= "NotificationInfos"} )">
+            <i class="uil uil-envelope-open"></i> <label style="width:120px;">Notifications</label> <span class="label label-warning">@CommonClass.NotificationCounter(@Session["VesselSessionID"].ToString())</span>
+
+        </a>
+    </li>
+    <li id="Menu2" class="">
+        <a class="top-menu-btn" href="@Url.Action("Index", "MSMP" ,new { area= "MooringManual"} )">
+
+            <i class="uil uil-book-open"></i> <label style="width:120px;" class="nav-label">Mooring Manual</label>
+        </a>
+    </li>
+    <li id="Menu3" class="">
+        <a class="top-menu-btn" href="@Url.Action("Index", "TrainingC" ,new { area= "TrainingContent"} )">
+
+            <i class="uil uil-clipboard-notes"></i> <label style="width:120px;" class="nav-label">Training Content</label>
+        </a>
+    </li>
+    <li id="Menu4" class="">
+
+        <a class="top-menu-btn" href="@Url.Action("Index", "Operation" ,new { area= "MooringOperation"} )">
+
+            <i class="uil uil-apps"></i> <label style="width:100px;" class="nav-label">LMPR</label>
+        </a>
+
+
+    </li>
+
+    <li id="Menu7" class="">
+
+        <a class="top-menu-btn" href="@Url.Action("Index", "InspectDiscardCriteria" ,new { area= "InsDisCriteria"} )">
+
+            <i class="uil uil-apps"></i> <label style="width:120px;" class="nav-label">Pre-Set Criteria</label>
+        </a>
+
+
+    </li>
+
+    @*<li>
+            <a href="javascript:void(0)"><i class="fa fa-flask"></i> <label class="nav-label">Inspect Discard Criteria</label><span class="fa arrow"></span></a>
+            <ul class="nav nav-second-level collapse">
+                <li>
+
+                    <a href="@Url.Action("Index", "InspectDiscardCriteria" ,new { area= "InsDisCriteria"} )">Line/Rope Tail</a>
+                </li>
+
+                <li>
+
+                    <a href="@Url.Action("LEdiscardsetting", "InspectDiscardCriteria" ,new { area= "InsDisCriteria"} )">Loose Equipment</a>
+                </li>
+                <li>
+
+                    <a href="@Url.Action("winchrotationsetting", "InspectDiscardCriteria" ,new { area= "InsDisCriteria"} )">Winch Rotation</a>
+                </li>
+            </ul>
+        </li>*@
+    @*<li>
+            <a href="#" class="top-menu-btn">
+                <i class="uil uil-hourglass"></i>Mooring Calculator
+            </a>
+        </li>
+        <li>
+            <a href="#" class="top-menu-btn">
+                <i class="uil uil-user-circle"></i>Adminstration
+            </a>
+        </li>*@
+    <li id="Menu5">
+        @*<a href="#" onclick="window.open('file:///D:/Examples/file2.html'); return false">CLICK ME</a>
+            <a class="top-menu-btn" href="@Url.Action("Index", "UserHelp" ,new { area= "UserHelp"} )" target="_blank">
+                <i class="uil uil-question-circle"></i><label style="width:100px;" class="nav-label">Help</label>
+            </a>*@
+
+        @*<a class="top-menu-btn" onclick="window.open('https://www.google.com/'); return false">*@
+        <a class="top-menu-btn" href="@Url.Action("Index", "UserHelp" ,new { area= "UserHelp"} )" target="_blank">
+            <i class="uil uil-question-circle"></i><label style="width:100px;" class="nav-label">Help</label>
+        </a>
+    </li>
+    <li id="Menu6" class="dropdown">
+        <a class="dropdown-toggle top-menu-btn count-info" data-toggle="dropdown" href="#">
+            <i class="uil uil-user"></i><label style="width:100px;" class="nav-label">Account</label>
+        </a>
+        <ul class="dropdown-menu">
+            @*<li><a href="javascript:void(0)">Profile</a></li>
+                 <li class="divider"></li>
+                <li><a href="javascript:void(0)">Logout</a></li>*@
+            <li>
+                <a href="/Account/SignOut">
+                    <i class="ti-power-off pdd-right-10"></i>
+                    <span>Logout</span>
+                </a>
+            </li>
+        </ul>
+    </li>
+</ul>
+
+<input type="hidden" id="Currentmenu" value="@CommonClass.TopeMenuID"/>
+
+<script>
+    //$("#topmenu li a").click(function () {
+    //    var selText = $(this).text();///User selected value...****
+    //    // $(this).parents('.btn-group').find('.dropdown-toggle').html(selText + ' <span class="caret"></span>');
+    //    alert(selText);
+    //    $("#Currentmenu").val(selText);
+    //   // $('li a').removeClass("active");
+    //    $("#oneID").addClass("active");
+    //});
+
+    var current = $("#Currentmenu").val();
+
+   // alert(current);
+
+
+    $("#topmenu li").each(function () {
+
+       // alert($(this).attr("id"));
+
+      
+
+        var selText = $(this).attr("id");///User selected value...****
+        // alert(selText);
+        //debugger;
+        if (selText == current) {
+            $(this).closest("li").addClass("active");
+        }
+        else {
+            $(this).removeClass("active");
+        }
+    })
+
+   
+</script>

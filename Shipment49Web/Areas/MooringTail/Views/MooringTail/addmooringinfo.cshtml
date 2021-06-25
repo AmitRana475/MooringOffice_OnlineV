@@ -1,0 +1,488 @@
+﻿@*@model Shipment49Web.Areas.MooringLine.Models.MooringRopeDetails*@
+@model Reports.MooringRopeDetail
+@{
+    /**/
+
+    /**/
+
+    /**/
+
+    /**/
+
+    ViewBag.Title = "addmooringinfo";
+    Layout = "~/Views/Shared/_LayoutVessel7.cshtml";
+}
+
+
+<script type="text/javascript">
+    $('.datepicker').datepicker();
+</script>
+
+<script>
+
+
+    function compcheck() {
+
+        var dateFrom = document.getElementById("ReceivedDate").value;
+
+        var dateTo = document.getElementById("InstalledDate").value;
+
+        if (dateFrom > dateTo) {
+            alert("Installed date can not less than Received Date !");
+            document.getElementById("InstalledDate").value = dateFrom;
+        }
+
+        //$("#InstalledDate").val(dateTo)
+    };
+</script>
+
+
+
+<script>
+
+    function eventOne() {
+        $('#instdt').hide();
+        $("#IsRopeInstalled").val("No");
+
+    };
+    function eventTwo() {
+        $('#instdt').show();
+        $("#IsRopeInstalled").val("Yes");
+    };
+</script>
+
+
+
+
+
+@using (Html.BeginForm("addmooringinfo", "MooringTail", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(e => e.Id)
+    <div class="page-heading page-header-flex">
+        <div>
+            <h1 class="page-title">
+                Mooring RopeTail Details Add
+            </h1>
+            @*<ol class="breadcrumb">
+                    <li><a href="">Home</a></li>
+                    <li><a href="">Form</a></li>
+                    <li><a>Create</a></li>
+                </ol>*@
+        </div>
+
+        @if (TempData["Error"] != null)
+        {
+            <p class="alert alert-danger" id="errorMessage">@TempData["Error"]</p>
+        }
+        @if (TempData["Success"] != null)
+        {
+            <p class="alert alert-success" id="successMessage">@TempData["Success"]</p>
+        }
+
+            <div class="form-actions">
+                <button name="Submit" type="submit" class="btn btn-success btn-width"><i class="uil uil-check mr-2"></i>Submit</button>
+                <button name="Reset" type="reset" id="btnReset" class="btn btn-danger btn-width"><i class="uil uil-redo mr-2"></i>Reset</button>
+                @*<button name="back" style="display:none" id="btnBack" onclick="goBack()" class="btn btn-danger btn-width"> << Back</button>*@
+
+                <a name="back" id="btnBack" onclick="goBack()" class="btn btn-primary btn-width"> << Go Back</a>
+
+            </div>
+    </div>
+    <div class="wrapper wrapper-content">
+        <div class="container">
+            <h3 class="card-title">RopeTail Construction</h3>
+            <div class="form-body">
+                <div class="row">
+                    <div class="col-md-8 mx-auto">
+                        <div class="row form-group ">
+                            <label class="col-sm-4 col-form-label">
+                                <label class="control-label">Line Type<sup>*</sup></label>
+                            </label>
+                            <div class="col-sm-8">
+
+                                @Html.DropDownListFor(model => model.RopeTypeId, new SelectList(Model.MooringRopeTypeLists, "Value", "Text"), "", htmlAttributes: new { @class = "form-control select2", @required = "true", })
+
+                                <div class="error"></div>
+                            </div>
+                        </div>
+                        <div class="row form-group ">
+                            <label class="col-sm-4 col-form-label">
+                                <label class="control-label">Line Construction<sup>*</sup></label>
+                            </label>
+                            <div class="col-sm-8">
+                                @Html.EditorFor(model => model.RopeConstruction, new { htmlAttributes = new { @class = "form-control", @maxlength = 100, @required = "true", } })
+
+                                <div class="error"></div>
+                            </div>
+                        </div>
+                        <div class="row form-group ">
+                            <label class="col-sm-4 col-form-label">
+                                <label class="control-label">Diameter(mm)<sup>*</sup></label>
+                            </label>
+                            <div class="col-sm-8">
+                                @Html.EditorFor(model => model.DiaMeter, new { htmlAttributes = new { @class = "form-control", @required = "true", @maxlength = 6, @onkeypress = "return isNumberKey(event)", @onKeyUp = "requiredValue(this)" } })
+                                @*<div class="error"></div>*@
+                                <span id="messageDia"></span>
+                            </div>
+                        </div>
+                        <div class="row form-group ">
+                            <label class="col-sm-4 col-form-label">
+                                <label class="control-label">Length(mtrs)<sup>*</sup></label>
+                            </label>
+                            <div class="col-sm-8">
+                                @Html.EditorFor(model => model.Length, new { htmlAttributes = new { @class = "form-control", @required = "true", @maxlength = 6, @onkeypress = "return isNumberKey(event)", @onKeyUp = "requiredValue(this)" } })
+                                @*<div class="error"></div>*@
+                                <span id="messageLnth"></span>
+                            </div>
+                        </div>
+                        <div class="row form-group ">
+                            <label class="col-sm-4 col-form-label">
+                                <label class="control-label">MBL</label>
+                            </label>
+                            <div class="col-sm-8">
+                                @Html.EditorFor(model => model.MBL, new { htmlAttributes = new { @class = "form-control", @maxlength = 6, @onkeypress = "return isNumberKey(event)", @onKeyUp = "requiredValue(this)" } })
+                                @*<div class="error"></div>*@
+                                <span id="messageMbl"></span>
+                            </div>
+                        </div>
+                        <div class="row form-group ">
+                            <label class="col-sm-4 col-form-label">
+                                <label class="control-label">LDBF(T)</label>
+                            </label>
+                            <div class="col-sm-8">
+                                @Html.EditorFor(model => model.LDBF, new { htmlAttributes = new { @class = "form-control", @maxlength = 6, @onkeypress = "return isNumberKey(event)", @onKeyUp = "requiredValue(this)" } })
+                                <span id="messageLdbf"></span>
+                            </div>
+                        </div>
+                        <div class="row form-group ">
+                            <label class="col-sm-4 col-form-label">
+                                <label class="control-label">WLL(T)</label>
+                            </label>
+                            <div class="col-sm-8">
+                                @Html.EditorFor(model => model.WLL, new { htmlAttributes = new { @class = "form-control", @maxlength = 6, @onkeypress = "return isNumberKey(event)", @onKeyUp = "requiredValue(this)" } })
+                                <span id="messageWll"></span>
+                            </div>
+                        </div>
+
+                        <div class="row form-group ">
+                            <label class="col-sm-4 col-form-label">
+                                <label class="control-label">Manufacturer Name<sup>*</sup></label>
+                            </label>
+                            <div class="col-sm-8">
+
+
+                                @Html.DropDownListFor(model => model.ManufacturerId, new SelectList(Model.ManufacturerTypeLists, "Value", "Text"), "", htmlAttributes: new { @class = "form-control select2", @required = "true", })
+
+                                <div class="error"></div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <h3 class="card-title">SHIP Related</h3>
+            <div class="form-body">
+                <div class="row">
+                    <div class="col-md-8 mx-auto">
+
+                        <div class="row form-group">
+                            <label class="col-sm-4 col-form-label">
+                                <label class="control-label">Certificate Number<sup>*</sup></label>
+                            </label>
+                            <div class="col-sm-8">
+                                @Html.EditorFor(model => model.CertificateNumber, new { htmlAttributes = new { @class = "form-control", @maxlength = 50, @required = "true", } })
+                                <div class="error"></div>
+                            </div>
+                        </div>
+                        @if (Model.Id == 0)
+                        {
+                            <div class="row form-group">
+                                <label class="col-sm-4 col-form-label">
+                                    <label class="control-label">Unique Identification No.<sup>*</sup></label>
+                                </label>
+                                <div class="col-sm-8">
+                                    @Html.EditorFor(model => model.UniqueID, new { htmlAttributes = new { @class = "form-control", @maxlength = 50, @required = "true", } })
+                                    <div class="error"></div>
+                                </div>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="row form-group">
+                                <label class="col-sm-4 col-form-label">
+                                    <label class="control-label">Unique Identification No.<sup>*</sup></label>
+                                </label>
+                                <div class="col-sm-8">
+                                    @Html.EditorFor(model => model.UniqueID, new { htmlAttributes = new { @class = "form-control", @readonly = "true", @maxlength = 50, @required = "true", } })
+                                    <div class="error"></div>
+                                </div>
+                            </div>
+                        }
+                        <div class="row form-group">
+                            <label class="col-sm-4 col-form-label">
+                                <label class="control-label">Received Date<sup>*</sup></label>
+                            </label>
+                            <div class="col-sm-8">
+
+                                @Html.TextBoxFor(x => x.ReceivedDate, "{0:yyyy-MM-dd}", new { @class = "form-control datepicker", @autocomplete = "Off",  @required = "true", @placeholder = "yyyy-mm-dd" })
+                                @*<input type="text" class="form-control datepicker" placeholder="dd-mm-yyyy">*@
+                                <div class="error"></div>
+                            </div>
+                        </div>
+                        <div class="row form-group ">
+                            <label class="col-sm-4 col-form-label">
+                                <label class="control-label">Is this line installed and in use? <sup>*</sup></label>
+                            </label>
+                            <div class="col-sm-8">
+                                <div class="">
+                                    <label onclick="eventTwo()" class="radio-inline"><input type="radio" name="optradio" required>Yes</label>
+                                    <label onclick="eventOne()" class="radio-inline"><input type="radio" name="optradio" required>No</label>
+                                </div>
+                                <div class="error"></div>
+                            </div>
+                        </div>
+
+                        <div style="display:none;">
+                            @Html.TextBoxFor(m => m.IsRopeInstalled)
+                        </div>
+
+
+
+                        <div style="display:none;" id="instdt" class="row form-group">
+                            <label class="col-sm-4 col-form-label">
+                                <label class="control-label">Installed Date<sup>*</sup></label>
+                            </label>
+                            <div class="col-sm-8">
+
+                                @Html.TextBoxFor(x => x.InstalledDate, "{0:yyyy-MM-dd}", new
+                                {
+                                    @class = "form-control datepicker",
+                               @autocomplete = "Off",                               
+                               @placeholder = "yyyy-mm-dd",
+                                    @onchange = "compcheck()",
+                                })
+                                @*<input type="text" class="form-control datepicker" placeholder="dd-mm-yyyy">*@
+                                <div class="error"></div>
+                            </div>
+                        </div>
+
+                        <div class="row form-group">
+                            <label class="col-sm-4 col-form-label">
+                                <label class="control-label">Line Tagging<sup>*</sup></label>
+                            </label>
+                            <div class="col-sm-8">
+                                @Html.DropDownListFor(model => model.RopeTagging, new SelectList(Model.RopeTaggings, "Value", "Text"), new { @class = "form-control select2", @required = "true", })
+
+
+                                <div class="error"></div>
+                            </div>
+                        </div>
+
+                        <div class="row form-group">
+                            <label class="col-sm-4 col-form-label">
+                                <label class="control-label">Existing Running Hours(Start Counter)<sup></sup></label>
+                            </label>
+                            <div class="col-sm-8">
+                                @Html.EditorFor(model => model.StartCounterHours, new { htmlAttributes = new { @class = "form-control", @maxlength = 15, @onkeypress = "return isNumberKey(event)", @onKeyUp = "requiredValue(this)" } })
+
+                                <div class="error"></div>
+                            </div>
+                        </div>
+
+
+                         <div class="row form-group">
+                            <label class="col-sm-4 col-form-label">
+                                <label class="control-label">Attachment<sup></sup></label>
+                            </label>
+                            <div class="col-sm-8">
+                                @Html.TextBox("file", "", new { type = "file", onchange = "ValidateSize(this)" })
+                                <label style="font-size:13px;font-style:italic">Acceptable file types : Image (jpg, jpeg, png), PDF, MS Word (doc, docx), Excel (xls, xlsx), PPT (ppt, pptx)</label>
+                                @*<input class="form-group" type="file" id="file" name="ImageFile" required />*@
+                                <div class="error"></div>
+                            </div>
+                        </div>
+
+                        <div class="row form-group">
+                            <label class="col-sm-4 col-form-label">
+                                <label class="control-label">Remarks<sup></sup></label>
+                            </label>
+                            <div class="col-sm-8">
+                                @Html.EditorFor(model => model.Remarks, new { htmlAttributes = new { @class = "form-control", @maxlength = 250, } })
+
+                                <div class="error"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+}
+
+<script>
+    $("#ReceivedDate").keydown(function (e) {
+        e.preventDefault();
+    });
+
+    $("#InstalledDate").keydown(function (e) {
+        e.preventDefault();
+    });
+</script>
+<script language=Javascript>
+      <!--
+    function isNumberKey(evt) {
+
+        var charCode = (evt.which) ? evt.which : event.keyCode
+        if (charCode != 46 && charCode > 31 && (charCode < 48 || charCode > 57))
+            return false;
+
+        return true;
+    }
+    //-->
+</script>
+
+<script type="text/javascript">
+    function requiredValue(arg) {
+
+        debugger;
+        var id = arg.getAttribute('id');
+        var value = arg.value;
+
+        if (value > 999) {
+
+            var message = "";
+            if (id == "DiaMeter") {
+                message = document.getElementById('messageDia');
+            }
+            if (id == "Length") {
+                message = document.getElementById('messageLnth');
+            } if (id == "MBL") {
+                message = document.getElementById('messageMbl');
+            } if (id == "LDBF") {
+                message = document.getElementById('messageLdbf');
+            }
+            if (id == "WLL") {
+                message = document.getElementById('messageWll');
+            }
+
+            var goodColor = "#0C6";
+            var badColor = "#FF0000";
+
+            message.style.color = badColor;
+            message.innerHTML = "Value can not greater then 999.99 !"
+            $("#" + id + "").val('');
+        }
+        else {
+            var message = "";
+            if (id == "DiaMeter") {
+                message = document.getElementById('messageDia');
+            }
+            if (id == "Length") {
+                message = document.getElementById('messageLnth');
+            } if (id == "MBL") {
+                message = document.getElementById('messageMbl');
+            } if (id == "LDBF") {
+                message = document.getElementById('messageLdbf');
+            }
+            if (id == "WLL") {
+                message = document.getElementById('messageWll');
+            }
+            message.innerHTML = ""
+        }
+
+    }
+</script>
+
+<script type="text/javascript">
+
+    //setTimeout(function () {
+    //    debugger;
+    //    $("#successMessage").hide('blind', {}, 500)
+    //}, 5000);
+
+
+    setTimeout(function () {
+
+        $('#successMessage').fadeOut('fast');
+        $('#errorMessage').fadeOut('fast');
+    }, 3000);
+
+
+</script>
+
+
+<script>
+    debugger;
+    var url = window.location.href;
+    var value = url.substring(url.lastIndexOf('/') + 1);
+
+    if (value == "addmooringinfo") {
+        $('#btnReset').show();
+        $('#btnBack').hide();
+    }
+    else {
+        $('#btnReset').hide();
+        $('#btnBack').show();
+    }
+
+</script>
+
+<script>
+    function goBack() {
+        window.history.back();
+    }
+</script>
+
+<script>
+    $('#btnReset').click(function () {
+        $("#RopeTypeId").val(null).trigger("change");
+        $("#ManufacturerId").val(null).trigger("change");
+        $("#RopeTagging").val(null).trigger("change");
+
+
+    });
+</script>
+
+<script>
+    function ValidateSize(file) {
+        debugger;
+
+        // str1 = new string[26] { "jpg", "jpeg", "png", "pps", "ppt", "pptx", "xls", "xlsm", "xlsx", "doc", "docx", "pdf", "rtf", "txt", "GIF", "WAV", "MID", "MIDI", "WMA", "MP3", "OGG", "RMA", "AVI", "MP4", "DIVX", "WMV" };
+        var fileInput = document.getElementById('file');
+        var filePath = fileInput.value;
+        var allowedExtensions = /(\.jpg|\.jpeg|\.png|\.pps|\.ppt|\.pptx|\.xls|\.xlsm|\.xlsx|\.doc|\.docx|\.pdf|\.rtf|\.txt|\.GIF|\.gif)$/i;
+        if (!allowedExtensions.exec(filePath)) {
+            // alert('Please upload file having extensions .jpeg/.jpg/.png/.gif only.');
+            alert('This file type not allowed !');
+            fileInput.value = '';
+            return false;
+        }
+        else {
+
+            var FileSize = file.files[0].size / 1024 / 1024; // in MiB
+            if (FileSize > 15) {
+                alert('File size exceeds 5 MB');
+                document.getElementById('file').value = '';
+                return false;
+                // $(file).val(''); //for clearing with Jquery
+            } else {
+
+            }
+        }
+    }
+</script>
+
+<script type="text/javascript">
+    //$('.datepicker').datepicker();
+
+    $("#ReceivedDate").datepicker({
+        endDate: 'today'
+    });
+
+    $("#InstalledDate").datepicker({
+        endDate: 'today'
+    });
+
+</script>

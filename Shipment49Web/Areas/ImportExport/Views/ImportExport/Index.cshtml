@@ -1,0 +1,109 @@
+﻿
+@{
+    ViewBag.Title = "ImportExport";
+    Layout = "~/Views/Shared/_LeftSideBar.cshtml";
+}
+
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+<script src="~/js/CommonScriptFunctions.js"></script>
+
+<script>
+    $(function () {
+        $('.dtpicker').datepicker({
+            dateFormat: 'dd-M-yy',
+            changeMonth: true,
+            changeMonth: true,
+            changeYear: true,
+            autoclose: true,
+            maxDate: "+0D"
+        })
+    });
+</script>
+
+<script type="text/javascript">
+    $(function () {
+        $("#photo").change(function (event) {
+            $("#bmsname1").hide();
+
+        });
+    });
+</script>
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        $("#search").keypress(function (event) {
+            $("#bmsname1").hide();
+        });
+    });
+</script>
+
+<script type="text/javascript">
+    $(function () {
+        $("#search").autocomplete({
+            source: '@Url.Action("AutoCompleteim", "importexport", "importexport")',
+            minLength: 1
+        });
+    });
+
+</script>
+
+@*<script type="text/javascript">
+        $(document).ready(function () {
+            $("#ServiceFrom").datepicker();
+            $("#ServiceTo").datepicker();
+        });
+    </script>*@
+
+
+<script type="text/javascript">
+    $(document).ready(
+        function () {
+            $("#Import").click(
+                function () {
+                    $("#loading").show();
+                    $.get('<%= Url.Action("../importexport/importexport") %>', {},
+                        function (data) {
+                            $('#result').html(data);
+                            $('#loading').hide();
+                        });
+                }
+            );
+        }
+    );
+</script>
+
+<div class="content-wrapper">
+    <section class="content-header">
+        <h1>
+            Import/ Export
+        </h1>
+    </section>
+    <section class="content">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="box box-info">
+                    <div class="box-header with-border">
+                        <div>
+                            @using (Html.BeginForm("Index", "ImportExport", FormMethod.Post, new { area = "ImportExport", enctype = "multipart/form-data" }))
+                            {
+                                <div class="col-md-6">
+                                    @Html.Partial("_import")
+                                </div>
+                                <div class="col-md-6">
+                                    @Html.Partial("_export")
+                                </div>
+                                <div class="col-md-6">
+                                    @Html.Partial("_exportfullhistory")
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>

@@ -1,0 +1,114 @@
+﻿@model CompanyLayer.Company
+@using Microsoft.AspNet.Identity
+
+@if (Request.IsAuthenticated)
+{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="page_title margin-3-bot">
+    <h2>Edit Company-Profile</h2>
+</div>
+<div class="white-bg margin-3 fleet clearfix">
+    <div class="row">
+        <div class="col-sm-6">
+            <div id="formContainer">
+                <div id="formHeader" class="FlowupLabels">
+                    @using (Html.BeginForm())
+    {
+                @Html.AntiForgeryToken()
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+
+
+                @Html.HiddenFor(model => model.CompanyID)
+                @Html.HiddenFor(model => model.FaxNo)
+
+                <div class="fl_wrap focused">
+                    @Html.LabelFor(model => model.CompanyName, new { @class = "fl_label" })
+
+                    @Html.TextBoxFor(model => model.CompanyName, new { @class = "fl_input" })
+                    @Html.ValidationMessageFor(model => model.CompanyName, "", new { @class = "text-danger" })
+
+                </div>
+                <div class="small-gutter row">
+                    <div class="col-sm-6 col-xs-12">
+                        <div class="fl_wrap focused">
+                            @Html.LabelFor(model => model.EstablishYear, new { @class = "fl_label" })
+
+                            @Html.TextBoxFor(model => model.EstablishYear, new { @class = "fl_input" })
+                            @Html.ValidationMessageFor(model => model.EstablishYear, "", new { @class = "text-danger" })
+
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-xs-12">
+                        <div class="fl_wrap focused">
+                            @Html.LabelFor(model => model.TotalEmployee, new { @class = "fl_label" })
+
+                            @Html.TextBoxFor(model => model.TotalEmployee, new { @class = "fl_input" })
+                            @Html.ValidationMessageFor(model => model.TotalEmployee, "", new { @class = "text-danger" })
+
+                        </div>
+                    </div>
+                </div>
+
+
+
+                <div class="fl_wrap focused">
+                    @Html.LabelFor(model => model.contectNo, new { @class = "fl_label" })
+
+                    @Html.TextBoxFor(model => model.contectNo, new { @class = "fl_input" })
+                    @Html.ValidationMessageFor(model => model.contectNo, "", new { @class = "text-danger" })
+
+                </div>
+
+                @*<div class="fl_wrap focused">
+        @Html.LabelFor(model => model.FaxNo, new { @class = "fl_label" })
+
+        @Html.TextBoxFor(model => model.FaxNo, new { @class = "hidden" })
+        @Html.ValidationMessageFor(model => model.FaxNo, "", new { @class = "text-danger" })
+
+    </div>*@
+
+                <div class="fl_wrap focused">
+                    @Html.LabelFor(model => model.EmailID, new { @class = "fl_label" })
+
+                    @Html.TextBoxFor(model => model.EmailID, new { @class = "fl_input" })
+                    @Html.ValidationMessageFor(model => model.EmailID, "", new { @class = "text-danger" })
+
+                </div>
+
+                <div class="fl_wrap focused">
+                    @Html.LabelFor(model => model.WebSite, new { @class = "fl_label" })
+
+                    @Html.TextBoxFor(model => model.WebSite, new { @class = "fl_input" })
+                    @Html.ValidationMessageFor(model => model.WebSite, "", new { @class = "text-danger" })
+
+                </div>
+
+                <div class="fl_wrap focused">
+                    @Html.LabelFor(model => model.Address, new { @class = "fl_label" })
+
+                    @Html.TextAreaFor(model => model.Address, new { @class = "fl_input" })
+                    @Html.ValidationMessageFor(model => model.Address, "", new { @class = "text-danger" })
+
+                </div>
+                <div class="clearfix">&nbsp;</div>
+                <div class="clearfix">&nbsp;</div>
+                <div class="row clearfix">
+                    <div class="col-xs-3 col-xs-6 form-group">
+                        @*<div class="col-md-offset-2 col-md-10">*@
+                        <input type="submit" value="Update" class="btn peach-btn btn-block" />
+                        @*</div>*@
+                    </div>
+                    <div class="col-sm-4 col-xs-6 back_text margin-1-top">
+                        <i class="fa fa-chevron-left"></i>&nbsp; @Html.ActionLink("Back to List", "Index")
+                    </div>
+                </div>
+}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

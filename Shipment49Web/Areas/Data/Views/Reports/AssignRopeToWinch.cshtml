@@ -1,0 +1,100 @@
+﻿@model Shipment49Web.Common.FilterModel
+
+@{
+    ViewBag.Title = "Assign Rope To Winch";
+    Layout = "~/Views/Shared/_LeftSideBar.cshtml";
+}
+
+
+@*<script>
+        $(function () {
+            $('.dtpicker').datepicker({
+                dateFormat: 'dd-M-yy',
+                changeMonth: true,
+                changeYear: true,
+                autoclose: true,
+                maxDate: "+0D"
+            })
+
+
+            $('.listbox').multiselect({
+                includeSelectAllOption: true,
+                enableCaseInsensitiveFiltering: true,
+                maxHeight: 200
+            });
+        });
+    </script>*@
+
+
+<div class="content-wrapper">
+    <section class="content-header">
+        <h1>
+            Winch Assigned
+        </h1>
+    </section>
+    <section class="content">
+     
+        <div class="row">
+            <div class="col-md-12">
+                <div class="box box-default">
+                    <div class="box-body">
+                        <div class="table-responsive table-striped">
+                            <table class="table no-margin" id="dataTable" width="100%" cellspacing="0">
+                                <thead>
+                                    <tr>
+                                        <th>Vessel Name</th>
+                                        <th>Winch</th>
+                                        <th>Location</th>
+                                        <th>Lead</th>
+
+                                        <th>Max BHF</th>
+                                        <th>Line Assigned</th>
+                                        <th>Rope Tail Assigned</th>
+                                           
+                                    </tr>
+                                </thead>
+                                <tbody>
+
+
+                                    @{
+                                        foreach (var record in Model.ListAssignRopeToWinch)
+                                        {
+                                            <tr>
+                                                <td>@record.VesselName</td>
+                                                @*<td>@record.AssignedDate.ToString("dd-MMM-yyyy")</td>*@
+                                                <td>@record.assignedWinchNumber</td>
+                                                <td>@record.AssignedLocation</td>
+                                                <td>@record.Lead</td>
+                                                <td>@record.MBL_Max_BHF</td>
+                                                @*<td>@Model.RopeCertificateNumber</td>*@
+                                                <td>
+                                                    <a href="~/Data/Reports/RopeSummary?rope=@record.RopeId&tail=0&vessel=@record.VesselID" title="Line Details" target="_blank">
+                                                        @*<i class="fa fa-list-ul"></i>*@
+                                                        @record.RopeCertificateNumber
+                                                    </a>
+                                                </td>
+                                                <td>
+                                                    @foreach (var item in record.TailList)
+                                                    {
+
+                                                        <a href="~/Data/Reports/RopeSummary?rope=@item.RopeId&tail=1&vessel=@item.VesselID" title="Rope Tail Details" target="_blank">
+                                                            @*<i class="fa fa-list-ul"></i>*@
+                                                            @item.TailCertificateNumber
+                                                        </a>
+
+                                                    }
+                                                </td>
+
+                                            </tr>
+                                        }
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                      
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>

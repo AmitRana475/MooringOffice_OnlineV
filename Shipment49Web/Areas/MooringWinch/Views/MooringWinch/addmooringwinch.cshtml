@@ -1,0 +1,218 @@
+﻿
+
+@model Reports.MooringWinchDetail
+@{
+    /**/
+
+    ViewBag.Title = "addmooringwinch";
+    Layout = "~/Views/Shared/_LayoutVessel7.cshtml";
+
+}
+
+
+
+
+@using (Html.BeginForm("addmooringwinch", "MooringWinch"))
+{
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(e => e.Id)
+
+    <div id="page-wrapper" class="content" style="margin-left:-15px;">
+        <div class="page-heading page-header-flex">
+            <div>
+                <h1 class="page-title">
+                    Add Mooring Winch
+                </h1>
+                @*<ol class="breadcrumb">
+                        <li><a href="">Home</a></li>
+                        <li><a href="">Form</a></li>
+                        <li><a>Create</a></li>
+                    </ol>*@
+
+                @if (TempData["Error"] != null)
+                {
+                    <p class="alert alert-danger" id="errorMessage">@TempData["Error"]</p>
+                }
+                @if (TempData["Success"] != null)
+                {
+                    <p class="alert alert-success" id="successMessage">@TempData["Success"]</p>
+                }
+            </div>
+            <div class="form-actions">
+                <button name="Submit" type="submit" class="btn btn-success btn-width"><i class="uil uil-check mr-2"></i>Submit</button>
+                <button name="Reset" type="reset" id="btnReset" class="btn btn-danger btn-width"><i class="uil uil-redo mr-2"></i>Reset</button>
+                <a name="back" style="display:none" id="btnBack" onclick="goBack()" class="btn btn-primary btn-width"> << Back</a>
+            </div>
+        </div>
+
+
+        <div class="wrapper wrapper-content">
+            <div class="container">
+                <div class="form-body">
+                    <div class="row">
+                        <div class="col-md-8 mx-auto">
+                            <div class="row form-group ">
+                                <label class="col-sm-4 col-form-label">
+                                    <label class="control-label">MooringWinch Ship Assigned Number<sup>*</sup></label>
+                                </label>
+                                <div class="col-sm-8">
+
+                                    @Html.TextBoxFor(x => x.AssignedNumber, new { @class = "form-control", @maxlength = 50, @required = "true" })
+                                    <div class="error"></div>
+                                </div>
+                            </div>
+
+
+
+
+                            <div class="row form-group">
+                                <label class="col-sm-4 col-form-label">
+                                    <label class="control-label">Mooring Winch Location<sup>*</sup></label>
+                                </label>
+                                <div class="col-sm-8">
+                                    @Html.TextBoxFor(x => x.Location, new { @class = "form-control", @maxlength = 50, @required = "true" })
+                                </div>
+                            </div>
+
+                            <div class="row form-group">
+                                <label class="col-sm-4 col-form-label">
+                                    <label class="control-label">Max Brake Holding Force(T)<sup>*</sup></label>
+                                </label>
+                                <div class="col-sm-8">
+                                    @Html.TextBoxFor(x => x.MBL, new { @class = "form-control", @maxlength = 6, @onkeypress = "return isNumberKey(event)", @onKeyUp = "requiredValue(this)", @required = "true" })
+                                    <span id="messageMbl"></span>
+                                </div>
+                            </div>
+                            <div class="row form-group">
+                                <label class="col-sm-4 col-form-label">
+                                    <label class="control-label">Lead<sup>*</sup></label>
+                                </label>
+                                <div class="col-sm-8">
+                                    @Html.DropDownListFor(model => model.Lead, new SelectList(Model.Leads, "Lead", "Lead"), "", new { @class = "form-control select2", @required = "true", @onchange = "ropecropped(this)" })
+                                </div>
+                            </div>
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+<script type="text/javascript">
+    function requiredValue(arg) {
+
+
+        debugger;
+        var id = arg.getAttribute('id');
+        var value = arg.value;
+
+        if (value > 999.99) {
+
+            var message = "";
+
+            message = document.getElementById('messageMbl');
+
+
+            var goodColor = "#0C6";
+            var badColor = "#FF0000";
+
+            message.style.color = badColor;
+            message.innerHTML = "Value can not greater then 999.99 !"
+            $("#" + id + "").val('');
+        }
+        else {
+            var message = "";
+
+            message = document.getElementById('messageMbl');
+            message.innerHTML = ""
+        }
+
+    }
+</script>
+
+
+<script language=Javascript>
+      <!--
+    function isNumberKey(evt) {
+
+        var charCode = (evt.which) ? evt.which : event.keyCode
+        if (charCode != 46 && charCode > 31 && (charCode < 48 || charCode > 57))
+            return false;
+
+        return true;
+    }
+    //-->
+</script>
+
+<script type="text/javascript">
+
+    setTimeout(function () {
+
+        $('#successMessage').fadeOut('fast');
+        $('#errorMessage').fadeOut('fast');
+    }, 3000);
+
+
+</script>
+
+<script>
+    $('#btnReset').click(function () {
+        $("#Lead").val(null).trigger("change");
+
+    });
+</script>
+
+<script>
+    debugger;
+    var url = window.location.href;
+    var value = url.substring(url.lastIndexOf('/') + 1);
+
+    if (value != "addmooringwinch") {
+
+        document.getElementById("AssignedNumber").readOnly = true;
+        //$('#Lead').attr("style", "pointer-events: none;");
+
+        $("#Lead").attr("disabled", "disabled");
+
+        $('#btnReset').hide();
+        $('#btnBack').show();
+    }
+    else {
+        $("#AssignedNumber").attr("enabled", "enabled");
+        $("#Lead").attr("enabled", "enabled");
+
+        $('#btnReset').show();
+        $('#btnBack').hide();
+    }
+
+</script>
+
+@*<script>
+    debugger;
+    var url = window.location.href;
+    var value = url.substring(url.lastIndexOf('/') + 1);
+
+    if (value == "addmooringwinch") {
+        $('#btnReset').show();
+        $('#btnBack').hide();
+    }
+    else {
+        $('#btnReset').hide();
+        $('#btnBack').show();
+    }
+
+</script>*@
+
+
+<script>
+    function goBack() {
+        window.history.back();
+    }
+</script>
+
+
+
+

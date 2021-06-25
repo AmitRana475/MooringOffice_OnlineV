@@ -1,0 +1,61 @@
+﻿@model Shipment49Web.Areas.MSPS.Models.DynamicMenuModel
+
+@{
+	/**/
+
+	ViewBag.Title = "Edit";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<h2>Edit SubMenu</h2>
+
+<div class="row">
+	<div class="col-md-12">
+		<section id="loginForm">
+			@using (Html.BeginForm("Edit", "SubMenus", new { area = "DynamicMenus" }, FormMethod.Post))
+			{
+				@Html.AntiForgeryToken()
+
+
+				<hr />
+
+
+				<div class="form-group">
+					<label class="col-md-4 control-label">Menu Name </label>
+					<div class="col-md-8">
+						<div class="input-group">
+
+							@Html.DropDownListFor(p => p.SubMenus.MId, new SelectList(ViewBag.Menulist, "Value", "Text"), "Select Menu", new { @class = "form-control" })
+						</div>
+					</div>
+
+				</div>
+
+				<div class="form-group">
+					<label class="col-md-4 control-label">SubMenu Name </label>
+					<div class="col-md-8">
+						<div class="input-group">
+							@Html.TextBoxFor(m => m.SubMenus.SubMenuName, new { @class = "form-control" })
+
+						</div>
+					</div>
+				</div>
+
+
+
+
+
+				<div class="small-gutter row">
+					<div class="col-sm-3 col-xs-6 form-group">
+						<input type="submit" value="Update" class="btn peach-btn btn-block" />
+					</div>
+					<div class="col-sm-4 col-xs-6 back_text margin-1-top">
+						<i class="fa fa-chevron-left"></i>&nbsp; @Html.ActionLink("Back to List", "Index")
+					</div>
+				</div>
+			}
+		</section>
+	</div>
+</div>
+

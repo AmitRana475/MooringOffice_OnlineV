@@ -1,0 +1,126 @@
+﻿@model List<VesselLayer.FleetNameClass>
+
+@{
+    ViewBag.Title = "Fleet Names ";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    var grid = new WebGrid(canPage: true, rowsPerPage: 10);
+    grid.Bind(source: Model, rowCount: ViewBag.TotalRows, autoSortAndPage: false);
+}
+
+@*<script type="text/javascript">
+
+        $(document).ready(function () {
+            var dir = $('#dir1').val();
+            var col = $('#col1').val();
+
+            var header = $('th a[href*=' + col + ']');
+            if (dir == 'Ascending') {
+                header.text(header.text() + '▲');
+            }
+            if (dir == 'Descending') {
+                header.text(header.text() + '▼');
+            }
+
+
+        });
+    </script>*@
+
+@{
+    if (!string.IsNullOrWhiteSpace(grid.SortColumn))
+    {
+        <script type="text/javascript">
+            $(document).ready(function () {
+
+                $('thead > tr > th > a[href*="sort=@grid.SortColumn"]').parent().append('@(grid.SortDirection == SortDirection.Ascending ? "▲" : "▼")');
+
+            });
+        </script>
+    }
+}
+
+@*@if (ViewBag.Messagebms != null)
+    {
+        <script type="text/javascript">
+
+            $(document).ready(function () {
+
+                alert('@ViewBag.Messagebms');
+
+            });
+
+        </script>
+
+    }*@
+
+
+
+<div class="container">
+    <h2> Fleet Name</h2>
+    <nav class="navbar navbar-default">
+
+        <div class="container-fluid-right">
+            <div class="navbar-header">
+
+                <a href="/setting/vessel/createfleetname" class="navbar-brand">Create New</a>
+
+                @*@Html.ActionLink("Create New", "create",new { @class="navbar-brand"})*@
+
+            </div>
+            <div class="collapse navbar-collapse">
+                @using (Html.BeginForm("fleetname", "vessel", FormMethod.Get, new { area = "setting", @class = "navbar-form navbar-right" }))
+                {
+
+                <div class="form-group">
+                    <input type="text" name="search" id="search" value="@ViewBag.search" class="form-control" placeholder="fleet name" />
+                </div>
+                <button type="submit" value="Search" class="btn btn-success">Search</button>
+
+                @*@ViewBag.TotalRows*@
+                }
+            </div>
+        </div>
+    </nav>
+
+    <div>
+
+        @grid.Table(
+              tableStyle: "table table-responsive table-borderd",
+              columns:
+              grid.Columns(
+
+                  grid.Column(columnName: "FleetName", header: "Fleet Name"),
+                  grid.Column(columnName: "AddedBy", header: "Added By"),
+                  grid.Column("", style: "button", header: "Action",
+                          format:
+                        @<text >
+
+                        @Ajax.ActionLink("Edit", "editfleetname", new { id = item.Fid }, null) |
+                        @Html.ActionLink("Delete", "deletefleetname", new { area = "setting", id = item.Fid }, new { onclick = "return confirm('The system will not delete Fleet Name in case it has associated data, please unselect this Fleet Name from all Vessels to permanently delete.');" })
+
+                        </text>)
+                  ))
+
+        <div class="row">
+            <div class="col-sm-6">
+                @grid.PagerList(mode: WebGridPagerModes.All, paginationStyle: "pagination pagination-small pagination-small")
+            </div>
+        </div>
+        @*@Html.Hidden("dir1", grid.SortDirection)
+            @Html.Hidden("col1", grid.SortColumn)*@
+
+    </div>
+
+    <div id="message-listbm">
+        <font>@ViewBag.Messagegrid</font>
+    </div>
+
+    @if (ViewBag.Messagebms != null)
+    {
+        @Html.ActionLink("Go Back", "create")
+
+    }
+
+
+
+</div>

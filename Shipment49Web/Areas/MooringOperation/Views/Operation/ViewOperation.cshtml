@@ -1,0 +1,357 @@
+﻿@model Reports.MOperationBirthDetail
+
+@{
+    ViewBag.Title = "ViewOperation";
+    Layout = "~/Views/Shared/_LayoutVessel7.cshtml";
+}
+
+@*<script src="~/assetsV/select2/dist/js/select2.min.js" type='text/javascript'></script>
+<link href="~/assetsV/select2/dist/css/select2.min.css" rel='stylesheet' type='text/css'>*@
+
+
+
+
+<div class="content">
+    <div class="page-heading page-header-flex">
+        <div>
+            <h1 class="page-title">
+                View Mooring Operation
+            </h1>
+            <ol class="breadcrumb">
+                <li><a href="">Home</a></li>
+                <li><a href="">Form</a></li>
+                <li><a>Create</a></li>
+            </ol>
+        </div>
+        <div>
+            @Html.ActionLink("Add Mooring Operation", "AddOperation", "Operation", new { }, new { @class = "btn btn-info" })
+            @*<a class="btn btn-info" href="mooring-op-add.php">
+            <i class="fa fa-plus-circle mr-2"></i>Create Operation
+        </a>*@
+        </div>
+    </div>
+
+    <div class="wrapper wrapper-content">
+        <div class="container">
+            <div class="panel panel-default mb-5">
+                <div class="panel-body">
+                    <div class="detail-header">
+                        <h4>View Mooring Operation</h4>
+                    </div>
+                    <div class="odd-even-strip">
+                        <div class="row form-group">
+                            <label class="col-md-5 col-sm-6 col-form-label">
+                                <label class="control-label">Port Name</label>
+                            </label>
+                            <div class="col-md-7 col-sm-6">
+                                @Html.DisplayFor(m => m.PortName)
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <label class="col-md-5 col-sm-6 col-form-label">
+                                <label class="control-label">AllFst DateTime</label>
+                            </label>
+                            <div class="col-md-7 col-sm-6">
+                                @Html.DisplayFor(m => m.FastDateTimeString)
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <label class="col-md-5 col-sm-6 col-form-label">
+                                <label class="control-label">CastOff DateTime</label>
+                            </label>
+                            <div class="col-md-7 col-sm-6">
+                                @Html.DisplayFor(m => m.CastDateTimeString)
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <label class="col-md-5 col-sm-6 col-form-label">
+                                <label class="control-label">Berth Name</label>
+                            </label>
+                            <div class="col-md-7 col-sm-6">
+                                @Html.DisplayFor(m => m.BirthName)
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <label class="col-md-5 col-sm-6 col-form-label">
+                                <label class="control-label">Berth Type</label>
+                            </label>
+                            <div class="col-md-7 col-sm-6">
+                                @Html.DisplayFor(m => m.BirthType)
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <label class="col-md-5 col-sm-6 col-form-label">
+                                <label class="control-label">Mooring Type</label>
+                            </label>
+                            <div class="col-md-7 col-sm-6">
+                                @Html.DisplayFor(m => m.MooringType)
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <label class="col-md-5 col-sm-6 col-form-label">
+                                <label class="control-label">Draft Arrival FWD(mtrs)</label>
+                            </label>
+                            <div class="col-md-7 col-sm-6">
+                                @Html.DisplayFor(m => m.DraftArrivalFWD)
+                            </div>
+                        </div>
+
+                        <div class="row form-group">
+                            <label class="col-md-5 col-sm-6 col-form-label">
+                                <label class="control-label">Draft Arrival AFT(mtrs)</label>
+                            </label>
+                            <div class="col-md-7 col-sm-6">
+                                @Html.DisplayFor(m => m.DraftArrivalAFT)
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <label class="col-md-5 col-sm-6 col-form-label">
+                                <label class="control-label">Draft Departure FWD(mtrs)</label>
+                            </label>
+                            <div class="col-md-7 col-sm-6">
+                                @Html.DisplayFor(m => m.DraftDepartureFWD)
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <label class="col-md-5 col-sm-6 col-form-label">
+                                <label class="control-label">Draft Departure AFT(mtrs)</label>
+                            </label>
+                            <div class="col-md-7 col-sm-6">
+                                @Html.DisplayFor(m => m.DraftDepartureAFT)
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <label class="col-md-5 col-sm-6 col-form-label">
+                                <label class="control-label">Depth at Berth(mtrs)</label>
+                            </label>
+                            <div class="col-md-7 col-sm-6">
+                                @Html.DisplayFor(m => m.DepthAtBerth)
+                            </div>
+                        </div>
+
+                        <div class="row form-group">
+                            <label class="col-md-5 col-sm-6 col-form-label">
+                                <label class="control-label">Berth Side</label>
+                            </label>
+                            <div class="col-md-7 col-sm-6">
+                                @Html.DisplayFor(m => m.BerthSide)
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <label class="col-md-5 col-sm-6 col-form-label">
+                                <label class="control-label">Vessel condition</label>
+                            </label>
+                            <div class="col-md-7 col-sm-6">
+                                @Html.DisplayFor(m => m.VesselCondition)
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <label class="col-md-5 col-sm-6 col-form-label">
+                                <label class="control-label">Ship Access</label>
+                            </label>
+                            <div class="col-md-7 col-sm-6">
+                                @Html.DisplayFor(m => m.ShipAccess)
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <label class="col-md-5 col-sm-6 col-form-label">
+                                <label class="control-label">Range of Tide(mtrs)</label>
+                            </label>
+                            <div class="col-md-7 col-sm-6">
+                                @Html.DisplayFor(m => m.RangOfTide)
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <label class="col-md-5 col-sm-6 col-form-label">
+                                <label class="control-label">Wind Direction</label>
+                            </label>
+                            <div class="col-md-7 col-sm-6">
+                                @Html.DisplayFor(m => m.WindDirection)
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <label class="col-md-5 col-sm-6 col-form-label">
+                                <label class="control-label">Wind Speed(kts)</label>
+                            </label>
+                            <div class="col-md-7 col-sm-6">
+                                @Html.DisplayFor(m => m.WindSpeed)
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <label class="col-md-5 col-sm-6 col-form-label">
+                                <label class="control-label">Any Squall</label>
+                            </label>
+                            <div class="col-md-7 col-sm-6">
+                                @Html.DisplayFor(m => m.AnySquall)
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <label class="col-md-5 col-sm-6 col-form-label">
+                                <label class="control-label">Current Speed(kts)</label>
+                            </label>
+                            <div class="col-md-7 col-sm-6">
+                                @Html.DisplayFor(m => m.CurrentSpeed)
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <label class="col-md-5 col-sm-6 col-form-label">
+                                <label class="control-label">Berth exposed Seaswell</label>
+                            </label>
+                            <div class="col-md-7 col-sm-6">
+                                @Html.DisplayFor(m => m.Berth_exposed_SeaSwell)
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <label class="col-md-5 col-sm-6 col-form-label">
+                                <label class="control-label">SurgingObserved</label>
+                            </label>
+                            <div class="col-md-7 col-sm-6">
+                                @Html.DisplayFor(m => m.SurgingObserved)
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <label class="col-md-5 col-sm-6 col-form-label">
+                                <label class="control-label">Any Affect Passing Traffic</label>
+                            </label>
+                            <div class="col-md-7 col-sm-6">
+                                @Html.DisplayFor(m => m.Any_Affect_Passing_Traffic)
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <label class="col-md-5 col-sm-6 col-form-label">
+                                <label class="control-label">Ship was continously</label>
+                            </label>
+                            <div class="col-md-7 col-sm-6">
+                                @Html.DisplayFor(m => m.Ship_was_continuously_contact_with_fender)
+                            </div>
+                        </div>
+                    </div>
+                    <div class="detail-header mt-5">
+                        <h4 class="detail-title">View Port Details</h4>
+                    </div>
+                    <div class="odd-even-strip">
+                        <div class="row form-group">
+                            <label class="col-md-5 col-sm-6 col-form-label">
+                                <label class="control-label">Facility name</label>
+                            </label>
+                            <div class="col-md-7 col-sm-6">
+                                @Html.DisplayFor(m => m.FacilityName)
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <label class="col-md-5 col-sm-6 col-form-label">
+                                <label class="control-label">Master's note for this port call</label>
+                            </label>
+                            <div class="col-md-7 col-sm-6">
+                                @Html.DisplayFor(m => m.PortDetails)
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <label class="col-md-5 col-sm-6 col-form-label">
+                                <label class="control-label">Any Damage line</label>
+                            </label>
+                            <div class="col-md-7 col-sm-6">
+                                @Html.DisplayFor(m => m.Any_Rope_Damaged)
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="panel panel-default mb-5">
+                <div class="panel-body">
+                    <div >
+                        <h3><i class="fa fa-caret-right mr-2"></i>Lines used in this operation</h3>
+                        <article>
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>Winch No.</th>
+                                            <th>Location</th>
+                                            <th>Line of location</th>
+                                            <th>Date &amp; Time From</th>
+                                            <th>Date &amp; Time To</th>
+                                            <th>Hours</th>
+                                            <th>Lead 1</th>
+                                            <th>Lead 2</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+
+                                        @foreach (var item in Model.RopeUsedInOperation2)
+                                        {
+                                        <tr>
+                                            <td>@Html.DisplayFor(modelItem => item.AssignedNumber)</td>
+                                            <td>@Html.DisplayFor(modelItem => item.Location)</td>
+                                            <td>@Html.DisplayFor(modelItem => item.CertificateNumber)</td>
+                                            <td>@Html.DisplayFor(modelItem => item.FromDateTime)</td>
+                                            <td>@Html.DisplayFor(modelItem => item.ToDateTime)</td>
+                                            <td>@Html.DisplayFor(modelItem => item.RunningHours)</td>
+                                            <td>@Html.DisplayFor(modelItem => item.Lead)</td>
+                                            <td>@Html.DisplayFor(modelItem => item.Lead1)</td>
+                                        </tr>
+                                        }
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </article>
+                    </div>
+                </div>
+            </div>
+            <div class="panel panel-default mb-5">
+                <div class="panel-body">
+                    <div >
+                        <h3><i class="fa fa-caret-right mr-2"></i>Rope-Tails used in this operation</h3>
+                        <article>
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>Winch No.</th>
+                                            <th>Location</th>
+                                            <th>RopeTail in use</th>
+                                            <th>Date &amp; Time From</th>
+                                            <th>Date &amp; Time To</th>
+                                            <th>Hours</th>
+                                            <th>Lead 1</th>
+                                            <th>Lead 2</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var item in Model.RopeTailsUsedInOperation2)
+                                        {
+                                        <tr>
+                                            <td>@Html.DisplayFor(modelItem => item.AssignedNumber)</td>
+                                            <td>@Html.DisplayFor(modelItem => item.Location)</td>
+                                            <td>@Html.DisplayFor(modelItem => item.CertificateNumber)</td>
+                                            <td>@Html.DisplayFor(modelItem => item.FromDateTime)</td>
+                                            <td>@Html.DisplayFor(modelItem => item.ToDateTime)</td>
+                                            <td>@Html.DisplayFor(modelItem => item.RunningHours)</td>
+                                            <td>@Html.DisplayFor(modelItem => item.Lead)</td>
+                                            <td>@Html.DisplayFor(modelItem => item.Lead1)</td>
+                                        </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </article>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+@*<script>
+    $(".accordion-block h3").on("click", function () {
+        //$(this).removeClass("active");
+
+        $(this).next("article").slideToggle(200);
+        $(this).toggleClass("active");
+    });
+
+
+</script>*@

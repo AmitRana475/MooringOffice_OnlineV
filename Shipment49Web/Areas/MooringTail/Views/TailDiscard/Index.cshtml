@@ -1,0 +1,113 @@
+﻿
+@model Shipment49Web.Areas.MooringTail.Models.MooringRopeDetails
+
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_LayoutVessel7.cshtml";
+}
+
+
+
+
+
+<div class="page-heading page-header-flex">
+    <div>
+        <h1 class="page-title">
+            RopeTail Discard
+        </h1>
+        @*<ol class="breadcrumb">
+            <li><a href="">Home</a></li>
+            <li><a href="">Form</a></li>
+            <li><a>Create</a></li>
+        </ol>*@
+    </div>
+
+    @if (TempData["Error"] != null)
+    {
+        <p class="alert alert-danger" id="errorMessage">@TempData["Error"]</p>
+    }
+    @if (TempData["Success"] != null)
+    {
+        <p class="alert alert-success" id="successMessage">@TempData["Success"]</p>
+    }
+        <div>
+            <a class="btn btn-info" href="@Url.Action("addlinediscard", "TailDiscard")">
+                <i class="fa fa-plus-circle mr-2"></i>Add RopeTail Discard
+            </a>
+            <a name="back" id="btnBack" onclick="goBack()" class="btn btn-primary btn-width"> << Go Back</a>
+
+        </div>
+</div>
+<div class="wrapper wrapper-content">
+    <div class="container">
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th style="display:none">Id</th>
+                        <th>Unique ID</th>
+                        <th>Cert.No.</th>
+                        <th>Line Type</th>
+                        <th>Out of Service Date</th>
+                        <th>Reason</th>
+                        @*<th width="100px">View</th>*@
+                        <th width="100px">Delete</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+
+                    @foreach (var item in Model.MooringLineDiscardList)
+                    {
+                        <tr>
+                            <td style="display:none"> @Html.DisplayFor(modelItem => item.Id)</td>
+                            <td> @Html.DisplayFor(modelItem => item.UniqueID)</td>
+                            <td> @Html.DisplayFor(modelItem => item.CertificateNumber)</td>
+
+                            <td>
+                                @Html.DisplayFor(modelItem => item.RopeType)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.OutofServiceDate)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.ReasonOutofService)
+                            </td>
+                            @*<td width="100px">
+                                <a href="#" class="btn btn-sm btn-light btn-view" data-toggle="modal" data-target="#viewModal">
+                                    <i class="uil uil-eye mr-2"></i>View
+                                </a>
+                            </td>*@
+
+                            <td width="100px">
+                                <button type="button" class="btn btn-sm btn-light btn-delete">
+                                    @Html.ActionLink("Delete", "Delete", "TailDiscard", new { id = item.Id }, new { onclick = "return confirm('Are sure wants to delete?');" })
+                                    <i class="uil uil-trash-alt mr-2"></i>
+                                </button>
+                            </td>
+
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+
+    setTimeout(function () {
+
+        $('#successMessage').fadeOut('fast');
+        $('#errorMessage').fadeOut('fast');
+    }, 3000);
+
+
+</script>
+
+<script>
+    function goBack() {
+        window.history.back();
+    }
+</script>

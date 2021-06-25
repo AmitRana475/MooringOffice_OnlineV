@@ -1,0 +1,428 @@
+﻿@model Shipment49Web.Areas.MSPS.Models.DetailsViewModel
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_LeftSideBar.cshtml";
+}
+
+<div class="content-wrapper">
+    <section class="content-header">
+        <h1>
+            Details
+        </h1>
+    </section>
+
+    <section class="content">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="nav-tabs-custom">
+                    <ul class="nav nav-tabs">
+                        <li class="active"><a href="#generaldata" data-toggle="tab">General Data</a></li>
+                        <li><a href="#shipdata" data-toggle="tab">Ship Specific Data</a></li>
+                        <li><a href="#shipattachments" data-toggle="tab">Ship Specific Attachment</a></li>
+                        <li><a href="#revisions" data-toggle="tab">Revisions</a></li>
+                    </ul>
+                    <div class="tab-content">
+                        <div class="active tab-pane" id="generaldata">
+                            <section id="loginForm">
+                                @using (Html.BeginForm("Edit", "introduction", new { area = "MSMP" }, FormMethod.Post))
+                                {
+                                    @Html.AntiForgeryToken()
+                                    <hr />
+                                    <div class="small-gutter row">
+                                        @if (Model.Content != null)
+                                        {
+                                            <div class="col-sm-4 col-xs-6 back_text margin-1-top">
+                                                <i class="fa fa-chevron-left"></i>&nbsp; @Html.ActionLink("Edit Content", "Edit", new { mid = Model.Mid })
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <div class="col-sm-4 col-xs-6 back_text margin-1-top">
+                                                <i class="fa fa-chevron-left"></i>&nbsp; @Html.ActionLink("Add Content", "Add", new { mid = Model.Mid })
+                                            </div>
+                                        }
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="col-md-8">
+                                            <div class="input-group">
+                                                @Html.TextAreaFor(m => m.Content, new { rows = "20", style = "resize:none;width:770px;", @class = "form-control input-lg textarea-editor" })
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                            </section>
+                        </div>
+                        <div class="tab-pane" id="shipdata">
+                            <section id="loginForm">
+                                <div class="form-group">
+                                    <div class="col-md-8">
+                                        <div class="input-group">
+                                            @Html.DropDownListFor(p => p.ShipId, new SelectList(ViewBag.ShipList, "Value", "Text"), "--Select Vessel--", new { @class = "form-control", style = "width:400px;" })
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-md-8">
+                                        <div class="input-group">
+                                            @Html.TextAreaFor(m => m.Content1, new { rows = "20", style = "resize:none;width:770px;", @class = "form-control input-lg textarea-editor" })
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="small-gutter row">
+                                    <div id="dvEdit" style="display:none" class="col-sm-4 col-xs-6 back_text margin-1-top">
+                                        <i class="fa fa-chevron-left"></i>&nbsp; @Html.ActionLink("Edit Content", "Edit", new { mid = Model.Mid }, new { @id = "MyLink1" })
+                                    </div>
+                                    <div id="dvAdd" style="display:none" class="col-sm-4 col-xs-6 back_text margin-1-top">
+                                        <i class="fa fa-chevron-left"></i>&nbsp; @Html.ActionLink("Add Content", "Add", new { mid = Model.Mid }, new { @id = "MyLink" })
+                                    </div>
+                                </div>
+                            </section>
+                        </div>
+                        <div class="tab-pane" id="shipattachments">
+                            <div id="indextab">
+                                <div class="row">
+                                    <div class="col-sm-4 col-md-4 col-xs-12">
+                                        @Html.Label("Choose Vessel")
+                                    </div>
+                                    <div class="col-sm-8 col-md-8 col-xs-12">
+                                        @Html.DropDownListFor(p => p.ShipId, new SelectList(ViewBag.ShipList, "Value", "Text"), "--Select Vessel--", new { @class = "form-control attach", style = "width:400px;" })
+                                    </div>
+                                </div>
+                                <div id="addattachment" class="row margin-4-bot">
+                                    <div class="col-sm-3 col-xs-12">
+                                        <a class="btn btn-success btn-block">Add Attachment</a>
+                                    </div>
+                                </div>
+                                <div class="content">
+                                    <div class="container-fluid">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="card">
+                                                    <div class="card-content user_listingtbl">
+                                                        <div class="table-responsive" id="dvListing">
+                                                            <table class="table table-striped">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th class="text-center">S.No.</th>
+                                                                        <th>Attachment Name</th>
+                                                                        <th>Download Attachment</th>
+                                                                        <th>Action</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody id="attachmentBody">
+                                                                    @{Int32 count = 0; ;}
+                                                                    @if (Model.shipattListing != null)
+                                                                    {
+                                                                        foreach (var m in Model.shipattListing)
+                                                                        {
+                                                                            <tr>
+                                                                                <td>@(count += 1)</td>
+                                                                                <td>@m.AttachmentName</td>
+                                                                                <td><a href="~/images/AttachFiles/filepath/@m.ShipId/@m.Attachment">Download</a></td>
+                                                                                <td><a href="#"> Add/Edit</a></td>
+                                                                            </tr>
+                                                                        }
+                                                                    }
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div style="display:none" id="dvAddatt">
+                                @Html.Partial("_addattchment")
+                            </div>
+                        </div>
+                        <div class="tab-pane" id="revisions">
+                            <div id="indextab1">
+                                <div class="content">
+                                    <div class="container-fluid">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="card">
+                                                    <div class="card-content user_listingtbl">
+                                                        <div class="table-responsive" id="dvListing5">
+                                                            <table class="table table-striped">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th class="text-center">S.No.</th>
+                                                                        <th>Content</th>
+                                                                        <th>Create By</th>
+                                                                        <th>Status</th>
+                                                                        <th>View Details</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody></tbody>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+<input type="hidden" name="hiddenInput" id="hiddenInput" value="" />
+
+@Html.HiddenFor(m => m.Mid)
+
+@section Scripts
+{
+    <script>
+        $('#addattachment').click(function (e) {
+            $('#indextab').hide();
+            $('#dvAddatt').show();
+        });
+    </script>
+
+    <script>
+        $('#crtRev').click(function (e) {
+            $('#indextab1').hide();
+            $('#dvAddRev').show();
+        });
+    </script>
+
+    <script>
+        $('#general').show();
+        $('#first').addClass("active");
+    </script>
+
+    <script>
+        function openCity(evt, cityName) {
+            var i, tabcontent, tablinks;
+            tabcontent = document.getElementsByClassName("tabcontent");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].style.display = "none";
+            }
+            tablinks = document.getElementsByClassName("tablinks");
+            for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].className = tablinks[i].className.replace(" active", "");
+            }
+            document.getElementById(cityName).style.display = "block";
+            evt.currentTarget.className += " active";
+
+            if (cityName == "revision") {
+                searchindex('1');
+            }
+            if (cityName == "revisiondetails") {
+                searchindex1('1');
+            }
+        }
+    </script>
+
+    <script>
+        $('#ShipId').find("option:first").attr("selected", "selected").end();
+        $('.attach').find("option:first").attr("selected", "selected").end();
+    </script>
+
+    <script type="text/javascript">
+
+        $("#ShipId").change(function () {
+            var objHidden = document.getElementById("hiddenInput");
+            objHidden.value = $('#ShipId').val();
+            $("#hiddenInput").val(objHidden.value);
+        })
+        
+        $("#MyLink").click(function () {
+            var id = $('#hiddenInput').val();
+            this.href = this.href + '&shipid=' + id;
+        });
+
+        $("#MyLink1").click(function () {
+            var id = $('#hiddenInput').val();
+            this.href = this.href + '&shipid=' + id;
+        });
+
+    </script>
+
+    <script>
+
+
+	$("#ShipId").change(function () {
+		var seltext = $("#ShipId option:selected").val();
+			var id = '@Model.Mid';
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("GetContent")', // Calling json method
+                dataType: 'json',
+				data: { id: id, textval:seltext },
+				success: function (pagetitle) {
+					var ss = pagetitle;
+					$('#Content1').summernote('code', ss);
+					$('#dvEdit').show();
+					$('#dvAdd').hide();
+                },
+				error: function (ex) {
+					$('#Content1').summernote('code', "");
+					$('#dvEdit').hide();
+					$('#dvAdd').show();
+                }
+            });
+            return false;
+    })
+
+    </script>
+
+    <script>
+
+        $(".attach").change(function () {
+            var selShipID = $(".attach option:selected").val();
+            var mID = '@Model.Mid';
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("GetAttachments")',
+                dataType: 'json',
+				data: { mID: mID, shipID: selShipID},
+                success: function (attachments) {
+                    $('#attachmentBody').empty();
+                    var tr;
+                    for (var i = 0; i < attachments.length; i++) {
+                        tr = $('<tr/>');
+                        tr.append("<td>" + (i+1) + "</td>");
+                        tr.append("<td>" + attachments[i].AttachmentName + "</td>");
+                        tr.append("<td><a href='" + "../images/AttachFiles/filepath/" + attachments[i].ShipId + "/" + attachments[i].Attachment + "'>Download</a></td>");
+                        tr.append("<td><a href='#'> Add/Edit </a></td>");
+                        $('#attachmentBody').append(tr);
+                    }
+                },
+				error: function (ex) {
+                }
+            });
+            return false;
+        })
+    </script>
+    
+    <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.2/summernote.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            // Initialize Editor
+            $('.textarea-editor').summernote(
+                {
+                    height: 550,
+                    width: 900,
+                    minHeight: null,
+                    maxHeight: null,
+                    focus: true,
+                    toolbar: [],
+                });
+        });
+    </script>
+    
+    <link href="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.2/summernote.css" rel="stylesheet">
+
+    <script type="text/javascript">
+
+        //File Upload response from the server
+        Dropzone.options.dropzoneForm = {
+            maxFiles: 10,
+            init: function () {
+                this.on("maxfilesexceeded", function (data) {
+                    var res = eval('(' + data.xhr.responseText + ')');
+                });
+                this.on("addedfile", function (file) {
+
+                    // Create the remove button
+                    var removeButton = Dropzone.createElement("<button>Remove file</button>");
+                    // Capture the Dropzone instance as closure.
+                    var _this = this;
+                    // Listen to the click event
+                    removeButton.addEventListener("click", function (e) {
+                        // Make sure the button click doesn't submit the form:
+                        e.preventDefault();
+                        e.stopPropagation();
+                        // Remove the file preview.
+                        _this.removeFile(file);
+                        // If you want to the delete the file on the server as well,
+                        // you can do the AJAX request here.
+                    });
+
+                    // Add the button to the file preview element.
+                    file.previewElement.appendChild(removeButton);
+                });
+            }
+        };
+    </script>
+
+    <script>
+        function searchindex(page) {
+            $("#dvListing5").html("");
+            //$("#dvListing5").html("<div class='loader_overlay'><div class='idencard_loader'><div class='item0 item-1'></div><div class='item0 item-2'></div><div class='item0 item-3'></div><div class='item0 item-4'></div></div></div>");
+            var ai = {
+                page: page,
+                //name: $("#txtsearch").val()
+            }
+            $.ajax({
+                type: "post",
+                url: 'DetailsView/MasterRevision/',
+                data: JSON.stringify(ai),
+                datatype: "json",
+                //contentType: 'application/json; charset=utf-8',
+                success: function (data) {
+                    if (data.trim() != "") {
+                        $("#dvListing5").fadeIn("fast");
+                        $("#dvListing5").html("");
+                        $("#dvListing5").html(data);
+                    }
+                    else {
+                        $("#dvListing5").html("");
+                        $("#dvListing5").html('<div class="text-danger card-avatar text-center"><img class="imgnorecord" src="../Include/Admin/img/norecord.png"/><br/>no record found</div>');
+                    }
+                },
+                error: function (data) {
+                    $("#dvListing5").html("");
+                    $("#dvListing5").html(data);
+                }
+            });
+        }
+
+
+        function searchindex1(page) {
+            $("#dvListing6").html("");
+            var mid = $("#Mid").val();
+            var ai = {
+                page: page,
+            }
+            $.ajax({
+                type: "post",
+                url: 'DetailsView/_revisiondetails?page=' + mid,
+                data: JSON.stringify(ai),
+                datatype: "json",
+                success: function (data) {
+                    if (data.trim() != "") {
+                        $("#dvListing6").fadeIn("fast");
+                        $("#dvListing6").html("");
+                        $("#dvListing6").html(data);
+                    }
+                    else {
+                        $("#dvListing6").html("");
+                        $("#dvListing6").html('<div class="text-danger card-avatar text-center"><img class="imgnorecord" src="../Include/Admin/img/norecord.png"/><br/>no record found</div>');
+                    }
+                },
+                error: function (data) {
+                    $("#dvListing6").html("");
+                    $("#dvListing6").html(data);
+                }
+            });
+        }
+    </script>
+    <script>
+        window.setTimeout(function () {
+            $(".alert-danger").fadeTo(500, 0).slideUp(500, function () {
+                $(this).remove();
+            });
+        }, 5000);
+    </script>
+}

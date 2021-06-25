@@ -1,0 +1,184 @@
+﻿@model Reports.UserInfo
+
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_LeftSideBar.cshtml";
+}
+
+<script src="~/js/CommonScriptFunctions.js"></script>
+
+<script>
+
+    $(function () {
+        $("#divVessels").hide();
+        $("#divFleetTypes").hide();
+        $("#divFleetNames").hide();
+    });
+
+</script>
+
+<script>
+
+    function val() {
+
+       // d = document.getElementById("LTypeIDs").val();
+        var LtypeSelect = document.getElementById("LTypeIDs");
+        var selectedText = LtypeSelect.options[LtypeSelect.selectedIndex].text;
+
+      
+        if (selectedText == "Vessel") {
+
+            $("#PermissionGroup").hide();
+            $("#vsllist").show();
+           // $("#VesselIMOs").prop('selectedIndex', 0);
+            
+        }
+        if (selectedText == "Office") {
+
+            $("#PermissionGroup").show();
+            $("#vsllist").hide();
+        }
+    }
+</script>
+
+@*<script>
+    window.onload = function () {
+
+        var LtypeSelect = document.getElementById("LTypeIDs");
+        var selectedText = LtypeSelect.options[LtypeSelect.selectedIndex].text;
+
+        var userRole = selectedText;//$("#getrole").val();
+        alert(userRole);
+        debugger;
+        if (userRole == "ADMIN") {
+            $("#PermissionGroup").show();
+           
+        }
+        else {
+            $("#PermissionGroup").hide();
+           
+        }
+    };
+</script>*@
+
+
+
+<div class="content-wrapper">
+    <section class="content-header">
+        <h1>
+            User Management
+        </h1>
+        <p class="pull-right">
+            @Html.ActionLink("Back to List", "Index", new { type = @ViewBag.Type })
+        </p>
+    </section>
+    <section class="content">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="box box-info">
+                    <div class="box-body">
+                        <div class="row">
+                            @using (Html.BeginForm("Create", "UserDetails"))
+                            {
+                                @Html.AntiForgeryToken()
+                                @Html.HiddenFor(m => m.UserID)
+                                @Html.HiddenFor(m => m.PermissionType)
+
+                            <div class="form-horizontal">
+                                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.UserRole, "User Role", htmlAttributes: new { @class = "control-label col-md-2" })
+                                    <div class="col-md-3">
+                                        @Html.DropDownListFor(model => model.UserRole, new SelectList(Model.UserRoles, "Value", "Text"), new { @class = "form-control" })
+                                        @Html.ValidationMessageFor(model => model.UserRole, "", new { @class = "text-danger" })
+                                    </div>
+                                    @Html.LabelFor(model => model.EmailAddress, "Email Address", htmlAttributes: new { @class = "control-label col-md-2" })
+                                    <div class="col-md-3">
+                                        @Html.EditorFor(model => model.EmailAddress, new { htmlAttributes = new { @autocomplete = "off", @class = "form-control", @required = "true", @type = "email" } })
+                                        @Html.ValidationMessageFor(model => model.EmailAddress, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.Password, htmlAttributes: new { @class = "control-label col-md-2" })
+                                    <div class="col-md-3">
+                                        @Html.EditorFor(model => model.Password, new { htmlAttributes = new { @type= "Password", @class = "form-control", @required = "true" } })
+                                        @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
+                                    </div>
+                                    @Html.LabelFor(model => model.ConfirmPassword, "Confirm Password", htmlAttributes: new { @class = "control-label col-md-2" })
+                                    <div class="col-md-3">
+                                        @Html.EditorFor(model => model.ConfirmPassword, new { htmlAttributes = new { @type = "Password", @class = "form-control" } })
+                                        @Html.ValidationMessageFor(model => model.ConfirmPassword, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.FullName, "Full Name", htmlAttributes: new { @class = "control-label col-md-2" })
+                                    <div class="col-md-3">
+                                        @Html.EditorFor(model => model.FullName, new { htmlAttributes = new { @autocomplete = "off", @class = "form-control", @required = "true" } })
+                                        @Html.ValidationMessageFor(model => model.FullName, "", new { @class = "text-danger" })
+                                    </div>
+                                    @Html.LabelFor(model => model.ContactNumber, "Contact Number", htmlAttributes: new { @class = "control-label col-md-2" })
+                                    <div class="col-md-3">
+                                        @Html.EditorFor(model => model.ContactNumber, new { htmlAttributes = new { @autocomplete = "off", @class = "form-control" } })
+                                        @Html.ValidationMessageFor(model => model.ContactNumber, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    @Html.Label("Login Type", htmlAttributes: new { @class = "control-label col-md-2" })
+                                    <div class="col-md-3">
+
+                                        @Html.DropDownListFor(m => m.LTypeIDs, new SelectList(Model.LoginTypes, "Id", "Name"), new { @class = "form-control", @onchange = "val()" })
+                                    </div>
+
+                                    <div  id="vsllist" style="display:none">
+                                        @Html.Label("Vessel List", htmlAttributes: new { @class = "control-label col-md-2" })
+                                        <div class="col-md-3">
+
+                                            @Html.ListBoxFor(m => m.VesselIMOs, new SelectList(Model.VesselList, "ImoNo", "VesselName"), new { @class = "form-control importexport" })
+
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                                <div class="form-group" id="PermissionGroup">
+                                    @Html.Label("Permission Types", htmlAttributes: new { @class = "control-label col-md-2" })
+                                    <div class="col-md-4">
+                                        <label class="radio-inline"><input type="radio" name="choose" id="rdAll">All</label>
+                                        <label class="radio-inline"><input type="radio" name="choose" id="rdVessel">Vessels</label>
+                                        <label class="radio-inline"><input type="radio" name="choose" id="rdFleetType">Fleet Types</label>
+                                        <label class="radio-inline"><input type="radio" name="choose" id="rdFleetName">Fleet Names</label>
+                                    </div>
+                                    @Html.Label("Permissions", htmlAttributes: new { @class = "control-label col-md-1" })
+                                    <div class="col-md-3">
+                                        <div id="divVessels">
+                                            <div>
+                                                @Html.ListBoxFor(m => m.VesselIMOs, new SelectList(Model.VesselList, "ImoNo", "VesselName"), new { @class = "form-control listbox" })
+                                            </div>
+                                        </div>
+                                        <div id="divFleetTypes">
+                                            <div>
+                                                @Html.ListBoxFor(m => m.FTypeIDs, new SelectList(Model.FleetTypeList, "Id", "Name"), new { @class = "form-control listbox" })
+                                            </div>
+                                        </div>
+                                        <div id="divFleetNames">
+                                            <div>
+                                                @Html.ListBoxFor(m => m.FNameIDs, new SelectList(Model.FleetNameList, "Id", "Name"), new { @class = "form-control listbox" })
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-md-offset-2 col-md-10">
+                                        <input type="submit" value="Save" id="btnSubmit" class="btn btn-default" />
+                                    </div>
+                                </div>
+                            </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>

@@ -1,0 +1,947 @@
+﻿@model Reports.MOperationBirthDetail
+
+@{
+    ViewBag.Title = "AddOperation";
+    Layout = "~/Views/Shared/_LayoutVessel7.cshtml";
+}
+
+<script>
+    function GetFacility() {
+        // alert('hi');
+        var portName = $("#PortName option:selected").text();
+
+        if (portName == "") {
+            $('#FacilityName').empty();
+            $('#OtherPorts').hide();
+            document.getElementById("OtherPort").required = false;
+        }
+        if (portName == "Others") {
+            $('#OtherPorts').show();
+
+            document.getElementById("OtherPort").required = true;
+            $('#FacilityName').empty();
+            $('#FacilityName').append('<option value="Others">Others</option>');
+
+        }
+        else {
+            $('#OtherPorts').hide();
+            document.getElementById("OtherPort").required = false;
+        }
+        $.ajax({
+            type: 'GET',
+            url: '/MooringOperation/Operation/BindFacilityName?PortName=' + portName,
+            cache: false,
+            contentType: false,
+            processData: false,
+            success: function (response) {
+                if (response.Result === true) {
+                    $('#FacilityName').empty();
+
+                    $('#FacilityName').append('<option value="">None Selected</option>');
+                    for (var i = 0; i < response.Data.length; i++) {
+                        $('#FacilityName').append('<option value="' + response.Data[i] + '">' + response.Data[i] + '</option>');
+
+                    }
+
+                    //$('#FacilityName').append('<option value="">Other</option>');
+
+                }
+                else {
+                    toastr["error"](response.Message);
+                }
+            },
+            failure: function (response) {
+                toastr["error"](response.Message);
+            }
+        });
+    };
+</script>
+
+<script>
+    window.onload = function () {
+        GetFacility();
+       
+    };
+</script>
+
+<script>
+    function selectall(source) {
+        checkboxes = document.getElementsByClassName('case1');
+        for (var i = 0, n = checkboxes.length; i < n; i++) {
+            checkboxes[i].checked = source.checked;
+        }
+        checkboxes_tail = document.getElementsByClassName('check');
+        for (var i = 0, n = checkboxes_tail.length; i < n; i++) {
+            checkboxes_tail[i].checked = source.checked;
+        }
+
+    }
+
+
+
+
+    function OthReason(t) {
+        var Id = t.value;
+        if (Id != "Others") {
+            $('#OtherFacility').hide();
+            document.getElementById("Others").required = false;
+        }
+        if (Id == "Others") {
+            $('#OtherFacility').show();
+            document.getElementById("Others").required = true;
+        }
+
+
+    }
+
+
+
+
+    function getId(id) {
+        $("#" + id).on("change", function () {
+            if ($(this).is(":checked"))
+                $(this).closest("tr").find(".check").prop('checked', true);
+            else
+                $(this).closest("tr").find(".check").prop('checked', false);
+
+        });
+
+    }
+
+
+
+</script>
+
+<div class="content">
+    @if (TempData["Error"] != null)
+    {
+        <p class="alert alert-danger" id="errorMessage">@TempData["Error"]</p>
+    }
+    @if (TempData["Success"] != null)
+    {
+        <p class="alert alert-success" id="successMessage">@TempData["Success"]</p>
+    }
+    @using (Html.BeginForm("AddOperation", "Operation"))
+    {
+
+        <div class="page-heading page-header-flex">
+            <div>
+                <h1 class="page-title">
+                    Add a record
+                </h1>
+                <ol class="breadcrumb">
+                    <li><a href="">Home</a></li>
+                    <li><a href="">Form</a></li>
+                    <li><a>Create</a></li>
+                </ol>
+            </div>
+
+            <div class="form-actions">
+                <button name="Submit" type="submit" class="btn btn-success btn-width" id="btn-damage-no"><i class="uil uil-check mr-2"></i>Submit</button>
+                @*<button name="Submit" type="submit" class="btn btn-success" id="btn-damage-yes" style="display: none"><i class="uil uil-check mr-2"></i>Add Damage Line</button>*@
+                <button name="Reset" type="reset" class="btn btn-danger btn-width"><i class="uil uil-redo mr-2"></i>Reset</button>
+            </div>
+        </div>
+
+        <div class="wrapper wrapper-content">
+            <div class="container">
+
+                <div class="panel panel-default mb-5">
+                    <div class="panel-body">
+                        <div class="row form-group">
+                            <label class="col-md-3 col-sm-4 col-form-label mt-0 mt-sm-3">
+                                <label class="control-label">Port Name<sup>*</sup></label>
+                            </label>
+                            <div class="col-md-5 col-sm-7">
+                                @Html.DropDownListFor(model => model.PortName, Model.PortNameList, htmlAttributes: new { @class = "form-control select2", onchange = "GetFacility()", @required = "true", })
+                                <div class="error"></div>
+                            </div>
+                        </div>
+                        <div style="display:none" id="OtherPorts" class="row form-group">
+                            <label class="col-md-3 col-sm-4 col-form-label mt-0 mt-sm-3">
+                                <label class="control-label">Enter Other Port Name<sup>*</sup></label>
+                            </label>
+                            <div class="col-md-5 col-sm-7">
+                                @Html.EditorFor(model => model.OtherPort, new { htmlAttributes = new { @class = "form-control", @Maxlength = 100 , @required = "false" } })
+                                <div class="error"></div>
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <label class="col-md-3 col-sm-4 col-form-label mt-0 mt-sm-3">
+                                <label class="control-label">Facility Name<sup>*</sup></label>
+                            </label>
+                            <div class="col-md-5 col-sm-7">
+                                @Html.DropDownListFor(model => model.FacilityName, Model.FacilityNameList, htmlAttributes: new { @class = "form-control select2", @onchange = "OthReason(this)", @required = "true", })
+
+                                <div class="error"></div>
+                            </div>
+                        </div>
+                        <div style="display:none" id="OtherFacility" class="row form-group">
+                            <label class="col-md-3 col-sm-4 col-form-label mt-0 mt-sm-3">
+                                <label class="control-label">Enter Other Facility Name<sup>*</sup></label>
+                            </label>
+                            <div class="col-md-5 col-sm-7">
+                                @Html.EditorFor(model => model.Others, new { htmlAttributes = new { @class = "form-control", @required = "false", @Maxlength = 100 } })
+
+                                <div class="error"></div>
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <label class="col-md-3 col-sm-4 col-form-label mt-0 mt-sm-3">
+                                <label class="control-label">Date & Time for 'All Fast'<sup>*</sup></label>
+                            </label>
+                            <div class="col-md-5 col-sm-7" id="top-fast-date-time">
+                                <div class="d-flex insertDateTime" data-toggle="modal" data-target="#fastDateTime">
+                                    @Html.TextBoxFor(model => model.FDate, htmlAttributes: new { @class = "insert_fast_date form-control", @onkeydown = "return false", @autocomplete = "off", @required = "true", })
+                                    @Html.TextBoxFor(model => model.FTime, htmlAttributes: new { @class = "insert_fast_time form-control", @onkeydown = "return false", @autocomplete = "off", @required = "true", })
+                                    @*<input class="insert_fast_date form-control" type="text" value="" name="">
+                                <input class="insert_fast_time form-control" type="text" value="" name="">*@
+                                </div>
+                                <!-- <input type="date" class="form-control" > -->
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <label class="col-md-3 col-sm-4 col-form-label mt-0 mt-sm-3">
+                                <label class="control-label">Date & Time for 'Cast Off'<sup>*</sup></label>
+                            </label>
+                            <div class="col-md-5 col-sm-7" id="top-cast-date-time">
+                                <div class="d-flex insertDateTime" data-toggle="modal" data-target="#castDateTime">
+                                    @Html.TextBoxFor(model => model.CDate, htmlAttributes: new { @class = "insert_cast_date form-control", @onkeydown = "return false", @autocomplete = "off", @required = "true", })
+                                    @Html.TextBoxFor(model => model.CTime, htmlAttributes: new { @class = "insert_cast_time form-control", @onkeydown = "return false", @autocomplete = "off", @required = "true", })
+                                    @*<input class="insert_cast_date form-control" type="text" value="" name="">
+                                <input class="insert_cast_time form-control" type="text" value="" name="">*@
+                                </div>
+                                <!-- <input type="date" class="form-control" > -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="container-fluid">
+                <h3 class="card-title">Check only the Lines / Rope Tails used during this operation</h3>
+                <div class="table-responsive mb-5">
+                    <table class="table table-bordered" id="add_date_time">
+                        <thead>
+                            <tr>
+                                @*<th><input type="checkbox" checked="checked" class="mr-2">Winch Used</th>*@
+                                <th>Row No.</th>
+                                <th><input type="checkbox" checked="checked" id="selectall5" onClick="selectall(this)" /> Winch + Line</th>
+                                <th>Location</th>
+                                <th>All Fast Date & Time</th>
+                                <th>Cast Off Date & Time</th>
+                                <th>Rope Tail</th>
+                                <th>Outboard End</th>
+                                <th>Lead Direction</th>
+                                <th>Lead Type</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @*@foreach (var item in Model.WinchList)*@
+                            @{
+                                for (int i = 0; i < Model.WinchList.Count; i++)
+                                {
+                                    <tr>
+
+                                        <td style="display:none"> @Html.HiddenFor(modelItem => Model.WinchList[i].RopeId)</td>
+                                        <td style="display:none"> @Html.HiddenFor(modelItem => Model.WinchList[i].WinchsId)</td>
+                                        <td style="display:none"> @Html.HiddenFor(modelItem => Model.WinchList[i].RowSr)</td>
+                                        <td> @Html.DisplayFor(modelItem => Model.WinchList[i].RowSr)</td>
+                                        @*<td> <input type="checkbox" checked="checked" class="mr-2">W1-1 </td>*@
+                                        <td>
+                                            @*<input class="case1" name="case1" type="checkbox" /> @Html.DisplayFor(x => item.WinchNo)*@
+                                            @*@Html.CheckBoxFor(model => item.Mark, htmlAttributes: new { Id = "Check" + item.RowSr })
+                                        @Html.LabelFor(model => item.WinchNo)*@
+                                            <label>@Html.CheckBoxFor(x => Model.WinchList[i].Mark, htmlAttributes: new { Id = @Model.WinchList[i].RowSr, @class = "case1", @onclick = "getId(this.id)" })&nbsp;@Html.DisplayFor(x => Model.WinchList[i].WinchNo)</label>
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(model => Model.WinchList[i].Location)
+                                            @Html.HiddenFor(model => Model.WinchList[i].Location)
+                                        </td>
+                                        <td>
+                                            <div class="d-flex insertDateTime">
+                                                @*<input class="insert_fast_date form-control datepicker" type="text" value="" name="">
+                                            <input class="insert_fast_time form-control input-time" type="time" value="" name="">*@
+                                                @Html.TextBoxFor(model => Model.WinchList[i].FDate_g, htmlAttributes: new { @class = "insert_fast_date form-control datepicker", @Readonly="true", @autocomplete = "off", @type = "text", @required = "true", })
+                                                @Html.TextBoxFor(model => Model.WinchList[i].FTime_g, htmlAttributes: new { @class = "insert_fast_time form-control input-time", @type = "time", @required = "true", })
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="d-flex insertDateTime">
+                                                @*<input class="insert_cast_date form-control datepicker" type="text" value="" name="">
+                                            <input class="insert_cast_time form-control input-time" type="time" value="" name="">*@
+                                                @Html.TextBoxFor(model => Model.WinchList[i].CDate_g, htmlAttributes: new { @class = "insert_cast_date form-control datepicker", @Readonly = "true", @autocomplete = "off", @type = "text", @required = "true", })
+                                                @Html.TextBoxFor(model => Model.WinchList[i].CTime_g, htmlAttributes: new { @class = "insert_cast_time form-control input-time", @type = "time", @required = "true", })
+                                            </div>
+                                        </td>
+
+                                        <td id="tailcheck">
+                                            @*@foreach (var tail in Model.WinchList[i].Tails)*@
+                                            @for (int t = 0; t < Model.WinchList[i].Tails.Count; t++)
+                                            {
+                                                @*<input type="checkbox" checked="checked" class="mr-2">R2-D41F*@
+                                                @*@Html.CheckBoxFor(model => tail.Selected, tail.Name)*@
+                                                <label>@Html.CheckBoxFor(x => Model.WinchList[i].Tails[t].Selected, htmlAttributes: new { @class = "check" })&nbsp;@Html.DisplayFor(x => Model.WinchList[i].Tails[t].Name)</label>
+                                                <div style="display:none"> @Html.HiddenFor(modelItem => Model.WinchList[i].Tails[t].Name)</div>
+                                                <div style="display:none"> @Html.HiddenFor(modelItem => Model.WinchList[i].Tails[t].TId)</div>
+
+                                            }
+                                        </td>
+                                        <td>
+                                            @*<select class="form-control select-control">
+                                            <option>Headline</option>
+                                            <option>amit</option>
+                                        </select>*@
+                                            @*<div>
+                                            <label class="radio-inline">
+                                                @Html.RadioButtonFor(model => item.OutboardEnd, "A", new { Id = "A" + item.RowSr, @required = "true" })
+                                                A
+                                            </label>
+                                            <label class="radio-inline">
+                                                @Html.RadioButtonFor(model => item.OutboardEnd, "B", new { Id = "B" + item.RowSr + item.RowSr })
+                                                B
+                                            </label>
+                                        </div>*@
+                                            @*@Html.DropDownListFor(items => Model.WinchList[i].outboard1, Model.OutBoards, Model.WinchList[i].outboard1, htmlAttributes: new { @class = "form-control select-control" })*@
+                                            @{var Outbordss = Model.WinchList[i].LastCurrentOutboardEnd;
+                                                @Html.DropDownListFor(model => model.WinchList[i].outboard1, Model.OutBoards, Outbordss, htmlAttributes: new { @class = "form-control select-control" })
+                                                @Html.HiddenFor(model => model.WinchList[i].LastCurrentOutboardEnd)
+                                            }
+                                        </td>
+                                        <td>
+                                            @*<select class="form-control select-control">
+                                            <option>Headline</option>
+                                            <option>amit</option>
+                                        </select>*@
+                                            @Html.DropDownListFor(model => model.WinchList[i].Lead, Model.AllLeads, Model.WinchList[i].LastCurrentLead, htmlAttributes: new { @class = "form-control select-control" })
+                                            @Html.HiddenFor(model => model.WinchList[i].LastCurrentLead)
+
+                                        </td>
+                                        <td>
+                                            @*<select class="form-control select-control">
+                                            <option>Direct</option>
+                                            <option>in-Direct</option>
+                                        </select>*@
+                                            @Html.DropDownListFor(items => Model.WinchList[i].Lead1, Model.All_Lead1, htmlAttributes: new { @class = "form-control select-control", @required = "true", })
+                                        </td>
+                                    </tr>
+                                }
+                            }
+
+                        </tbody>
+                    </table>
+                </div>
+
+                <h3 class="card-title">Berth Details</h3>
+                <div class="form-body">
+                    <div class="row">
+                        <div class="col-md-8 mx-auto">
+                            <div class="row form-group ">
+                                <label class="col-sm-4 col-form-label">
+                                    <label class="control-label">Berth Name/Number<sup>*</sup></label>
+                                </label>
+                                <div class="col-sm-8">
+                                    @*<input type="text" class="form-control">*@
+                                    @Html.EditorFor(model => model.BirthName, new { htmlAttributes = new { @class = "form-control", @required = "true", @Maxlength = 100 } })
+                                    <div class="error"></div>
+                                </div>
+                            </div>
+                            <div class="row form-group ">
+                                <label class="col-sm-4 col-form-label">
+                                    <label class="control-label">Berth Type<sup>*</sup></label>
+                                </label>
+                                <div class="col-sm-8">
+                                    @Html.DropDownListFor(model => model.BirthType, Model.BerthTypeList, htmlAttributes: new { @class = "form-control select2", @required = "true", })
+
+                                    <div class="error"></div>
+                                </div>
+                            </div>
+                            <div class="row form-group ">
+                                <label class="col-sm-4 col-form-label">
+                                    <label class="control-label">Type of Mooring<sup>*</sup></label>
+                                </label>
+                                <div class="col-sm-8">
+                                    @Html.DropDownListFor(model => model.MooringType, Model.MooringTypeList, htmlAttributes: new { @class = "form-control select2", @required = "true", })
+                                    <div class="error"></div>
+                                </div>
+                            </div>
+                            <div class="row form-group ">
+                                <label class="col-sm-4 col-form-label">
+                                    <label class="control-label">Drafts: Arrival (mtrs)<sup>*</sup></label>
+                                </label>
+                                <div class="col-sm-8">
+                                    <div class="col-sm-6">
+                                        <label class="control-label">Fwd</label>
+                                        @Html.EditorFor(model => model.DraftArrivalFWD, new { htmlAttributes = new { @class = "form-control", @Maxlength = 5, @required = "true", @onkeypress = "return isNumberKey(event)", @onKeyUp = "requiredValue(this)" } })
+                                    </div>
+                                    <div class="col-sm-offset-6">
+                                        <label class="control-label">Aft</label>
+                                        @Html.EditorFor(model => model.DraftArrivalAFT, new { htmlAttributes = new { @class = "form-control", @Maxlength = 5, @required = "true", @onkeypress = "return isNumberKey(event)", @onKeyUp = "requiredValue(this)" } })
+                                    </div>
+                                    <div id="ErDraftArrival" class="error"></div>
+                                </div>
+                            </div>
+                            <div class="row form-group ">
+                                <label class="col-sm-4 col-form-label">
+                                    <label class="control-label">Drafts: Departure (mtrs)<sup>*</sup></label>
+                                </label>
+                                <div class="col-sm-8">
+                                    <div class="col-sm-6">
+                                        <label class="control-label">Fwd</label>
+                                        @Html.EditorFor(model => model.DraftDepartureFWD, new { htmlAttributes = new { @class = "form-control", @Maxlength = 5, @required = "true", @onkeypress = "return isNumberKey(event)", @onKeyUp = "requiredValue(this)" } })
+                                    </div>
+                                    <div class="col-sm-offset-6">
+                                        <label class="control-label">Aft</label>
+                                        @Html.EditorFor(model => model.DraftDepartureAFT, new { htmlAttributes = new { @class = "form-control", @Maxlength = 5, @required = "true", @onkeypress = "return isNumberKey(event)", @onKeyUp = "requiredValue(this)" } })
+                                    </div>
+                                    <div id="ErDraftDeparture" class="error"></div>
+
+                                </div>
+                            </div>
+                            <div class="row form-group ">
+                                <label class="col-sm-4 col-form-label">
+                                    <label class="control-label">Depth at Berth<sup>*</sup></label>
+                                </label>
+                                <div class="col-sm-8">
+                                    @Html.EditorFor(model => model.DepthAtBerth, new { htmlAttributes = new { @class = "form-control", @Maxlength = 5, @required = "true", @onkeypress = "return isNumberKey(event)", @onKeyUp = "requiredValue(this)" } })
+                                    <div id="ErDepthAtBerth" class="error"></div>
+                                </div>
+                            </div>
+                            <div class="row form-group ">
+                                <label class="col-sm-4 col-form-label">
+                                    <label class="control-label">Berthing Side<sup>*</sup></label>
+                                </label>
+                                <div class="col-sm-8">
+                                    @Html.DropDownListFor(model => model.BerthSide, Model.BerthSideList, htmlAttributes: new { @class = "form-control select2", @required = "true", })
+
+                                    <div class="error"></div>
+                                </div>
+                            </div>
+                            <div class="row form-group ">
+                                <label class="col-sm-4 col-form-label">
+                                    <label class="control-label">Vessel condition<sup>*</sup></label>
+                                </label>
+                                <div class="col-sm-8">
+                                    @Html.DropDownListFor(model => model.VesselCondition, Model.VesselConditionList, htmlAttributes: new { @class = "form-control select2", @required = "true", })
+
+                                    <div class="error"></div>
+                                </div>
+                            </div>
+                            <div class="row form-group ">
+                                <label class="col-sm-4 col-form-label">
+                                    <label class="control-label">Ship access<sup>*</sup></label>
+                                </label>
+                                <div class="col-sm-8">
+                                    @Html.DropDownListFor(model => model.ShipAccess, Model.ShipAccessList, htmlAttributes: new { @class = "form-control select2", @required = "true", })
+
+                                    <div class="error"></div>
+                                </div>
+                            </div>
+                            <div class="row form-group ">
+                                <label class="col-sm-4 col-form-label">
+                                    <label class="control-label">Range of Tide(mtrs)<sup>*</sup></label>
+                                </label>
+                                <div class="col-sm-8">
+                                    @Html.EditorFor(model => model.RangOfTide, new { htmlAttributes = new { @class = "form-control", @Maxlength = 5, @required = "true", @onkeypress = "return isNumberKey(event)", @onKeyUp = "requiredValue(this)" } })
+                                    <div id="ErRangOfTide" class="error"></div>
+                                </div>
+                            </div>
+                            <div class="row form-group ">
+                                <label class="col-sm-4 col-form-label">
+                                    <label class="control-label">Avg Wind Direction(relative to bow)<sup>*</sup></label>
+                                </label>
+                                <div class="col-sm-8">
+                                    @Html.DropDownListFor(model => model.WindDirection, Model.WindDirections, htmlAttributes: new { @class = "form-control select2", @required = "true", })
+
+                                    <div class="error"></div>
+                                </div>
+                                <div class="asdw">
+									<h4>Wind Direction</h4>
+                                    <img src="~/images/Wind1.png" / title="Wind Direction" alt="wind Direction">
+                                </div>
+                            </div>
+                            <div class="row form-group ">
+                                <label class="col-sm-4 col-form-label">
+                                    <label class="control-label">Avg Wind Speed(Kts)<sup>*</sup></label>
+                                </label>
+                                <div class="col-sm-8">
+                                    @Html.EditorFor(model => model.WindSpeed, new { htmlAttributes = new { @class = "form-control", @required = "true", @onkeypress = "return isNumberKey(event)", @onKeyUp = "requiredValue(this)" } })
+                                    <div id="ErWindSpeed" class="error"></div>
+                                </div>
+                            </div>
+                            <div class="row form-group ">
+                                <label class="col-sm-4 col-form-label">
+                                    <label class="control-label">Any Squall / Gusts experienced<sup>*</sup></label>
+                                </label>
+                                <div class="col-sm-8">
+                                    <div class="">
+                                        @*<label class="radio-inline"><input type="radio" name="optradio">Yes</label>
+                                    <label class="radio-inline"><input type="radio" name="optradio">No</label>*@
+
+                                        @*@Html.RadioButtonFor(model => model.AnySquall, "Yes", new { @checked = true })
+                                    @Html.Label("Yes", "Yes")
+                                    &nbsp;
+                                    @Html.RadioButtonFor(model => model.AnySquall, "No", new { id = "B" })
+                                    @Html.Label("No", "No")*@
+
+                                        <label class="radio-inline">
+                                            @Html.RadioButtonFor(model => model.AnySquall, "Yes", new { @required = "true" })
+                                            Yes
+                                        </label>
+                                        <label class="radio-inline">
+                                            @Html.RadioButtonFor(model => model.AnySquall, "No")
+                                            No
+                                        </label>
+
+                                    </div>
+                                    <div class="error"></div>
+                                </div>
+                            </div>
+                            <div class="row form-group ">
+                                <label class="col-sm-4 col-form-label">
+                                    <label class="control-label">Air Temp (in Degree Centigrade)<sup>*</sup></label>
+                                </label>
+
+                                <div class="col-sm-8">
+                                    <div class="col-sm-6">
+                                        @Html.DropDownListFor(model => model.AirTempCentigrate, Model.PositiveNegative, htmlAttributes: new { @class = "form-control select2", @required = "true", })
+                                    </div>
+                                    <div class="col-sm-offset-6">
+                                        @Html.EditorFor(model => model.AirTemprature, new { htmlAttributes = new { @class = "form-control", @required = "true", @onkeypress = "return isNumberKey(event)", @onKeyUp = "requiredValue(this)" } })
+                                    </div>
+                                    <div id="ErAirTemprature" class="error"></div>
+                                </div>
+                            </div>
+                            <div class="row form-group ">
+                                <label class="col-sm-4 col-form-label">
+                                    <label class="control-label">Current Speed(Kts)<sup>*</sup></label>
+                                </label>
+                                <div class="col-sm-8">
+                                    @Html.EditorFor(model => model.CurrentSpeed, new { htmlAttributes = new { @class = "form-control", @Maxlength = 5, @required = "true", @onkeypress = "return isNumberKey(event)", @onKeyUp = "requiredValue(this)" } })
+                                    <div id="ErCurrentSpeed" class="error"></div>
+                                </div>
+                            </div>
+                            <div class="row form-group ">
+                                <label class="col-sm-4 col-form-label">
+                                    <label class="control-label">Berth exposed to Sea / Swell <sup>*</sup></label>
+                                </label>
+                                <div class="col-sm-8">
+                                    <div class="">
+                                        <label class="radio-inline">
+                                            @Html.RadioButtonFor(model => model.Berth_exposed_SeaSwell, "Yes", new { @required = "true" })
+                                            Yes
+                                        </label>
+                                        <label class="radio-inline">
+                                            @Html.RadioButtonFor(model => model.Berth_exposed_SeaSwell, "No")
+                                            No
+                                        </label>
+                                    </div>
+                                    <div class="error"></div>
+                                </div>
+                            </div>
+                            <div class="row form-group ">
+                                <label class="col-sm-4 col-form-label">
+                                    <label class="control-label">Surging observed<sup>*</sup></label>
+                                </label>
+                                <div class="col-sm-8">
+                                    <div class="">
+                                        <label class="radio-inline">
+                                            @Html.RadioButtonFor(model => model.SurgingObserved, "Yes", new { @required = "true" })
+                                            Yes
+                                        </label>
+                                        <label class="radio-inline">
+                                            @Html.RadioButtonFor(model => model.SurgingObserved, "No")
+                                            No
+                                        </label>
+                                    </div>
+                                    <div class="error"></div>
+                                </div>
+                            </div>
+                            <div class="row form-group ">
+                                <label class="col-sm-4 col-form-label">
+                                    <label class="control-label">Any affect of passing traffic<sup>*</sup></label>
+                                </label>
+                                <div class="col-sm-8">
+                                    <div class="">
+                                        <label class="radio-inline">
+                                            @Html.RadioButtonFor(model => model.Any_Affect_Passing_Traffic, "Yes", new { @required = "true" })
+                                            Yes
+                                        </label>
+                                        <label class="radio-inline">
+                                            @Html.RadioButtonFor(model => model.Any_Affect_Passing_Traffic, "No")
+                                            No
+                                        </label>
+                                    </div>
+                                    <div class="error"></div>
+                                </div>
+                            </div>
+                            <div class="row form-group ">
+                                <label class="col-sm-4 col-form-label">
+                                    <label class="control-label">Ship was continuously in contact with fender<sup>*</sup></label>
+                                </label>
+                                <div class="col-sm-8">
+                                    <div class="">
+                                        <label class="radio-inline">
+                                            @Html.RadioButtonFor(model => model.Ship_was_continuously_contact_with_fender, "Yes", new { @required = "true" })
+                                            Yes
+                                        </label>
+                                        <label class="radio-inline">
+                                            @Html.RadioButtonFor(model => model.Ship_was_continuously_contact_with_fender, "No")
+                                            No
+                                        </label>
+                                    </div>
+                                    <div class="error"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <h3 class="card-title">Port Details</h3>
+                <div class="form-body">
+                    <div class="row">
+                        <div class="col-md-8 mx-auto">
+                            <div class="row form-group">
+                                <label  class="col-sm-4 col-form-label">
+                                    <label  class="control-label">Master's note for this call<sup>*</sup></label>
+                                </label>
+                                <div class="col-md-8">
+                                    @Html.EditorFor(model => model.PortDetails, new { htmlAttributes = new {  @class = "form-control", @Maxlength = 300 , @required = "true" } })
+                                    <div class="error"></div>
+                                </div>
+                            </div>
+                            <div class="row form-group">
+                                <label class="col-sm-4 col-form-label">
+                                    <label class="control-label">Was any line damage?</label>
+                                </label>
+                                <div class="col-sm-8">
+                                    @*<div class="">
+                                    <label class="radio-inline"><input type="radio" name="line_damage_option" value="1">Yes</label>
+                                    <label class="radio-inline"><input type="radio" value="0" name="line_damage_option">No</label>
+                                </div>*@
+                                    <div class="">
+                                        <label class="radio-inline">
+                                            @Html.RadioButtonFor(model => model.Any_Rope_Damaged, "Yes", new { @required = "true" })
+                                            Yes
+                                        </label>
+                                        <label class="radio-inline">
+                                            @Html.RadioButtonFor(model => model.Any_Rope_Damaged, "No")
+                                            No
+                                        </label>
+                                    </div>
+                                    <div class="error"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    }
+</div>
+
+
+<div class="modal fade" id="fastDateTime" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">All Fast Date & Time</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row form-group">
+                    <label class="col-md-3 col-sm-4 col-form-label">
+                        <label class="control-label">All Fast Date</label>
+                    </label>
+                    <div class="col-md-6 col-sm-6">
+                        <input type="date" id="fast_date" name="fast_date" onkeydown="return false" required="required"  class="form-control">
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <label class="col-md-3 col-sm-4 col-form-label">
+                        <label class="control-label">All Fast Time</label>
+                    </label>
+                    <div class="col-md-6 col-sm-6">
+                        <input type="time" name="fast_time" min="00:00" max="24:00" onkeydown="return false" required="required" class="form-control">
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <label class="col-md-3 col-sm-4 col-form-label">
+                        <button type="button" onclick="getFastValue()" class="btn btn-info btn-block">Insert</button>
+                    </label>
+                </div>
+                <p class="text-danger">Note: This time shall apply to all lines, however you can still change date & time for individual lines.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="castDateTime" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">All Cast Off Date & Time</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row form-group">
+                    <label class="col-md-3 col-sm-4 col-form-label">
+                        <label class="control-label">All Cast Off Date</label>
+                    </label>
+                    <div class="col-md-6 col-sm-6">
+                        <input type="date" id="cast_date" name="cast_date" onkeydown="return false" required="required" class="form-control">
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <label class="col-md-3 col-sm-4 col-form-label">
+                        <label class="control-label">All Cast Off Time</label>
+                    </label>
+                    <div class="col-md-6 col-sm-6">
+                        <input type="time" name="cast_time" required="required" onkeydown="return false" class="form-control">
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <label class="col-md-3 col-sm-4 col-form-label">
+                        <button type="button" onclick="getCastValue()" class="btn btn-info btn-block">Insert</button>
+                    </label>
+                </div>
+                <p class="text-danger">Note: This time shall apply to all lines, however you can still change date & time for individual lines.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script>
+    $(document).ready(function () {
+        $("input[name='line_damage_option']").on('click', function () {
+            var radioValue = $("input[name='line_damage_option']:checked").val();
+            if (radioValue == 1) {
+                $('#btn-damage-no').hide();
+                $('#btn-damage-yes').show();
+            } else {
+                $('#btn-damage-no').show();
+                $('#btn-damage-yes').hide();
+            }
+        });
+    });
+
+    function getFastValue() {
+        var fast_date = $('input[name="fast_date"]').val();
+        var fast_time = $('input[name="fast_time"]').val();
+        var fastdateANDtime = fast_date + " " + fast_time;
+        //var split_date = fast_date.split("-")
+        var cast_date = $('input[name="cast_date"]').val();
+        var cast_time = $('input[name="cast_time"]').val();
+        var castdateANDtime = cast_date + " " + cast_time;
+        //var total_value = fast_date + ' | ' + fast_time;
+        console.log(fast_date);
+        if (castdateANDtime != " ") {
+
+            if (castdateANDtime < fastdateANDtime) {
+                alert('Invalid All Fast date & time. Cast off date & time cannot be lesser than All fast date & time');
+
+            }
+        }
+        else {
+            $('#fastDateTime').modal('hide');
+            $("#add_date_time").find('.insert_fast_date').each(function () {
+                $(this).val(fast_date);
+            });
+            $("#add_date_time").find('.insert_fast_time').each(function () {
+                $(this).val(fast_time)
+            });
+            $('#top-fast-date-time').find('.insert_fast_date').val(fast_date);
+            $('#top-fast-date-time').find('.insert_fast_time').val(fast_time);
+        }
+    }
+    function getCastValue() {
+        var cast_date = $('input[name="cast_date"]').val();
+        var cast_time = $('input[name="cast_time"]').val();
+        var castdateANDtime = cast_date + " " + cast_time;
+        //var split_date = cast_date.split("-")
+        var fast_date = $('input[name="fast_date"]').val();
+        var fast_time = $('input[name="fast_time"]').val();
+        var fastdateANDtime = fast_date + " " + fast_time;
+
+        if (castdateANDtime < fastdateANDtime) {
+            alert('Invalid Cast off date & time. Cast off date & time cannot be lesser than All fast date & time');
+
+        }
+        else {
+
+            $('#castDateTime').modal('hide');
+            $("#add_date_time").find('.insert_cast_date').each(function () {
+                $(this).val(cast_date);
+            });
+            $("#add_date_time").find('.insert_cast_time').each(function () {
+                $(this).val(cast_time)
+            });
+
+            $('#top-cast-date-time').find('.insert_cast_date').val(cast_date);
+            $('#top-cast-date-time').find('.insert_cast_time').val(cast_time);
+        }
+    }
+
+    /*$(".input-date").on("change", function() {
+        this.setAttribute(
+            "data-date",
+            moment(this.value, "YYYY-MM-DD")
+            .format( this.getAttribute("data-date-format") )
+        )
+    }).trigger("change")
+
+    $(".input-time").on("change", function() {
+        this.setAttribute(
+            "data-time",
+            moment(this.value, "hh:mm")
+            .format( this.getAttribute("data-time-format") )
+        )
+    }).trigger("change")*/
+
+    //$(document).ready(function () {
+
+
+    //});
+
+    function isNumberKey(evt) {
+
+        var charCode = (evt.which) ? evt.which : event.keyCode
+        if (charCode != 46 && charCode > 31 && (charCode < 48 || charCode > 57))
+            return false;
+
+        return true;
+    }
+
+    function requiredValue(arg) {
+
+
+        var id = arg.getAttribute('id');
+        var value = arg.value;
+
+        if (value > 999) {
+
+            var message = "";
+            if (id == "CurrentSpeed") {
+                message = document.getElementById('ErCurrentSpeed');
+            }
+            if (id == "AirTemprature") {
+                message = document.getElementById('ErAirTemprature');
+            } if (id == "WindSpeed") {
+                message = document.getElementById('ErWindSpeed');
+            } if (id == "RangOfTide") {
+                message = document.getElementById('ErRangOfTide');
+            }
+
+            var A1 = ""; var A2 = ""; var D1 = ""; var D2 = "";
+
+            if (id == "DraftArrivalFWD") {
+                A1 = arg.value;
+                message = document.getElementById('ErDraftArrival');
+            }
+            if (id == "DraftArrivalAFT") {
+                A2 = arg.value;
+                message = document.getElementById('ErDraftArrival');
+            }
+            if (id == "DraftDepartureFWD") {
+                D1 = arg.value;
+                message = document.getElementById('ErDraftDeparture');
+            }
+            if (id == "DraftDepartureAFT") {
+                D2 = arg.value;
+                message = document.getElementById('ErDraftDeparture');
+            }
+
+
+            if (id == "DepthAtBerth") {
+                alert(maxvalue);
+                message = document.getElementById('ErDepthAtBerth');
+            }
+
+            var goodColor = "#0C6";
+            var badColor = "#FF0000";
+
+            message.style.color = badColor;
+            message.innerHTML = "Value can not be greater then 999.99 !"
+            $("#" + id + "").val('');
+        }
+        else {
+            var message = "";
+            if (id == "CurrentSpeed") {
+                message = document.getElementById('ErCurrentSpeed');
+            }
+            if (id == "AirTemprature") {
+                message = document.getElementById('ErAirTemprature');
+            } if (id == "WindSpeed") {
+                message = document.getElementById('ErWindSpeed');
+            } if (id == "RangOfTide") {
+                message = document.getElementById('ErRangOfTide');
+            }
+
+            if (id == "DraftArrivalFWD") {
+                message = document.getElementById('ErDraftArrival');
+            }
+            if (id == "DraftArrivalAFT") {
+                message = document.getElementById('ErDraftArrival');
+            }
+            if (id == "DraftDepartureFWD") {
+                message = document.getElementById('ErDraftDeparture');
+            }
+            if (id == "DraftDepartureAFT") {
+                message = document.getElementById('ErDraftDeparture');
+            }
+
+            if (id == "DepthAtBerth") {
+                message = document.getElementById('ErDepthAtBerth');
+            }
+
+            message.innerHTML = ""
+        }
+
+
+
+    }
+
+
+    $("#DepthAtBerth").blur(function () {
+
+        var myarray = [$('#DraftArrivalFWD').val(), $('#DraftArrivalAFT').val(), $('#DraftDepartureFWD').val(), $('#DraftDepartureAFT').val()];
+
+        var maxvalue = max = Math.max.apply(null, myarray);
+        var DepthValue = $('#DepthAtBerth').val();
+        debugger;
+        if (DepthValue != "") {
+            var message = "";
+
+            message = document.getElementById('ErDepthAtBerth');
+
+
+            // var goodColor = "#0C6";
+            if (DepthValue <= maxvalue) {
+
+
+                var badColor = "#FF0000";
+
+                message.style.color = badColor;
+                message.innerHTML = "Depth at Berth cannot be less than Maximum draft value !"
+                $("#DepthAtBerth").val('');
+
+            }
+            else {
+                message.innerHTML = ""
+            }
+        }
+
+    })
+
+</script>
+
+<script type="text/javascript">
+    $('.datepicker').datepicker();
+
+    //$(".datepicker").datepicker({
+    //    dateFormat: 'yy-mm-dd'
+    //});
+</script>

@@ -1,0 +1,169 @@
+﻿@*@model Shipment49Web.Areas.MSPS.Models.DetailsViewModel*@
+
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Smartmenus</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<!-- SmartMenus core CSS (required) -->
+	@*<link href="res/smartmenus/css/sm-core-css.css" rel='stylesheet' type='text/css' />*@
+	<link href="~/res/smartmenus/css/sm-core-css.css" rel='stylesheet' type='text/css' />
+	<!-- "sm-blue" menu theme (optional, you can use your own CSS, too) -->
+	<link href="~/res/smartmenus/css/sm-blue/sm-blue.css" rel='stylesheet' type='text/css' />
+	<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+	<!--[if lt IE 9]>
+	  <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+	  <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+	<![endif]-->
+
+
+	<script src="~/Scripts/jquery-1.12.4.js"></script>
+	<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600,700" rel="stylesheet">
+
+	@Styles.Render("~/Content/css")
+	@Styles.Render("~/Content/cssform")
+	@*@Styles.Render("~/Content/dropzonescss")*@
+	@*@Scripts.Render("~/bundles/bootstrap.min")*@
+	@Scripts.Render("~/bundles/bootstrap")
+	@Styles.Render("~/Content/dropzonescss")
+	@Scripts.Render("~/bundles/modernizr")
+
+	<link href="/Content/helper.css" rel="stylesheet">
+
+
+	<style>
+		.vertical-menu {
+			width: 250px; /* Set a width if you like */
+		}
+
+			.vertical-menu a {
+				background-color: #eee; /* Grey background color */
+				color: black; /* Black text color */
+				display: block; /* Make the links appear below each other */
+				padding: 12px; /* Add some padding */
+				text-decoration: none; /* Remove underline from links */
+			}
+
+				.vertical-menu a:hover {
+					background-color: #ccc; /* Dark grey background on mouse-over */
+				}
+
+				.vertical-menu a.active {
+					background-color: #4073a0; /* Add a green color to the "active/current" link */
+					color: white;
+				}
+	</style>
+</head>
+<body>
+
+
+	<div style="margin-top: -60px" class="top_header hidden-sm hidden-xs">
+		@*<label  style="color:lightgray; font-size:22px; margin-left:15px; padding:10px 6px 4px 6px; vertical-align:central ">Work-Ship</label>*@
+		<div class="pull-left">
+
+			<div class="logo_box">
+				<h1><a href="/home/index"><img src="/images/moor.png" alt="Shipping work and rest hrs" class="ship-logo" style="width:99%;"></a></h1>
+			</div>
+		</div>
+		<div class="pull-right text-right">
+			@Html.Partial("_LoginPartial")
+		</div>
+	</div>
+	<div class="top_header hidden-lg hidden-md visible-sm visible-xs">
+		<div class="col-xs-2">
+			<button type="button" class="navbar-toggle">
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+			</button>
+		</div>
+		<div class="col-xs-8 text-center">
+			<a href="/home/index"><img src="/images/moor.png" alt="Shipping work and rest hrs" class="ship-logo"></a>
+		</div>
+		<div class="col-xs-2 text-right rightside_partial">
+			<i class="fa fa-ellipsis-v" aria-hidden="true"></i>
+			<div class="mobile_loginPartial">
+				@Html.Partial("_LoginPartial")
+			</div>
+		</div>
+	</div>
+
+	<!--<div>
+		<ul id="topMenu"></ul>
+	</div>-->
+	<!--<h1>Smartmenus</h1>-->
+	<div style="width: 250px;">
+
+		<ul class="nav-sidebar" style="margin-top: 57px" id="myMenu"></ul>
+	</div>
+	<br />
+	@*<div class="vertical-menu">
+		<a href="@Url.Action("index","approve",new {   Area = "msps" })" class="active">Revision Master List</a>
+		<br />
+		<a href="@Url.Action("index","menus",new {   Area = "dynamicmenus" })" class="active">Menu Setting</a>
+		
+
+	</div>*@
+	<div id="mymenuid" style="margin-left:260px;margin-top:-345px" class="rightside">
+		@*@Html.Partial("_LeftSideBar")*@
+		@RenderBody()
+
+
+
+	</div>
+
+
+	<footer style="font-size: 12px;">
+		<span>@DateTime.Now.Year SYNERGETIC SHIPPING SOLUTIONS | AQUA 49 WEBSTREET TECHNOLOGIES</span>
+	</footer>
+
+	@Scripts.Render("~/bundles/jqueryval")
+	@Scripts.Render("~/bundles/jqueryui")
+	@Scripts.Render("~/bundles/jqueryvaldropdown")
+
+
+	@Scripts.Render("~/bundles/dropzonescripts")
+	@RenderSection("scripts", required: false)
+
+	<script>
+		$(document).ready(function () {
+			var url = window.location;
+			var element = $('.main-nav li a').filter(function () {
+				return this.href == url || url.href.indexOf(this.href) == 0;
+			});
+			$(element).parentsUntil('.main-nav', 'li').addClass('active').find(".dropdown_menu").slideDown().next(".sub-indicator").addClass("sub-arrow-open");
+
+
+		});
+	</script>
+</body>
+</html>
+
+
+@*<script src="https://code.jquery.com/jquery-1.10.2.js"></script>*@
+<!-- SmartMenus jQuery plugin -->
+<script src="~/res/smartmenus/jquery.smartmenus.min.js" type="text/javascript"></script>
+@*<script src="../renderMenu.js"></script>*@
+
+<script src="~/renderMenu.js"></script>
+<script>
+		$(document).ready(function () {
+			 //var items = [ {"href": "codeignitertutoriales.com", "text": "Home", "icon": "fa fa-home"}, { "href": "#", "text": "Products", "icon": "fa fa-book", "children": [ { "href": "//github.com", "text": "Books", "children": [ { "href": "#", "text": "Jquery" }, { "href": "#", "text": "Codeigniter" }, { "href": "#", "text": "Wordpress" } ] }, { "href": "#", "text": "Software" } ] }, { "href": "#", "text": "Sites", "children": [ { "href": "//codeignitertutoriales.com", "text": "My Blog" }, { "href": "#", "text": "GitHub" } ] } ];
+
+			//var ss = 'Model.SmartMenuContent';
+			var ss = '@ViewBag.MenuContent';
+
+		
+			var gg = ss.replace(/&quot;/g, '"')
+
+			var items = gg;
+
+			//var $topMenu = $('#topMenu').renderizeMenu(items, { rootClass: "sm sm-blue" });
+			//$topMenu.smartmenus();
+
+			var $menu = $('#myMenu').renderizeMenu(items, { rootClass: "sm sm-blue sm-vertical" });
+			$menu.smartmenus();
+		});
+</script>

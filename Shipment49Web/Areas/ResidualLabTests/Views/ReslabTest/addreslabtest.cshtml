@@ -1,0 +1,418 @@
+﻿
+
+@model Reports.ResidualLabTest
+@{
+    /**/
+
+    ViewBag.Title = "addreslabtest";
+    Layout = "~/Views/Shared/_LayoutVessel7.cshtml";
+
+}
+
+
+
+@using (Html.BeginForm("addreslabtest", "ReslabTest", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(e => e.Id)
+
+    <div style="display:none">
+        @Html.TextBoxFor(x => x.RopeTypeId)
+        @Html.TextBoxFor(x => x.ManufacturerId)
+    </div>
+    <div id="page-wrapper" class="content">
+        <div class="page-heading page-header-flex">
+            <div>
+                <h1 class="page-title">
+                    Add Line Residual Lab Test
+                </h1>
+                @*<ol class="breadcrumb">
+                    <li><a href="">Home</a></li>
+                    <li><a href="">Form</a></li>
+                    <li><a>Create</a></li>
+                </ol>*@
+            </div>
+            @if (TempData["Error"] != null)
+            {
+                <p class="alert alert-danger" id="errorMessage">@TempData["Error"]</p>
+            }
+            @if (TempData["Success"] != null)
+            {
+                <p class="alert alert-success" id="successMessage">@TempData["Success"]</p>
+            }
+            <div class="form-actions">
+                <button name="Submit" type="submit" id="btnSubmit" class="btn btn-success btn-width"><i class="uil uil-check mr-2"></i>Submit</button>
+                <button name="Reset" type="reset" class="btn btn-danger btn-width"><i class="uil uil-redo mr-2"></i>Reset</button>
+            </div>
+        </div>
+
+        <div style="display:block" id="msgDiv">
+            <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+
+
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        </div>
+                        <div id="messageID" class="modal-body">
+                            ...
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div class="wrapper wrapper-content">
+            <div class="container">
+                <div class="form-body">
+                    <div class="row">
+                        <div class="col-md-8 mx-auto">
+                            <div class="row form-group ">
+                                <label class="col-sm-4 col-form-label">
+                                    <label class="control-label">Select Line<sup>*</sup></label>
+                                </label>
+                                <div class="col-sm-8">
+                                    @Html.DropDownListFor(model => model.RopeId, new SelectList(Model.MooringLineLists, "Id", "CertificateNumber"), "", htmlAttributes: new { @class = "form-control select2", @required = "true", @onchange = "checkdata(this)", })
+                                    <div class="error"></div>
+                                </div>
+                            </div>
+
+
+
+
+
+
+                            <div class="row form-group">
+                                <label class="col-sm-4 col-form-label">
+                                    <label class="control-label">Line Type</label>
+                                </label>
+                                <div class="col-sm-8">
+                                    <label id="linetype" class="form-control"></label>
+                                </div>
+                            </div>
+
+
+
+                            <div class="row form-group">
+                                <label class="col-sm-4 col-form-label">
+                                    <label class="control-label">Manufacturer<sup>*</sup></label>
+                                </label>
+                                <div class="col-sm-8">
+                                    <label id="manuF" class="form-control"></label>
+                                    <div class="error"></div>
+                                </div>
+                            </div>
+
+
+                            <div class="row form-group">
+                                <label class="col-sm-4 col-form-label">
+                                    <label class="control-label">Line Location<sup>*</sup></label>
+                                </label>
+                                <div class="col-sm-8">
+                                    @Html.TextBoxFor(x => x.Location, new { @class = "form-control", @required = "true", })
+                                    <div class="error"></div>
+                                </div>
+                            </div>
+
+                            <div class="row form-group">
+                                <label class="col-sm-4 col-form-label">
+                                    <label class="control-label">Lab Test Date<sup>*</sup></label>
+                                </label>
+                                <div class="col-sm-8">
+                                    @Html.TextBoxFor(x => x.LabTestDate, "{0:yyyy-MM-dd}", new { @class = "form-control datepicker", @autocomplete = "Off", @required = "true", @placeholder = "yyyy-mm-dd" })
+                                    @*@Html.TextBoxFor(x => x.LabTestDate, "{0:yyyy-MM-dd}", new { @class = "form-control datepicker", @autocomplete = "Off", @readOnly = "true", @required = "true", @placeholder = "yyyy-mm-dd" })*@
+                                    <div class="error"></div>
+                                </div>
+                            </div>
+
+
+                            <div class="row form-group">
+                                <label class="col-sm-4 col-form-label">
+                                    <label class="control-label">Months in Service at Test Date<sup>*</sup></label>
+                                </label>
+                                <div class="col-sm-8">
+                                    <label id="mntinserdt" class="form-control"></label>
+                                    <div class="error"></div>
+                                </div>
+                            </div>
+
+
+
+
+                            <div class="row form-group">
+                                <label class="col-sm-4 col-form-label">
+                                    <label class="control-label">Running hours in service<sup>*</sup></label>
+                                </label>
+                                <div class="col-sm-8">
+                                    @Html.TextBoxFor(x => x.RunningHours, new { @class = "form-control", @readonly = "true", @required = "true" })
+                                    <div class="error"></div>
+                                </div>
+                            </div>
+
+
+
+                            <div class="row form-group">
+                                <label class="col-sm-4 col-form-label">
+                                    <label class="control-label">Residual Strength as per Test Report (Percentage)<sup>*</sup></label>
+                                </label>
+                                <div class="col-sm-8">
+                                    @Html.TextBoxFor(x => x.TestResults, new { @class = "form-control listbox", @required = "true", @maxlength = 3, @onkeypress = "return isNumberKey(event)", @onKeyUp = "requiredValue(this)", @onchange = "CrpLngthChk();" })
+                                    <span id="messageLnth"></span>
+                                </div>
+                            </div>
+
+
+                            <div class="row form-group">
+                                <label class="col-sm-4 col-form-label">
+                                    <label class="control-label">Attachment<sup></sup></label>
+                                </label>
+                                <div class="col-sm-8">
+                                    @Html.TextBox("file", "", new { type = "file", onchange = "ValidateSize(this)" })
+                                    <label style="font-size:13px;font-style:italic">Acceptable file types : Image (jpg, jpeg, png), PDF, MS Word (doc, docx), Excel (xls, xlsx), PPT (ppt, pptx)</label>
+                                    @*<input class="form-group" type="file" id="file" name="ImageFile" required />*@
+                                    <div class="error"></div>
+                                </div>
+                            </div>
+
+                            <div class="row form-group">
+                                <label class="col-sm-4 col-form-label">
+                                    <label class="control-label">Remarks<sup>*</sup></label>
+                                </label>
+                                <div class="col-sm-8">
+                                    @Html.TextAreaFor(x => x.Remarks, new { @class = "form-control listbox" })
+                                    <div class="error"></div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+
+    <script>
+        $("#LabTestDate").keydown(function (e) {
+            e.preventDefault();
+        });
+
+      
+    </script>
+
+<script>
+    //$("#LabTestDate").mouseleave(function () {
+    //    alert('bla');
+    //})
+
+    //var requestSent = false;
+
+    function compcheck() {
+        debugger;
+
+        //if (!requestSent) {
+        //    requestSent = true;
+
+        var ropeid = $('#RopeId').val();
+        var lbtestdate = $('#LabTestDate').val();
+
+        $.ajax({
+            type: 'POST',
+            dataType: 'json',
+            url: '/ReslabTest/TestDate',
+            data: { 'RopeId': ropeid, 'ResLabTDate': lbtestdate, 'Ropetail': 0 },
+            success: function (response) {
+                if (response.Result == true) {
+
+                    debugger;
+
+                    $("#mntinserdt").text(response.minserchks);
+                    //$("#rnhrs").text(response.CrntRHrs);
+
+                    return;
+                }
+                else {
+                    alert('An Error has occured. Please try again.');
+                }
+            },
+            //   complete: function() {
+
+            //    requestSent = false;
+            //},
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                //toastr["error"]('An Error has occured. Please try again.');
+                alert('An Error has occured. Please try again.');
+            }
+        });
+    }
+</script>
+
+<script>
+    function checkdata(t) {
+        var Id = t.value;
+
+        $.ajax({
+            type: 'POST',
+            dataType: 'json',
+            url: '/ReslabTest/GetWinchlocation',
+            data: { 'Id': Id, 'Ropetail': 0 },
+            success: function (response) {
+                if (response.Result == true) {
+
+                    debugger;
+                    $("#linetype").text(response.linetype);
+                    $("#manuF").text(response.mname);
+                    $("#Location").val(response.locations);
+
+                    $("#mntinserdt").text(response.minserchks);
+                    $("#RunningHours").val(response.CrntRHrs);
+
+                    $("#RopeTypeId").val(response.rptypeid);
+                    $("#ManufacturerId").val(response.manufid);
+                }
+                else {
+                    alert('An Error has occured. Please try again.');
+                }
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                //toastr["error"]('An Error has occured. Please try again.');
+                alert('An Error has occured. Please try again.');
+            }
+        });
+
+    }
+</script>
+
+@*<script>
+        document.multiselect('#rsopcropping')
+            .setCheckBoxClick("checkboxAll", function (target, args) {
+                console.log("Checkbox 'Select All' was clicked and got value ", args.checked);
+            })
+            .setCheckBoxClick("1", function (target, args) {
+                console.log("Checkbox for item with value '1' was clicked and got value ", args.checked);
+            });
+
+        function enable() {
+            document.multiselect('#rsopcropping').setIsEnabled(true);
+        }
+
+        function disable() {
+            document.multiselect('#rsopcropping').setIsEnabled(false);
+        }
+    </script>*@
+
+<script type="text/javascript">
+
+    setTimeout(function () {
+
+        $('#successMessage').fadeOut('fast');
+        $('#errorMessage').fadeOut('fast');
+    }, 3000);
+
+
+</script>
+
+
+
+<script language=Javascript>
+      <!--
+    function isNumberKey(evt) {
+
+        var charCode = (evt.which) ? evt.which : event.keyCode
+        if (charCode != 46 && charCode > 31 && (charCode < 48 || charCode > 57))
+            return false;
+
+        return true;
+    }
+    //-->
+</script>
+
+<script type="text/javascript">
+    function requiredValue(arg) {
+
+
+
+        debugger;
+        var id = arg.getAttribute('id');
+        var value = arg.value;
+
+
+       // alert(value);
+
+        if (value > 100) {
+
+            var message = "";
+
+            message = document.getElementById('messageLnth');
+
+
+            var goodColor = "#0C6";
+            var badColor = "#FF0000";
+
+            message.style.color = badColor;
+            message.innerHTML = "Value can not greater then 100% !"
+            $("#" + id + "").val('');
+        }
+        else {
+
+            message = document.getElementById('messageLnth');
+
+            message.innerHTML = ""
+        }
+
+    }
+</script>
+
+<script>
+    function ValidateSize(file) {
+        debugger;
+
+        // str1 = new string[26] { "jpg", "jpeg", "png", "pps", "ppt", "pptx", "xls", "xlsm", "xlsx", "doc", "docx", "pdf", "rtf", "txt", "GIF", "WAV", "MID", "MIDI", "WMA", "MP3", "OGG", "RMA", "AVI", "MP4", "DIVX", "WMV" };
+        var fileInput = document.getElementById('file');
+        var filePath = fileInput.value;
+        var allowedExtensions = /(\.jpg|\.jpeg|\.png|\.pps|\.ppt|\.pptx|\.xls|\.xlsm|\.xlsx|\.doc|\.docx|\.pdf|\.rtf|\.txt|\.GIF|\.gif)$/i;
+        if (!allowedExtensions.exec(filePath)) {
+            // alert('Please upload file having extensions .jpeg/.jpg/.png/.gif only.');
+            alert('This file type not allowed !');
+            fileInput.value = '';
+            return false;
+        }
+        else {
+
+            var FileSize = file.files[0].size / 1024 / 1024; // in MiB
+            if (FileSize > 15) {
+                alert('File size exceeds 5 MB');
+                document.getElementById('file').value = '';
+                return false;
+                // $(file).val(''); //for clearing with Jquery
+            } else {
+
+            }
+        }
+    }
+</script>
+
+<script type="text/javascript">
+    //$('.datepicker').datepicker();
+
+
+
+    $("#LabTestDate").datepicker({
+        endDate: 'today'
+    });
+
+
+</script>
+
+<script type="text/javascript">
+    $('.datepicker').datepicker();
+</script>
+
+
+
+
+
+

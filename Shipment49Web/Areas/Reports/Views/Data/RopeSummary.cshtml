@@ -1,0 +1,118 @@
+﻿@model Shipment49Web.Areas.CrewReport.Controllers.FilterModel
+
+@{
+    ViewBag.Title = "Rope Summary";
+    Layout = "~/Views/Shared/_LeftSideBar.cshtml";
+}
+
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+
+<script>
+
+    $(function () {
+        $('.dtpicker').datepicker({
+            autoclose: true, dateFormat: 'dd-mm-yy'
+        })
+    });
+
+</script>
+
+<div class="content-wrapper">
+    <section class="content-header">
+        <h1>
+            Rope Summary
+        </h1>
+    </section>
+
+    <section class="content">
+        <div class="box box-info">
+            <div class="box-body">
+                <div class="row">
+                    @using (Html.BeginForm("RopeSummary", "data", FormMethod.Post, new { area = "Reports" }))
+                    {
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                @Html.TextBox("DateFrom", Model.DateFrom, new { @class = "form-control dtpicker", @placeholder = "Date From" })
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                @Html.TextBox("DateTo", Model.DateUpto, new { @class = "form-control dtpicker", @placeholder = "Date To" })
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <div style="float:right">
+                                    <button type="submit" class="btn btn-danger">Search</button>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="box box-default">
+                    <div class="box-body">
+                        <div class="nav-tabs-custom">
+                            <ul class="nav nav-tabs">
+                                <li class="active"><a href="#ropedetails" class="tablinks" data-toggle="tab">Details</a></li>
+                                <li><a href="#ropeendtoend" class="tablinks" data-toggle="tab">End to End</a></li>
+                                <li><a href="#ropesplicing" class="tablinks" data-toggle="tab">Splicing</a></li>
+                                <li><a href="#ropecropping" class="tablinks" data-toggle="tab">Cropping</a></li>
+                                <li><a href="#ropedamage" class="tablinks" data-toggle="tab">Damage</a></li>
+                                <li><a href="#ropediscard" class="tablinks" data-toggle="tab">Discard</a></li>
+                                <li><a href="#ropedisposal" class="tablinks" data-toggle="tab">Disposal</a></li>
+                            </ul>
+                            <div class="tab-content" style="min-height: 650px">
+                                <div class="tab-pane active" id="ropedetails">
+                                    <div class="table-responsive table-striped">
+                                        <table class="table no-margin" id="dataTable" width="100%" cellspacing="0">
+                                        </table>
+                                    </div>
+                                </div>
+                                <div class="tab-pane" id="ropeendtoend">
+                                    <div class="table-responsive table-striped">
+                                        <table class="table no-margin" id="dataTable" width="100%" cellspacing="0">
+                                        </table>
+                                    </div>
+                                </div>
+                                <div class="tab-pane" id="ropesplicing">
+                                    <div class="table-responsive table-striped">
+                                        <table class="table no-margin" id="dataTable" width="100%" cellspacing="0">
+                                        </table>
+                                    </div>
+                                </div>
+                                <div class="tab-pane" id="ropecropping">
+                                    <div class="table-responsive table-striped">
+                                        <table class="table no-margin" id="dataTable" width="100%" cellspacing="0">
+                                        </table>
+                                    </div>
+                                </div>
+                                <div class="tab-pane" id="ropedamage">
+                                    <div class="table-responsive table-striped">
+                                        <table class="table no-margin" id="dataTable" width="100%" cellspacing="0">
+                                        </table>
+                                    </div>
+                                </div>
+                                <div class="tab-pane" id="ropediscard">
+                                    <div class="table-responsive table-striped">
+                                        <table class="table no-margin" id="dataTable" width="100%" cellspacing="0">
+                                        </table>
+                                    </div>
+                                </div>
+                                <div class="tab-pane" id="ropedisposal">
+                                    <div class="table-responsive table-striped">
+                                        <table class="table no-margin" id="dataTable" width="100%" cellspacing="0">
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>

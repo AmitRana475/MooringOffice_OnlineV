@@ -1,0 +1,212 @@
+﻿@model Reports.LooseEDisposal
+@{
+    /**/
+
+    ViewBag.Title = "AddDisposal";
+    Layout = "~/Views/Shared/_LayoutVessel7.cshtml";
+}
+
+
+
+<div class="content">
+
+    @using (Html.BeginForm("AddDisposal", "LEDamaged"))
+    {
+        <div class="page-heading page-header-flex">
+            <div>
+                <h1 class="page-title">
+                    Add Loose Equipment Disposal / @ViewBag.LooseEquipmentType
+                </h1>
+                <ol class="breadcrumb">
+                    <li><a href="">Home</a></li>
+                    <li><a href="">Form</a></li>
+                    <li><a>Create</a></li>
+                </ol>
+            </div>
+            <div class="form-actions">
+                <button id="btnSubmit" name="btnSubmit" type="submit" class="btn btn-success btn-width"><i class="uil uil-check mr-2"></i>Submit</button>
+                <button name="Reset" type="reset" id="btnReset" class="btn btn-danger btn-width"><i class="uil uil-redo mr-2"></i>Reset</button>
+            </div>
+        </div>
+
+
+        <div class="wrapper wrapper-content">
+            <div class="container">
+                @if (TempData["Error"] != null)
+                {
+                    <p class="alert alert-danger" id="errorMessage">@TempData["Error"]</p>
+                }
+                @if (TempData["Success"] != null)
+                {
+                    <p class="alert alert-success" id="successMessage">@TempData["Success"]</p>
+                }
+                <div class="form-body">
+                    <div class="row">
+                        @Html.AntiForgeryToken()
+
+
+                        <div class="col-md-8 mx-auto">
+
+                            <div style="display:none">
+                                @Html.EditorFor(model => model.LooseETypeId, new { htmlAttributes = new { @class = "form-control", @required = "true", } })
+
+                            </div>
+
+                            <div style="display:none">
+                                @Html.EditorFor(model => model.LooseECertiNo, new { htmlAttributes = new { @class = "form-control", @required = "false", } })
+
+                            </div>
+
+                            <div class="row form-group ">
+                                <label class="col-sm-4 col-form-label">
+                                    <label class="control-label">Select Discard @ViewBag.LooseEquipmentType<sup>*</sup></label>
+                                </label>
+                                <div class="col-sm-8">
+                                    @Html.DropDownListFor(model => model.LEQuipID, new SelectList(Model.GetAllLE_DiscardedDetail, "Value", "Text"), "", htmlAttributes: new { @class = "form-control select2", @required = "true", @onchange = "FindCertificate()" })
+                                    <div class="error"></div>
+                                </div>
+                            </div>
+
+                            <div class="row form-group">
+                                <label class="col-sm-4 col-form-label">
+                                    <label class="control-label">Discarded Date<sup>*</sup></label>
+                                </label>
+                                <div class="col-sm-8">
+                                    @Html.EditorFor(model => model.DiscardedDate1, new { htmlAttributes = new { @class = "form-control", @Readonly = "Readonly", @autocomplete = "Off", @required = "false", } })
+
+                                    @*@Html.TextBoxFor(x => x.DiscardedDate1, "{0:yyyy-MM-dd}", new { @class = "form-control datepicker", @placeholder = "yyyy-mm-dd", @required = "true" })*@
+                                    <div class="error"></div>
+                                </div>
+                            </div>
+
+
+
+                            <div class="row form-group">
+                                <label class="col-sm-4 col-form-label">
+                                    <label class="control-label">Disposal Port Name<sup>*</sup></label>
+                                </label>
+                                <div class="col-sm-8">
+                                    @Html.EditorFor(model => model.DisposalPortName, new { htmlAttributes = new { @class = "form-control", @required = "true", } })
+
+                                    <div class="error"></div>
+                                </div>
+                            </div>
+
+
+                            <div class="row form-group">
+                                <label class="col-sm-4 col-form-label">
+                                    <label class="control-label">Reception Facility Name<sup>*</sup></label>
+                                </label>
+                                <div class="col-sm-8">
+                                    @Html.EditorFor(model => model.ReceptionFacilityName, new { htmlAttributes = new { @class = "form-control", @required = "true", } })
+
+                                    <div class="error"></div>
+                                </div>
+                            </div>
+
+
+                            <div class="row form-group">
+                                <label class="col-sm-4 col-form-label">
+                                    <label class="control-label">Disposal Date<sup>*</sup></label>
+                                </label>
+                                <div class="col-sm-8">
+                                    @Html.TextBoxFor(x => x.DisposalDate, "{0:yyyy-MM-dd}", new { @class = "form-control datepicker", @placeholder = "yyyy-mm-dd", @autocomplete = "Off",  @required = "true" })
+                                    <div class="error"></div>
+                                </div>
+                            </div>
+
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    }
+
+
+</div>
+
+
+<script>
+
+    //window.onload = function () {
+
+    //    FindCertificate();
+    //};
+
+    $("#DisposalDate").keydown(function (e) {
+        e.preventDefault();
+    });
+
+    function FindCertificate() {
+
+        var cc = $("#LEQuipID option:selected").text();
+        $('#LooseECertiNo').val(cc);
+
+        var t = $("#LEQuipID").val();
+        checkdata(t);
+
+    }
+
+    var cc = $("#LEQuipID option:selected").text();
+    $('#LooseECertiNo').val(cc);
+
+</script>
+
+<script>
+    function checkdata(t) {
+        var Id = t;
+        var type = $('#LooseETypeId').val();
+        $.ajax({
+            type: 'POST',
+            dataType: 'json',
+            url: '/LEDamaged/GetDiscardDate',
+            data: { 'Id': Id, 'LET': type },
+            success: function (response) {
+                if (response.Result == true) {
+
+                    // debugger;
+
+                    $("#DiscardedDate1").val(response.outboard);
+
+                }
+                else {
+                    alert('An Error has occured. Please try again.');
+                }
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                //toastr["error"]('An Error has occured. Please try again.');
+                alert('An Error has occured. Please try again.');
+            }
+        });
+
+    }
+</script>
+
+<script type="text/javascript">
+
+    setTimeout(function () {
+
+        $('#successMessage').fadeOut('fast');
+        $('#errorMessage').fadeOut('fast');
+    }, 3000);
+
+
+</script>
+<script type="text/javascript">
+    $('.datepicker').datepicker();
+</script>
+
+
+<script>
+    $('#btnReset').click(function () {
+        $("#LooseETypeId").val(null).trigger("change");
+        $("#LEQuipID").val(null).trigger("change");
+       
+    });
+</script>
+
+

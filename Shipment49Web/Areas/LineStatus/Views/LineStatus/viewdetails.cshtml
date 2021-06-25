@@ -1,0 +1,508 @@
+﻿@model Shipment49Web.Areas.LineStatus.Models.LineStatusClass
+@{
+    ViewBag.Title = "viewdetails";
+    Layout = "~/Views/Shared/_LayoutVessel7.cshtml";
+}
+
+
+<div class="content" >
+    <div class="page-heading page-header-flex">
+        <div>
+            <h1 class="page-title">
+                Line Status
+            </h1>
+            @*<ol class="breadcrumb">
+                <li><a href="">Home</a></li>
+                <li><a href="">Form</a></li>
+                <li><a>Create</a></li>
+            </ol>*@
+        </div>
+        <div>
+
+        </div>
+    </div>
+
+
+    <div class="li-side klxapq">
+				@*<label>Total Students:</label>  @ViewBag.TotalStudents*@
+
+				<label>Winch - @ViewBag.Winch | </label>
+				<label>Location -  @ViewBag.Location | </label>
+				<label>Total Running Hours -  @ViewBag.TtlRnghrs | </label>
+				<label>Next Inspection Due - @ViewBag.NxtInsDue | </label>
+				<label>OutboardEnd -  @ViewBag.OutboardEnd</label>
+			</div>
+    <div class="admin-tabs">	
+        <ul class="nav nav-pills">
+            <li class="active"><a data-toggle="pill" href="#tab1">Line Detail</a></li>
+            <li><a data-toggle="pill" href="#tab2">Inspection</a></li>
+            <li><a data-toggle="pill" href="#tab3">Splicing</a></li>
+            <li><a data-toggle="pill" href="#tab4">Cropping</a></li>
+            <li><a data-toggle="pill" href="#tab5">Damage</a></li>
+            <li><a data-toggle="pill" href="#tab6">Discard</a></li>
+            <li><a data-toggle="pill" href="#tab7">Disposal</a></li>
+            <li><a data-toggle="pill" href="#tab8">End to End</a></li>
+            <li><a data-toggle="pill" href="#tab9">Winch Rotation</a></li>
+        </ul>
+    </div>
+    <div class="wrapper wrapper-content">
+        <div class="container-fluid">
+            <div class="tab-content">
+                <div id="tab1" class="tab-pane fade in active">
+
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead class="thead-dark">
+                                <tr>
+                                    <th>Type</th>
+                                    <th>Unique Ident. No.</th>
+                                    <th>Certificate No.</th>
+                                    <th>Manufacturer</th>
+                                    <th>Rope Const.</th>
+                                    <th>Diameter</th>
+                                    <th>Original Length</th>
+                                    <th>Current Length</th>
+                                    <th>MBL</th>
+                                    <th>LDBF</th>
+                                    <th>WILL</th>
+                                    <th>Received Date</th>
+                                    <th>Insatlled Date</th>
+                                    <th>Tagging</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model.MooringLineList)
+                                {
+                                    <tr>
+                                        <td> @Html.DisplayFor(modelItem => item.RopeType)</td>
+                                        <td> @Html.DisplayFor(modelItem => item.UniqueID)</td>
+                                        <td> @Html.DisplayFor(modelItem => item.CertificateNumber)</td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.ManufacturerName)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.RopeConstruction)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.DiaMeter)
+                                        </td>
+                                        <td> @Html.DisplayFor(modelItem => item.Length)</td>
+                                        <td> @Html.DisplayFor(modelItem => item.CurrentLength)</td>
+                                        <td> @Html.DisplayFor(modelItem => item.MBL)</td>
+
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.LDBF)
+                                        </td>
+                                        <td> @Html.DisplayFor(modelItem => item.WLL)</td>
+                                        <td> @Html.DisplayFor(modelItem => item.ReceivedDate1)</td>
+                                        <td> @Html.DisplayFor(modelItem => item.InstalledDate1)</td>
+                                        <td> @Html.DisplayFor(modelItem => item.RopeTagging)</td>
+
+
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+                <div id="tab2" class="tab-pane fade">
+
+                    <div class="table-responsive">
+
+
+                        <table class="table">
+                            <thead class="thead-dark">
+                                <tr>
+                                    <th>Inspected Date</th>
+                                    <th>Inspect By</th>
+                                    <th>Certificate No.</th>
+
+                                    <th>External Rating (A)</th>
+                                    <th>Internal Rating (A)</th>
+                                    <th>Average Rating (A)</th>
+                                    <th>Length of Abrasion (A)</th>
+                                    <th>Disatance Outboard (A)</th>
+                                    <th>Cut Yarn Count (A)</th>
+                                    <th>Length of Glazing(A)</th>
+
+                                    <th>External Rating (B)</th>
+                                    <th>Internal Rating (B)</th>
+                                    <th>Average Rating (B)</th>
+                                    <th>Length of Abrasion (B)</th>
+                                    <th>Disatance Outboard (B)</th>
+                                    <th>Cut Yarn Count (B)</th>
+                                    <th>Length of Glazing(B)</th>
+                                    <th>Chafe Gaurd Condition</th>
+                                    <th>Twist</th>
+                                    <th>Photo 1</th>
+                                    <th>Photo 2</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                                @foreach (var item in Model.InspectionDetail)
+                                {
+                                    <tr>
+
+                                        <td> @Html.DisplayFor(modelItem => item.InspectDate1)</td>
+                                        <td> @Html.DisplayFor(modelItem => item.InspectBy)</td>
+                                        <td> @Html.DisplayFor(modelItem => item.CertificateNumber)</td>
+                                        <td> @Html.DisplayFor(modelItem => item.ExternalRating_A)</td>
+                                        <td> @Html.DisplayFor(modelItem => item.InternalRating_A)</td>
+                                        <td>@Html.DisplayFor(modelItem => item.AverageRating_A)</td>
+                                        <td> @Html.DisplayFor(modelItem => item.LengthOFAbrasion_A)</td>
+                                        <td> @Html.DisplayFor(modelItem => item.DistanceOutboard_A)</td>
+                                        <td>@Html.DisplayFor(modelItem => item.CutYarnCount_A)</td>
+                                        <td> @Html.DisplayFor(modelItem => item.LengthOFGlazing_A)</td>
+
+                                        <td> @Html.DisplayFor(modelItem => item.ExternalRating_B)</td>
+                                        <td> @Html.DisplayFor(modelItem => item.InternalRating_B)</td>
+                                        <td>@Html.DisplayFor(modelItem => item.AverageRating_B)</td>
+                                        <td> @Html.DisplayFor(modelItem => item.LengthOFAbrasion_B)</td>
+                                        <td> @Html.DisplayFor(modelItem => item.DistanceOutboard_B)</td>
+                                        <td>@Html.DisplayFor(modelItem => item.CutYarnCount_B)</td>
+                                        <td> @Html.DisplayFor(modelItem => item.LengthOFGlazing_B)</td>
+                                        <td> @Html.DisplayFor(modelItem => item.Chafe_guard_condition)</td>
+                                        <td> @Html.DisplayFor(modelItem => item.Twist)</td>
+
+                                        <td style="width:200px">
+
+                                            @if (item.Image1 != "")
+                                            {
+
+                                                <img style='width: 80px; height: 80px;border-radius: 5px;cursor: pointer;transition: 0.3s;' onclick='return showImageIns(this)' src="~/images/InspectionImages/@item.Image1">
+
+                                            }
+                                            else
+                                            {
+                                                <img style='width: 80px; height: 80px;border-radius: 5px;cursor: pointer;transition: 0.3s;' src="~/images/noimage.png">
+
+                                            }
+
+                                        </td>
+
+                                        <td style="width:200px">
+
+                                            @if (item.Image2 != "")
+                                            {
+
+                                                <img style='width: 80px; height: 80px;border-radius: 5px;cursor: pointer;transition: 0.3s;' onclick='return showImageIns(this)' src="@item.Image2">
+
+                                            }
+                                            else
+                                            {
+                                                <img style='width: 80px; height: 80px;border-radius: 5px;cursor: pointer;transition: 0.3s;' src="~/images/noimage.png">
+
+                                            }
+
+                                        </td>
+
+
+                                    </tr>
+                                }
+
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+                <div id="tab3" class="tab-pane fade">
+
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead class="thead-dark">
+                                <tr>
+                                    <th>Splicing Done Date</th>
+                                    <th>Certificate No.</th>
+                                    <th>Splicing Done By</th>
+                                    <th>Splicing Method</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model.RopeSplicingList)
+                                {
+
+
+                                    <tr>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.SplicingDoneDate)
+                                        </td>
+
+                                        <td> @Html.DisplayFor(modelItem => item.CertificateNumber)</td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.SplicingDoneBy)
+                                        </td>
+                                        <td> @Html.DisplayFor(modelItem => item.SplicingMethod)</td>
+
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+                <div id="tab4" class="tab-pane fade">
+
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead class="thead-dark">
+                                <tr>
+                                    <th>Cropping Date</th>
+                                    <th>Certificate No.</th>
+                                    <th>Cropped Outboard End</th>
+                                    <th>Length of Cropping</th>
+                                    <th>Reason of Cropping</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model.RopeCroppingList)
+                                {
+
+
+                                    <tr>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.CroppedDate)
+                                        </td>
+                                        <td> @Html.DisplayFor(modelItem => item.CertificateNumber)</td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.CroppedOutboardEnd)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.LengthofCroppedRope)
+                                        </td>
+
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.ReasonofCropping)
+                                        </td>
+
+
+
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+                <div id="tab5" class="tab-pane fade">
+
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead class="thead-dark">
+                                <tr>
+                                    <th>Damage Date</th>
+                                    <th>Certificate No.</th>
+                                    <th>Damage Observed</th>
+                                    <th>Incident Report</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model.RopeDamageList)
+                                {
+
+
+                                    <tr>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.DamageDate)
+                                        </td>
+                                        <td> @Html.DisplayFor(modelItem => item.CertificateNumber)</td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.DamageObserved)
+                                        </td>
+
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.IncidentReport)
+                                        </td>
+
+
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+                <div id="tab6" class="tab-pane fade">
+
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead class="thead-dark">
+                                <tr>
+                                    <th>Out of Service Date</th>
+                                    <th>Certificate No.</th>
+                                    <th>Rope Type</th>
+                                    <th>Reason Out of Service</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model.MooringLineDiscardList)
+                                {
+                                    <tr>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.OutofServiceDate1)
+                                        </td>
+                                        <td> @Html.DisplayFor(modelItem => item.CertificateNumber)</td>
+
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.RopeType)
+                                        </td>
+
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.ReasonOutofService)
+                                        </td>
+
+
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+                <div id="tab7" class="tab-pane fade">
+
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead class="thead-dark">
+                                <tr>
+                                    <th>Disposal Date</th>
+                                    <th>Certificate No.</th>
+                                    <th>Disposal Port Name</th>
+                                    <th>Reception Facility Name</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model.RopeDisposalList)
+                                {
+                                    <tr>
+
+                                        <td> @Html.DisplayFor(modelItem => item.DisposalDate)</td>
+                                        <td> @Html.DisplayFor(modelItem => item.CertificateNumber)</td>
+
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.DisposalPortName)
+                                        </td>
+
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.ReceptionFacilityName)
+                                        </td>
+
+
+
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+                <div id="tab8" class="tab-pane fade">
+
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead class="thead-dark">
+                                <tr>
+                                    <th>End to End Done Date</th>
+                                    <th>Certificate No.</th>
+                                    <th>Current Outboard End in Use</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model.RopeEndtoEndList)
+                                {
+
+
+                                    <tr>
+
+                                        <td> @Html.DisplayFor(modelItem => item.EndtoEndDoneDate)</td>
+                                        <td> @Html.DisplayFor(modelItem => item.CertificateNumber)</td>
+
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.CurrentOutboadEndinUse1)
+                                        </td>
+
+
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+
+                <div id="tab9" class="tab-pane fade">
+
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead class="thead-dark">
+                                <tr>
+                                    <th>Assigned Winch</th>
+                                    <th>Assigned Date</th>
+                                    <th>Winch Location</th>
+                                    <th>Winch Lead</th>
+                                    <th>Running hrs done(for that lead)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model.WinchRotationList)
+                                {
+
+
+                                    <tr>
+
+                                        <td> @Html.DisplayFor(modelItem => item.AssignedNumber)</td>
+                                        <td> @Html.DisplayFor(modelItem => item.AssignedDate)</td>
+
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Location)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Lead)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.RunningHours)
+                                        </td>
+
+
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<div id="ImageModalInspection" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title"></h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12 d-flex justify-content-center align-items-center">
+                        <img id="imgNameIns" />
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    function showImageIns(param) {
+        var imgSrc = $(param).attr("src");
+        //alert(imgSrc);
+        $('#imgNameIns').attr('src', imgSrc);
+        $('#ImageModalInspection').modal('show');
+    }
+</script>

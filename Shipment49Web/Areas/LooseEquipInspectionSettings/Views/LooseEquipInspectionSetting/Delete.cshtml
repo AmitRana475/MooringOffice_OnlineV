@@ -1,0 +1,76 @@
+﻿@model Reports.tblLooseEquipInspectionSetting
+
+@{
+    ViewBag.Title = "Delete";
+    Layout = "~/Views/Shared/_LeftSideBar.cshtml";
+}
+
+<div class="content-wrapper">
+    <section class="content-header">
+        <h1>
+            Loose Equipment Inspection Setting
+        </h1>
+        <p class="pull-right">
+            @Html.ActionLink("Back to List", "Index")
+        </p>
+    </section>
+    <section class="content">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="box box-info">
+                    <div class="box-body">
+                        <div class="table-responsive table-striped">
+                            <table class="table no-margin" id="dataTable" width="100%" cellspacing="0">
+                                @using (Html.BeginForm("DeleteType", "LooseEquipInspectionSetting"))
+                                {
+                                    <tr>
+                                        <th>
+                                            @Html.DisplayNameFor(model => model.EquipmentType)
+                                        </th>
+                                        <th>
+                                            @Html.DisplayNameFor(model => model.InspectionFrequency)
+                                        </th>
+                                        <th>
+                                            @Html.DisplayNameFor(model => model.MaximumRunningHours)
+                                        </th>
+                                        <th>
+                                            @Html.DisplayNameFor(model => model.MaximumMonthsAllowed)
+                                        </th>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            @Html.DisplayFor(model => model.EquipmentTypeName)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(model => model.InspectionFrequency)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(model => model.MaximumRunningHours)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(model => model.MaximumMonthsAllowed)
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="4">
+                                            <h4>
+                                                Are you sure you want to delete the above record ?
+                                            </h4>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="4">
+                                            @Html.AntiForgeryToken()
+                                            @Html.HiddenFor(e => e.Id)
+                                            <input type="submit" value="Delete" class="btn btn-danger" />
+                                        </td>
+                                    </tr>
+                                }
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>

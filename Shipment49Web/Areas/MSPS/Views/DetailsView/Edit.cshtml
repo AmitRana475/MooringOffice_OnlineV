@@ -1,0 +1,93 @@
+﻿@model Shipment49Web.Areas.MSPS.Models.DocsPagesModel
+
+@{
+    /**/
+
+    ViewBag.Title = "Edit";
+    //Layout = "~/Views/Shared/_Layout.cshtml";
+    Layout = "~/Views/Shared/_LeftSideBar.cshtml";
+}
+
+<div class="content-wrapper">
+    <section class="content-header">
+        <h1>
+            Notifications
+        </h1>
+    </section>
+
+    <section class="content">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="box box-info">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">Notifications</h3>
+                    </div>
+
+                    @using (Html.BeginForm("Edit", "detailsview", new { area = "MSMP" }, FormMethod.Post))
+                    {
+                        @Html.AntiForgeryToken()
+
+                        <div class="box-body">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="input-group">
+                                        @Html.TextAreaFor(m => m.Content, new { rows = "20", style = "resize:none; width:700px;", @class = "form-control input-lg textarea-editor" })
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="box-footer clearfix">
+                            <input type="submit" value="Update" class="btn btn-sm btn-info btn-flat pull-left" />
+                            <a href="~/MSPS/DetailsView?id=@Model.Mid" class="btn btn-sm btn-default btn-flat pull-right">Back to List</a>
+                            @*@Html.ActionLink("Back to List", "Index", null, new { @class = "btn btn-sm btn-default btn-flat pull-right" })*@
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+
+
+
+@section Scripts
+	{
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.12/summernote-lite.css" rel="stylesheet">
+    @*<script src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.12/summernote-lite.js"></script>*@
+
+    <script src="~/js/summernote.js"></script>
+
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('.textarea-editor').summernote({
+                tabsize: 2,
+                minHeight: null,             // set minimum height of editor
+                maxHeight: null,
+                height: 400
+            });
+        });
+
+
+
+        $('.textarea-editor').summernote({
+         
+
+            height: "300px",
+            callbacks: {
+                onImageUpload: function (image) {
+                    alert(55);
+                    uploadImage(image[0]);
+                },
+                onMediaDelete: function (target) {
+                    debugger;
+                    alert(target[0].src);
+                    deleteImage(target[0].src);
+                    debugger;
+                }
+            }
+        });
+    </script>
+}

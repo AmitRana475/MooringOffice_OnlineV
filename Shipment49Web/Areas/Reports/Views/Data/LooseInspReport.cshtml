@@ -1,0 +1,91 @@
+﻿@model Shipment49Web.Areas.CrewReport.Controllers.FilterModel
+
+@{
+    ViewBag.Title = "Loose Inspection Report";
+    Layout = "~/Views/Shared/_LeftSideBar.cshtml";
+}
+
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+
+<script>
+
+    $(function () {
+        $('.dtpicker').datepicker({
+            autoclose: true, dateFormat: 'dd-mm-yy'
+        })
+    });
+
+</script>
+
+<div class="content-wrapper">
+    <section class="content-header">
+        <h1>
+            Loose Equipment Inspection Report
+        </h1>
+    </section>
+
+    <section class="content">
+        <div class="box box-info">
+            <div class="box-body">
+                <div class="row">
+                    @using (Html.BeginForm("RopeInspReport", "data", FormMethod.Post, new { area = "Reports" }))
+                    {
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                @Html.TextBox("DateFrom", Model.DateFrom, new { @class = "form-control dtpicker", @placeholder = "Date From" })
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                @Html.TextBox("DateTo", Model.DateUpto, new { @class = "form-control dtpicker", @placeholder = "Date To" })
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <div style="float:right">
+                                    <button type="submit" class="btn btn-danger">Search</button>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="box box-default">
+                    <div class="box-body">
+                        <div class="table-responsive table-striped">
+                            <table class="table no-margin" id="dataTable" width="100%" cellspacing="0">
+                                <thead>
+                                    <tr>
+                                        <th>Inspection Date</th>
+                                        <th>Inspected By</th>
+                                        <th>Loose Equipment Type</th>
+                                        <th>Condition</th>
+                                        <th>Remarks</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @{
+                                        foreach (var record in Model.ListLooseEquipmentInspection)
+                                        {
+                                            <tr>
+                                                <td>@record.InspectDate</td>
+                                                <td>@record.InspectBy</td>
+                                                <td>@record.LooseEquipmentType</td>
+                                                <td>@record.Condition</td>
+                                                <td>@record.Remarks</td>
+                                            </tr>
+                                        }
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>

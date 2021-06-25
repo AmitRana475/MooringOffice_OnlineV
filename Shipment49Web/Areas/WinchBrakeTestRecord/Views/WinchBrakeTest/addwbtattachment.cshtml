@@ -1,0 +1,97 @@
+﻿
+
+@model Shipment49Web.Areas.WinchBrakeTestRecord.Models.WbtRecordClass
+@{
+    ViewBag.Title = "addwbtattachment";
+    Layout = "~/Views/Shared/_LayoutVessel7.cshtml";
+}
+
+
+<div class="content">
+    @using (Html.BeginForm("addwbtattachment", "WinchBrakeTest", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        <div class="page-heading page-header-flex">
+            <div>
+                <h1 class="page-title">
+                    Add Winch Brake Test Attachment
+                </h1>
+                @*<ol class="breadcrumb">
+                        <li><a href="">Home</a></li>
+                        <li><a href="">Form</a></li>
+                        <li><a>Create</a></li>
+                    </ol>*@
+            </div>
+            <div class="form-actions">
+                <button name="Submit" type="submit" id="btnSubmit" class="btn btn-success btn-width"><i class="uil uil-check mr-2"></i>Submit</button>
+                <button name="Reset" type="reset" class="btn btn-danger btn-width"><i class="uil uil-redo mr-2"></i>Reset</button>
+            </div>
+        </div>
+
+
+        <div class="wrapper wrapper-content">
+            <div class="container">
+                @if (TempData["Error"] != null)
+                {
+                    <p class="alert alert-danger" id="errorMessage">@TempData["Error"]</p>
+                }
+                @if (TempData["Success"] != null)
+                {
+                    <p class="alert alert-success" id="successMessage">@TempData["Success"]</p>
+                }
+                <div class="form-body">
+                    <div class="row">
+                        @Html.AntiForgeryToken()
+                        @Html.HiddenFor(e => e.Id)
+
+
+                        <div class="col-md-8 mx-auto">
+
+                            <div class="row form-group">
+                                <label class="col-sm-4 col-form-label">
+                                    <label class="control-label">File Name<sup>*</sup></label>
+                                </label>
+                                <div class="col-sm-8">
+                                    @Html.TextBoxFor(x => x.AttachmentName, new { @class = "form-control", @required = "true", @Maxlength=50 })
+                                    <div class="error"></div>
+                                </div>
+                            </div>
+
+                            <div class="row form-group">
+                                <label class="col-sm-4 col-form-label">
+                                    <label class="control-label">Date<sup>*</sup></label>
+                                </label>
+                                <div class="col-sm-8">
+                                    @Html.TextBoxFor(x => x.AttachmentDate, "{0:yyyy-MM-dd}", new { @class = "form-control datepicker", @autocomplete = "Off", @readOnly = "true", @required = "true", @placeholder = "yyyy-mm-dd" })
+                                    <div class="error"></div>
+                                </div>
+                            </div>
+
+
+                            <div class="row form-group">
+                                <label class="col-sm-4 col-form-label">
+                                    <label class="control-label">Attachment<sup>*</sup></label>
+                                </label>
+                                <div class="col-sm-8">
+                                   
+                                    <input class="form-group" type="file" name="ImageFile" required />
+                                </div>
+                            </div>
+
+                          
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+
+    }
+</div>
+
+
+<script type="text/javascript">
+    $('.datepicker').datepicker();
+</script>

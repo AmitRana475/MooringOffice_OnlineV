@@ -1,0 +1,75 @@
+﻿
+
+@model Shipment49Web.Areas.TrainingContent.Models.TrainingAttachmentClass
+@{
+    ViewBag.Title = "addtrainingattachment";
+    Layout = "~/Views/Shared/_LayoutOthers.cshtml";
+}
+
+
+
+<div class="content">
+    <div class="container-fluid">
+        <div class="row">
+            @if (TempData["Error"] != null)
+            {
+                <p class="alert alert-danger" id="errorMessage">@TempData["Error"]</p>
+            }
+            @if (TempData["Success"] != null)
+            {
+                <p class="alert alert-success" id="successMessage">@TempData["Success"]</p>
+            }
+            <div class="col-md-10">
+                <div class="card">
+                    <div class="card-header card-header-primary">
+                        <h4 class="card-title">Add Winch Brake Test</h4>
+                    </div>
+                    <div class="card-body">
+
+
+
+
+
+                        @*@using (Html.BeginForm("addmooringinfo", "MooringLine", FormMethod.Post, new { id = "myForm", enctype = "multipart/form-data", onsubmit = "btnSubmit.disabled = true; return true;" }))*@
+                        @using (Html.BeginForm("addtrainingattachment", "TrainingC", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                        {
+                            @Html.AntiForgeryToken()
+                            @Html.HiddenFor(e => e.Id)
+
+
+                        <div id="tabsecond">
+
+
+                            <div class="form-group">
+                                <label class="bmd-label-floating">File Name</label>
+                                @Html.TextBoxFor(x => x.AttachmentName, new { @class = "form-control", @required = "true" })
+                            </div>
+
+                            @*<div class="form-group">
+                                <label class="label">Date</label>
+                                @Html.TextBoxFor(x => x.AttachmentDate, "{0:yyyy-MM-dd}", new { @class = "form-control", @required = "true", @type = "date" })
+                            </div>*@
+
+                            <div >
+                                <label class="label">Attachment</label><br />
+                                <input class="form-group" type="file" name="ImageFile" required />
+                            </div>
+
+                            <div class="btn-next-con">
+                                <input class="btn btn-primary pull-right" onclick="showSelectsd();" id="btnSubmit" name="btnSubmit" style="width: 12%;cursor:pointer;" type="submit" value="Save" />
+                            </div>
+                        </div>
+                        }
+
+                    </div>
+                </div>
+
+
+
+
+            </div>
+
+        </div>
+    </div>
+</div>
+

@@ -1,0 +1,40 @@
+﻿
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DigimoorX7 ForgotPassword</title>
+    @Styles.Render("~/Content/css")
+    @Styles.Render("~/Content/cssform")
+    @Scripts.Render("~/bundles/modernizr")
+
+
+</head>
+<body>
+    <div class="login_bg">
+        <div class="container">
+            <div class="col-sm-6 col-sm-offset-3">
+                <div class="wrapper-page login-warp">
+                    <h2>
+                        <img src="http://work-ship.com/wp-content/uploads/2016/05/logo.png" alt="Shipping work and rest hrs" class="ship-logo">
+                    </h2>
+                    <div class="clearfix">&nbsp;</div>
+                    <div class="clearfix">&nbsp;</div>
+                    <div class="clearfix">&nbsp;</div>
+                    <div class="clearfix">&nbsp;</div>
+                    @RenderBody()
+                    <div class="text-center copyright">&copy; @DateTime.Now.Year - 49WebStreet (Work-Ship)</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/bundles/jqueryval")
+    <link href="/Content/helper.css" rel="stylesheet">
+    @RenderSection("scripts", required: false)
+
+</body>
+</html>

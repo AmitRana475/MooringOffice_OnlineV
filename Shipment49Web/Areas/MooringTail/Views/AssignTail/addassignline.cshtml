@@ -1,0 +1,246 @@
+﻿
+
+
+@model Reports.AssignRopeToWinch
+@{
+    ViewBag.Title = "addassignline";
+    Layout = "~/Views/Shared/_LayoutVessel7.cshtml";
+}
+
+
+
+
+@using (Html.BeginForm("addassignline", "AssignTail"))
+{
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(e => e.Id)
+
+    <div id="page-wrapper" class="content">
+
+        <div class="page-heading page-header-flex">
+            <div>
+                <h1 class="page-title">
+                    Assign RopeTail to Winch
+                </h1>
+                @*<ol class="breadcrumb">
+                        <li><a href="">Home</a></li>
+                        <li><a href="">Form</a></li>
+                        <li><a>Create</a></li>
+                    </ol>*@
+            </div>
+            <div class="form-actions">
+                <button name="Submit" type="submit" class="btn btn-success btn-width"><i class="uil uil-check mr-2"></i>Submit</button>
+                <button name="Reset" type="reset" id="btnReset" class="btn btn-danger btn-width"><i class="uil uil-redo mr-2"></i>Reset</button>
+                <a name="back" id="btnBack" onclick="goBack()" class="btn btn-primary btn-width"> << Go Back</a>
+            </div>
+        </div>
+        <div class="wrapper wrapper-content">
+            <div class="container">
+                <div class="form-body">
+                    <div class="row">
+                        <div class="col-md-8 mx-auto">
+                            <div class="row form-group ">
+                                <label class="col-sm-4 col-form-label">
+                                    <label class="control-label">Select RopeTail<sup>*</sup></label>
+                                </label>
+                                <div class="col-sm-8">
+
+                                    @Html.DropDownListFor(model => model.RopeId, new SelectList(Model.MooringLineLists, "Id", "CertificateNumber"), "", htmlAttributes: new { @class = "form-control select2", @required = "true", })
+                                    <div class="error"></div>
+                                </div>
+                            </div>
+                            <div class="row form-group ">
+                                <label class="col-sm-4 col-form-label">
+                                    <label class="control-label">Outboard end in use<sup>*</sup></label>
+                                </label>
+                                <div class="col-sm-8">
+                                    <div class="">
+                                        @*<label class="radio-inline"><input type="radio" name="optradio">A</label>
+                                            <label class="radio-inline"><input type="radio" name="optradio">B</label>*@
+
+                                        @Html.RadioButtonFor(model => model.Outboard, "true", new { id = "A", @checked = true, @class = "radio-inline", @name = "optradio" })
+
+                                        @Html.Label("A", "A")
+
+                                        &nbsp;
+                                        @Html.RadioButtonFor(model => model.Outboard, "false", new { id = "B", @class = "radio-inline", @name = "optradio" })
+                                        @Html.Label("B", "B")
+                                    </div>
+                                    <div class="error"></div>
+                                </div>
+                            </div>
+                            <div class="row form-group">
+                                <label class="col-sm-4 col-form-label">
+                                    <label class="control-label">Assigned Date<sup>*</sup></label>
+                                </label>
+                                <div class="col-sm-8">
+                                    @Html.TextBoxFor(x => x.AssignedDate, "{0:yyyy-MM-dd}", new { @class = "form-control datepicker", @autocomplete = "Off",  @required = "true", @onchange = "datecheck(this)", @placeholder = "yyyy-mm-dd" })
+                                    <div class="error"></div>
+                                </div>
+                            </div>
+
+                            <div class="row form-group ">
+                                <label class="col-sm-4 col-form-label">
+                                    <label class="control-label">Assign RopeTail to Winch<sup>*</sup></label>
+                                </label>
+                                <div class="col-sm-8">
+
+                                    @Html.DropDownListFor(model => model.WinchId, new SelectList(Model.MooringWinchLists, "Id", "AssignedNumber"), "", htmlAttributes: new { @class = "form-control select2", @required = "true", @onchange = "checkdata(this)" })
+                                    <div class="error"></div>
+                                </div>
+                            </div>
+
+
+                            <div class="row form-group">
+                                <label class="col-sm-4 col-form-label">
+                                    <label class="control-label">RopeTail Location Assign<sup></sup></label>
+                                </label>
+                                <div class="col-sm-8">
+                                    <label id="location" style="background-color:#ECECEC;border:none" class="form-control"></label>
+                                </div>
+                            </div>
+                            <div class="row form-group">
+                                <label class="col-sm-4 col-form-label">
+                                    <label class="control-label">Lead<sup></sup></label>
+                                </label>
+                                <div class="col-sm-8">
+                                    <label id="lead" style="background-color:#ECECEC;border:none" class="form-control"></label>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+}
+
+
+<script>
+    $("#AssignedDate").keydown(function (e) {
+        e.preventDefault();
+    });
+</script>
+
+<script>
+    function checkdata(t) {
+        var Id = t.value;
+
+        $.ajax({
+            type: 'POST',
+            dataType: 'json',
+            url: '/AssignTail/Getleadlocation',
+            data: { 'Id': Id },
+            success: function (response) {
+                if (response.Result == true) {
+
+                    debugger;
+                    $("#location").text(response.location);
+                    $("#lead").text(response.lead);
+
+                    var loc = response.location;
+                    var lead = response.lead;
+
+                    if (loc == null) {
+                        $("#location").text("Not Assigned");
+                    }
+                    if (lead == null) {
+                        $("#lead").text("Not Assigned");
+                    }
+                }
+                else {
+                    alert('An Error has occured. Please try again.');
+                }
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                //toastr["error"]('An Error has occured. Please try again.');
+                // alert('An Error has occured. Please try again.');
+            }
+        });
+
+    }
+</script>
+
+<script>
+    function datecheck(t) {
+        var dtvalue = t.value;
+        var RopeId = $("#RopeId").val();
+
+        //alert(Id);
+        $.ajax({
+            type: 'POST',
+            dataType: 'json',
+            url: '/AssignTail/Installdatecheck',
+            data: { 'dtvalue': dtvalue, 'RopeId': RopeId },
+            success: function (response) {
+                if (response.Result == true) {
+
+                    debugger;
+                    if (response.Message != "") {
+                        $("#AssignedDate").val(response.instdate);
+                        alert(response.Message);
+                    }
+                }
+                else {
+                    alert('An Error has occured. Please try again.');
+                }
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+
+                //alert('An Error has occured. Please try again.');
+            }
+        });
+
+    }
+</script>
+
+<script type="text/javascript">
+
+    setTimeout(function () {
+
+        $('#successMessage').fadeOut('fast');
+        $('#errorMessage').fadeOut('fast');
+    }, 3000);
+
+
+</script>
+
+
+<script>
+    $('#btnReset').click(function () {
+        $("#RopeId").val(null).trigger("change");
+        $("#WinchId").val(null).trigger("change");
+        $("#location").text('');
+        $("#lead").text('');
+    });
+</script>
+
+
+@*<script>
+        $(document).ready(function () {
+            $("#AssignedDate").datepicker({
+                dateFormat: "yy-mm-dd",
+                //minDate: -0,
+                //maxDate: "+0M +0D"
+                maxDate: 0
+
+            });
+        });
+    </script>*@
+
+<script type="text/javascript">
+    //$('.datepicker').datepicker();
+
+    $("#AssignedDate").datepicker({
+        endDate: 'today'
+    });
+
+</script>
+<script>
+    function goBack() {
+        window.history.back();
+    }
+</script>
+

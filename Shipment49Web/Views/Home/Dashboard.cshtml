@@ -1,0 +1,642 @@
+@using NotificationLayer
+@using UserLayer
+@using Reports
+
+@{
+    ViewBag.Title = "Dashboard";
+    Layout = "~/Views/Shared/_LeftSideBar.cshtml";
+}
+
+<link href="~/Content/Chart.css" rel="stylesheet" />
+<script src="~/js/CommonScriptFunctions.js"></script>
+<script src="~/Scripts/Chart.min.js"></script>
+<script src="~/js/html2canvas.min.js"></script>
+<script src="~/js/FileSaver.min.js"></script>
+<script src="~/js/canvas-to-blob.min.js"></script>
+
+<style>
+    .dv-meter {
+        height: auto !important;
+        width: 100% !important;
+        display: block !important;
+        margin: auto !important;
+        position: center !important
+    }
+</style>
+
+
+<div class="content-wrapper">
+    <section class="content-header">
+        <h1>
+            Dashboard - Fleet Vessels
+        </h1>
+    </section>
+
+    <input type="hidden" id="ZoneAData" value="@ViewBag.ZoneA" />
+    <input type="hidden" id="ZoneBData" value="@ViewBag.ZoneB" />
+    <input type="hidden" id="CombinedZonesData" value="@ViewBag.CombinedZones" />
+    <input type="hidden" id="RopesDiscardedData" value="@ViewBag.RopesDiscarded" />
+    <input type="hidden" id="RopesRequiringDiscarded" value="@ViewBag.RopesRequiringDiscarded" />
+    <input type="hidden" id="SatisfactoryRopes" value="@ViewBag.SatisfactoryRopes" />
+
+    <section class="content">
+        <div class="row">
+            <div class="col-md-4">
+                <div class="box box-info">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">
+                            Ropes Satisfactory (Rating 1-5)
+                        </h3>
+                        <div class="pull-right">
+                            <a href="~/Data/Reports/SatisfactoryRopes" class="small-box-footer">
+                                More Info <i class="fa fa-arrow-circle-right"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="box-body" style="min-height: 250px">
+                        <canvas id="dvMeter" class="dv-meter"></canvas>
+                        <div id="preview-textfield" class="reset">
+                            <div style="font-size: large; position: relative; top: -60px; text-align: center">
+                                @Html.Raw(string.Format("{0}%", Math.Round(ViewBag.SatisfactoryRopes, 0)))
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="box box-info">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">
+                            Inspection Overdue
+                        </h3>
+                        <div class="pull-right">
+                            <a href="~/Data/Reports/OverdueInspection" class="small-box-footer">
+                                More Info <i class="fa fa-arrow-circle-right"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="box-body" style="min-height: 250px; position: center">
+                        @*<div id="dvShip">
+                                @{
+                                    decimal overdue_inspection = ViewBag.InspectionOverdue;
+                                }
+                                <div style="font-size: large; text-align: center; position: relative">
+                                    @Html.Raw(string.Format("{0:00} %", overdue_inspection))
+                                </div>
+
+                                <div style="text-align: center">
+                                    @if (overdue_inspection == 0)
+                                    {
+                                        <img src="~/assets/images/inspection-overdue-100.png" style="height: 150px; margin-top: -35px; overflow: hidden; width: 100%" />
+                                    }
+                                    else if (overdue_inspection > 0 && overdue_inspection <= 25)
+                                    {
+                                        <img src="~/assets/images/inspection-overdue-75.png" style="height: 150px; margin-top: -35px; overflow: hidden; width: 100%" />
+                                    }
+                                    else if (overdue_inspection > 25 && overdue_inspection <= 50)
+                                    {
+                                        <img src="~/assets/images/inspection-overdue-50.png" style="height: 150px; margin-top: -35px; overflow: hidden; width: 100%" />
+                                    }
+                                    else if (overdue_inspection > 50 && overdue_inspection <= 75)
+                                    {
+                                        <img src="~/assets/images/inspection-overdue-25.png" style="height: 150px; margin-top: -35px; overflow: hidden; width: 100%" />
+                                    }
+                                    else if (overdue_inspection > 75)
+                                    {
+                                        <img src="~/assets/images/inspection-overdue-0.png" style="height: 150px; margin-top: -35px; overflow: hidden; width: 100%" />
+                                    }
+                                </div>
+                                <ul class="ulShip">
+                                    <li>
+                                        <img class="imgdot" src="~/assets/images/greendot.png" />
+                                        No Inspections Overdue
+                                    </li>
+                                    <li>
+                                        <img class="imgdot" src="~/assets/images/yellowdot.png" />
+                                        Upto 10% Inspections Overdue
+                                    </li>
+                                    <li>
+                                        <img class="imgdot" src="~/assets/images/orangedot.png" />
+                                        Upto 20% Inspections Overdue
+                                    </li>
+                                    <li>
+                                        <img class="imgdot" src="~/assets/images/reddot.png" />
+                                        Upto 20-100% Inspections Overdue
+                                    </li>
+                                </ul>
+                            </div>*@
+
+                        <div id="dvShip">
+                            @{
+                                decimal overdue_inspection = ViewBag.InspectionOverdue;
+                            }
+                            <div style="font-size: large; text-align: center; position: relative">
+                                @Html.Raw(string.Format("{0:00} %", overdue_inspection))
+                            </div>
+
+                            <div style="text-align: center">
+                                @if (overdue_inspection == 0)
+                                {
+                                    <img src="~/assets/images/inspection/0.png" style="height: 150px; margin-top: -35px; overflow: hidden; width: 100%" />
+                                }
+                                else if (overdue_inspection > 0 && overdue_inspection <= 10)
+                                {
+                                    <img src="~/assets/images/inspection/10.png" style="height: 150px; margin-top: -35px; overflow: hidden; width: 100%" />
+                                }
+                                else if (overdue_inspection > 10 && overdue_inspection <= 20)
+                                {
+                                    <img src="~/assets/images/inspection/20.png" style="height: 150px; margin-top: -35px; overflow: hidden; width: 100%" />
+                                }
+                                else if (overdue_inspection > 20 && overdue_inspection <= 30)
+                                {
+                                    <img src="~/assets/images/inspection/30.png" style="height: 150px; margin-top: -35px; overflow: hidden; width: 100%" />
+                                }
+                                else if (overdue_inspection > 30 && overdue_inspection <= 40)
+                                {
+                                    <img src="~/assets/images/inspection/40.png" style="height: 150px; margin-top: -35px; overflow: hidden; width: 100%" />
+                                }
+                                else if (overdue_inspection > 40 && overdue_inspection <= 50)
+                                {
+                                    <img src="~/assets/images/inspection/50.png" style="height: 150px; margin-top: -35px; overflow: hidden; width: 100%" />
+                                }
+                                else if (overdue_inspection > 50 && overdue_inspection <= 60)
+                                {
+                                    <img src="~/assets/images/inspection/60.png" style="height: 150px; margin-top: -35px; overflow: hidden; width: 100%" />
+                                }
+                                else if (overdue_inspection > 60 && overdue_inspection <= 70)
+                                {
+                                    <img src="~/assets/images/inspection/70.png" style="height: 150px; margin-top: -35px; overflow: hidden; width: 100%" />
+                                }
+                                else if (overdue_inspection > 70 && overdue_inspection <= 80)
+                                {
+                                    <img src="~/assets/images/inspection/80.png" style="height: 150px; margin-top: -35px; overflow: hidden; width: 100%" />
+                                }
+                                else if (overdue_inspection > 80 && overdue_inspection <= 90)
+                                {
+                                    <img src="~/assets/images/inspection/90.png" style="height: 150px; margin-top: -35px; overflow: hidden; width: 100%" />
+                                }
+                                else if (overdue_inspection > 90)
+                                {
+                                    <img src="~/assets/images/inspection/100.png" style="height: 150px; margin-top: -35px; overflow: hidden; width: 100%" />
+                                }
+
+                                @*else if (overdue_inspection > 25 && overdue_inspection <= 50)
+                                    {
+                                        <img src="~/assets/images/inspection-overdue-50.png" style="height: 150px; margin-top: -35px; overflow: hidden; width: 100%" />
+                                    }
+                                    else if (overdue_inspection > 50 && overdue_inspection <= 75)
+                                    {
+                                        <img src="~/assets/images/inspection-overdue-25.png" style="height: 150px; margin-top: -35px; overflow: hidden; width: 100%" />
+                                    }
+                                    else if (overdue_inspection > 75)
+                                    {
+                                        <img src="~/assets/images/inspection-overdue-0.png" style="height: 150px; margin-top: -35px; overflow: hidden; width: 100%" />
+                                    }*@
+                            </div>
+                            <ul class="ulShip">
+                                <li>
+                                    <img class="imgdot" src="~/assets/images/greendot.png" />
+                                    0% Overdue
+                                </li>
+                                <li>
+                                    <img class="imgdot" src="~/assets/images/yellowdot.png" />
+                                    Upto 10% Overdue
+                                </li>
+                                <li>
+                                    <img class="imgdot" src="~/assets/images/orangedot.png" />
+                                    Upto 20% Overdue
+                                </li>
+                                <li>
+                                    <img class="imgdot" src="~/assets/images/reddot.png" />
+                                    Upto 20-100% Overdue
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="box box-info">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">
+                            Ropes Discarded - (Last 3 Months)
+                        </h3>
+                        <div class="pull-right">
+                            <a href="~/Data/Reports/RopesDiscarded" class="small-box-footer">
+                                More Info <i class="fa fa-arrow-circle-right"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="box-body" style="min-height: 250px">
+                        <div id="line-chart1">
+                            <svg height="200"></svg>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+        <div class="row" style="align-content: center;">
+            <div class="col-md-6 ">
+                <div class="row" style="padding-bottom: 15px;">
+                    <div class="col-xs-6 col-sm-6">
+                        <div class="small-ones" id="col1">
+                            <div class="box-header with-border">
+                                <h3 class="box-title" id="small-title">
+                                    Lines/Tails Requiring Discard
+                                </h3>
+                                <br />
+                                <span style="float:right;">
+                                    <a href="~/Data/Reports/RopesRequiringDiscard" class="small-box-footer" id="small-link" ;>
+                                        Details <i class="fa fa-arrow-circle-right" style="color:white"></i>
+                                    </a>
+                                </span>
+
+                            </div>
+
+                            <div style="position: relative; top: 15px; left: 20px; color:white; text-align: left; float: left;">
+                                <h4 style="padding: 0%; margin: 0;">Lines - @Html.Raw(ViewBag.RopesRequiringDiscarded)</h4><br>
+                                <h4 style="padding: 0%; margin: 0%;">Tails - @Html.Raw(ViewBag.TailsRequiringDiscarded)</h4>
+                            </div>
+
+                            <img class="demonstartor" src="~/assets/images/requiring discard.svg"><br>
+
+
+
+                        </div>
+                    </div>
+
+                    <div class="col-xs-6 col-sm-6">
+                        <div class="small-ones" id="col2">
+                            <div class="box-header with-border">
+                                <h3 class="box-title" id="small-title">
+                                    Upcoming Lines/Tails Discard
+                                </h3>
+                                <br />
+                                <span style="float:right;">
+                                    <a href="~/Data/Reports/UpComingDiscard" class="small-box-footer" id="small-link" ;>
+                                        Details <i class="fa fa-arrow-circle-right" style="color:white"></i>
+                                    </a>
+                                </span>
+
+                            </div>
+
+
+                            <div style="position: relative; top: 15px; left: 20px; color:white; text-align: left; float: left;">
+                                <h4 style="padding: 0%; margin: 0;">Lines - @Html.Raw(ViewBag.UpComingRopeDiscard)</h4><br>
+                                <h4 style="padding: 0%; margin: 0%;">Tails - @Html.Raw(ViewBag.UpComingTailDiscard)</h4>
+                            </div>
+
+                            <img class="demonstartor" src="~/assets/images/Upcoming discard.svg">
+
+
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row" style="padding-bottom: 15px;">
+                    <div class="col-xs-6 col-sm-6">
+                        <div class="small-ones" id="col3">
+                            <div class="box-header with-border">
+                                <h3 class="box-title" id="small-title">
+                                    End to End
+                                </h3>
+                                <br />
+                                <span style="float:right;">
+                                    <a href="~/Data/Reports/End2EndDetail" class="small-box-footer" id="small-link" ;>
+                                        Details <i class="fa fa-arrow-circle-right" style="color:white"></i>
+                                    </a>
+                                </span>
+
+                            </div>
+                            <div style="position: relative; top: 15px; left: 20px; color:white; text-align: left; float: left;">
+                                <h4 style="padding: 0%; margin: 0;">Upcoming - @Html.Raw(ViewBag.End2EndUpComing)</h4><br>
+                                <h4 style="padding: 0%; margin: 0%;">Over-Due - @Html.Raw(ViewBag.End2EndDue)</h4>
+                            </div>
+
+                            <img class="demonstartor" src="~/assets/images/End to End.svg">
+
+
+
+                        </div>
+                    </div>
+
+                    <div class="col-xs-6 col-sm-6">
+                        <div class="small-ones" id="col4">
+                            <div class="box-header with-border">
+                                <h3 class="box-title" id="small-title">
+                                    Winch Rotation
+                                </h3>
+                                <br />
+                                <span style="float:right;">
+                                    <a href="~/Data/Reports/WinchRotationDetail" class="small-box-footer" id="small-link" ;>
+                                        Details <i class="fa fa-arrow-circle-right" style="color:white"></i>
+                                    </a>
+                                </span>
+
+                            </div>
+                            <div style="position: relative; top: 15px; left: 20px; color:white; text-align: left; float: left;">
+                                <h4 style="padding: 0%; margin: 0;">Upcoming - @Html.Raw(ViewBag.WRotationUpComing)</h4><br>
+                                <h4 style="padding: 0%; margin: 0%;">Over-Due - @Html.Raw(ViewBag.WRotationDue)</h4>
+                            </div>
+
+                            <img class="demonstartor" src="~/assets/images/Winch rotation.svg">
+
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6 ">
+                <div class="box box-info">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">
+                            Avg Abrasion
+                        </h3>
+                        <div class="pull-right">
+                            <button id="download1" hidden="hidden" title="Save as PNG" style="color:Highlight; border:none; background-color:transparent">
+                                Download
+                                <i class="fa fa-download"></i>
+                            </button>
+                            &nbsp; &nbsp; &nbsp;
+                            <a href="~/Data/Reports/AbrasionReport" class="small-box-footer">
+                                More Info <i class="fa fa-arrow-circle-right"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="box-body" style="min-height: 367px">
+
+                        <div id="bar-chart2">
+                            <svg height="300"></svg>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+
+
+
+
+
+
+        </div>
+        <div class="row">
+
+            <div class="col-md-12">
+                <div class="box box-info">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">
+                            Anomalies Reported By Vessels In Mooring Operations
+                        </h3>
+                        <div class="pull-right">
+                            <button id="download" title="Save as PNG" style="color:Highlight; border:none; background-color:transparent">
+                                Download
+                                <i class="fa fa-download"></i>
+                            </button>
+                            &nbsp; &nbsp; &nbsp;
+                            <a href="~/Data/Reports/Anomalies" class="small-box-footer">
+                                More Info <i class="fa fa-arrow-circle-right"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="box-body" style="min-height: 250px">
+                        <div style="height: 250px">
+                            @Html.Partial("_CombineAnomaliesChart", (Shipment49Web.Common.GraphData)@ViewBag.CombinedAnomalies)
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+
+        </div>
+        <div class="row">
+            <!-- Left col -->
+            <div class="col-md-8">
+                <div class="box box-info">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">
+                            Notifications
+                        </h3>
+                        <div class="pull-right">
+                            <a href="~/NotificationInfos/NotificationInfo" class="small-box-footer">
+                                More Info <i class="fa fa-arrow-circle-right"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="box-body">
+                        <div class="table-responsive">
+                            <table class="table no-margin table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Date</th>
+                                        <th>Vessel Name</th>
+                                        <th>Notification</th>
+                                        <th>Acknowledged</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @{
+                                        var notificationsList = (List<Reports.View_Notifications>)ViewBag.Notifications;
+
+                                        foreach (var notification in notificationsList)
+                                        {
+                                            <tr>
+                                                <td class="col-md-2">
+                                                    @{
+                                                        DateTime? notDate = notification.NotificationDate;
+                                                        if (notDate != null)
+                                                        {
+                                                            @Html.Raw(notDate.Value.ToString("dd-MMM-yyyy"))
+                                                        }
+                                                    }
+                                                </td>
+                                                <td class="col-md-2">@notification.VesselName</td>
+                                                <td class="col-md-7">
+                                                    @notification.NotificationText
+                                                    @*<p title="@notification.NotificationText">
+                                                            @{
+                                                                string nottext = notification.NotificationText;
+                                                                if (nottext.Length > 60)
+                                                                {
+                                                                    @Html.Raw(string.Format("{0}....", nottext.Substring(0, 60)))
+                                                                }
+                                                                else
+                                                                {
+                                                                    @Html.Raw(nottext)
+                                                                }
+                                                            }
+                                                        </p>*@
+                                                </td>
+                                                <td class="col-md-1">
+                                                    @{
+                                                        bool ackn = notification.Acknowledge == null ? false : Convert.ToBoolean(notification.Acknowledge);
+
+                                                        if (ackn)
+                                                        {
+                                                            @Html.Raw("Yes")
+                                                        }
+                                                        else
+                                                        {
+                                                            @Html.Raw("No")
+                                                        }
+                                                    }
+                                                </td>
+                                            </tr>
+                                        }
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="box box-info">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">
+                            Sync Details
+                        </h3>
+                        <div class="pull-right">
+                            <a href="~/Setting/Log/Index" class="small-box-footer">
+                                More Info <i class="fa fa-arrow-circle-right"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="box-body">
+                        <div class="table-responsive">
+                            <table class="table no-margin table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Vessel Name</th>
+                                        <th>Last Data</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @{
+                                        var importLogList = (List<Reports.ImportLog>)ViewBag.ImportLogs;
+
+                                        foreach (var log in importLogList)
+                                        {
+                                            <tr>
+                                                <td>@log.VesselName</td>
+                                                <td>
+                                                    @if (log.DateImported != null)
+                                                    {
+                                                        @Html.Raw(log.DateImported.Value.ToString("dd-MMM-yyyy"))
+                                                    }
+                                                </td>
+                                            </tr>
+                                        }
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+<style>
+
+    .imgdot {
+        width: 35px;
+        margin-top: -5px;
+    }
+
+    .ulShip {
+        padding: 0;
+        margin: 0;
+        list-style: none;
+    }
+
+        .ulShip li {
+            text-align: left;
+        }
+
+
+    #h5ship {
+        font-size: 41px;
+        margin-bottom: -85px;
+        padding-left: 140px
+    }
+</style>
+
+
+
+
+<link href="~/assets/plugins/barchart/nv.d3.css" rel="stylesheet" />
+
+
+@section Scripts {
+
+
+
+
+    <script src="~/assets/plugins/gauge/gauge.js"></script>
+    <script src="~/assets/plugins/barchart/d3.min.js"></script>
+    <script src="~/assets/plugins/barchart/nv.d3.min.js"></script>
+    <script src="~/assets/plugins/barchart/nvd3.js"></script>
+
+    <script>
+        function InitGauge() {
+            var opts = {
+                angle: -0.2, // The span of the gauge arc
+                lineWidth: 0.2, // The line thickness
+                radiusScale: 1, // Relative radius
+                pointer: {
+                    length: 0.6, // // Relative to gauge radius
+                    strokeWidth: 0.035, // The thickness
+                    color: '#000000' // Fill color
+                },
+                limitMax: false,     // If false, max value increases automatically if value > maxValue
+                limitMin: false,     // If true, the min value of the gauge will be fixed
+                //colorStart: '#FDBE40',   // Colors
+                //colorStop: '#FDBE40',    // just experiment with them
+                //strokeColor: '#8FC0DA',  // to see which ones work best for you
+                generateGradient: true,
+                highDpiSupport: true,     // High resolution support
+                // renderTicks is Optional
+                renderTicks: {
+                    divisions: 10,
+                    divWidth: 1.1,
+                    divLength: 0.7,
+                    divColor: '#eee'
+                },
+                staticZones: [
+                    { strokeStyle: "#F03E3E", min: 0, max: 70 }, // Red from 100 to 130
+                    { strokeStyle: "orange", min: 70, max: 90 }, // Yellow
+                    { strokeStyle: "#30B32D", min: 90, max: 100 } // Green
+                ]
+            };
+            var target = document.getElementById('dvMeter'); // your canvas element
+            var gauge = new Gauge(target).setOptions(opts); // create sexy gauge!
+            gauge.maxValue = 100; // set max gauge value
+            gauge.setMinValue(0);  // Prefer setter over gauge.minValue = 0
+            gauge.animationSpeed = 32; // set animation speed (32 is default value)
+            //gauge.set(95); // set actual value
+
+            var satisfactoryRopes = $('#SatisfactoryRopes').val();
+            gauge.set(satisfactoryRopes);
+        }
+
+        $(function () {
+            InitGauge();
+        });
+
+
+
+
+
+    </script>
+}
+

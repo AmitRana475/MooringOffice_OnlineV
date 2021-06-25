@@ -1,0 +1,143 @@
+﻿@model List<VesselLayer.FleetTypeClass>
+
+@{
+    ViewBag.Title = "Fleet Type";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    var grid = new WebGrid(canPage: true, rowsPerPage: 10);
+    grid.Bind(source: Model, rowCount: ViewBag.TotalRows, autoSortAndPage: false);
+}
+
+@*<script type="text/javascript">
+
+    $(document).ready(function () {
+        var dir = $('#dir').val();
+        var col = $('#col').val();
+
+        var header = $('th a[href*=' + col + ']');
+        if (dir == 'Ascending') {
+            header.text(header.text() + ' ▲');
+        }
+        if (dir == 'Descending') {
+            header.text(header.text() + ' ▼');
+        }
+
+
+    });
+</script>*@
+
+@{
+    if (!string.IsNullOrWhiteSpace(grid.SortColumn))
+    {
+        <script type="text/javascript">
+            $(document).ready(function () {
+
+                $('thead > tr > th > a[href*="sort=@grid.SortColumn"]').parent().append('@(grid.SortDirection == SortDirection.Ascending ? "▲" : "▼")');
+
+            });
+        </script>
+    }
+}
+
+
+<div class="container">
+
+    <h2> Fleet Type</h2>
+    <nav class="navbar navbar-default">
+
+        <div class="container-fluid-right">
+            <div class="navbar-header">
+
+                <a href="/setting/vessel/createfleettype" class="navbar-brand">Create New</a>
+
+                @*@Html.ActionLink("Create New", "create",new { @class="navbar-brand"})*@
+
+            </div>
+            <div class="collapse navbar-collapse">
+                @using (Html.BeginForm("fleettype", "vessel", FormMethod.Get, new { area = "setting", @class = "navbar-form navbar-right" }))
+                {
+                   
+                    <div class="form-group">
+                        <input type="text" name="search" id="search" value="@ViewBag.search" class="form-control" placeholder="fleet type" />
+                    </div>
+                    <button type="submit" value="Search" class="btn btn-success">Search</button>
+
+                    @*@ViewBag.TotalRows*@
+                }
+            </div>
+        </div>
+    </nav>
+
+    <div>
+
+      @grid.Table(
+              tableStyle: "table table-responsive table-borderd",
+              columns:
+              grid.Columns(
+
+                  grid.Column(columnName: "FleetType", header: "Fleet Type"),
+                  grid.Column(columnName: "AddedBy", header: "Added By"),
+                  grid.Column("", style: "button", header: "Action",
+                          format:
+                        @<text >
+                       
+                        @Ajax.ActionLink("Edit", "editfleettype", new { id = item.Tid },null) |
+                        @Html.ActionLink("Delete", "deletefleettype", new { area = "setting", id = item.Tid }, new { onclick = "return confirm('The system will not delete Fleet Type in case it has associated data, please unselect this Fleet Type from all Vessels to permanently delete.');" })
+
+                        </text>)
+                  ))
+
+        <div class="row">
+            <div class="col-sm-6">
+                @grid.PagerList(mode: WebGridPagerModes.All, paginationStyle: "pagination pagination-small pagination-small")
+            </div>
+        </div>
+        @*@Html.Hidden("dir", grid.SortDirection)
+        @Html.Hidden("col", grid.SortColumn)*@
+
+    </div>
+
+    <div id="message-listbm">
+        <font>@ViewBag.Messagegrid</font>
+    </div>
+
+    @if (ViewBag.Messagebms != null)
+    {
+        @Html.ActionLink("Go Back", "create")
+
+    }
+</div>
+
+
+
+
+
+
+
+
+
+@*<p>
+    @Html.ActionLink("Create New", "CreateFleetType")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.FleetType)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.FleetType)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.Tid }) |
+            @Html.ActionLink("Details", "Details", new { id=item.Tid }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.Tid })
+        </td>
+    </tr>
+}
+
+</table>*@

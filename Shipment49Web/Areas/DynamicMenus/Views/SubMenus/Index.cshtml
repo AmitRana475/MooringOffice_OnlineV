@@ -1,0 +1,147 @@
+﻿@model Shipment49Web.Areas.MSPS.Models.MenuIndex
+@{
+	/**/
+
+	ViewBag.Title = "Index";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+
+<div class="content">
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-md-12">
+
+				@*<div class="card">
+						<div class="card-content viewem_list">
+							<div class="row">
+								<div class="col-md-3">
+
+									<div class="form-group">
+										<input class="form-control" placeholder="Search" id="txtsearch" onkeyup="return searchUser(this.value)" type="text">
+
+									</div>
+
+								</div>
+
+								<div class="col-md-3">
+									<button type="button" onclick="searchData(1)" class="btn btn-info btn-round add_member waves-effect waves-light">Search<div class="ripple-container"></div></button>
+									<a type="button" href="@Url.Action("Index","introduction")" class="btn btn-info btn-round add_member waves-effect waves-light">Refresh<div class="ripple-container"></div></a>
+								</div>
+								<div class="col-md-3">
+
+								</div>
+							</div>
+
+
+
+						</div>
+					</div>*@
+
+
+
+				<div class="card">
+
+					@{int listcount = Model.Pager.CurrentPage == 1 ? 0 : (Model.Pager.PageSize * Model.Pager.CurrentPage) - (Model.Pager.PageSize); }
+					<div class="card-header card-header-text" data-background-color="rose">
+
+						<h4 class="card-title">SubMenus Listing</h4>
+					</div>
+
+					<div class="card-content user_listingtbl">
+
+
+						<div class="table-responsive" id="dvListing">
+
+
+							<table class="table table-striped">
+								<thead>
+									<tr>
+										<th class="text-center">S.No.</th>
+
+										<th>Menu Name</th>
+
+										<th>SubMenu Name</th>
+
+
+									</tr>
+								</thead>
+								<tbody>
+									@{Int32 count = 0;}
+									@foreach (var m in Model.submenuListing)
+									{
+
+									<tr>
+										<td>@(count += 1)</td>
+										<td>@m.MenuName</td>
+										<td>@m.SubMenuName</td>
+
+
+
+										<td>
+											<a href="@Url.Action("Add")">
+												Add
+											</a>
+											|
+											<a href="@Url.Action("Edit",new {id=m.SubId })">
+												Edit
+											</a>
+										</td>
+
+
+									</tr>
+
+									}
+
+								</tbody>
+							</table>
+
+							@if (Model.submenuListing.Count() > 0)
+							{
+								if (Model.Pager.EndPage > 1)
+								{
+									<ul class="pagination">
+										@if (Model.Pager.CurrentPage > 1)
+										{
+											<li>
+												<a onclick="return searchData(1)">First</a>
+											</li>
+											<li>
+												<a onclick="return searchData(@(Model.Pager.CurrentPage - 1))">Previous</a>
+											</li>
+										}
+
+										@for (var page = Model.Pager.StartPage; page <= Model.Pager.EndPage; page++)
+										{
+											<li class="@(page == Model.Pager.CurrentPage ? "active" : "")">
+												<a onclick="return searchData(@page)">@page</a>
+											</li>
+										}
+
+										@if (Model.Pager.CurrentPage < Model.Pager.TotalPages)
+										{
+											<li>
+												<a onclick="return searchData(@(Model.Pager.CurrentPage + 1))">Next</a>
+											</li>
+											<li>
+												<a onclick="return searchData(@(Model.Pager.TotalPages))">Last</a>
+											</li>
+										}
+									</ul>
+								}
+							}
+
+
+						</div>
+					</div>
+				</div>
+
+
+
+
+			</div>
+		</div>
+	</div>
+
+</div>

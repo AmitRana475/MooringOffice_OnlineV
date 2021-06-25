@@ -1,0 +1,329 @@
+﻿
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Digimoor-X7</title>
+   
+    <link href="font-awesome/css/font-awesome.css" rel="stylesheet">
+    <link href="~/css/select2.min.css" rel="stylesheet">
+    <link href="~/css/animate.css" rel="stylesheet">
+    <link href="~/css/style.css" rel="stylesheet">
+    <link href="~/css/bootstrap.min.css" rel="stylesheet" />
+    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"> -->
+
+    <link rel="stylesheet" href="~/css/data-table/dataTables.bootstrap.min.css">
+    <link rel="stylesheet" href="~/css/data-table/buttons.dataTables.min.css">
+    <link rel="stylesheet" href="https://unicons.iconscout.com/release/v3.0.6/css/line.css">
+</head>
+<body class="mini-navbar">
+
+    <div id="wrapper">
+        <nav class="navbar-default navbar-static-side" role="navigation">
+            <div class="sidebar-collapse">
+                <ul class="nav metismenu" id="side-menu">
+                    <li class="nav-header">
+                        <div class="dropdown profile-element">
+                            <span>
+                                <img alt="image" class="img-circle" src="images/User-icon.png" />
+                            </span>
+                            <a data-toggle="dropdown" class="dropdown-toggle" href="#">
+                                <span class="clear">
+                                    <span class="block m-t-xs">
+                                        Welcome,<strong class="font-bold"> John Doe</strong>
+                                    </span> <span class="text-muted text-xs block">UX Designer <b class="caret"></b></span>
+                                </span>
+                            </a>
+                            <ul class="dropdown-menu animated fadeInRight m-t-xs">
+                                <li><a href="javascript:void(0)">Profile</a></li>
+                                <li><a href="javascript:void(0)">Contacts</a></li>
+                                <li><a href="javascript:void(0)">Mailbox</a></li>
+                                <li class="divider"></li>
+                                <li><a href="javascript:void(0)">Logout</a></li>
+                            </ul>
+                        </div>
+                        <div class="logo-element">
+                            <img src="~/images/logo.png" alt="img">
+                        </div>
+                    </li>
+                    <li>
+                        <a href="dashboard.php">
+                            <i class="uil uil-layer-group"></i> <label class="nav-label">Dashboard</label>
+                        </a>
+                    </li>
+                    <!-- <li class="active">
+                        <a href="javascript:void(0)"><i class="fa fa-diamond"></i> <label class="nav-label">Layouts</label></a>
+                    </li> -->
+                    <li class="active">
+                        <a href="javascript:void(0)"><i class="fa fa-bar-chart-o"></i> <label class="nav-label">Mooring Operation</label><span class="fa arrow"></span></a>
+                        <ul class="nav nav-second-level collapse">
+                            <li>
+                                <a href="mooring-op-add.php">Add Mooring Operation</a>
+                            </li>
+                            <li>
+                                <a href="damage-line-add.php">Add Damage Record </a>
+                            </li>
+                            <li>
+                                <a href="mooring-op-list.php">View MooringOP</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0)"><i class="fa fa-envelope"></i> <span class="fa arrow"></span><label class="nav-label">Mooring Line </label></a>
+                        <ul class="nav nav-second-level collapse">
+                            <li>
+                                <a href="mooring-line-inspection.php">Mooring Line Inspection</a>
+                            </li>
+                            <li>
+                                <a href="mooring-line-details.php">Mooring Line Details</a>
+                            </li>
+                            <li>
+                                <a href="assign-line-to-winch.php">Assign Line To Winch</a>
+                            </li>
+                            <li>
+                                <a href="line-end-to-end.php">Line End To End</a>
+                            </li>
+                            <li>
+                                <a href="line-splicing.php">Line Splicing</a>
+                            </li>
+                            <li>
+                                <a href="line-cropping.php">Line Cropping</a>
+                            </li>
+                            <li>
+                                <a href="line-damage.php">Line Damage</a>
+                            </li>
+                            <li>
+                                <a href="line-discard.php">Line Discard</a>
+                            </li>
+                            <li>
+                                <a href="line-disposal.php">Line Disposal</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0)"><i class="fa fa-envelope"></i> <span class="fa arrow"></span><label class="nav-label">Mooring Rope Tail </label></a>
+                        <ul class="nav nav-second-level collapse">
+                            <li>
+                                <a href="mooring-ropetail-inspection.php">Mooring Rope Tail Inspection</a>
+                            </li>
+                            <li>
+                                <a href="mooring-ropetail-details.php">Mooring Rope Tail Details</a>
+                            </li>
+                            <li>
+                                <a href="assign-ropetail-to-winch.php">Assign Rope Tail To Winch</a>
+                            </li>
+                            <li>
+                                <a href="ropetail-splicing.php">Rope Tail Splicing</a>
+                            </li>
+                            <li>
+                                <a href="ropetail-cropping.php">Rope Tail Cropping</a>
+                            </li>
+                            <li>
+                                <a href="ropetail-damage.php">Rope Tail Damage</a>
+                            </li>
+                            <li>
+                                <a href="ropetail-discard.php">Rope Tail Discard</a>
+                            </li>
+                            <li>
+                                <a href="ropetail-disposal.php">Rope Tail Disposal</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0)"><i class="fa fa-flask"></i> <label class="nav-label">Mooring Loose Equipment</label><span class="fa arrow"></span></a>
+                        <ul class="nav nav-second-level collapse">
+                            <li>
+                                <a href="#">Loose Equipment Inspection</a>
+                            </li>
+                            <li>
+                                <a href="#">Loose Equipment Details  </a>
+                            </li>
+                            <li>
+                                <a href="#">Loose Equipment Damage</a>
+                            </li>
+                            <li>
+                                <a href="#">Loose Equipment Discard </a>
+                            </li>
+                            <li>
+                                <a href="#">Loose Equipment Disposal </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="mooring-winch.php">
+                            <i class="uil uil-layer-group"></i> <label class="nav-label">Mooring Winch</label>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="line-status.php">
+                            <i class="uil uil-layer-group"></i> <label class="nav-label">Line Status</label>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="ropetail-status.php">
+                            <i class="uil uil-layer-group"></i> <label class="nav-label">Rope Tail Status</label>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0)"><i class="fa fa-flask"></i> <label class="nav-label">Inspect Discard Criteria</label><span class="fa arrow"></span></a>
+                        <ul class="nav nav-second-level collapse">
+                            <li>
+                                <a href="#">Line/Rope Tail</a>
+                            </li>
+                            <li>
+                                <a href="#">Loose Equipment</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <i class="uil uil-layer-group"></i> <label class="nav-label">Line Residual Lab Test</label>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <i class="uil uil-layer-group"></i> <label class="nav-label">Tail Residual Lab Test</label>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+
+        <div id="page-wrapper">
+
+            <header class="row border-bottom">
+                <nav class="navbar navbar-static-top" role="navigation" style="margin-bottom: 0">
+                    <div class="navbar-header">
+
+                        <a class="navbar-minimalize minimalize-styl-2" href="javascript:void(0)"><i class="fa fa-bars"></i> </a>
+                        <div class="navbar-form-custom mt-4">
+                            <img src="images/logo-large.png" height="35">
+                        </div>
+
+                    </div>
+                    <ul class="nav navbar-top-links navbar-right">
+                        <li>
+                            <a href="#" class="top-menu-btn">
+                                <i class="uil uil-book-open"></i>Mooring Manual
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="top-menu-btn">
+                                <i class="uil uil-clipboard-notes"></i>Training Content
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="top-menu-btn">
+                                <i class="uil uil-apps"></i>LMPR
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="top-menu-btn">
+                                <i class="uil uil-hourglass"></i>Mooring Calculator
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="top-menu-btn">
+                                <i class="uil uil-user-circle"></i>Adminstration
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="top-menu-btn">
+                                <i class="uil uil-question-circle"></i>Help
+                            </a>
+                        </li>
+                        <li class="dropdown">
+                            <a class="dropdown-toggle top-menu-btn count-info" data-toggle="dropdown" href="#">
+                                <i class="uil uil-envelope-open"></i>Notifications  <span class="label label-warning">12</span>
+                            </a>
+                            <ul class="dropdown-menu dropdown-messages">
+                                <li>
+                                    <div class="dropdown-messages-box">
+                                        <a href="javascript:void(0)">
+                                            <div class="media-body ">
+                                                <small class="pull-right">23h ago</small>
+                                                <strong>Monica Smith</strong> love <strong>Kim Smith</strong>. <br>
+                                                <small class="text-muted">2 days ago at 2:30 am - 11.06.2014</small>
+                                            </div>
+                                        </a>
+                                    </div>
+                                </li>
+                                <li class="divider"></li>
+                                <li>
+                                    <div class="dropdown-messages-box">
+                                        <a href="javascript:void(0)">
+                                            <div class="media-body ">
+                                                <small class="pull-right">23h ago</small>
+                                                <strong>Monica Smith</strong> love <strong>Kim Smith</strong>. <br>
+                                                <small class="text-muted">2 days ago at 2:30 am - 11.06.2014</small>
+                                            </div>
+                                        </a>
+                                    </div>
+                                </li>
+                                <li class="divider"></li>
+                                <li>
+                                    <div class="dropdown-messages-box">
+                                        <a href="javascript:void(0)">
+                                            <div class="media-body ">
+                                                <small class="pull-right">23h ago</small>
+                                                <strong>Monica Smith</strong> love <strong>Kim Smith</strong>. <br>
+                                                <small class="text-muted">2 days ago at 2:30 am - 11.06.2014</small>
+                                            </div>
+                                        </a>
+                                    </div>
+                                </li>
+                                <li class="divider"></li>
+                                <li>
+                                    <div class="text-center link-block">
+                                        <a href="javascript:void(0)">
+                                            <i class="fa fa-envelope mr-2"></i>Read All Messages
+                                        </a>
+                                    </div>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="dropdown">
+                            <a class="dropdown-toggle top-menu-btn count-info" data-toggle="dropdown" href="#">
+                                <i class="uil uil-user"></i>Account
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a href="javascript:void(0)">Profile</a></li>
+                                <li><a href="javascript:void(0)">Contacts</a></li>
+                                <li><a href="javascript:void(0)">Mailbox</a></li>
+                                <li class="divider"></li>
+                                <li><a href="javascript:void(0)">Logout</a></li>
+                            </ul>
+                        </li>
+
+                    </ul>
+                </nav>
+            </header>
+            @*Common section*@
+                     
+
+            @RenderBody()
+        </div>
+    </div>
+    <script src="js/jquery-2.1.1.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/plugins/metisMenu/jquery.metisMenu.js"></script>
+    <script src="js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+    <script src="js/select2.full.min.js"></script>
+    <script src="js/navAdmin.js"></script>
+    <!-- <script src="js/plugins/pace/pace.min.html"></script> -->
+    <script src="js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+
+    <script>$(function () {
+            $(".select2").select2({
+                placeholder: "Select an option",
+                allowClear: false
+            });
+            $(".select-control").select2({
+                minimumResultsForSearch: -1,
+                allowClear: false
+            });
+        });</script>
+</body>
+</html>
+

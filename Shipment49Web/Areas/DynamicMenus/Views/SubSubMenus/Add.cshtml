@@ -1,0 +1,102 @@
+﻿@model Shipment49Web.Areas.MSPS.Models.DynamicMenuModel
+
+@{
+	/**/
+
+	ViewBag.Title = "Add";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<h2>Add SubSubMenu</h2>
+
+<div class="row">
+	<div class="col-md-12">
+		<section id="loginForm">
+			@using (Html.BeginForm("Add", "SubMenus", new { area = "DynamicMenus" }, FormMethod.Post))
+			{
+				@Html.AntiForgeryToken()
+
+
+				<hr />
+
+
+				<div class="form-group">
+					<label class="col-md-4 control-label">Menu Name </label>
+					<div class="col-md-8">
+						<div class="input-group">
+
+							@Html.DropDownListFor(p => p.SubSubMenus.MId, new SelectList(ViewBag.Menulist, "Value", "Text"), "Select Menu", new { @class = "form-control" })
+						</div>
+					</div>
+
+				</div>
+
+				<div class="form-group">
+					<label class="col-md-4 control-label">SubMenu Name</label>
+					<div class="col-md-8">
+						<div class="input-group">
+
+							@Html.DropDownListFor(model => model.SubSubMenus.SubId, new SelectList(" "), new { @class = "form-control" })
+
+						</div>
+					</div>
+
+				</div>
+				<div class="form-group">
+					<label class="col-md-4 control-label">SubSubMenu Name </label>
+					<div class="col-md-8">
+						<div class="input-group">
+							@Html.TextBoxFor(m => m.SubSubMenus.SubSubMenuName, new { @class = "form-control" })
+
+						</div>
+					</div>
+				</div>
+
+
+
+
+
+				<div class="small-gutter row">
+					<div class="col-sm-3 col-xs-6 form-group">
+						<input type="submit" value="Save" class="btn peach-btn btn-block" />
+					</div>
+					<div class="col-sm-4 col-xs-6 back_text margin-1-top">
+						<i class="fa fa-chevron-left"></i>&nbsp; @Html.ActionLink("Back to List", "Index")
+					</div>
+				</div>
+			}
+		</section>
+	</div>
+</div>
+
+<script type="text/javascript">
+
+
+    $(document).ready(function () {
+
+		$("#SubSubMenus_MId").change(function () {
+			debugger;
+			alert(1);
+			$("#SubSubMenus_SubId").empty();
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("GetSubMenu")', // Calling json method
+                dataType: 'json',
+				data: { id: $("#SubSubMenus_MId").val() },
+
+				success: function (pagetitle) {
+					debugger;
+					$.each(pagetitle, function (i, pagetitle) {
+						$("#SubSubMenus_SubId").append('<option value="' + pagetitle.Value + '">' +
+							pagetitle.Text + '</option>');
+                    });
+                },
+                error: function (ex) {
+                    alert('Failed to retrieve document.' + ex);
+                }
+            });
+            return false;
+		})
+
+</script>

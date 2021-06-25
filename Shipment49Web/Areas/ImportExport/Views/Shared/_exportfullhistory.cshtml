@@ -1,0 +1,61 @@
+﻿@using System.Collections.Generic;
+
+<h3 class="heading-s2">
+    Export Full History
+</h3>
+<div class="form-group">
+    <div class="col-md-12">
+        <label> Vessel Name</label>
+        <div class="form-group">
+            @*@Html.TextBox("searchTerm", null, new { id = "search", placeholder = "Vessel Name", value = @ViewBag.vname, @class = "form-control" })*@
+            @Html.ListBox("searchTerm", new SelectList((List<Reports.VesselDetail>)(ViewData["VesselList"]), "ImoNo", "VesselName"), new { @class = "form-control importexport" })
+        </div>
+    </div>
+
+    <div class="col-md-12">
+        <div>
+            <label>Choose Any One To Export Data :</label><br />
+                                                          <div class="form-group">
+                                                              @*<div class="form-group">
+            <input type="text" class="date form-control dtpicker" name="ServiceFrom" id="ServiceFrom" value="@ViewBag.datefrom" />
+        </div>*@
+                                                              <input type="radio" id="download" name="download" value="Line">    Line<br />
+
+                                                              <input type="radio" id="download" name="download" value="RopeTail">   RopeTail<br />
+
+                                                              <input type="radio" id="download" name="download" value="LooseEquipment">   Loose Equipment<br />
+
+                                                              <input type="radio" id="download" name="download" value="Attachment">   Line/RopeTail/Residual Attachment<br />
+                                                          </div>
+        </div>
+    </div>
+
+    <div class="col-sm-4">
+        <input name="submit" type="submit" value="Export History" id="Export" class="btn peach-btn btn-block btn-info" />
+    </div>
+
+    <div class="col-sm-4">
+        <input name="submit" type="submit" value="Export Attachment" id="Zip" class="btn peach-btn btn-block btn-warning" />
+    </div>
+
+</div>
+@*@section Scripts {
+    <script>
+        function FillCity() {
+            var stateId = $('#State').val();
+            $.ajax({
+                url: '/Employees/FillCity',
+                type: "GET",
+                dataType: "JSON",
+                data: { State: stateId },
+                success: function (cities) {
+                    $("#City").html(""); // clear before appending new list
+                    $.each(cities, function (i, city) {
+                        $("#City").append(
+                            $('<option></option>').val(city.CityId).html(city.CityName));
+                    });
+                }
+            });
+        }
+    </script>
+}*@

@@ -1,0 +1,264 @@
+﻿
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+    <meta name="description" content="Digimoor X7 is a versatile MEG4-compliant software that helps Management make data-backed decisions to order new mooring ropes for their fleet Vessels" />
+    <title>@ViewBag.Title - DigimoorX7</title>
+    <script src="~/Scripts/jquery-3.1.1.min.js"></script>
+    <!-- jQuery 3 -->
+    <script src="~/TemplateFiles/bower_components/jquery/dist/jquery.min.js"></script>
+    <link href="~/css/CustomStyles.css" rel="stylesheet" />
+    <script src="~/Scripts/toastr.min.js"></script>
+    <link href="~/Content/toastr.min.css" rel="stylesheet" />
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <!-- Bootstrap 3.3.7 -->
+    <link rel="stylesheet" href="~/TemplateFiles/bower_components/bootstrap/dist/css/bootstrap.min.css">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="~/TemplateFiles/bower_components/font-awesome/css/font-awesome.min.css">
+    <!-- Ionicons -->
+    <link rel="stylesheet" href="~/TemplateFiles/bower_components/Ionicons/css/ionicons.min.css">
+    <!-- Theme style -->
+    <link rel="stylesheet" href="~/TemplateFiles/dist/css/AdminLTE.min.css">
+    <link rel="stylesheet" href="~/TemplateFiles/dist/css/skins/_all-skins.min.css">
+    <!-- Google Font -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.15/css/bootstrap-multiselect.css" type="text/css" />
+
+    <style type="text/css">
+        .multiselect-container > li > a > label.checkbox {
+            width: 250px;
+        }
+
+        .dropdown-menu-custom-settings {
+            top: 0% !important;
+            left: 230px !important;
+            width: 100% !important;
+            background-color: #0f3976;
+        }
+    </style>
+</head>
+
+<body class="hold-transition skin-blue sidebar-mini">
+    <input type="hidden" id="ipadd" />
+    <div class="wrapper">
+        <header class="main-header">
+            <!-- Logo -->
+            <a href="/home/Dashboard" class="logo">
+                <!-- mini logo for sidebar mini 50x50 pixels -->
+                <span class="logo-mini" title="DigimoorX7"><b>X7</b></span>
+                <!-- logo for regular state and mobile devices -->
+                <span class="logo-lg" title="DigimoorX7"><b>Digimoor</b>X7</span>
+            </a>
+            <!-- Header Navbar: style can be found in header.less -->
+            <nav class="navbar navbar-static-top">
+                <!-- Sidebar toggle button-->
+                <a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button">
+                    <span class="sr-only">Toggle navigation</span>
+                </a>
+                <!-- Navbar Right Menu -->
+                <div class="navbar-custom-menu">
+                    <ul class="nav navbar-nav">
+                        <!-- User Account: style can be found in dropdown.less -->
+                        <li class="dropdown user user-menu">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                <span class="hidden-xs">@Session["LoggedInUserFullName"]</span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li class="user-body">
+                                    <div class="row">
+                                        <div class="col-xs-6 text-center">
+                                            <a href="~/Setting/UserDetails/EditProfile">Edit Profile</a>
+                                        </div>
+                                        <div class="col-xs-6 text-center">
+                                            <a href="~/Setting/UserDetails/ChangePassword">Change Password</a>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="user-footer">
+                                    <div class="pull-right">
+                                        <a href="~/Account/Signout" class="btn btn-default btn-flat">Sign out</a>
+                                    </div>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+        </header>
+        <aside class="main-sidebar">
+            <section class="sidebar">
+                <ul class="sidebar-menu" id="ulLeftMenu"></ul>
+            </section>
+        </aside>
+
+        @RenderBody()
+
+        <footer class="main-footer">
+            <div class="pull-right hidden-xs">
+                <b>AQUA 49 WEBSTREET TECHNOLOGIES</b>
+            </div>
+            <strong>
+                @DateTime.Now.Year SYNERGETIC SHIPPING SOLUTIONS
+            </strong>
+        </footer>
+    </div>
+
+    <script>
+
+        var isMobile = false;
+
+        $(document).ready(function () {
+            var ss = "@ViewBag.MenuContent";
+            var gg = ss.replace(/&quot;/g, '"');
+            var items = JSON.parse(gg);
+            isMobile = checkMobile();
+            //alert(isMobile);
+            if (isMobile) {
+                $("#ulLeftMenu").attr("data-widget", "tree");
+            }
+            var li = '';
+            li += createLi(items);
+            $('#ulLeftMenu').append(li);
+
+        });
+
+        function createLi(child) {
+            var lichild = '';
+            for (var j = 0; j < child.length; j++) {
+                var subchild = child[j].children;
+                if (subchild) {
+                    if (isMobile) {
+                        lichild += '<li class="treeview"><a href="' + child[j].href + '"><i class="fa fa-circle-o"></i>';
+                        lichild += '<span style="white-space: break-spaces">' + child[j].text + '</span><span class="pull-right-container">';
+                        lichild += '<i class="fa fa-angle-left pull-right"></i></span></a>';
+                        lichild += '<ul class="treeview-menu">';
+                    }
+                    else {
+                        lichild += '<li class="dropdown"><a href="' + child[j].href + '"><i class="fa fa-circle-o"></i>';
+                        lichild += '<span style="white-space: break-spaces">' + child[j].text + '</span><span class="pull-right-container">';
+                        lichild += '<i class="fa fa-angle-left pull-right"></i></span></a>';
+                        lichild += '<ul class="dropdown-menu dropdown-menu-custom-settings">';
+                    }
+                    lichild += createLi(subchild);
+                    lichild += '</ul></li>';
+                }
+                else {
+                    lichild += '<li><a href="' + child[j].href + '"><i class="fa fa-circle-o"></i><span style="white-space: break-spaces">' + child[j].text + '</span></a></li>';
+                }
+            }
+            return lichild;
+        }
+
+        function checkMobile() {
+            var isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+            if (isMobile) {
+                return true;
+            }
+            else {
+                return false;
+            }
+        }
+    </script>
+
+    <script>
+        $(document).ready(function () {
+            var url = window.location;
+            var element = $('.main-nav li a').filter(function () {
+                return this.href == url || url.href.indexOf(this.href) == 0;
+            });
+            $(element).parentsUntil('.main-nav', 'li').addClass('active').find(".dropdown_menu").slideDown().next(".sub-indicator").addClass("sub-arrow-open");
+        });
+    </script>
+
+    <script>
+        jQuery(function ($) {
+            if ($(window).width() > 769) {
+                $('.wrapper .dropdown').hover(function () {
+                    $(this).find('.dropdown-menu').first().stop(true, true).delay(250).slideDown();
+                }, function () {
+                    $(this).find('.dropdown-menu').first().stop(true, true).delay(100).slideUp();
+
+                });
+                $('.wrapper .dropdown > a').click(function () {
+                    location.href = this.href;
+                });
+            }
+        });
+    </script>
+
+
+    <script>
+        function GetIPAdd() {
+            $.getJSON("https://api.ipify.org?format=json",
+                function (data) {
+                    $("#ipadd").val(data.ip);
+                })
+        }
+    </script>
+    <script type="text/javascript">
+        var interval = 10000;
+        setInterval(function () { GetIPAdd(), Update() }, interval);
+
+        function Update() {
+
+            var Ip = $('#ipadd').val();
+            $.ajax({
+                type: 'POST',
+                dataType: 'json',
+                url: '/Account/AutoLogout1',
+                data: { 'Ip': Ip },
+                success: function (response) {
+                    if (response.Result == true) {
+
+
+                        var check = response.lgn;
+                        if (check == 1) {
+                            //alert(response.AnotherLog);
+                        }
+                        if (check == 2) {
+                            // alert(response.AnotherLog);
+                            window.location.href = "/Account/Login/"
+                        }
+
+
+
+                    }
+                    else {
+                        //alert('An Error has occured. Please try again.');
+                    }
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+
+                    // alert('An Error has occured. Please try again.');
+                }
+            });
+        }
+    </script>
+
+    <!-- ./wrapper -->
+    <!-- Bootstrap 3.3.7 -->
+    <script src="~/TemplateFiles/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+    <!-- FastClick -->
+    <script src="~/TemplateFiles/bower_components/fastclick/lib/fastclick.js"></script>
+    <!-- AdminLTE App -->
+    <script src="~/TemplateFiles/dist/js/adminlte.min.js"></script>
+    <!-- Sparkline -->
+    <script src="~/TemplateFiles/bower_components/jquery-sparkline/dist/jquery.sparkline.min.js"></script>
+    <!-- jvectormap  -->
+    <script src="~/TemplateFiles/plugins/jvectormap/jquery-jvectormap-1.2.2.min.js"></script>
+    <script src="~/TemplateFiles/plugins/jvectormap/jquery-jvectormap-world-mill-en.js"></script>
+    <!-- SlimScroll -->
+    <script src="~/TemplateFiles/bower_components/jquery-slimscroll/jquery.slimscroll.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.15/js/bootstrap-multiselect.js"></script>
+</body>
+
+@Scripts.Render("~/bundles/dropzonescripts")
+@Scripts.Render("~/bundles/jqueryval")
+@Scripts.Render("~/bundles/jqueryui")
+@RenderSection("scripts", required: false)
+
+
+</html>

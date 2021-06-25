@@ -1,0 +1,330 @@
+﻿@using System.Data;
+@using System.Data.SqlClient;
+
+@model Shipment49Web.Common.AbrasionDetails
+
+@{
+    ViewBag.Title = "Dashboard";
+    Layout = "~/Views/Shared/_LeftSideBar.cshtml";
+}
+
+<script src="~/js/CommonScriptFunctions.js"></script>
+
+<div class="content-wrapper">
+    <section class="content-header">
+        <h1>
+            Abrasion Details
+        </h1>
+    </section>
+    <section class="content">
+        <div class="box box-info">
+            <div class="box-body">
+                @using (Html.BeginForm("AbrasionReport", "Reports", FormMethod.Post, new { area = "data" }))
+                {
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="col-md-3">
+                                @Html.LabelFor(m => m.FleetNameIDs, "Fleet Name")
+                                <div class="form-group">
+                                    @Html.ListBoxFor(m => m.FleetNameIDs, new SelectList(Model.FleetNames, "Id", "Name"), new { @class = "form-control listbox" })
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                @Html.LabelFor(m => m.FleetTypeIDs, "Fleet Type")
+                                <div class="form-group">
+                                    @Html.ListBoxFor(m => m.FleetTypeIDs, new SelectList(Model.FleetTypes, "Id", "Name"), new { @class = "form-control listbox" })
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                @Html.LabelFor(m => m.AgeRangeFrom, "Age Range From")
+                                <div class="form-group">
+                                    @Html.EditorFor(m => m.AgeRangeFrom, new { htmlAttributes = new { @class = "form-control" } })
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                @Html.LabelFor(m => m.AgeRangeTo, "Age Range To")
+                                <div class="form-group">
+                                    @Html.EditorFor(m => m.AgeRangeTo, new { htmlAttributes = new { @class = "form-control" } })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="col-md-3">
+                                @Html.LabelFor(m => m.TradeIDs, "Trade Name")
+                                <div class="form-group">
+                                    @Html.ListBoxFor(m => m.TradeIDs, new SelectList(Model.TradePlatforms, "Id", "Name"), new { @class = "form-control listbox" })
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                @Html.LabelFor(m => m.VesselIDs, "Vessel Name")
+                                <div class="form-group">
+                                    @Html.ListBoxFor(m => m.VesselIDs, new SelectList(Model.Vessels, "Id", "VesselName"), new { @class = "form-control listbox" })
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                @Html.LabelFor(m => m.ManufacturerIDs, "Manufacturer")
+                                <div class="form-group">
+                                    @Html.ListBoxFor(m => m.ManufacturerIDs, new SelectList(Model.ManufacturerList, "Id", "Name"), new { @class = "form-control listbox" })
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                @Html.LabelFor(m => m.RopeTypeIDs, "Rope Type")
+                                <div class="form-group">
+                                    @Html.ListBoxFor(m => m.RopeTypeIDs, new SelectList(Model.RopeType, "Id", "RopeType"), new { @class = "form-control listbox" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="col-md-3">
+                                @Html.LabelFor(m => m.InspectionRatingIDs, "Inspection Rating")
+                                <div class="form-group">
+                                    @Html.ListBoxFor(m => m.InspectionRatingIDs, new SelectList(Model.InspectionRatingList, "Value", "Text"), new { @class = "form-control listbox" })
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                @Html.LabelFor(m => m.RunningHoursFrom, "Running Hours From")
+                                <div class="form-group">
+                                    @Html.EditorFor(m => m.RunningHoursFrom, new { htmlAttributes = new { @class = "form-control" } })
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                @Html.LabelFor(m => m.RunningHoursTo, "Running Hours To")
+                                <div class="form-group">
+                                    @Html.EditorFor(m => m.RunningHoursTo, new { htmlAttributes = new { @class = "form-control" } })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <div class="pull-right">
+                                    <button type="submit" class="btn btn-danger">Search</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="box box-default">
+                    <div class="box-body">
+                        <input type="hidden" id="CombinedZonesData" value="@ViewBag.CombinedZones" />
+                        <div class="box-body" style="height: 250px">
+                            <div id="bar-chart2">
+                                <svg height="200"></svg>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="box box-default">
+                    <div class="box-body">
+                        <div class="table-responsive">
+                            <table class="table no-margin table-striped" id="dataTable" width="100%" cellspacing="0">
+                                <thead>
+                                    <tr>
+                                        <th class="col-md-2">Rating </th>
+                                        @foreach (System.Data.DataRow row_1 in Model.AbrasionDetailsResult.Tables[0].Rows)
+                                        {
+                                            <th class="col-md-1">@row_1["RatingID"]</th>
+                                        }
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td class="col-md-2">Total Ropes </td>
+                                        @foreach (System.Data.DataRow row_2 in Model.AbrasionDetailsResult.Tables[0].Rows)
+                                        {
+                                            <td class="col-md-1">
+                                                <a href="~/Data/Reports/AbrasionDetails/@row_2["RatingID"]" target="_blank">@row_2["TotalRopes"]</a>
+                                                @*<a data-toggle="collapse" data-parent="#accordion" data-target="#@row_2["Rating"]">
+                                                        @row_2["TotalRopes"]
+                                                    </a>*@
+                                            </td>
+                                        }
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        @*@{
+                DataTable dataTable = Model.AbrasionDetailsResult.Tables[1];
+                DataView dataView = dataTable.AsDataView();
+
+                <div class="panel-group" id="accordion">
+
+                    @foreach (System.Data.DataRow dRow in Model.AbrasionDetailsResult.Tables[0].Rows)
+                    {
+                        dataView.RowFilter = "Rating = " + dRow["Rating"];
+
+                        DataTable recordsFound = dataView.ToTable();
+
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a data-toggle="collapse" data-parent="#accordion" href="@string.Format("#collapse_{0}", dRow["Rating"])">
+                                        Rating - @dRow["Rating"] - (@dRow["TotalRopes"])
+                                    </a>
+                                </h4>
+                            </div>
+
+                            <div id="@string.Format("collapse_{0}", dRow["Rating"])" class="panel-collapse collapse">
+                                <div class="panel-body">
+                                    <div class="table-responsive">
+                                        <table class="table no-margin table-striped" id="dataTable" width="100%" cellspacing="0">
+                                            <thead>
+                                                <tr>
+                                                    <th>Rope ID</th>
+                                                    <th>Vessel</th>
+                                                    <th>Avg Rating</th>
+                                                    <th>Winch Number</th>
+                                                    <th>Manufacturer</th>
+                                                    <th>Rope Type</th>
+                                                    <th>Inspect By</th>
+                                                    <th>Inspect Date</th>
+                                                    <th>Photo 1</th>
+                                                    <th>Photo 2</th>
+                                                    <th>Image 1</th>
+                                                    <th>Image 2</th>
+                                                    <th>Rope Summary</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach (DataRow dataRow in recordsFound.Rows)
+                                                {
+                                                    <tr>
+                                                        <td>@dataRow["RopeId"]</td>
+                                                        <td>@dataRow["VesselName"]</td>
+                                                        <td class="text-center">@dataRow["Rating"]</td>
+                                                        <td>@dataRow["AssignedNumber"]</td>
+                                                        <td>@dataRow["Name"]</td>
+                                                        <td>@dataRow["RopeType"]</td>
+                                                        <td>@dataRow["InspectBy"]</td>
+                                                        <td>
+                                                            @if (dataRow["InspectDate"] != null)
+                                                            {
+                                                                DateTime dt = (DateTime)(dataRow["InspectDate"]);
+                                                                @Html.Raw(dt.ToString("dd-MMM-yyyy"));
+                                                            }
+                                                        </td>
+                                                        <td>@dataRow["Photo1"]</td>
+                                                        <td>@dataRow["Photo2"]</td>
+                                                        <td>@dataRow["Image1"]</td>
+                                                        <td>@dataRow["Image2"]</td>
+                                                        <td class="text-center">
+                                                            <a href="~/Data/Reports/RopeSummary?rope=@dataRow["RopeId"]&tail=0&vessel=@dataRow["ImoNo"]" title="Rope Details" target="_blank">
+                                                                <i class="fa fa-list-ul"></i>
+                                                            </a>
+                                                        </td>
+                                                    </tr>
+                                                }
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+
+                </div>
+            }*@
+
+    </section>
+</div>
+
+
+<style>
+
+    .imgdot {
+        width: 35px;
+        margin-top: -5px;
+    }
+
+    .ulShip {
+        padding: 0;
+        margin: 0;
+        list-style: none;
+    }
+
+        .ulShip li {
+            text-align: left;
+        }
+
+
+    #h5ship {
+        font-size: 41px;
+        margin-bottom: -85px;
+        padding-left: 140px
+    }
+</style>
+
+<link href="~/assets/plugins/barchart/nv.d3.css" rel="stylesheet" />
+
+@section Scripts {
+
+    <script src="~/assets/plugins/gauge/gauge.js"></script>
+    <script src="~/assets/plugins/barchart/d3.min.js"></script>
+    <script src="~/assets/plugins/barchart/nv.d3.min.js"></script>
+    <script src="~/assets/plugins/barchart/abrasionChart.js"></script>
+
+    <script>
+        function InitGauge() {
+            var opts = {
+                angle: -0.2, // The span of the gauge arc
+                lineWidth: 0.2, // The line thickness
+                radiusScale: 1, // Relative radius
+                pointer: {
+                    length: 0.6, // // Relative to gauge radius
+                    strokeWidth: 0.035, // The thickness
+                    color: '#000000' // Fill color
+                },
+                limitMax: false,     // If false, max value increases automatically if value > maxValue
+                limitMin: false,     // If true, the min value of the gauge will be fixed
+                //colorStart: '#FDBE40',   // Colors
+                //colorStop: '#FDBE40',    // just experiment with them
+                //strokeColor: '#8FC0DA',  // to see which ones work best for you
+                generateGradient: true,
+                highDpiSupport: true,     // High resolution support
+                // renderTicks is Optional
+                renderTicks: {
+                    divisions: 10,
+                    divWidth: 1.1,
+                    divLength: 0.7,
+                    divColor: '#eee'
+                },
+                staticZones: [
+                    { strokeStyle: "#F03E3E", min: 0, max: 70 }, // Red from 100 to 130
+                    { strokeStyle: "orange", min: 70, max: 90 }, // Yellow
+                    { strokeStyle: "#30B32D", min: 90, max: 100 } // Green
+                ]
+            };
+            var target = document.getElementById('dvMeter'); // your canvas element
+            var gauge = new Gauge(target).setOptions(opts); // create sexy gauge!
+            gauge.maxValue = 100; // set max gauge value
+            gauge.setMinValue(0);  // Prefer setter over gauge.minValue = 0
+            gauge.animationSpeed = 32; // set animation speed (32 is default value)
+            //gauge.set(95); // set actual value
+
+            var satisfactoryRopes = $('#SatisfactoryRopes').val();
+            gauge.set(satisfactoryRopes);
+        }
+
+        $(function () {
+            InitGauge();
+        });
+
+
+    </script>
+}

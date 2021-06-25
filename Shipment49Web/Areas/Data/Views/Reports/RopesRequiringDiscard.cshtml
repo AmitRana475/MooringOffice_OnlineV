@@ -1,0 +1,242 @@
+﻿@*@model List<Reports.spRopesRequiringDiscard_Details_Result>*@
+@model Shipment49Web.Common.RopeSummaryReport
+
+@{
+    ViewBag.Title = "Ropes Requiring Discard";
+    Layout = "~/Views/Shared/_LeftSideBar.cshtml";
+}
+
+
+
+<link href="~/Content/Chart.css" rel="stylesheet" />
+<script src="~/js/CommonScriptFunctions.js"></script>
+<script src="~/Scripts/Chart.min.js"></script>
+
+<div class="content-wrapper">
+    <section class="content-header">
+        <h1>
+            Lines/Tails Requiring Discard
+        </h1>
+    </section>
+
+    <section class="content">
+        <div class="box box-info">
+            <div class="box-body">
+                @{ int count = 0; int count2 = 0;}
+                <div class="nav-tabs-custom">
+                    <ul class="nav nav-tabs">
+
+                        <li class="active">
+                            <a href="#GraphView" class="tablinks" data-toggle="tab">Graphical View</a>
+                        </li>
+                        <li>
+                            <a href="#unsatisfactory" class="tablinks" data-toggle="tab">Line Discard Details</a>
+                        </li>
+                        <li>
+                            <a href="#satisfactory" class="tablinks" data-toggle="tab">Tail Discard Details</a>
+                        </li>
+
+                    </ul>
+                    <div class="tab-content" style="min-height: 650px">
+                        <div class="tab-pane active" id="GraphView">
+
+                            @{
+                                count = Model.RopeDiscardDetails.Count;
+                                count2 = Model.TailDiscardDetails.Count;
+                                if (count == 0 && count2 == 0)
+                                {
+                                    <div class="panel-group">
+                                        <div class="panel panel-info">
+                                            <div class="panel-body">
+                                                <p class="text-center">
+                                                    No Records Found!
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                                else
+                                {
+                                    
+                                        <div style="height: 300px">
+                                            @Html.Partial("_RopeTailsDiscardChart", (Shipment49Web.Common.GraphData)@ViewBag.RopeTailsDiscardedCharts_RTW)
+                                        </div>
+                                    
+                                    
+                                        <div style="height: 300px">
+                                            @Html.Partial("_RopeTailsDiscardChart_MW", (Shipment49Web.Common.GraphData)@ViewBag.RopeTailsDiscardedCharts_MW)
+                                        </div>
+                                   
+                                   
+                                        <div style="height: 300px">
+                                            @Html.Partial("_RopeTailsDiscardChart_VW", (Shipment49Web.Common.GraphData)@ViewBag.RopeTailsDiscardedCharts_VW)
+                                        </div>
+                                   
+                                }
+                            }
+                        </div>
+
+                        <div class="tab-pane" id="unsatisfactory">
+                            @{
+                                count = Model.RopeDiscardDetails.Count;
+                                if (count == 0)
+                                {
+                                    <div class="panel-group">
+                                        <div class="panel panel-info">
+                                            <div class="panel-body">
+                                                <p class="text-center">
+                                                    No Records Found!
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="table-responsive">
+                                        <table class="table no-margin table-striped" id="dataTable" width="100%" cellspacing="0">
+                                            <thead>
+                                                <tr>
+                                                    <th>Vessel Name</th>
+                                                    <th>Certificate Number</th>
+                                                    <th>Rope Type</th>
+                                                    <th>Manufacture</th>
+                                                    <th>Installed Date</th>
+
+                                                    <th>Running Hours</th>
+                                                    <th>Duration</th>
+                                                    <th>Reason</th>
+                                                    <th>Cost</th>
+                                                    <th>Details</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @{
+                                                    foreach (var record in Model.RopeDiscardDetails)
+                                                    {
+                                                                                                <tr>
+                                                                                                    <td>@record.VesselName</td>
+                                                                                                    <td>@record.CertificateNumber</td>
+                                                                                                    <td>@record.RopeType</td>
+                                                                                                    <td>@record.Name</td>
+                                                                                                    <td>
+                                                                                                        @{
+                                                                                                            DateTime? dt = record.InstalledDate;
+                                                                                                            if (dt != null)
+                                                                                                            {
+                                                                                                                @Html.Raw(dt.Value.ToString("dd-MMM-yyyy"))
+                                                                                                            }
+                                                                                                        }
+                                                                                                    </td>
+                                                                                                    <td>@record.CurrentRunningHours</td>
+                                                                                                    <td>@record.Duration</td>
+                                                                                                    <td>@record.Reason</td>
+                                                                                                    <td>
+                                                                                                        @{
+                                                                                                            if (record.CostUsd != null)
+                                                                                                            {
+                                                                                                                @Html.Raw(Convert.ToDecimal(string.Format("{0:F2}", record.CostUsd)));
+                                                                                                            }
+
+                                                                                                        }
+                                                                                                    </td>
+                                                                                                    <td>
+                                                                                                        <a href="~/Data/Reports/RopeSummary?rope=@record.RopeId&tail=0&vessel=@record.VesselID" title="Rope Details" target="_blank">
+                                                                                                            <i class="fa fa-list-ul"></i>
+                                                                                                        </a>
+                                                                                                    </td>
+                                                                                                </tr>
+                                                    }
+                                                }
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                }
+                            }
+                        </div>
+                        <div class="tab-pane" id="satisfactory">
+                            @{
+                                count = Model.TailDiscardDetails.Count;
+                                if (count == 0)
+                                {
+                                    <div class="panel-group">
+                                        <div class="panel panel-info">
+                                            <div class="panel-body">
+                                                <p class="text-center">
+                                                    No Records Found!
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="table-responsive">
+                                        <table class="table no-margin table-striped" id="dataTable" width="100%" cellspacing="0">
+                                            <thead>
+                                                <tr>
+                                                    <th>Vessel Name</th>
+                                                    <th>Certificate Number</th>
+                                                    <th>Rope Type</th>
+                                                    <th>Manufacture</th>
+                                                    <th>Installed Date</th>
+                                                    <th>Running Hours</th>
+                                                    <th>Duration</th>
+                                                    <th>Reason</th>
+                                                    <th>Cost</th>
+                                                    <th>Details</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @{
+                                                    foreach (var record in Model.TailDiscardDetails)
+                                                    {
+                                                                                                <tr>
+                                                                                                    <td>@record.VesselName</td>
+                                                                                                    <td>@record.CertificateNumber</td>
+                                                                                                    <td>@record.RopeType</td>
+                                                                                                    <td>@record.Name</td>
+                                                                                                    <td>
+                                                                                                        @{
+                                                                                                            DateTime? dt = record.InstalledDate;
+                                                                                                            if (dt != null)
+                                                                                                            {
+                                                                                                                @Html.Raw(dt.Value.ToString("dd-MMM-yyyy"))
+                                                                                                            }
+                                                                                                        }
+                                                                                                    </td>
+                                                                                                    <td>@record.CurrentRunningHours</td>
+                                                                                                    <td>@record.Duration</td>
+                                                                                                    <td>@record.Reason</td>
+                                                                                                    <td>
+                                                                                                        @{
+                                                                                                            if (record.CostUsd != null)
+                                                                                                            {
+                                                                                                                @Html.Raw(Convert.ToDecimal(string.Format("{0:F2}", record.CostUsd)));
+                                                                                                            }
+
+                                                                                                        }
+                                                                                                    </td>
+                                                                                                    <td>
+                                                                                                        <a href="~/Data/Reports/RopeSummary?rope=@record.RopeId&tail=1&vessel=@record.VesselID" title="Rope Details" target="_blank">
+                                                                                                            <i class="fa fa-list-ul"></i>
+                                                                                                        </a>
+                                                                                                    </td>
+                                                                                                </tr>
+                                                    }
+                                                }
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                }
+                            }
+                        </div>
+
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>

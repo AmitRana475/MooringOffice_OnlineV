@@ -1,0 +1,55 @@
+﻿@model List<NotificationLayer.NotificationClass>
+
+@{
+var grid = new WebGrid(canPage: true, rowsPerPage: 2);
+    grid.Bind(source: Model, rowCount: ViewBag.TotalRows, autoSortAndPage: false);
+}
+
+@grid.Table(
+           tableStyle: "table table-responsive table-borderd",
+           columns:
+              grid.Columns(
+
+            grid.Column(columnName: "NcDate", header: "Date", format: item => item.NcDate.ToString("dd-MMM-yyyy")),
+                  grid.Column(columnName: "VesselName", header: "Vessel Name"),
+                  grid.Column(columnName: "NonConfirmity", header: "Deviation"),
+                  grid.Column(columnName: "FullName", header: "Name"),
+                  grid.Column(columnName: "Rank", header: "Rank"),
+                  grid.Column(columnName: "MasterAkn", header: "Master Ack"),
+                  grid.Column(columnName: "HODAkn", header: "HOD Ack"),
+                  grid.Column("", style: "button", header: "Action",
+                          format:
+                        @<text >
+
+                        @Html.ActionLink("Comment (" + ((object)item.Comment1.Count) + ")", "comment", new { area = "notification", id = item.Nid }) |
+
+
+                        @if (item.Acknowledge == null || item.Acknowledge == string.Empty)
+                        {
+                            @Html.ActionLink("Acknowledge", "acknowledge", new { area = "notification", Page, id = item.Nid })
+                        }
+                        else
+                        {
+                            <label style="color:green">@item.Acknowledge</label>
+                        }
+
+                        </text>),
+
+                   grid.Column("", style: "button", header: "Detail",
+                          format:
+                        @<text >
+
+                        @Html.ActionLink("CrewReport", "index", "crewreport", new { area = "crewreport" }, null)
+
+
+                        </text>)
+
+               ))
+<div class="row">
+    <div class="col-sm-6">
+        @grid.PagerList(mode: WebGridPagerModes.All, paginationStyle: "pagination pagination-small pagination-small")
+
+    </div>
+</div>
+@Html.Hidden("dir", grid.SortDirection)
+@Html.Hidden("col", grid.SortColumn)

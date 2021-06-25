@@ -1,0 +1,143 @@
+﻿
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - DigimoorX7</title>
+
+    <script src="~/Scripts/jquery-1.12.4.js"></script>
+        <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600,700" rel="stylesheet">
+
+        @Styles.Render("~/Content/css")
+        @Styles.Render("~/Content/cssform")
+        @Scripts.Render("~/bundles/bootstrap")
+
+        <link href="/Content/helper.css" rel="stylesheet">
+
+    <style>
+        .vertical-menu {
+            width: 200px; /* Set a width if you like */
+        }
+
+            .vertical-menu a {
+                background-color: #eee; /* Grey background color */
+                color: black; /* Black text color */
+                display: block; /* Make the links appear below each other */
+                padding: 12px; /* Add some padding */
+                text-decoration: none; /* Remove underline from links */
+            }
+
+                .vertical-menu a:hover {
+                    background-color: #ccc; /* Dark grey background on mouse-over */
+                }
+
+                .vertical-menu a.active {
+                    background-color: #4CAF50; /* Add a green color to the "active/current" link */
+                    color: white;
+                }
+    </style>
+</head>
+
+<body>
+    <div class="menu-overlay"></div>
+    <div class="top_header hidden-sm hidden-xs">
+        <div class="pull-left">
+            <div class="logo_box">
+                <h1><a href="/home/index"><img src="/images/moor.png" alt="Shipping work and rest hrs" class="ship-logo" style="width:99%;"></a></h1>
+            </div>
+        </div>
+        <div class="pull-right text-right">
+            @Html.Partial("_LoginPartial")
+        </div>
+    </div>
+    <div class="top_header hidden-lg hidden-md visible-sm visible-xs">
+        <div class="col-xs-2">
+            <button type="button" class="navbar-toggle">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+        </div>
+        <div class="col-xs-8 text-center">
+            <a href="/home/index"><img src="/images/moor.png" alt="Shipping work and rest hrs" class="ship-logo"></a>
+        </div>
+        <div class="col-xs-2 text-right rightside_partial">
+            <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
+            <div class="mobile_loginPartial">
+                @Html.Partial("_LoginPartial")
+            </div>
+        </div>
+    </div>
+    <div class="top_header_height"></div>
+    <div class="nav-sidebar">
+        <div class="navbar-header">
+        </div>
+        <div id="myidname">
+            @{ var menusList = ViewBag.GetSubMenu as IEnumerable<MenuLayer.SubMenu>; }
+            <ul class="main-nav nav" id="horizontalmenu">
+                @if (ViewBag.GetMenu != null)
+                {
+                    foreach (var item in ViewBag.GetMenu)
+                    {
+                        string clsSubMenu = "";
+                        if (item.Menus1.Count > 1)
+                        {
+                            clsSubMenu = "dropdown";
+                        }
+                        <li class="@clsSubMenu">
+                            @if (item.Menus1.Count > 1)
+                            {
+                                <a href="#" data-ajax="true" data-ajax-mode="replace" data-ajax-update="#mymenuid">@item.MenuName</a>
+                                <ul class="dropdown_menu">
+                                    @foreach (var subMenu in item.Menus1)
+                                    {
+                                        <li>
+                                            <ul>
+                                            </ul>
+                                            <span class="sub-indicator"></span>
+                                            }
+                                        </li>
+                                </li>
+                            }
+                                </ul>
+                                <span class="sub-indicator"></span>
+                            }
+                            else
+                            {
+                                @Ajax.ActionLink((string)@item.MenuName, (string)@item.Action, (string)@item.Controller, new { area = (string)@item.AreaName }, new AjaxOptions { UpdateTargetId = "mymenuid" }, null)
+                            }
+                            </li>
+                        }
+                    }
+                </ul>
+            </div>
+
+            <div class="vertical-menu">
+                <a href="#" class="active">Admin Setting</a>
+                <a href="@Url.Action("index","approve",new {   Area = "msps" })">Check Content</a>
+            </div>
+        </div>
+        <div id="mymenuid" class="rightside">
+            @RenderBody()
+        </div>
+        <footer>
+            <span class="margin-3">&copy; 2018 - @DateTime.Now.Year (Work-Ship) Aqua 49 WebStreet Technologies Pvt. Ltd.</span>
+        </footer>
+        @Scripts.Render("~/bundles/jqueryval")
+        @Scripts.Render("~/bundles/jqueryui")
+        @Scripts.Render("~/bundles/jqueryvaldropdown")
+        @RenderSection("scripts", required: false)
+        <script>
+            $(document).ready(function () {
+                var url = window.location;
+                var element = $('.main-nav li a').filter(function () {
+                    return this.href == url || url.href.indexOf(this.href) == 0;
+                });
+                $(element).parentsUntil('.main-nav', 'li').addClass('active').find(".dropdown_menu").slideDown().next(".sub-indicator").addClass("sub-arrow-open");
+            });
+        </script>
+    </body>
+</html>

@@ -1,0 +1,218 @@
+﻿@model Shipment49Web.Areas.MooringTail.Models.AssignLinetoWinch
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_LayoutVessel7.cshtml";
+}
+
+
+<div class="page-heading page-header-flex">
+    <div>
+        <h1 class="page-title">
+            Assign RopeTail to Winch
+        </h1>
+        @*<ol class="breadcrumb">
+            <li><a href="">Home</a></li>
+            <li><a href="">Form</a></li>
+            <li><a>Create</a></li>
+        </ol>*@
+    </div>
+    @if (TempData["Error"] != null)
+    {
+        <p class="alert alert-danger" id="errorMessage">@TempData["Error"]</p>
+    }
+    @if (TempData["Success"] != null)
+    {
+        <p class="alert alert-success" id="successMessage">@TempData["Success"]</p>
+    }
+        <div>
+            <a class="btn btn-info" href="@Url.Action("addassignline", "AssignTail")">
+                <i class="fa fa-plus-circle mr-2"></i>Assign RopeTail to Winch
+            </a>
+
+            <a name="back" id="btnBack" onclick="goBack()" class="btn btn-primary btn-width"> << Go Back</a>
+
+        </div>
+</div>
+
+
+<div class="wrapper wrapper-content">
+    <div class="container">
+        <h3 class="card-title">RopeTail currently assigned to Winch</h3>
+        <div class="form-body">
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th style="display:none">Id</th>
+                            <th>Unique ID</th>
+                            <th>Cert.No.</th>
+                            <th>Assigned Winch</th>
+                            <th>Assigned Location</th>
+                            <th>Outboard End</th>
+                            <th>Assigned Date</th>
+                            <th>Lead</th>
+                            <th>Status</th>
+                            <th>Change Status</th>
+
+                            @*<th width="120px">View</th>*@
+                            <th width="120px">Delete</th>
+                        </tr>
+
+                    </thead>
+                    <tbody>
+
+                        @foreach (var item in Model.AssignMooringLineList)
+                        {
+
+
+                        <tr>
+                            <td style="display:none"> @Html.DisplayFor(modelItem => item.Id)</td>
+                            <td> @Html.DisplayFor(modelItem => item.UniqueId)</td>
+                            <td> @Html.DisplayFor(modelItem => item.CertificateNumber)</td>
+                            <td> @Html.DisplayFor(modelItem => item.AssignedNumber)</td>
+                            <td> @Html.DisplayFor(modelItem => item.AssignedLocation)</td>
+
+                            @if (item.Outboard == true)
+                            {
+                                <td>A</td>
+                            }
+                            else
+                            {
+                                <td>B</td>
+                            }
+                            <td> @Html.DisplayFor(modelItem => item.AssignedDate)</td>
+                            <td> @Html.DisplayFor(modelItem => item.Lead)</td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Status)
+                            </td>
+                            <td><a href="#" onclick="BtnUpdateStatus(@item.Id)">Shift to Inactive</a>  </td>
+                            @*<td width="120px">
+            <a href="@Url.Action("View", "AssignLine")" class="btn btn-sm btn-light btn-view">
+                <i class="uil uil-eye mr-2"></i>View
+            </a>
+        </td>*@
+                            <td width="100px">
+                                <button type="button" class="btn btn-sm btn-light btn-delete">
+                                    @Html.ActionLink("Delete", "Delete", "AssignTail", new { id = item.Id }, new { onclick = "return confirm('Are sure wants to delete?');" })
+                                    <i class="uil uil-trash-alt mr-2"></i>
+                                </button>
+                            </td>
+
+
+                        </tr>
+                        }
+
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <h3 class="card-title">Past Records for RopeTail assigned to Winches</h3>
+        <div class="form-body">
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th style="display:none">Id</th>
+                            <th>Unique ID</th>
+                            <th>Cert.No.</th>
+                            <th>Assigned Winch</th>
+                            <th>Assigned Location</th>
+                            <th>Outboard End</th>
+                            <th>Assigned Date</th>
+                            <th>Lead</th>
+                            <th width="120px">Delete</th>
+
+                        </tr>
+
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.AssignMooringLineList1)
+                        {
+
+
+                        <tr>
+                            <td style="display:none"> @Html.DisplayFor(modelItem => item.Id)</td>
+                            <td> @Html.DisplayFor(modelItem => item.UniqueId)</td>
+                            <td> @Html.DisplayFor(modelItem => item.CertificateNumber)</td>
+                            <td> @Html.DisplayFor(modelItem => item.AssignedNumber)</td>
+                            <td> @Html.DisplayFor(modelItem => item.AssignedLocation)</td>
+
+                            @if (item.Outboard == true)
+                            {
+                                <td>A</td>
+                            }
+                            else
+                            {
+                                <td>B</td>
+                            }
+                            <td> @Html.DisplayFor(modelItem => item.AssignedDate)</td>
+
+                            <td> @Html.DisplayFor(modelItem => item.Lead)</td>
+                            <td width="100px">
+
+
+                                <button type="button" class="btn btn-sm btn-light btn-delete">
+                                    @Html.ActionLink("Delete", "Delete", "AssignTail", new { id = item.Id }, new { onclick = "return confirm('Are sure wants to delete?');" })
+                                    <i class="uil uil-trash-alt mr-2"></i>
+                                </button>
+                            </td>
+
+
+                        </tr>
+                        }
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    function BtnUpdateStatus(Id) {
+
+        $.ajax({
+            type: 'POST',
+            dataType: 'json',
+            url: '/AssignTail/Shifttoinactive',
+            data: { 'Id': Id },
+            success: function (response) {
+                if (response.Result == true) {
+                    alert('Status Updated successfully.');
+                    //toastr["success"]('Status Updated successfully.');
+                    window.location.reload();
+
+                }
+                else {
+                    alert('An Error has occured. Please try again.');
+                    // toastr["error"]('An Error has occured. Please try again.');
+                }
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                //toastr["error"]('An Error has occured. Please try again.');
+                alert('An Error has occured. Please try again.');
+            }
+        });
+
+    };
+    //}
+</script>
+
+<script type="text/javascript">
+
+    setTimeout(function () {
+
+        $('#successMessage').fadeOut('fast');
+        $('#errorMessage').fadeOut('fast');
+    }, 3000);
+
+
+</script>
+<script>
+    function goBack() {
+        window.history.back();
+    }
+</script>

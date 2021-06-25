@@ -1,0 +1,117 @@
+﻿@model Shipment49Web.Areas.MSPS.Models.ContentDetails
+
+@{
+    ViewBag.Title = "CheckContent";
+    Layout = "~/Views/Shared/_LeftSideBar.cshtml";
+}
+
+<script src="~/js/libs/jquery-1.11.1.min.js" type="text/javascript" charset="utf-8"></script>
+
+<link href="~/css/htmldiff.css" rel="stylesheet" />
+
+<div class="content-wrapper">
+    <section class="content-header">
+        <h1>
+            Type :  @ViewBag.Type
+        </h1>
+    </section>
+
+    <section class="content">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="box box-info">
+                    <div class="box-body">
+                        <span style="margin-left :20px; text-align:center; margin-bottom:20px;font-weight:bold;color:#4B84E2; font-size:medium">@ViewBag.ContentChangePath</span>
+                        @using (Html.BeginForm("CheckContent", "Approve", new { area = "MSMP" }, FormMethod.Post))
+                        {
+                            @Html.AntiForgeryToken()
+                            @Html.HiddenFor(m => m.Id)
+                            @Html.HiddenFor(m => m.MId)
+
+                            @Html.HiddenFor(m => m.RevisionType)
+                            @Html.HiddenFor(m => m.Content)
+
+                            @Html.HiddenFor(m => m.RevisionText)
+
+                            <hr />
+
+                            <div style="display: none" class="container--compare-blocks">
+                                <div class="compare-block compare-block-two">
+                                    <header class="small-title">2nd HTML Block</header>
+                                    <div class="block" id="block2">
+                                        <div>@Model.Content </div>
+                                    </div>
+                                </div>
+                                <div class="compare-block compare-block-one">
+                                    <header class="small-title">1st HTML Block</header>
+                                    <div class="block" id="block1">
+                                        <div>@Model.Content1 </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="panel-body">
+                                        <div class="block" id="Block_Difference">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="small-gutter row">
+                                <div class="col-sm-3 col-xs-6 form-group">
+                                    @if (Model.Status != "Approved")
+                                    {
+                                        <input type="submit" name="submitButton" value="Approve" class="btn peach-btn btn-block btn-primary" />
+                                    }
+                                </div>
+                                <div class="col-sm-3 col-xs-6 form-group">
+                                    <input type="submit" name="submitButton" value="Reject" class="btn peach-btn btn-block btn-default" />
+                                </div>
+                                <div class="col-sm-4 col-xs-6 back_text margin-1-top">
+                                    <i class="fa fa-chevron-left"></i>&nbsp;
+                                    <a href=@string.Format("/MSPS/DetailsView?id={0}", Model.MId)>Back to List</a>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+
+
+
+@section Scripts
+	{
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.2/summernote.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            debugger;
+            // Initialize Editor
+            $('.textarea-editor').summernote();
+
+            let originalHTML = $("#block2")[0].innerText;
+            let newHTML = $("#block1")[0].innerText;
+
+            // Diff HTML strings
+            let output = htmldiff(originalHTML, newHTML);
+
+            $("#Block_Difference")[0].innerHTML = output;
+
+            $("#RevisionText").val(output);
+        });
+    </script>
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.2/summernote.css" rel="stylesheet">
+}
+
+<script>
+    $("div.note-toolbar panel-heading").remove();
+    $(".note-editable").attr("contenteditable", "false")
+</script>
+
+<script src="~/js/htmldiff.js"></script>

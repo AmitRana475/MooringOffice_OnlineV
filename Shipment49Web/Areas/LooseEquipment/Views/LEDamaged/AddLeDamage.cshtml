@@ -1,0 +1,236 @@
+﻿
+@model Reports.LooseEDamageRecord
+@{
+    /**/
+
+    ViewBag.Title = "AddLeDamage";
+    Layout = "~/Views/Shared/_LayoutVessel7.cshtml";
+}
+
+
+@*<script>
+        $(document).ready(function () {
+            $("#RopeId").select2();
+            $("#DamageLocation").select2();
+            $("#DamageReason").select2();
+            $("#IncidentReport").select2();
+            $("#DamageObserved").select2();
+            $("#MOPId").select2();
+        });
+    </script>*@
+
+
+
+
+
+
+
+<div class="content">
+
+    @using (Html.BeginForm("AddLeDamage", "LEDamaged"))
+    {
+        <div class="page-heading page-header-flex">
+            <div>
+                <h1 class="page-title">
+                    Add Loose Equipment Damage / @ViewBag.LooseEquipmentType
+                </h1>
+                <ol class="breadcrumb">
+                    <li><a href="">Home</a></li>
+                    <li><a href="">Form</a></li>
+                    <li><a>Create</a></li>
+                </ol>
+            </div>
+            <div class="form-actions">
+                <button name="Submit" type="submit" class="btn btn-success btn-width" ><i class="uil uil-check mr-2"></i>Submit</button>
+                <button name="Reset" type="reset" id="btnReset" class="btn btn-danger btn-width"><i class="uil uil-redo mr-2"></i>Reset</button>
+            </div>
+        </div>
+
+
+        <div class="wrapper wrapper-content">
+            <div class="container">
+                @if (TempData["Error"] != null)
+                {
+                    <p class="alert alert-danger" id="errorMessage">@TempData["Error"]</p>
+                }
+                @if (TempData["Success"] != null)
+                {
+                    <p class="alert alert-success" id="successMessage">@TempData["Success"]</p>
+                }
+                <div class="form-body">
+                    <div class="row">
+                        @Html.AntiForgeryToken()
+                        @Html.HiddenFor(e => e.Id)
+
+                        <div class="col-md-8 mx-auto">
+
+                            <div style="display:none">
+                                @Html.EditorFor(model => model.LooseETypeId, new { htmlAttributes = new { @class = "form-control", @required = "true", } })
+
+                            </div>
+
+                            <div style="display:none">
+                                @Html.EditorFor(model => model.CertificateNumber, new { htmlAttributes = new { @class = "form-control", @required = "false", } })
+
+                            </div>
+
+                            <div class="row form-group ">
+                                <label class="col-sm-4 col-form-label">
+                                    <label class="control-label">Select @ViewBag.LooseEquipmentType<sup>*</sup></label>
+                                </label>
+                                <div class="col-sm-8">
+                                    @Html.DropDownListFor(model => model.LEQuipID, new SelectList(Model.GetAllLE_Detail, "Value", "Text"), "", htmlAttributes: new { @class = "form-control select2", @required = "true", @onchange = "FindCertificate()" })
+                                    <div class="error"></div>
+
+                                </div>
+                            </div>
+
+                            <div class="row form-group">
+                                <label class="col-sm-4 col-form-label">
+                                    <label class="control-label">Damage Date<sup>*</sup></label>
+                                </label>
+                                <div class="col-sm-8">
+                                    @Html.TextBoxFor(x => x.DamageDate, "{0:yyyy-MM-dd}", new { @class = "form-control datepicker", @placeholder = "yyyy-mm-dd", @autocomplete = "Off", @required = "true" })
+                                    <div class="error"></div>
+                                </div>
+                            </div>
+
+
+                            <div class="row form-group">
+                                <label class="col-sm-4 col-form-label">
+                                    <label class="control-label">Incident Report<sup>*</sup></label>
+                                </label>
+                                <div class="col-sm-8">
+                                    @Html.DropDownListFor(model => model.IncidentReport, new SelectList(Model.IncidentReports, "Value", "Text"), "", htmlAttributes: new { @class = "form-control select2", @required = "true", })
+
+                                    <div class="error"></div>
+                                </div>
+                            </div>
+
+                            <div class="row form-group">
+                                <label class="col-sm-4 col-form-label">
+                                    <label class="control-label">Reason Observed<sup>*</sup></label>
+                                </label>
+                                <div class="col-sm-8">
+                                    @Html.DropDownListFor(model => model.DamageObserved, new SelectList(Model.DamageObservedLists, "DamageObserved1", "DamageObserved1"), "", htmlAttributes: new { @class = "form-control select2", @required = "true", @onchange = "damageOb(this)" })
+
+                                    <div class="error"></div>
+                                </div>
+                            </div>
+                            <div class="row form-group">
+                                <label class="col-sm-4 col-form-label">
+                                    <label class="control-label">Damage Reason<sup>*</sup></label>
+                                </label>
+                                <div class="col-sm-8">
+                                    @Html.DropDownListFor(model => model.DamageReason, new SelectList(Model.DamageReasons, "DamageReasonL", "DamageReasonL"), "", htmlAttributes: new { @class = "form-control select2", @required = "true" })
+
+                                    <div class="error"></div>
+                                </div>
+                            </div>
+
+                            <div class="row form-group">
+                                <label class="col-sm-4 col-form-label">
+                                    <label class="control-label">Remarks</label>
+                                </label>
+                                <div class="col-sm-8">
+                                    @Html.EditorFor(model => model.Remarks, new { htmlAttributes = new { @class = "form-control" } })
+                                    @*@Html.ValidationMessageFor(model => model.ManufacturerName, "", new { @class = "text-danger" })*@
+                                    <div class="error"></div>
+                                </div>
+                            </div>
+
+                            <div style="display:none" id="mopr" class="row form-group">
+                                <label class="col-sm-4 col-form-label">
+                                    <label class="control-label">Mooring Operation<sup>*</sup></label>
+                                </label>
+                                <div class="col-sm-8">
+                                    @Html.DropDownListFor(model => model.MOpId, new SelectList(Model.MooringOperationsLists, "OPId", "Operation"), "", htmlAttributes: new { @class = "form-control select2", })
+                                </div>
+                            </div>
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    }
+
+
+</div>
+
+
+
+
+<script>
+    
+    $("#DamageDate").keydown(function (e) {
+        e.preventDefault();
+    });
+
+    function damageOb(t) {
+        var Id = t.value;
+        if (Id != "Mooring Operation") {
+            document.getElementById("MOpId").required = false;
+            $('#mopr').hide();
+        }
+        if (Id == "Mooring Operation") {
+            $('#mopr').show();
+            document.getElementById("MOpId").required = true;
+        }
+    }
+
+    function FindCertificate() {
+
+        var cc = $("#LEQuipID option:selected").text();
+        //alert(cc);
+        $('#CertificateNumber').val(cc);
+        //$("#LEQuipID").change(function () {
+        //    var cur_value = $('option:selected', this).text();
+        //    alert(cur_value);
+        //});
+
+    }
+
+    var cc = $("#LEQuipID option:selected").text();
+    $('#CertificateNumber').val(cc);
+
+</script>
+
+
+
+<script type="text/javascript">
+
+    setTimeout(function () {
+
+        $('#successMessage').fadeOut('fast');
+        $('#errorMessage').fadeOut('fast');
+    }, 3000);
+
+
+</script>
+
+<script type="text/javascript">
+    $('.datepicker').datepicker();
+</script>
+
+<script>
+    $('#btnReset').click(function () {
+        $("#LooseETypeId").val(null).trigger("change");
+        $("#LEQuipID").val(null).trigger("change");
+        $("#IncidentReport").val(null).trigger("change");
+        $("#DamageObserved").val(null).trigger("change");
+        $("#MOpId").val(null).trigger("change");
+
+    });
+</script>
+
+
+
+
+
+
+
+

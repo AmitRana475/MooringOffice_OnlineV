@@ -1,0 +1,127 @@
+﻿
+@{
+	ViewBag.Title = "index";
+	Layout = "~/Views/Shared/_LeftSideBar.cshtml";
+}
+
+
+
+
+@model List<VesselLayer.FleetNameClass>
+
+
+
+
+
+<div class="page_title margin-3-bot">
+	<h2>Fleet Name</h2>
+</div>
+
+<div class="white-bg margin-3 fleet">
+	<div class="row margin-4-bot">
+		<div class="col-sm-2 col-xs-12">
+			<a href="/setting/fleetname/create" class="btn btn-success btn-block">Create New</a>
+		</div>
+		<div class="col-sm-6 col-xs-12 pull-right">
+			@using (Html.BeginForm("index", "fleetname", FormMethod.Get, new { area = "setting", @class = "navbar-form navbar-right" }))
+			{
+
+				<div class="form-group">
+					<input type="text" name="search" id="search" value="@ViewBag.search" class="form-control" placeholder="Fleet Name" />
+				</div>
+				<button type="submit" value="Search" class="btn peach-btn">Search</button>
+			}
+		</div>
+	</div>
+
+	<div class="content">
+		<div class="container-fluid">
+			<div class="row">
+				<div class="col-md-12">
+
+					
+
+
+					<div class="card">
+
+						@*@{int listcount = Model.Pager.CurrentPage == 1 ? 0 : (Model.Pager.PageSize * Model.Pager.CurrentPage) - (Model.Pager.PageSize); }*@
+						
+						<div class="card-content user_listingtbl">
+
+
+							<div class="table-responsive" id="dvListing">
+
+
+							
+								<table class="table table-striped">
+									<thead>
+										<tr>
+											<th class="text-center">S.No.</th>
+
+										
+											<th>Content</th>
+
+											<th>Create By</th>
+											<th>Status</th>
+
+											<th>View Details</th>
+
+
+
+										</tr>
+									</thead>
+									<tbody>
+										
+									</tbody>
+								</table>
+
+								@*@if (Model.contentListing.Count() > 0)
+								{
+									if (Model.Pager.EndPage > 1)
+									{
+										<ul class="pagination">
+											@if (Model.Pager.CurrentPage > 1)
+											{
+												<li>
+													<a onclick="return searchData(1)">First</a>
+												</li>
+												<li>
+													<a onclick="return searchData(@(Model.Pager.CurrentPage - 1))">Previous</a>
+												</li>
+											}
+
+											@for (var page = Model.Pager.StartPage; page <= Model.Pager.EndPage; page++)
+											{
+												<li class="@(page == Model.Pager.CurrentPage ? "active" : "")">
+													<a onclick="return searchData(@page)">@page</a>
+												</li>
+											}
+
+											@if (Model.Pager.CurrentPage < Model.Pager.TotalPages)
+											{
+												<li>
+													<a onclick="return searchData(@(Model.Pager.CurrentPage + 1))">Next</a>
+												</li>
+												<li>
+													<a onclick="return searchData(@(Model.Pager.TotalPages))">Last</a>
+												</li>
+											}
+										</ul>
+									}
+								}*@
+
+
+							</div>
+						</div>
+					</div>
+
+
+
+
+				</div>
+			</div>
+		</div>
+
+	</div>
+	
+</div>

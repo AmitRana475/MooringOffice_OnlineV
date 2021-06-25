@@ -1,0 +1,391 @@
+﻿
+@{
+    ViewBag.Title = "Analysis";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+
+}
+
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        $("#datefrom").datepicker();
+    });
+</script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        $("#dateto").datepicker();
+
+    });
+</script>
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#Ranks').multiselect({
+            includeSelectAllOption: true,
+
+            filterPlaceholder: 'Search',
+            enableCaseInsensitiveFiltering: true,
+            maxHeight: 250,
+            numberDisplayed: 1,
+            nonSelectedText: 'Rank'
+
+        });
+        $('#searchbtn').click(function () {
+            var selected = $("#Ranks option:selected");
+            var message = "";
+            selected.each(function () {
+                message += $(this).val() + ",";
+            });
+            $('#Rank').val(message);
+            //alert(message);
+        });
+
+        $('#searchbtn1').click(function () {
+            var selected = $("#Ranks option:selected");
+            var message = "";
+            selected.each(function () {
+                message += $(this).val() + ",";
+            });
+            $('#Rank').val(message);
+            //alert(message);
+        });
+
+    });
+</script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#vesselnames').multiselect({
+            includeSelectAllOption: true,
+
+            filterPlaceholder: 'Search',
+            enableCaseInsensitiveFiltering: true,
+            maxHeight: 250,
+            //buttonWidth: '150px',
+            numberDisplayed: 1,
+            nonSelectedText: 'Vessel'
+
+
+        });
+
+        $('#searchbtn').click(function () {
+            var selected = $("#vesselnames option:selected");
+            var message = "";
+            selected.each(function () {
+                message += $(this).val() + ",";
+
+            });
+            $('#VesselName').val(message);
+            //alert(message);
+        });
+
+        $('#searchbtn1').click(function () {
+            var selected = $("#vesselnames option:selected");
+            var message = "";
+            selected.each(function () {
+                message += $(this).val() + ",";
+
+            });
+            $('#VesselName').val(message);
+            //alert(message);
+        });
+
+
+
+    });
+</script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#fleettypes').multiselect({
+            includeSelectAllOption: true,
+
+            filterPlaceholder: 'Search',
+            enableCaseInsensitiveFiltering: true,
+            maxHeight: 250,
+            numberDisplayed: 1,
+            nonSelectedText: 'FleetType'
+
+        });
+        $('#searchbtn').click(function () {
+            var selected = $("#fleettypes option:selected");
+            var message = "";
+            selected.each(function () {
+                message += $(this).val() + ",";
+            });
+            $('#fleettype').val(message);
+            //alert(message);
+        });
+
+        $('#searchbtn1').click(function () {
+            var selected = $("#fleettypes option:selected");
+            var message = "";
+            selected.each(function () {
+                message += $(this).val() + ",";
+            });
+            $('#fleettype').val(message);
+            //alert(message);
+        });
+
+    });
+</script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#fleetnames').multiselect({
+            includeSelectAllOption: true,
+
+            filterPlaceholder: 'Search',
+            enableCaseInsensitiveFiltering: true,
+            maxHeight: 250,
+            numberDisplayed: 1,
+            nonSelectedText: 'FleetName'
+
+        });
+        $('#searchbtn').click(function () {
+            var selected = $("#fleetnames option:selected");
+            var message = "";
+            selected.each(function () {
+                message += $(this).val() + ",";
+            });
+            $('#fleetname').val(message);
+            //alert(message);
+        });
+
+
+        $('#searchbtn1').click(function () {
+            var selected = $("#fleetnames option:selected");
+            var message = "";
+            selected.each(function () {
+                message += $(this).val() + ",";
+            });
+            $('#fleetname').val(message);
+            //alert(message);
+        });
+
+    });
+</script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        var values2 = '@ViewBag.fleettypebm1';
+        $('#fleettypes option').filter(function () {
+            return values2.indexOf($(this).text()) > -1; //Options text exists in array
+        }).prop('selected', true);
+
+        $("#fleettypes").multiselect("refresh");
+
+        //........................
+
+        var values2 = '@ViewBag.fleetnamebm1';
+        $('#fleetnames option').filter(function () {
+            return values2.indexOf($(this).text()) > -1; //Options text exists in array
+        }).prop('selected', true);
+
+        $("#fleetnames").multiselect("refresh");
+
+        //................
+
+        var values2 = '@ViewBag.vesselnamebm1';
+        $('#vesselnames option').filter(function () {
+            return values2.indexOf($(this).text()) > -1; //Options text exists in array
+        }).prop('selected', true);
+
+        $("#vesselnames").multiselect("refresh");
+
+        //................
+
+        var values2 = '@ViewBag.rankbm1';
+        $('#Ranks option').filter(function () {
+            return values2.indexOf($(this).text()) > -1; //Options text exists in array
+        }).prop('selected', true);
+
+        $("#Ranks").multiselect("refresh");
+
+
+    });
+</script>
+
+<div class="page_title margin-3-bot">
+    <h2>Statistical Trend View </h2>
+</div>
+<div class="white-bg margin-3 fleet">
+
+    @using (Html.BeginForm("index", "statisticaltrendview", FormMethod.Get, new { area = "analysis" }))
+    {
+    <div id="mydiv">
+        @*<div ng-controller="multiselecteddropdown5" data-ng-model="fleettype">
+            <div ng-dropdown-multiselect="" options="CategoriesT" selected-model="SkillsetsFleetType" extra-settings="dropdownSetting" width="100%"></div>
+            <input id="fleettype" name="fleettype" type="hidden" value="{{SkillsetsFleetType}}" />
+        </div>
+
+        <div ng-controller="multiselecteddropdown4" data-ng-model="fleetname">
+            <div ng-dropdown-multiselect="" options="CategoriesF" selected-model="SkillsetsFleetName" extra-settings="dropdownSetting" width="100%"></div>
+            <input id="fleetname" name="fleetname" type="hidden" value="{{SkillsetsFleetName}}" />
+        </div>
+
+        <div ng-controller="multiselecteddropdown6" data-ng-model="VesselName">
+            <div ng-dropdown-multiselect="" options="Categories" selected-model="Skillsets" extra-settings="dropdownSetting" width="100%"></div>
+            <input id="VesselName" name="VesselName" type="hidden" value="{{Skillsets}}" />
+        </div>
+
+        <div ng-controller="multiselectedrank" data-ng-model="Ranks">
+            <div ng-dropdown-multiselect="" options="Categories1" selected-model="Ranks" extra-settings="dropdownSetting" width="100%"></div>
+            <input type="hidden" name="Rank" id="Rank" value="{{Ranks}}" />
+        </div>*@
+
+        <div class="small-gutter row">
+            <div class="col-sm-3 col-xs-6 form-group">
+                @Html.ListBox("fleettypes", new SelectList(ViewBag.fleettypebm, "Value", "Text"))
+                <input id="fleettype" name="fleettype" type="hidden" />
+            </div>
+            <div class="col-sm-3 col-xs-6 form-group">
+                @Html.ListBox("fleetnames", new SelectList(ViewBag.fleetnamebm, "Value", "Text"))
+                <input id="fleetname" name="fleetname" type="hidden" />
+            </div>
+            <div class="col-sm-3 col-xs-6 form-group">
+                @Html.ListBox("vesselnames", new SelectList(ViewBag.vesselnamebm, "Value", "Text"))
+                <input id="VesselName" name="VesselName" type="hidden" />
+            </div>
+            <div class="col-sm-3 col-xs-6 form-group">
+                @Html.ListBox("Ranks", new SelectList(ViewBag.rankebm, "Value", "Text"))
+                <input id="Rank" name="Rank" type="hidden" />
+            </div>
+            <div class="col-sm-4 col-xs-6 form-group">
+                <input type="text" name="datefrom" id="datefrom" value="@ViewBag.datefrom" class="form-control" placeholder="Select Date From" />
+            </div>
+            <div class="col-sm-4 col-xs-6 form-group">
+                <input type="text" name="dateto" id="dateto" value="@ViewBag.dateto" class="form-control" placeholder="Select Date To" />
+            </div>
+            @*<div class="col-sm-3 col-xs-6 form-group">
+            <input type="text" name="search" id="search" value="@ViewBag.vname"  class="form-control" placeholder="vessel Name" />&ensp;
+                </div>*@
+            <div class="col-sm-4 col-xs-12 form-group">
+                <button type="submit" id="searchbtn" name="Searchbtn" value="Search" class="btn peach-btn btn-block">Search</button>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-3 col-xs-12 form-group">
+                <button type="submit" id="searchbtn1" name="searchTerm" value="searchTerm" class="btn btn-success btn-block">Export</button>
+            </div>
+        </div>
+    </div>
+    }
+
+    @*<div>
+
+            <table class="table">
+                <tr>
+
+
+                    <th>
+                        Vessel Name
+                    </th>
+
+                    <th>
+                        Rank/Position
+                    </th>
+                    <th>
+                        Deviation
+                    </th>
+
+                    <th>
+                        Work Hours
+                    </th>
+
+                    <th>
+                        Rest Hours
+                    </th>
+
+
+                </tr>
+
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        @Html.HiddenFor(modelItem => item.VesselId)
+                        <td>
+                            @Html.DisplayFor(modelItem => item.VesselName)
+                        </td>
+
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Rank)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Deviation)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Work)
+                        </td>
+
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Rest)
+                        </td>
+
+
+                    </tr>
+                }
+
+            </table>
+
+            <div class="row">
+                <div class="col-sm-6">
+                    @grid.PagerList(mode: WebGridPagerModes.All, paginationStyle: "pagination pagination-small pagination-small")
+                </div>
+            </div>
+            @Html.Hidden("dir", grid.SortDirection)
+            @Html.Hidden("col", grid.SortColumn)
+
+        </div>
+
+
+
+
+        <div class="row">
+            <div class="col-sm-6">
+                @grid.PagerList(mode: WebGridPagerModes.All, paginationStyle: "pagination pagination-small pagination-small")
+            </div>
+        </div>
+        @Html.Hidden("dir", grid.SortDirection)
+        @Html.Hidden("col", grid.SortColumn)
+    *@
+
+
+    @Html.Partial("_graphicalindex")
+
+    <div id="message-listbm">
+        <font>@ViewBag.Messagegrid</font>
+    </div>
+
+</div>
+
+@*<script type="text/javascript">
+
+        $(document).ready(function () {
+            var dir = $('#dir').val();
+            var col = $('#col').val();
+
+            var header = $('th a[href*=' + col + ']');
+            if (dir == 'Ascending') {
+                header.text(header.text() + ' ▲');
+            }
+            if (dir == 'Descending') {
+                header.text(header.text() + ' ▼');
+            }
+
+
+        });
+    </script>*@
+
+@*@section Scripts {
+        @Scripts.Render("~/bundles/jqueryval")
+        @Scripts.Render("~/bundles/jqueryui")
+        @Scripts.Render("~/bundles/jqueryvaldropdown")
+    }*@

@@ -1,0 +1,366 @@
+﻿@model Shipment49Web.Areas.MSPS.Models.RevisionIndex
+@*@model MSMPmodule.DocsPages*@
+@using System.Text.RegularExpressions;
+
+@{
+	ViewBag.Title = "Index";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+
+}
+
+<style type="text/css">
+	.Fullscreen {
+		position: absolute;
+		left: 0;
+		top: 0;
+		margin-top:50px;		
+		width: 100%;
+		height: 100%;
+		/* Optional - just for DIV)*/
+		border: solid 1px #000000;
+		/*background-color: grey;*/
+	}
+</style>
+<h2>Revsion List</h2>
+<link rel="stylesheet" href="~/css/style.css">
+@*<link href="~/css/bootstrap.min.css" rel="stylesheet" />
+	<script src="~/js/bootstrap.min.js"></script>*@
+<div class="content">
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-md-12">
+
+
+
+				<div class="card">
+
+					@{int listcount = Model.Pager.CurrentPage == 1 ? 0 : (Model.Pager.PageSize * Model.Pager.CurrentPage) - (Model.Pager.PageSize); }
+					@*<div class="card-header card-header-text" data-background-color="rose">
+
+							<h4 class="card-title">Revision Status</h4>
+						</div>*@
+
+					<div class="card-content user_listingtbl">
+
+
+						<div class="table-responsive" id="dvListing">
+
+
+							@*@if (ViewBag.TotalCount != null)
+								{
+									<span style="font-size:medium; margin-left:1050px">
+										<b> Total Member :- @ViewBag.TotalCount</b>
+									</span>
+								}*@
+							<table class="table table-striped">
+								<thead>
+									<tr>
+										<th class="text-center">S.No.</th>
+
+										<th>Created Date</th>
+										<th>Revision Details</th>
+										@*<th>Page Title</th>
+											<th>Content</th>*@
+
+										<th>Change By</th>
+										<th>Approve By</th>
+										<th>Approved Date</th>
+
+
+
+
+
+									</tr>
+								</thead>
+								<tbody>
+									@{Int32 count = 0; string correctContent = "";}
+									@foreach (var m in Model.revisionListing)
+									{
+										correctContent = Regex.Replace(@m.Content, "<.*?>", String.Empty);
+
+										<tr>
+											<td>@(count += 1)</td>
+											<td>@m.CreatedDate</td>
+											<td><a href="javascript:void(0)" onclick="ViewRevisionDetails('@m.DocsId','@m.PageTitle')"> @m.DocumentName >> @m.PageTitle >> @m.RNumber </a></td>
+											@*<td>@m.PageTitle</td>*@
+
+
+											@*<td title="@correctContent">@(correctContent == null ? "" : correctContent.Length > 50 ? correctContent.Substring(0, 50) + "..." : correctContent )</td>*@
+											@*<td>@correctContent</td>*@
+											<td>@m.CreatedBy</td>
+											<td>@m.ApprovedBy</td>
+											<td>@m.ApprovedDate</td>
+
+
+
+
+
+
+										</tr>
+
+									}
+
+								</tbody>
+							</table>
+
+							@if (Model.revisionListing.Count() > 0)
+							{
+								if (Model.Pager.EndPage > 1)
+								{
+									<ul class="pagination">
+										@if (Model.Pager.CurrentPage > 1)
+										{
+											<li>
+												<a onclick="return searchData(1)">First</a>
+											</li>
+											<li>
+												<a onclick="return searchData(@(Model.Pager.CurrentPage - 1))">Previous</a>
+											</li>
+										}
+
+										@for (var page = Model.Pager.StartPage; page <= Model.Pager.EndPage; page++)
+										{
+											<li class="@(page == Model.Pager.CurrentPage ? "active" : "")">
+												<a onclick="return searchData(@page)">@page</a>
+											</li>
+										}
+
+										@if (Model.Pager.CurrentPage < Model.Pager.TotalPages)
+										{
+											<li>
+												<a onclick="return searchData(@(Model.Pager.CurrentPage + 1))">Next</a>
+											</li>
+											<li>
+												<a onclick="return searchData(@(Model.Pager.TotalPages))">Last</a>
+											</li>
+										}
+									</ul>
+								}
+							}
+
+
+						</div>
+					</div>
+				</div>
+
+
+
+
+			</div>
+		</div>
+	</div>
+
+</div>
+
+<div id="myModal" class="Fullscreen"  style="display:none;">
+	<input type="hidden" id="txtquestionid" />
+	<input type="hidden" id="hdnanswerid" />
+	<div class="modal-dialog" style="width:1100px">
+
+
+		<div style="overflow:scroll;height:450px;" class="modal-content">
+			<div class="modal-header" style="border-bottom: 1px solid #ccc;  padding-bottom: 10px;">
+
+				<h4 class="modal-title">Revision List </h4>
+			</div>
+			<div class="modal-body" style="overflow-y: auto;">
+				<div class="card-content">
+
+					<div class="card-content userlist matching_qn">
+						<div id="dvlist" class="table-responsive">
+							<table class="table table-striped">
+								<thead>
+									<tr>
+										<th class="text-center">S.No.</th>
+
+										<th>Created Date</th>
+										<th>Revision Details</th>
+										<th>Change By</th>
+										<th>Approve By</th>
+										<th>Approved Date</th>
+
+
+
+
+
+									</tr>
+								</thead>
+								<tbody>
+									@if (Model.revisionViewListing != null)
+									{
+									foreach (var m in Model.revisionViewListing)
+									{
+										correctContent = Regex.Replace(@m.Content, "<.*?>", String.Empty);
+
+										<tr>
+											<td>@(count += 1)</td>
+											<td>@m.CreatedDate</td>
+											<td><a href="javascript:void(0)" onclick="ViewRevisionDetails('@m.DocsId','@m.PageTitle')"> @m.DocumentName >> @m.PageTitle >> @m.RNumber </a></td>
+											@*<td>@m.PageTitle</td>*@
+
+
+											@*<td title="@correctContent">@(correctContent == null ? "" : correctContent.Length > 50 ? correctContent.Substring(0, 50) + "..." : correctContent )</td>*@
+											@*<td>@correctContent</td>*@
+											<td>@m.CreatedBy</td>
+											<td>@m.ApprovedBy</td>
+											<td>@m.ApprovedDate</td>
+
+
+
+
+
+
+										</tr>
+
+									}
+									}
+
+								</tbody>
+							</table>
+
+
+						</div>
+
+						@*<div style="display:none" class="container--compare-blocks">
+							<div class="compare-block compare-block-two">
+								<header class="small-title">2nd HTML Block</header>
+								<!-- element containing our 2nd set of html for comparison -->
+								<div class="block" id="block2">
+								
+									<div>@Model.Content </div>
+								</div>
+							</div>
+							<div style="display:none" class="compare-block compare-block-one">
+								<header class="small-title">1st HTML Block</header>
+								<!-- element containing our 1st set of html for comparison -->
+								<div class="block" id="block1">
+									
+									<div>@Model.Content1 </div>
+								</div>
+							</div>
+						</div>
+
+						<div style="margin-top:0px">
+							<article style="margin-top:20px" class="container--diff">
+								<header class="title">
+									Check Content Difference
+								</header>
+								<!-- results of our comparison will be inserted here -->
+								<section id="diff" class="diff"></section>
+							</article>
+						</div>*@
+					</div>
+				</div>
+			</div>
+			<div class="modal-footer" style="border-top: 1px solid #ccc; padding-top: 10px;">
+
+
+				<button type="button" class="btn btn-default btn-round" data-dismiss="modal">Close</button>
+			</div>
+		</div>
+
+	</div>
+</div>
+
+<script>
+
+	function searchData(page) {
+
+		debugger;
+		//var searchby1 = $("#ddlSearchBy :selected").text();
+
+		//var searchby = $("#ddlSearchBy :selected").val();
+		//var search = $("#txtsearch").val();
+		//  var date = $("#datepicker").val();
+		$("#dvListing").html("");
+		$("#dvListing").html("<div class='loader_overlay'><div class='idencard_loader'><div class='item0 item-1'></div><div class='item0 item-2'></div><div class='item0 item-3'></div><div class='item0 item-4'></div></div></div>");
+		var ai = {
+			//search: search,
+			//searchby: searchby,
+			page: page
+			//type: $("#drpaccount").val() != "" ? $("#drpaccount").val() : "5"
+
+
+		}
+		debugger;
+		$.ajax({
+			type: "post",
+			url: '/introduction/GetRevision/',
+			data: JSON.stringify(ai),
+			datatype: "json",
+			contentType: 'application/json; charset=utf-8',
+			success: function (data) {
+				debugger;
+				if (data.trim() != "") {
+					$("#dvListing").fadeIn("fast");
+					$("#dvListing").html("");
+					$("#dvListing").html(data);
+				}
+				else {
+					$("#dvListing").html("");
+					$("#dvListing").html('<div class="text-danger card-avatar text-center"><img class="imgnorecord" src="../Include/Admin/img/norecord.png"/><br/>no record found</div>');
+				}
+			},
+			error: function (data) {
+				$("#dvListing").html("");
+				$("#dvListing").html(data);
+			}
+		});
+	}
+</script>
+
+
+<script>
+
+	function ViewRevisionDetails(id,PageTitle) {
+
+
+
+		debugger;
+		$('#myModal').show();
+
+		//$('#myModal').modal('show');
+		//$("#dvlist").html("");
+		//$("#dvlist").html("<div class='loader_overlay'><div class='idencard_loader'><div class='item0 item-1'></div><div class='item0 item-2'></div><div class='item0 item-3'></div><div class='item0 item-4'></div></div></div>");
+
+
+		var getData;
+		var ai = {
+			id: id,
+			PageTitle:PageTitle
+		}
+		$.ajax({
+			type: "post",
+			url: '/Revision/RevisionDetails/',
+			data: JSON.stringify(ai),
+			datatype: "json",
+			contentType: 'application/json; charset=utf-8',
+			success: function (data) {
+
+
+				//$('#myModal').modal('show');
+				if (data.trim() != "") {
+					$("#dvlist").fadeIn("fast");
+					$("#dvlist").html("");
+					$("#dvlist").html(data);
+				}
+				else {
+					$("#dvlist").html("");
+					$("#dvlist").html('<div class="text-danger card-avatar text-center"><img class="imgnorecord" src="../Include/Admin/img/norecord.png"/><br/>no record found</div>');
+				}
+			},
+			error: function (data) {
+
+				$("#dvlist").html("");
+				$("#dvlist").html(data);
+			}
+		});
+	}
+
+
+
+
+</script>
+
+<script src="~/js/libs/jquery-1.11.1.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="~/js/index.js" type="text/javascript" charset="utf-8"></script>

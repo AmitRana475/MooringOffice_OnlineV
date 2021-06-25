@@ -1,0 +1,278 @@
+﻿
+
+@model Shipment49Web.Areas.MooringWinch.Models.MooringWinchClass
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_LayoutVessel7.cshtml";
+}
+
+
+
+
+
+<div class="content" id="page-wrapper" style="margin-left:-15px;">
+
+
+
+    <div class="page-heading page-header-flex">
+        <div>
+            <h1 class="page-title">
+                Mooring Winch
+            </h1>
+            <ol class="breadcrumb">
+                <li><a href="">Home</a></li>
+                <li><a href="">Form</a></li>
+                <li><a>Create</a></li>
+            </ol>
+        </div>
+        @if (TempData["Error"] != null)
+        {
+            <p class="alert alert-danger" id="errorMessage">@TempData["Error"]</p>
+        }
+        @if (TempData["Success"] != null)
+        {
+            <p class="alert alert-success" id="successMessage">@TempData["Success"]</p>
+        }
+            <div>
+
+
+                <button name="Submit" type="submit" onclick="SaveData()" class="btn btn-info"><i class="uil uil-check mr-2"></i>Save Order</button>
+
+                <a class="btn btn-info" href="@Url.Action("addmooringwinch", "MooringWinch")">
+                    <i class="fa fa-plus-circle mr-2"></i>Add Mooring Winch
+                </a>
+
+
+
+            </div>
+    </div>
+
+
+    
+
+    <div class="wrapper wrapper-content">
+        <div class="container">
+            <label style="font-style:italic">Click continuously on the arrow icon on left side of each line, drag line upwards or downwards to rank the sorting order of winch list. This sorting order will determine alignment of winch list in other lists of this software.</label>
+            <div>
+                <br />
+            </div>
+            <div class="table-responsive">
+                @{ int count = 0;}
+                <table class="table">
+                    <thead>
+                        <tr>
+
+                            <th style="display:none">Id</th>
+                            <th>                  </th>
+                            <th>Assigned Number</th>
+                            <th>Location</th>
+                            <th>Max Brake Holding Force(T)</th>
+
+                            <th>Lead</th>
+
+                            @*<th width="100px">View</th>*@
+                            <th width="100px">Edit</th>
+                            <th width="100px">Delete</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tblwinchlist">
+
+
+                        @foreach (var item in Model.MooringWinchList)
+                        {
+                            count++;
+
+                            <tr>
+                                <td style="display:none"> @Html.DisplayFor(modelItem => item.Id)</td>
+                                <td>
+                                    <i style="cursor:pointer" class="fa fa-arrows" aria-hidden="true"></i>
+
+                                </td>
+                                <td>@Html.DisplayFor(modelItem => item.AssignedNumber)</td>
+                                <td>@Html.DisplayFor(modelItem => item.Location)</td>
+                                <td>@Html.DisplayFor(modelItem => item.MBL)</td>
+                                <td>@Html.DisplayFor(modelItem => item.Lead)</td>
+
+
+
+                                @*<td width="100px">
+                                <a href="#" class="btn btn-sm btn-light btn-view" data-toggle="modal" data-target="#viewModal">
+                                    <i class="uil uil-eye mr-2"></i>View
+                                </a>
+                            </td>*@
+                                <td width="120px">
+                                    <a href="@Url.Action("Edit", "MooringWinch", new { id = item.Id })" class="btn btn-sm btn-light btn-edit">
+                                        <i class="uil uil-edit-alt mr-2"></i>Edit
+                                    </a>
+                                </td>
+                                <td width="100px">
+                                    <button type="button" class="btn btn-sm btn-light btn-delete">
+                                        @Html.ActionLink("Delete", "Delete", "MooringWinch", new { id = item.Id }, new { onclick = "return confirm('Are sure wants to delete?');" })
+                                        <i class="uil uil-trash-alt mr-2"></i>
+                                    </button>
+                                </td>
+
+
+                            </tr>
+                        }
+
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+<link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.24/themes/smoothness/jquery-ui.css" />
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.24/jquery-ui.min.js"></script>
+<script type="text/javascript">
+    $(function () {
+
+
+
+
+        $("#tblwinchlist").sortable({
+           // items: 'tr',
+           // items: 'tr:not(tr:first-child)',
+            cursor: 'pointer',
+            axis: 'y',
+            dropOnEmpty: false,
+            start: function (e, ui) {
+                ui.item.addClass("selected");
+            },
+            stop: function (e, ui) {
+                ui.item.removeClass("selected");
+                $(this).find("tr").each(function (index) {
+                    if (index > 0) {
+                        debugger;
+                        $(this).find("td").eq(0).html(index);
+                        //$(this).find("td").val(index + 1);
+                        
+                    }
+                });
+            }
+        });
+    });
+</script>
+
+<script>
+    function BtnUpdateStatus(Id) {
+
+        $.ajax({
+            type: 'POST',
+            dataType: 'json',
+            url: '/AssignLine/Shifttoinactive',
+            data: { 'Id': Id },
+            success: function (response) {
+                if (response.Result == true) {
+                    alert('Status Updated successfully.');
+                    //toastr["success"]('Status Updated successfully.');
+                    window.location.reload();
+
+                }
+                else {
+                    alert('An Error has occured. Please try again.');
+                    // toastr["error"]('An Error has occured. Please try again.');
+                }
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                //toastr["error"]('An Error has occured. Please try again.');
+                alert('An Error has occured. Please try again.');
+            }
+        });
+
+    };
+    //}
+</script>
+
+<script type="text/javascript">
+
+    setTimeout(function () {
+
+        $('#successMessage').fadeOut('fast');
+        $('#errorMessage').fadeOut('fast');
+    }, 3000);
+
+
+</script>
+
+
+<script>
+
+
+
+    function SaveData() {
+
+       
+        var winches = []; // list object
+        //$('#tbl1 > tbody  > tr').each(function () { //loop in table list
+
+        $('#tblwinchlist tr').each(function () {
+            debugger;
+            var Mooringwinch = {};
+            var assnumber = $(this).find("td").eq(2).html();
+            var locationg = $(this).find("td").eq(3).html();
+            var mbl = $(this).find("td").eq(4).html();
+            var lead = $(this).find("td").eq(5).html();
+
+
+            Mooringwinch.AssignedNumber = assnumber;
+            Mooringwinch.Location = locationg;
+            Mooringwinch.MBL = mbl;
+            Mooringwinch.Lead = lead;
+            winches.push(Mooringwinch);
+        });
+
+        //$("#tblwinchlist").each(function () {
+
+        //    var MooringRopeInspection = {};
+        //    var row = $(this).closest("tr")[0];
+        //    //var row1 = $(this).closest("tr").find('input');
+        //    var cells = $(this).closest('tr').children('td');
+        //    debugger;
+
+        //    var cntSrNo = row.cells[2].innerHTML;
+
+           
+        //    MooringRopeInspection.RopeId = row.cells[2].innerHTML;
+        //    MooringRopeInspection.WinchId = row.cells[3].innerHTML;
+           
+        //    inspections.push(MooringRopeInspection);
+        //});
+
+
+
+
+        debugger;
+        winches = JSON.stringify(winches);
+
+        
+
+        $.ajax({
+            url: '@Url.Action("InsertInOrder", "MooringWinch")',
+            type: "POST",
+            data: { 'winches': winches },
+            dataType: "json",
+            beforeSend: function (x) {
+                if (x && x.overrideMimeType) {
+                    x.overrideMimeType("application/j-son;charset=UTF-8");
+                }
+            },
+            success: function (result) {
+                debugger;
+                window.location.href = result;
+            }
+        });
+
+
+
+    }
+
+</script>
+
+
+

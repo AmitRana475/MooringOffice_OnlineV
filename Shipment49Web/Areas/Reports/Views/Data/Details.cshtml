@@ -1,0 +1,87 @@
+﻿@model List<Reports.View_ReportInspectionStatusDetails>
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_LeftSideBar.cshtml";
+}
+
+
+<div class="content-wrapper">
+    <section class="content-header">
+        <h1>
+            Inspection Details
+        </h1>
+    </section>
+
+    <section class="content">
+        <div class="box box-info">
+            <div class="box-body">
+                <div class="table-responsive table-striped">
+                    <table class="table no-margin" id="dataTable" width="100%" cellspacing="0">
+                        <thead>
+                            <tr>
+                                <th>Vessel Name</th>
+                                <th>Inspect Date</th>
+                                <th>Assigned Number</th>
+                                <th>Certificate Number</th>
+                                <th>Manufacturer</th>
+                                <th>Rope Type</th>
+                                <th>Twist</th>
+                                <th>Photo</th>
+                                <th>Photo</th>
+                                <th>External Rating A</th>
+                                <th>Internal Rating A</th>
+                                <th>Average Rating A</th>
+                                <th>Length Of Abrasion A</th>
+                                <th>Distance Outboard A</th>
+                                <th>Cut Yarn Count A</th>
+                                <th>Length Of Glazing A</th>
+                                <th>External Rating B</th>
+                                <th>Internal Rating B</th>
+                                <th>Average Rating B</th>
+                                <th>Length Of Abrasion B</th>
+                                <th>Distance Outboard B</th>
+                                <th>Cut Yarn Count B</th>
+                                <th>Length Of Glazing B</th>
+                                <th>Chafe Guard Condition</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @{
+                                foreach (var record in Model)
+                                {
+                                    <tr>
+                                        <td>@record.VesselName</td>
+                                        <td>@record.InspectDate</td>
+                                        <td>@record.AssignedNumber</td>
+                                        <td>@record.CertificateNumber</td>
+                                        <td>@record.ManufacturerId</td>
+                                        <td>@record.RopeType</td>
+                                        <td>@record.Twist</td>
+                                        <td>@record.Photo1</td>
+                                        <td>@record.Photo2</td>
+                                        <td>@record.ExternalRating_A</td>
+                                        <td>@record.InternalRating_A</td>
+                                        <td>@record.AverageRating_A</td>
+                                        <td>@record.LengthOFAbrasion_A</td>
+                                        <td>@record.DistanceOutboard_A</td>
+                                        <td>@record.CutYarnCount_A</td>
+                                        <td>@record.LengthOFGlazing_A</td>
+                                        <td>@record.ExternalRating_B</td>
+                                        <td>@record.InternalRating_B</td>
+                                        <td>@record.AverageRating_B</td>
+                                        <td>@record.LengthOFAbrasion_B</td>
+                                        <td>@record.DistanceOutboard_B</td>
+                                        <td>@record.CutYarnCount_B</td>
+                                        <td>@record.LengthOFGlazing_B</td>
+                                        <td>@record.Chafe_guard_condition</td>
+                                    </tr>
+                                }
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>

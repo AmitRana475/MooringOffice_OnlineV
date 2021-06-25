@@ -1,0 +1,790 @@
+﻿@model Shipment49Web.Areas.LooseEquipment.Models.LooseEquipmentDetails
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_LayoutVessel7.cshtml";
+}
+
+<div class="content">
+    <div class="page-heading page-header-flex">
+        <div>
+            <h1 class="page-title">
+                Loose Equipment Details
+            </h1>
+            <ol class="breadcrumb">
+                <li><a href="">Home</a></li>
+                <li><a href="">Form</a></li>
+                <li><a>Create</a></li>
+            </ol>
+        </div>
+
+       
+    </div>
+
+
+    <div class="admin-tabs loose-eq-detail-tab">
+        <ul class="nav nav-pills">
+            <li class="active"><a data-toggle="pill" href="#tab1">Joining Shakle</a></li>
+            <li><a data-toggle="pill" href="#tab2">Chain Stopper</a></li>
+            <li><a data-toggle="pill" href="#tab3">Chafe Guard</a></li>
+            <li><a data-toggle="pill" href="#tab4">Winch Brake Test Kit</a></li>
+            <li><a data-toggle="pill" href="#tab5">Messenger Rope</a></li>
+            <li><a data-toggle="pill" href="#tab6">Rope Stopper</a></li>
+            <li><a data-toggle="pill" href="#tab7">Fire Wire</a></li>
+            <li><a data-toggle="pill" href="#tab8">Towing Rope</a></li>
+            <li><a data-toggle="pill" href="#tab9">Suez Rope</a></li>
+            
+
+        </ul>
+    </div>
+
+
+    <div class="wrapper wrapper-content">
+        <div class="container-fluid">
+            @if (TempData["Error"] != null)
+            {
+                <p class="alert alert-danger" id="errorMessage">@TempData["Error"]</p>
+            }
+            @if (TempData["Success"] != null)
+            {
+                <p class="alert alert-success" id="successMessage">@TempData["Success"]</p>
+            }
+        <div class="tab-content">
+            @*@Html.ActionLink("Add New", "createjs", "LEDetails", new { }, new { Style = "color:White;float:right;" })*@
+            <div id="tab1" class="tab-pane fade in active">
+                <div class="text-right mb-4">
+                    <a class="btn btn-info" href="@Url.Action("createjs", "LEDetails", new { })">
+                        <i class="fa fa-plus-circle mr-2"></i>Add Loose Eq. Detail
+                    </a>
+                </div>
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead class=" text-primary">
+                            <tr>
+                                <th style="display:none">Id</th>
+                                <th>Unique ID</th>
+                                <th>Cert.No.</th>
+                                <th>Manufacturer</th>
+                                <th>Type</th>
+                                <th>MBL</th>
+                                <th>Received Date</th>
+                                <th>Installed Date</th>
+                                <th>Inspection Due Date</th>
+                                <th>Remarks</th>
+                                @*<th>View</th>*@
+                                <th>Edit</th>
+                                <th>Delete</th>
+
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                            @foreach (var item in Model.JoiningShackleList)
+                            {
+                            <tr>
+                                <td style="display:none"> @Html.DisplayFor(modelItem => item.Id)</td>
+                                <td> @Html.DisplayFor(modelItem => item.UniqueID)</td>
+                                <td> @Html.DisplayFor(modelItem => item.CertificateNumber)</td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.ManufactureName)
+                                </td>
+                                <td> @Html.DisplayFor(modelItem => item.Type)</td>
+                                <td> @Html.DisplayFor(modelItem => item.MBL)</td>
+                                <td> @Html.DisplayFor(modelItem => item.DateReceived1)</td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.DateInstalled1)
+
+                                </td>
+                                <td> @Html.DisplayFor(modelItem => item.InspectionDueDate1)</td>
+
+                                <td> @Html.DisplayFor(modelItem => item.Remarks)</td>
+                                @*<td width="100px">
+                                    <a href="#" class="btn btn-sm btn-light btn-view" data-toggle="modal" data-target="#viewModal">
+                                        <i class="uil uil-eye mr-2"></i>View
+                                    </a>
+                                </td>*@
+
+                            <td>
+                                @*<a href="@Url.Action("Edit", "LEDetails", new { id = item.Id, LTp = item.LooseETypeId })" class="btn btn-sm btn-light btn-edit">
+            <i class="uil uil-edit-alt mr-2"></i>Edit
+        </a>*@
+                                @*@Html.ActionLink("Edit", "Edit", new { id = item.Id, LTp = item.LooseETypeId }) |
+        @Html.ActionLink("Delete", "Delete", new { id = item.Id, LTp = item.LooseETypeId }, new { onclick = "return confirm('Are you sure you want to delete this?');" })*@
+
+                                <button type="button" class="btn btn-sm btn-light btn-edit">
+                                    <i class="uil uil-edit-alt mr-2"></i>
+                                    @Html.ActionLink("Edit", "Edit", new { id = item.Id, LTp = item.LooseETypeId })
+
+                                </button>
+
+                            </td>
+                            <td>
+                                <button type="button" class="btn btn-sm btn-light btn-delete">
+                                    <i class="uil uil-trash-alt mr-2"></i>
+                                    @Html.ActionLink("Delete", "Delete", new { id = item.Id, LTp = item.LooseETypeId }, new { onclick = "return confirm('Are you sure you want to delete this?');" })
+
+                                </button>
+                            </td>
+
+                            </tr>
+                            }
+
+                        </tbody>
+                    </table>
+
+                </div>
+
+            </div>
+            <div id="tab2" class="tab-pane fade">
+                @*@Html.ActionLink("Add New", "ChainStopperadd", "LEDetails", new { }, new { Style = "color:White;float:right;" })*@
+                <div class="text-right mb-4">
+                    <a class="btn btn-info" href="@Url.Action("ChainStopperadd", "LEDetails", new { })">
+                        <i class="fa fa-plus-circle mr-2"></i>Add Loose Eq. Detail
+                    </a>
+                </div>
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead class=" text-primary">
+                            <tr>
+                                <th style="display:none">Id</th>
+                                <th>Unique ID</th>
+                                <th>Cert.No.</th>
+                                <th>Manufacturer</th>
+
+                                <th>MBL</th>
+                                <th>Length</th>
+                                <th>Received Date</th>
+                                <th>Installed Date</th>
+                                <th>Inspection Due Date</th>
+                                <th>Remarks</th>
+                                <th>Edit</th>
+                                <th>Delete</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                            @foreach (var item in Model.ChainStopperList)
+                            {
+                            <tr>
+                                <td style="display:none"> @Html.DisplayFor(modelItem => item.Id)</td>
+                                <td> @Html.DisplayFor(modelItem => item.UniqueID)</td>
+                                <td> @Html.DisplayFor(modelItem => item.CertificateNumber)</td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.ManufactureName)
+                                </td>
+
+                                <td> @Html.DisplayFor(modelItem => item.MBL)</td>
+                                <td> @Html.DisplayFor(modelItem => item.Length)</td>
+                                <td> @Html.DisplayFor(modelItem => item.ReceivedDate1)</td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.InstalledDate1)
+
+                                </td>
+                                <td> @Html.DisplayFor(modelItem => item.InspectionDueDate1)</td>
+
+                                <td> @Html.DisplayFor(modelItem => item.Remarks)</td>
+
+                                @*<td>
+            @Html.ActionLink("Edit", "Edit", new { id = item.Id, LTp = item.LooseETypeId }) |
+            @Html.ActionLink("Delete", "Delete", new { id = item.Id, LTp = item.LooseETypeId }, new { onclick = "return confirm('Are you sure you want to delete this?');" })
+        </td>*@
+                                <td>
+                                    <button type="button" class="btn btn-sm btn-light btn-edit">
+                                        <i class="uil uil-edit-alt mr-2"></i>
+                                        @Html.ActionLink("Edit", "Edit", new { id = item.Id, LTp = item.LooseETypeId })
+
+                                    </button>
+
+                                </td>
+                                <td>
+                                    <button type="button" class="btn btn-sm btn-light btn-delete">
+                                        <i class="uil uil-trash-alt mr-2"></i>
+                                        @Html.ActionLink("Delete", "Delete", new { id = item.Id, LTp = item.LooseETypeId }, new { onclick = "return confirm('Are you sure you want to delete this?');" })
+
+                                    </button>
+                                </td>
+
+                            </tr>
+                            }
+
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+            <div id="tab3" class="tab-pane fade">
+                @*@Html.ActionLink("Add New", "ChafeGuardadd", "LEDetails", new { }, new { Style = "color:White;float:right;" })*@
+                <div class="text-right mb-4">
+                    <a class="btn btn-info" href="@Url.Action("ChafeGuardadd", "LEDetails", new { })">
+                        <i class="fa fa-plus-circle mr-2"></i>Add Loose Eq. Detail
+                    </a>
+                </div>
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead class=" text-primary">
+                            <tr>
+                                <th style="display:none">Id</th>
+                                <th>Unique ID</th>
+                                <th>Cert.No.</th>
+                                <th>Manufacturer</th>
+                                <th>Received Date</th>
+                                <th>Installed Date</th>
+                                <th>Inspection Due Date</th>
+                                <th>Remarks</th>
+                                <th>Edit</th>
+                                <th>Delete</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                            @foreach (var item in Model.ChafeGuardList)
+                            {
+                            <tr>
+                                <td style="display:none"> @Html.DisplayFor(modelItem => item.Id)</td>
+                                <td> @Html.DisplayFor(modelItem => item.UniqueID)</td>
+                                <td> @Html.DisplayFor(modelItem => item.CertificateNumber)</td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.ManufacturerName)
+                                </td>
+
+
+                                <td> @Html.DisplayFor(modelItem => item.ReceivedDate1)</td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.InstalledDate1)
+
+                                </td>
+                                <td> @Html.DisplayFor(modelItem => item.InspectionDueDate1)</td>
+
+                                <td> @Html.DisplayFor(modelItem => item.Remarks)</td>
+
+                                @*<td>
+            @Html.ActionLink("Edit", "Edit", new { id = item.Id, LTp = item.LooseETypeId }) |
+            @Html.ActionLink("Delete", "Delete", new { id = item.Id, LTp = item.LooseETypeId }, new { onclick = "return confirm('Are you sure you want to delete this?');" })
+        </td>*@
+
+                                <td>
+                                    <button type="button" class="btn btn-sm btn-light btn-edit">
+                                        <i class="uil uil-edit-alt mr-2"></i>
+                                        @Html.ActionLink("Edit", "Edit", new { id = item.Id, LTp = item.LooseETypeId })
+
+                                    </button>
+
+                                </td>
+                                <td>
+                                    <button type="button" class="btn btn-sm btn-light btn-delete">
+                                        <i class="uil uil-trash-alt mr-2"></i>
+                                        @Html.ActionLink("Delete", "Delete", new { id = item.Id, LTp = item.LooseETypeId }, new { onclick = "return confirm('Are you sure you want to delete this?');" })
+
+                                    </button>
+                                </td>
+                            </tr>
+                            }
+
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+            <div id="tab4" class="tab-pane fade">
+                @*@Html.ActionLink("Add New", "WBTKadd", "LEDetails", new { }, new { Style = "color:White;float:right;" })*@
+                <div class="text-right mb-4">
+                    <a class="btn btn-info" href="@Url.Action("WBTKadd", "LEDetails", new { })">
+                        <i class="fa fa-plus-circle mr-2"></i>Add Loose Eq. Detail
+                    </a>
+                </div>
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead class=" text-primary">
+                            <tr>
+                                <th style="display:none">Id</th>
+                                <th>Unique ID</th>
+                                <th>Cert.No.</th>
+                                <th>Manufacturer</th>
+                                <th>Received Date</th>
+                                <th>Installed Date</th>
+                                <th>Inspection Due Date</th>
+                                <th>Remarks</th>
+                                <th>Edit</th>
+                                <th>Delete</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                            @foreach (var item in Model.WinchBreakTestKitList)
+                            {
+                            <tr>
+                                <td style="display:none"> @Html.DisplayFor(modelItem => item.Id)</td>
+                                <td> @Html.DisplayFor(modelItem => item.UniqueID)</td>
+                                <td> @Html.DisplayFor(modelItem => item.CertificateNumber)</td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.ManufacturerName)
+                                </td>
+
+
+                                <td> @Html.DisplayFor(modelItem => item.ReceivedDate1)</td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.InstalledDate1)
+
+                                </td>
+                                <td> @Html.DisplayFor(modelItem => item.InspectionDueDate1)</td>
+
+                                <td> @Html.DisplayFor(modelItem => item.Remarks)</td>
+
+                                @*<td>
+            @Html.ActionLink("Edit", "Edit", new { id = item.Id, LTp = item.LooseETypeId }) |
+            @Html.ActionLink("Delete", "Delete", new { id = item.Id, LTp = item.LooseETypeId }, new { onclick = "return confirm('Are you sure you want to delete this?');" })
+        </td>*@
+                                <td>
+                                    <button type="button" class="btn btn-sm btn-light btn-edit">
+                                        <i class="uil uil-edit-alt mr-2"></i>
+                                        @Html.ActionLink("Edit", "Edit", new { id = item.Id, LTp = item.LooseETypeId })
+
+                                    </button>
+
+                                </td>
+                                <td>
+                                    <button type="button" class="btn btn-sm btn-light btn-delete">
+                                        <i class="uil uil-trash-alt mr-2"></i>
+                                        @Html.ActionLink("Delete", "Delete", new { id = item.Id, LTp = item.LooseETypeId }, new { onclick = "return confirm('Are you sure you want to delete this?');" })
+
+                                    </button>
+                                </td>
+
+                            </tr>
+                            }
+
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+            <div id="tab5" class="tab-pane fade">
+                @*@Html.ActionLink("Add New", "LERopeTail", "LEDetails", new { LTp = 3 }, new { Style = "color:White;float:right;" })*@
+                <div class="text-right mb-4">
+                    <a class="btn btn-info" href="@Url.Action("LERopeTail", "LEDetails", new { LTp = 3 })">
+                        <i class="fa fa-plus-circle mr-2"></i>Add Loose Eq. Detail
+                    </a>
+                </div>
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead class=" text-primary">
+                            <tr>
+                                <th style="display:none">Id</th>
+                                <th>Unique ID</th>
+                                <th>Cert.No.</th>
+                                <th>Manufacturer</th>
+                                <th>Rope Construction</th>
+                                <th>Diameter</th>
+                                <th>Length</th>
+                                <th>MBL</th>
+                                <th>LDBF</th>
+                                <th>WLL</th>
+                                <th>Received Date</th>
+                                <th>Installed Date</th>
+                                <th>Inspection Due Date</th>
+                                <th>Rope Tagging</th>
+                                <th>Remarks</th>
+                                <th>Edit</th>
+                                <th>Delete</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                            @foreach (var item in Model.MessengerRopeList)
+                            {
+                            <tr>
+                                <td style="display:none"> @Html.DisplayFor(modelItem => item.Id)</td>
+                                <td> @Html.DisplayFor(modelItem => item.UniqueID)</td>
+                                <td> @Html.DisplayFor(modelItem => item.CertificateNumber)</td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.ManufactureName)
+                                </td>
+                                <td> @Html.DisplayFor(modelItem => item.RopeConstruction)</td>
+                                <td> @Html.DisplayFor(modelItem => item.Diameter)</td>
+                                <td> @Html.DisplayFor(modelItem => item.Length)</td>
+                                <td> @Html.DisplayFor(modelItem => item.MBL)</td>
+                                <td> @Html.DisplayFor(modelItem => item.LDBF)</td>
+                                <td> @Html.DisplayFor(modelItem => item.WLL)</td>
+                                <td> @Html.DisplayFor(modelItem => item.ReceivedDate1)</td>
+                                <td>@Html.DisplayFor(modelItem => item.InstalledDate1)</td>
+                                <td> @Html.DisplayFor(modelItem => item.InspectionDueDate1)</td>
+                                <td> @Html.DisplayFor(modelItem => item.RopeTagging)</td>
+                                <td> @Html.DisplayFor(modelItem => item.Remarks)</td>
+
+                                @*<td>
+            @Html.ActionLink("Edit", "Edit", new { id = item.Id, LTp = item.LooseETypeId }) |
+            @Html.ActionLink("Delete", "Delete", new { id = item.Id, LTp = item.LooseETypeId }, new { onclick = "return confirm('Are you sure you want to delete this?');" })
+        </td>*@
+                                <td>
+                                    <button type="button" class="btn btn-sm btn-light btn-edit">
+                                        <i class="uil uil-edit-alt mr-2"></i>
+                                        @Html.ActionLink("Edit", "Edit", new { id = item.Id, LTp = item.LooseETypeId })
+
+                                    </button>
+
+                                </td>
+                                <td>
+                                    <button type="button" class="btn btn-sm btn-light btn-delete">
+                                        <i class="uil uil-trash-alt mr-2"></i>
+                                        @Html.ActionLink("Delete", "Delete", new { id = item.Id, LTp = item.LooseETypeId }, new { onclick = "return confirm('Are you sure you want to delete this?');" })
+
+                                    </button>
+                                </td>
+
+                            </tr>
+                            }
+
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+            <div id="tab6" class="tab-pane fade">
+                @*@Html.ActionLink("Add New", "LERopeTail", "LEDetails", new { LTp = 4 }, new { Style = "color:White;float:right;" })*@
+                <div class="text-right mb-4">
+                    <a class="btn btn-info" href="@Url.Action("LERopeTail", "LEDetails", new { LTp = 4 })">
+                        <i class="fa fa-plus-circle mr-2"></i>Add Loose Eq. Detail
+                    </a>
+                </div>
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead class=" text-primary">
+                            <tr>
+                                <th style="display:none">Id</th>
+                                <th>Unique ID</th>
+                                <th>Cert.No.</th>
+                                <th>Manufacturer</th>
+                                <th>Rope Construction</th>
+                                <th>Diameter</th>
+                                <th>Length</th>
+                                <th>MBL</th>
+                                <th>LDBF</th>
+                                <th>WLL</th>
+                                <th>Received Date</th>
+                                <th>Installed Date</th>
+                                <th>Inspection Due Date</th>
+                                <th>Rope Tagging</th>
+                                <th>Remarks</th>
+                                <th>Edit</th>
+                                <th>Delete</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                            @foreach (var item in Model.RopeStopperList)
+                            {
+                            <tr>
+                                <td style="display:none"> @Html.DisplayFor(modelItem => item.Id)</td>
+                                <td> @Html.DisplayFor(modelItem => item.UniqueID)</td>
+                                <td> @Html.DisplayFor(modelItem => item.CertificateNumber)</td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.ManufactureName)
+                                </td>
+                                <td> @Html.DisplayFor(modelItem => item.RopeConstruction)</td>
+                                <td> @Html.DisplayFor(modelItem => item.Diameter)</td>
+                                <td> @Html.DisplayFor(modelItem => item.Length)</td>
+                                <td> @Html.DisplayFor(modelItem => item.MBL)</td>
+                                <td> @Html.DisplayFor(modelItem => item.LDBF)</td>
+                                <td> @Html.DisplayFor(modelItem => item.WLL)</td>
+                                <td> @Html.DisplayFor(modelItem => item.ReceivedDate1)</td>
+                                <td>@Html.DisplayFor(modelItem => item.InstalledDate1)</td>
+                                <td> @Html.DisplayFor(modelItem => item.InspectionDueDate1)</td>
+                                <td> @Html.DisplayFor(modelItem => item.RopeTagging)</td>
+                                <td> @Html.DisplayFor(modelItem => item.Remarks)</td>
+
+                                @*<td>
+            @Html.ActionLink("Edit", "Edit", new { id = item.Id, LTp = item.LooseETypeId }) |
+            @Html.ActionLink("Delete", "Delete", new { id = item.Id, LTp = item.LooseETypeId }, new { onclick = "return confirm('Are you sure you want to delete this?');" })
+        </td>*@
+                                <td>
+                                    <button type="button" class="btn btn-sm btn-light btn-edit">
+                                        <i class="uil uil-edit-alt mr-2"></i>
+                                        @Html.ActionLink("Edit", "Edit", new { id = item.Id, LTp = item.LooseETypeId })
+
+                                    </button>
+
+                                </td>
+                                <td>
+                                    <button type="button" class="btn btn-sm btn-light btn-delete">
+                                        <i class="uil uil-trash-alt mr-2"></i>
+                                        @Html.ActionLink("Delete", "Delete", new { id = item.Id, LTp = item.LooseETypeId }, new { onclick = "return confirm('Are you sure you want to delete this?');" })
+
+                                    </button>
+                                </td>
+
+                            </tr>
+                            }
+
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+
+            <div id="tab7" class="tab-pane fade">
+                @*@Html.ActionLink("Add New", "LERopeTail", "LEDetails", new { LTp = 6 }, new { Style = "color:White;float:right;" })*@
+                <div class="text-right mb-4">
+                    <a class="btn btn-info" href="@Url.Action("LERopeTail", "LEDetails", new { LTp = 6 })">
+                        <i class="fa fa-plus-circle mr-2"></i>Add Loose Eq. Detail
+                    </a>
+                </div>
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead class=" text-primary">
+                            <tr>
+                                <th style="display:none">Id</th>
+                                <th>Unique ID</th>
+                                <th>Cert.No.</th>
+                                <th>Manufacturer</th>
+                                <th>Rope Construction</th>
+                                <th>Diameter</th>
+                                <th>Length</th>
+                                <th>MBL</th>
+                                <th>LDBF</th>
+                                <th>WLL</th>
+                                <th>Received Date</th>
+                                <th>Installed Date</th>
+                                <th>Inspection Due Date</th>
+                                <th>Rope Tagging</th>
+                                <th>Remarks</th>
+                                <th>Edit</th>
+                                <th>Delete</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                            @foreach (var item in Model.FireWireList)
+                            {
+                            <tr>
+                                <td style="display:none"> @Html.DisplayFor(modelItem => item.Id)</td>
+                                <td> @Html.DisplayFor(modelItem => item.UniqueID)</td>
+                                <td> @Html.DisplayFor(modelItem => item.CertificateNumber)</td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.ManufactureName)
+                                </td>
+                                <td> @Html.DisplayFor(modelItem => item.RopeConstruction)</td>
+                                <td> @Html.DisplayFor(modelItem => item.Diameter)</td>
+                                <td> @Html.DisplayFor(modelItem => item.Length)</td>
+                                <td> @Html.DisplayFor(modelItem => item.MBL)</td>
+                                <td> @Html.DisplayFor(modelItem => item.LDBF)</td>
+                                <td> @Html.DisplayFor(modelItem => item.WLL)</td>
+                                <td> @Html.DisplayFor(modelItem => item.ReceivedDate1)</td>
+                                <td>@Html.DisplayFor(modelItem => item.InstalledDate1)</td>
+                                <td> @Html.DisplayFor(modelItem => item.InspectionDueDate1)</td>
+                                <td> @Html.DisplayFor(modelItem => item.RopeTagging)</td>
+                                <td> @Html.DisplayFor(modelItem => item.Remarks)</td>
+
+                                @*<td>
+            @Html.ActionLink("Edit", "Edit", new { id = item.Id, LTp = item.LooseETypeId }) |
+            @Html.ActionLink("Delete", "Delete", new { id = item.Id, LTp = item.LooseETypeId }, new { onclick = "return confirm('Are you sure you want to delete this?');" })
+        </td>*@
+                                <td>
+                                    <button type="button" class="btn btn-sm btn-light btn-edit">
+                                        <i class="uil uil-edit-alt mr-2"></i>
+                                        @Html.ActionLink("Edit", "Edit", new { id = item.Id, LTp = item.LooseETypeId })
+
+                                    </button>
+
+                                </td>
+                                <td>
+                                    <button type="button" class="btn btn-sm btn-light btn-delete">
+                                        <i class="uil uil-trash-alt mr-2"></i>
+                                        @Html.ActionLink("Delete", "Delete", new { id = item.Id, LTp = item.LooseETypeId }, new { onclick = "return confirm('Are you sure you want to delete this?');" })
+
+                                    </button>
+                                </td>
+
+                            </tr>
+                            }
+
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+
+            <div id="tab8" class="tab-pane fade">
+                @*@Html.ActionLink("Add New", "LERopeTail", "LEDetails", new { LTp = 9 }, new { Style = "color:White;float:right;" })*@
+                <div class="text-right mb-4">
+                    <a class="btn btn-info" href="@Url.Action("LERopeTail", "LEDetails", new { LTp = 9 })">
+                        <i class="fa fa-plus-circle mr-2"></i>Add Loose Eq. Detail
+                    </a>
+                </div>
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead class=" text-primary">
+                            <tr>
+                                <th style="display:none">Id</th>
+                                <th>Unique ID</th>
+                                <th>Cert.No.</th>
+                                <th>Manufacturer</th>
+                                <th>Rope Construction</th>
+                                <th>Diameter</th>
+                                <th>Length</th>
+                                <th>MBL</th>
+                                <th>LDBF</th>
+                                <th>WLL</th>
+                                <th>Received Date</th>
+                                <th>Installed Date</th>
+                                <th>Inspection Due Date</th>
+                                <th>Rope Tagging</th>
+                                <th>Remarks</th>
+                                <th>Edit</th>
+                                <th>Delete</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                            @foreach (var item in Model.TowingRopeList)
+                            {
+                            <tr>
+                                <td style="display:none"> @Html.DisplayFor(modelItem => item.Id)</td>
+                                <td> @Html.DisplayFor(modelItem => item.UniqueID)</td>
+                                <td> @Html.DisplayFor(modelItem => item.CertificateNumber)</td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.ManufactureName)
+                                </td>
+                                <td> @Html.DisplayFor(modelItem => item.RopeConstruction)</td>
+                                <td> @Html.DisplayFor(modelItem => item.Diameter)</td>
+                                <td> @Html.DisplayFor(modelItem => item.Length)</td>
+                                <td> @Html.DisplayFor(modelItem => item.MBL)</td>
+                                <td> @Html.DisplayFor(modelItem => item.LDBF)</td>
+                                <td> @Html.DisplayFor(modelItem => item.WLL)</td>
+                                <td> @Html.DisplayFor(modelItem => item.ReceivedDate1)</td>
+                                <td>@Html.DisplayFor(modelItem => item.InstalledDate1)</td>
+                                <td> @Html.DisplayFor(modelItem => item.InspectionDueDate1)</td>
+                                <td> @Html.DisplayFor(modelItem => item.RopeTagging)</td>
+                                <td> @Html.DisplayFor(modelItem => item.Remarks)</td>
+
+                                @*<td>
+            @Html.ActionLink("Edit", "Edit", new { id = item.Id, LTp = item.LooseETypeId }) |
+            @Html.ActionLink("Delete", "Delete", new { id = item.Id, LTp = item.LooseETypeId }, new { onclick = "return confirm('Are you sure you want to delete this?');" })
+        </td>*@
+                                <td>
+                                    <button type="button" class="btn btn-sm btn-light btn-edit">
+                                        <i class="uil uil-edit-alt mr-2"></i>
+                                        @Html.ActionLink("Edit", "Edit", new { id = item.Id, LTp = item.LooseETypeId })
+
+                                    </button>
+
+                                </td>
+                                <td>
+                                    <button type="button" class="btn btn-sm btn-light btn-delete">
+                                        <i class="uil uil-trash-alt mr-2"></i>
+                                        @Html.ActionLink("Delete", "Delete", new { id = item.Id, LTp = item.LooseETypeId }, new { onclick = "return confirm('Are you sure you want to delete this?');" })
+
+                                    </button>
+                                </td>
+
+                            </tr>
+                            }
+
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+
+            <div id="tab9" class="tab-pane fade">
+                @*@Html.ActionLink("Add New", "LERopeTail", "LEDetails", new { LTp = 10 }, new { Style = "color:White;float:right;" })*@
+                <div class="text-right mb-4">
+                    <a class="btn btn-info" href="@Url.Action("LERopeTail", "LEDetails", new { LTp = 10 })">
+                        <i class="fa fa-plus-circle mr-2"></i>Add Loose Eq. Detail
+                    </a>
+                </div>
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead class=" text-primary">
+                            <tr>
+                                <th style="display:none">Id</th>
+                                <th>Unique ID</th>
+                                <th>Cert.No.</th>
+                                <th>Manufacturer</th>
+                                <th>Rope Construction</th>
+                                <th>Diameter</th>
+                                <th>Length</th>
+                                <th>MBL</th>
+                                <th>LDBF</th>
+                                <th>WLL</th>
+                                <th>Received Date</th>
+                                <th>Installed Date</th>
+                                <th>Inspection Due Date</th>
+                                <th>Rope Tagging</th>
+                                <th>Remarks</th>
+                                <th>Edit</th>
+                                <th>Delete</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                            @foreach (var item in Model.SuezRopeRopeList)
+                            {
+                            <tr>
+                                <td style="display:none"> @Html.DisplayFor(modelItem => item.Id)</td>
+                                <td> @Html.DisplayFor(modelItem => item.UniqueID)</td>
+                                <td> @Html.DisplayFor(modelItem => item.CertificateNumber)</td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.ManufactureName)
+                                </td>
+                                <td> @Html.DisplayFor(modelItem => item.RopeConstruction)</td>
+                                <td> @Html.DisplayFor(modelItem => item.Diameter)</td>
+                                <td> @Html.DisplayFor(modelItem => item.Length)</td>
+                                <td> @Html.DisplayFor(modelItem => item.MBL)</td>
+                                <td> @Html.DisplayFor(modelItem => item.LDBF)</td>
+                                <td> @Html.DisplayFor(modelItem => item.WLL)</td>
+                                <td> @Html.DisplayFor(modelItem => item.ReceivedDate1)</td>
+                                <td>@Html.DisplayFor(modelItem => item.InstalledDate1)</td>
+                                <td> @Html.DisplayFor(modelItem => item.InspectionDueDate1)</td>
+                                <td> @Html.DisplayFor(modelItem => item.RopeTagging)</td>
+                                <td> @Html.DisplayFor(modelItem => item.Remarks)</td>
+
+                                @*<td>
+            @Html.ActionLink("Edit", "Edit", new { id = item.Id, LTp = item.LooseETypeId }) |
+            @Html.ActionLink("Delete", "Delete", new { id = item.Id, LTp = item.LooseETypeId }, new { onclick = "return confirm('Are you sure you want to delete this?');" })
+        </td>*@
+                                <td>
+                                    <button type="button" class="btn btn-sm btn-light btn-edit">
+                                        <i class="uil uil-edit-alt mr-2"></i>
+                                        @Html.ActionLink("Edit", "Edit", new { id = item.Id, LTp = item.LooseETypeId })
+
+                                    </button>
+
+                                </td>
+                                <td>
+                                    <button type="button" class="btn btn-sm btn-light btn-delete">
+                                        <i class="uil uil-trash-alt mr-2"></i>
+                                        @Html.ActionLink("Delete", "Delete", new { id = item.Id, LTp = item.LooseETypeId }, new { onclick = "return confirm('Are you sure you want to delete this?');" })
+
+                                    </button>
+                                </td>
+
+                            </tr>
+                            }
+
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+
+        </div>
+        </div>
+    </div>
+
+
+
+
+</div>
+
+
+<script type="text/javascript">
+
+    setTimeout(function () {
+
+        $('#successMessage').fadeOut('fast');
+        $('#errorMessage').fadeOut('fast');
+    }, 3000);
+
+
+</script>
+

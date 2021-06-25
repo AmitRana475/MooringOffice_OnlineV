@@ -1,0 +1,410 @@
+﻿@model Shipment49Web.ViewModels.NotificationSearchViewModel
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_LeftSideBar.cshtml";
+}
+
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<script src="~/js/CommonScriptFunctions.js"></script>
+
+<script>
+    $(function () {
+        $('.dtpicker').datepicker({
+            autoclose: true
+        })
+
+        $("#checkAll").click(function () {
+            $('input:checkbox').not(this).prop('checked', this.checked);
+        });
+
+        $("#btnAcknowledge").click(function () {
+            var arr = [];
+            $('input.ackn:checkbox:checked').each(function () {
+                arr.push($(this).attr("id"));
+            });
+            $.ajax({
+                type: 'POST',
+                url: '/NotificationInfo/Acknowledgement?ids=' + arr,
+                success: function (response) {
+                    if (response.Result == true) {
+                        toastr["success"]('Notifications acknowledged successfully');
+                        setInterval('refreshPage()', 2000);
+                    }
+                    else {
+                        toastr["error"]('An Error has occured.');
+                    }
+                },
+                failure: function (response) {
+                    toastr["error"]('An Error has occured.');
+                }
+            });
+        });
+
+
+        $('#btnSave').click(function () {
+
+            var notificationID = $('#NotificationID_P').val();
+            var vesselID = $('#VesselID_P').val();
+
+            var newComment = $('#newComment').val();
+
+            if (newComment.length == 0) {
+                $("#newComment").focus();
+            }
+            else {
+                $.ajax({
+                    type: 'POST',
+                    dataType: 'json',
+                    url: '/NotificationInfo/AddComments',
+                    data: { 'notificationid': notificationID, 'vesselid': vesselID, 'commentText': newComment },
+                    success: function (response) {
+                        if (response.Result == true) {
+                            toastr["success"]('Comment added successfully.');
+                            $('#AddCommentsModal').modal('hide');
+                            setInterval('refreshPage()', 2000);
+                        }
+                        else {
+                            toastr["error"]('An Error has occured. Please try again.');
+                        }
+                    },
+                    error: function (XMLHttpRequest, textStatus, errorThrown) {
+                        toastr["error"]('An Error has occured. Please try again.');
+                    }
+                });
+            }
+        });
+    });
+
+    function refreshPage() {
+        location.reload();
+    }
+
+    function getComments(Id, VesselId) {
+        $.ajax({
+            type: 'GET',
+            url: '/NotificationInfo/ViewComments?notificationid=' + Id + '&vesselid=' + VesselId,
+            cache: false,
+            contentType: false,
+            processData: false,
+            success: function (response) {
+                if (response.Result == true) {
+                    $('#commentsData').empty();
+                    var tr;
+                    for (var i = 0; i < response.Data.length; i++) {
+                        tr = $('<tr/>');
+                        tr.append("<td class='col-md-8'>" + response.Data[i].Comments + "</td>");
+                        tr.append("<td class='col-md-1'>" + response.Data[i].CommentsType + "</td>");
+                        tr.append("<td class='col-md-2'>" + response.Data[i].CreatedBy + "</td>");
+                        tr.append("<td class='col-md-1'>" + response.Data[i].IsActive + "</td>");
+                        $('#commentsData').append(tr);
+                    }
+                    $('#CommentsModal').modal('show');
+                }
+                else {
+                    toastr["error"](response.Message);
+                }
+            },
+            failure: function (response) {
+                toastr["error"](response.Message);
+            }
+        });
+    }
+
+    function addComments(Id, VesselId) {
+        $('#NotificationID_P').val(Id);
+        $('#VesselID_P').val(VesselId);
+        $('#AddCommentsModal').modal('show');
+    }
+
+</script>
+
+<style>
+    .red {
+        color: red;
+    }
+
+    .black {
+        color: black;
+    }
+</style>
+
+<div class="content-wrapper">
+    <section class="content-header">
+        <h1>
+            Notifications
+        </h1>
+    </section>
+    <section class="content">
+        <div class="box box-info">
+            <div class="box-body">
+                <div class="row">
+                    @using (Html.BeginForm("Index", "NotificationInfo", FormMethod.Post, new { area = "data" }))
+                    {
+                        <div class="col-md-2">
+                            @Html.Label("Fleet Name")
+                            <div class="form-group">
+                                @Html.ListBoxFor(m => m.FleetIDs, new SelectList(Model.FleetNameList, "Id", "Name"), new { @class = "form-control listbox" })
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            @Html.Label("Fleet Type")
+                            <div class="form-group">
+                                @Html.ListBoxFor(m => m.FleetTypeIDs, new SelectList(Model.FleetTypeList, "Id", "Name"), new { @class = "form-control listbox" })
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            @Html.Label("Trade Platform")
+                            <div class="form-group">
+                                @Html.ListBoxFor(m => m.TradeIDs, new SelectList(Model.TradePlatformList, "Id", "Name"), new { @class = "form-control listbox" })
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            @Html.Label("Vessels")
+                            <div class="form-group">
+                                @Html.ListBoxFor(m => m.VesselIDs, new SelectList(Model.VesselList, "Id", "VesselName"), new { @class = "form-control listbox" })
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            @Html.Label("Notification Date From")
+                            <div class="form-group">
+                                @Html.TextBoxFor(e => e.DateFrom, "{0:dd-MMM-yyyy}", new { @class = "form-control dtpicker", @placeholder = "Date From" })
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            @Html.Label("Notification Date Upto")
+                            <div class="form-group">
+                                @Html.TextBoxFor(e => e.DateTo, "{0:dd-MMM-yyyy}", new { @class = "form-control dtpicker", @placeholder = "Date To" })
+                            </div>
+                        </div>
+                        <div class="row mrg-top-10">
+                            <div class="form-group">
+                                <div class="col-md-12">
+                                    <div style="margin: 10px 10px 10px 20px; float: left">
+                                        <button class="btn btn-info" id="btnAcknowledge">Acknowledge</button>
+                                    </div>
+                                    <div style="float:right; margin: 10px 14px 10px 20px">
+                                        <button type="submit" class="btn btn-danger">Search</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="box box-default">
+                    <div class="box-body">
+                        <div class="table-responsive">
+                            <table class="table no-margin table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>
+                                            <input type="checkbox" class="checkbox" id="checkAll" />
+                                        </th>
+                                        <th>
+                                            Date
+                                        </th>
+                                        <th>
+                                            Vessel Name
+                                        </th>
+                                        <th>
+                                            Notification
+                                        </th>
+                                        <th>
+                                            Ship Ackn
+                                        </th>
+                                        <th>
+                                            Comments
+                                        </th>
+                                        <th>
+                                            Office Ackn
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in (List<Reports.View_Notifications>)Model.NotificationsList)
+                                    {
+                                        <tr class="@(item.AcknBy != null ? "black" : "red")">
+                                            <td class="col-md-1">
+                                                <input type="checkbox" class="checkbox ackn" id="@string.Format("{0}_{1}", item.Id, item.VesselId)" />
+                                            </td>
+                                            <td class="col-md-1">
+                                                @{
+                                                    DateTime? notificationDate = item.NotificationDate;
+                                                    if (notificationDate != null)
+                                                    {
+                                                        @Html.Raw(notificationDate.Value.ToString("dd-MMM-yyyy"))
+                                                    }
+                                                }
+                                            </td>
+                                            <td class="col-md-1">
+                                                @item.VesselName
+                                            </td>
+                                            <td class="col-md-5">
+                                                @item.NotificationText
+                                            </td>
+                                            <td class="col-md-1">
+                                                @{
+                                                    bool result = item.Acknowledge == null ? false : true;
+                                                    if (result)
+                                                    {
+                                                        @Html.Raw("No");
+                                                    }
+                                                    else
+                                                    {
+                                                        @Html.Raw("Yes");
+                                                    }
+                                                }
+                                            </td>
+                                            <td class="col-md-1">
+                                                @*<a href="#" class="fa fa-plus-circle" title="Add Comment" data-toggle="modal" data-target="#AddCommentsModal"></a>*@
+                                                <a href="#" class="fa fa-plus-circle" onclick="addComments(@item.Id, @item.VesselId)" title="Add Comments"></a>||
+                                                <a href="#" class="fa fa-eye" onclick="getComments(@item.Id, @item.VesselId)" title="View Comments"> (@item.TotalComments)</a><br />
+                                            </td>
+                                            <td class="col-md-2">
+                                                @{
+                                                    if (!string.IsNullOrEmpty(item.AcknBy))
+                                                    {
+                                                        @Html.Raw(string.Format("By {0} on {1}", item.FullName, item.AcknDateTime.Value.ToShortDateString()))
+                                                    }
+                                                }
+
+                                            </td>
+
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="text-center">
+                            <ul class="pagination">
+                                @{
+                                    int totalRecords = Convert.ToInt32(TempData.Peek("TotalRecords"));
+
+                                    int tot_pages = totalRecords / Shipment49Web.Common.CommonMethods.PAGESIZE;
+                                    int remainder = totalRecords % Shipment49Web.Common.CommonMethods.PAGESIZE;
+
+                                    tot_pages = remainder > 0 ? (tot_pages + 1) : tot_pages;
+
+                                    int currPage = Convert.ToInt32(TempData.Peek("CurrentPage"));
+
+                                    if (totalRecords > 0)
+                                    {
+                                        if (currPage == 0)
+                                        {
+                                            currPage = 1;
+                                        }
+
+                                        if (currPage != 1)
+                                        {
+                                            <li>@Html.ActionLink("First", "Index", "NotificationInfo", new { id = 1 }, null)</li>
+                                        }
+
+                                        if (currPage != tot_pages)
+                                        {
+                                            for (int cnt = currPage; cnt < (currPage + 10); cnt++)
+                                            {
+                                                if (cnt == currPage)
+                                                {
+                                                    <li class="active"><a href="#">@cnt</a></li>
+                                                }
+                                                else
+                                                {
+                                                    <li>@Html.ActionLink(cnt.ToString(), "Index", "NotificationInfo", new { id = cnt }, null)</li>
+                                                }
+
+                                                if (cnt == tot_pages)
+                                                {
+                                                    break;
+                                                }
+                                            }
+                                        }
+                                        @*else
+                                            {
+                                                for (int cnt = (currPage - 10); cnt < currPage; cnt++)
+                                                {
+                                                    if (cnt == currPage)
+                                                    {
+                                                        <li class="active"><a href="#">@cnt</a></li>
+                                                    }
+                                                    else
+                                                    {
+                                                        <li>@Html.ActionLink(cnt.ToString(), "Index", "NotificationInfo", new { id = cnt }, null)</li>
+                                                    }
+                                                }
+                                            }*@
+
+                                        if (currPage == tot_pages)
+                                        {
+                                            <li class="active"><a href="#">@tot_pages</a></li>
+                                        }
+                                        else
+                                        {
+                                            <li>@Html.ActionLink("Last", "Index", "NotificationInfo", new { id = tot_pages }, null)</li>
+                                        }
+                                    }
+                                }
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+<div id="CommentsModal" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Comments</h4>
+            </div>
+            <div class="modal-body">
+                <div class="table-responsive">
+                    <table class="table no-margin" width="100%" cellspacing="0">
+                        <thead>
+                            <tr>
+                                <th>Comments</th>
+                                <th>Type</th>
+                                <th>Created By</th>
+                                <th>Active</th>
+                            </tr>
+                        </thead>
+                        <tbody id="commentsData">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="AddCommentsModal" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Add New Comment</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <textarea rows="5" cols="40" id="newComment"></textarea>
+                        <input type="hidden" id="NotificationID_P" />
+                        <input type="hidden" id="VesselID_P" />
+                    </div>
+                    <div class="col-md-12">
+                        <button type="button" class="btn btn-primary" id="btnSave">Save</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,93 @@
+﻿
+@model Shipment49Web.Common.GraphData
+
+<div class="col-md-10">
+    <canvas id="@string.Format("myChart{0}", Model.chartId)" style="display: block;width: 300px;height: 200px;"></canvas>
+    <input type="hidden" id="@string.Format("hdn{0}", Model.chartId)" class="hdn" value="@Model.data" />
+    <hr />
+</div>
+
+<script>
+
+    var data = $("@string.Format("#hdn{0}", Model.chartId)").val();
+
+    debugger;
+    data = JSON.parse(data);
+    console.log(data);
+
+
+
+    var ctx = $("@string.Format("#myChart{0}", Model.chartId)");
+
+    //alert(data);
+    //  var abcksdfk = Math.max(data.datasets[0].data) + 100,
+    var maxval = @Model.chartId;
+
+    var myChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            //labels: ['Tidal range more than 2 mtrs', 'Current more than 1.5 kts', 'Wind force more than 22', 'Experienced Squall', 'Experienced Surging', 'Berth exposed to swell', 'Affect of passing Traffic', 'Ship not in contact with fender continuosly', 'Air Tepm <15, OR >40 Deg C'],
+            labels: ['Rope Damaged', 'Squall', 'Surging', 'Sea Swell', 'Traffic Affected', 'Fender Contact'],
+            datasets: data
+            
+        },
+        options: {
+            "hover": {
+                "animationDuration": 0
+            },
+            "animation": {
+                "duration": 1,
+                "onComplete": function () {
+                    var chartInstance = this.chart,
+                        ctx = chartInstance.ctx;
+
+                    ctx.font = Chart.helpers.fontString(Chart.defaults.global.defaultFontSize, Chart.defaults.global.defaultFontStyle, Chart.defaults.global.defaultFontFamily);
+                    ctx.textAlign = 'center';
+                    ctx.textBaseline = 'bottom';
+
+                    this.data.datasets.forEach(function (dataset, i) {
+                        var meta = chartInstance.controller.getDatasetMeta(i);
+                        meta.data.forEach(function (bar, index) {
+                            var data = dataset.data[index];
+                            ctx.fillText(data, bar._model.x, bar._model.y - 5);
+                        });
+                    });
+                }
+            },
+            legend: {
+                "display": true,
+                 align: 'left'
+            },
+            tooltips: {
+                "enabled": true
+            },
+            scales: {
+                yAxes: [{
+                    display: true,
+                    gridLines: {
+                        display: true
+                    },
+                    ticks: {
+                        max: maxval,
+                        display: true,
+                        beginAtZero: true
+                    }
+                }],
+                xAxes: [{
+                    gridLines: {
+                        display: false
+                    },
+                    ticks: {
+                        beginAtZero: true
+                    }
+                }]
+            }
+        }
+
+
+    });
+
+</script>
+
+
+

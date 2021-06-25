@@ -1,0 +1,1017 @@
+﻿@model Shipment49Web.Common.ReportAnalysisFilterModel
+
+
+@{
+    ViewBag.Title = "Anomalies";
+    Layout = "~/Views/Shared/_LeftSideBar.cshtml";
+}
+
+
+@*<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>*@
+@*<script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.0.3/js/bootstrap.min.js"></script>*@
+@*<script src="http://cdn.rawgit.com/davidstutz/bootstrap-multiselect/master/dist/js/bootstrap-multiselect.js" type="text/javascript"></script>*@
+
+
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<link href="~/Content/Chart.css" rel="stylesheet" />
+<script src="~/js/CommonScriptFunctions.js"></script>
+<script src="~/Scripts/Chart.min.js"></script>
+
+<div class="content-wrapper">
+    <section class="content-header">
+        <h1>
+            Anomalies Reported By Vessels In Mooring Operations
+        </h1>
+    </section>
+    <section class="content">
+        <div class="box box-info">
+            <div class="box-body">
+                <div class="row">
+                    @using (Html.BeginForm("Anomalies", "Reports", FormMethod.Post, new { area = "data" }))
+                    {
+                        <div class="col-md-12">
+                            <div class="col-md-3">
+                                @Html.Label("Fleet Name")
+                                <div class="form-group">
+                                    @Html.ListBoxFor(m => m.FleetNameIDs, new SelectList(Model.FleetNameList, "Id", "Name"), new { @class = "form-control listbox" })
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                @Html.Label("Fleet Type")
+                                <div class="form-group">
+                                    @Html.ListBoxFor(m => m.FleetTypeIDs, new SelectList(Model.FleetTypeList, "Id", "Name"), new { @class = "form-control listbox" })
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                @Html.Label("Trade")
+                                <div class="form-group">
+                                    @Html.ListBoxFor(m => m.TradeIDs, new SelectList(Model.TradePlatformList, "Id", "Name"), new { @class = "form-control listbox" })
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                @Html.Label("Vessel Age Range From")
+                                <div class="form-group">
+                                    @Html.TextBoxFor(m => m.AgeRangeFrom, new { @class = "form-control", type = "number", min = "0", max = "50" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="col-md-3">
+                                @Html.Label("Vessel Age Range To")
+                                <div class="form-group">
+                                    @Html.TextBoxFor(m => m.AgeRangeTo, new { @class = "form-control", type = "number", min = "0", max = "50" })
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                @Html.Label("Vessel")
+                                <div class="form-group">
+                                    @Html.ListBoxFor(m => m.VesselIDs, new SelectList(Model.VesselList, "ImoNo", "VesselName"), new { @class = "form-control listbox" })
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                @Html.Label("Port")
+                                <div class="form-group">
+                                    @Html.ListBoxFor(m => m.PortNames, new SelectList(Model.Ports, "Value", "Text", "Port Name"), new { @class = "form-control importexport" })
+                                    @*@Html.DropDownListFor(m => m.PortNames, new SelectList(Model.Ports, "Value", "Text"), "Port Name", htmlAttributes: new { @class = "form-control" })*@
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                @Html.Label("Port Facility")
+                                <div class="form-group">
+                                    @Html.DropDownListFor(m => m.PortFacilityNames, new SelectList(Model.PortFacilities, "Value", "Text", "None Selected"), new { @class = "form-control" })
+                                    @*@Html.DropDownListFor(m => m.PortFacilityNames, new SelectList(Model.PortFacilities, "Value", "Text"), "Facility Name", htmlAttributes: new { @class = "form-control" })*@
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-12">
+                            <div class="col-md-3">
+                                @Html.Label("Berth Type")
+                                <div class="form-group">
+                                    @Html.DropDownListFor(m => m.BirthTypeNames, new SelectList(Model.BirthTypes, "Value", "Text"), "Berth Type", htmlAttributes: new { @class = "form-control" })
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                @Html.Label("Mooring Type")
+                                <div class="form-group">
+                                    @Html.DropDownListFor(m => m.MooringTypeNames, new SelectList(Model.MooringTypes, "Value", "Text"), "Type of Mooring", htmlAttributes: new { @class = "form-control" })
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                @Html.Label("Wind Speed Range From")
+                                <div class="form-group">
+                                    @Html.TextBoxFor(m => m.WindSpeedRangeFrom, new { @class = "form-control", type = "number", min = "0", max = "200" })
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                @Html.Label("Wind Speed Range To")
+                                <div class="form-group">
+                                    @Html.TextBoxFor(m => m.WindSpeedRangeTo, new { @class = "form-control", type = "number", min = "0", max = "200" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="col-md-3">
+                                @Html.Label("Squall/ Gusts")
+                                <div class="form-group">
+                                    @Html.DropDownListFor(m => m.Squal_Gusts, new SelectList(Model.GetListBoolean(), "Value", "Text"), htmlAttributes: new { @class = "form-control" })
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                @Html.Label("Surging Observed")
+                                <div class="form-group">
+                                    @Html.DropDownListFor(m => m.SurgingObserved, new SelectList(Model.GetListBoolean(), "Value", "Text"), htmlAttributes: new { @class = "form-control" })
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                @Html.Label("Curr Speed Range From")
+                                <div class="form-group">
+                                    @Html.TextBoxFor(m => m.CurrentSpeedRangeFrom, new { @class = "form-control", type = "number", min = "0", max = "50" })
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                @Html.Label("Curr Speed Range To")
+                                <div class="form-group">
+                                    @Html.TextBoxFor(m => m.CurrentSpeedRangeTo, new { @class = "form-control", type = "number", min = "0", max = "50" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+
+                            <div class="col-md-3">
+                                @Html.Label("Berth Exposed To Swell")
+                                <div class="form-group">
+                                    @Html.DropDownListFor(m => m.BerthExposesToSwell, new SelectList(Model.GetListBoolean(), "Value", "Text"), htmlAttributes: new { @class = "form-control" })
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                @Html.Label("Rope Damaged")
+                                <div class="form-group">
+                                    @Html.DropDownListFor(m => m.RopeDamagedAnytime, new SelectList(Model.GetListBoolean(), "Value", "Text"), htmlAttributes: new { @class = "form-control" })
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                @Html.Label("Air Temp Range From")
+                                <div class="form-group">
+                                    @Html.TextBoxFor(m => m.AirTempRangeFrom, new { @class = "form-control", type = "number", min = "-50", max = "60" })
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                @Html.Label("Air Temp Range To")
+                                <div class="form-group">
+                                    @Html.TextBoxFor(m => m.AirTempRangeTo, new { @class = "form-control", type = "number", min = "-50", max = "60" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+
+                            <div class="col-md-3">
+                                @Html.Label("Traffic Passing Effect")
+                                <div class="form-group">
+                                    @Html.DropDownListFor(m => m.TrafficPassingEffect, new SelectList(Model.GetListBoolean(), "Value", "Text"), htmlAttributes: new { @class = "form-control" })
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                @Html.Label("Ship Fender Contact")
+                                <div class="form-group">
+                                    @Html.DropDownListFor(m => m.ShipFenderContact, new SelectList(Model.GetListBoolean(), "Value", "Text"), htmlAttributes: new { @class = "form-control" })
+                                </div>
+                            </div>
+
+                            <div class="col-md-3">
+                                @Html.Label("Tidal Range From")
+                                <div class="form-group">
+                                    @Html.TextBoxFor(m => m.TidalRangeFrom, new { @class = "form-control", type = "number", min = "0", max = "30" })
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                @Html.Label("Tidal Range To")
+                                <div class="form-group">
+                                    @Html.TextBoxFor(m => m.TidalRangeTo, new { @class = "form-control", type = "number", min = "0", max = "30" })
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="col-md-12">
+
+                            <div class="col-md-3">
+                                @Html.Label("Mooring Operation Date From")
+                                <div class="form-group">
+                                    @Html.TextBoxFor(m => m.DateDiscardedFrom, "{0:dd-MMM-yyyy}", new { @class = "form-control dtpicker", @placeholder = "Date From" })
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                @Html.Label("Mooring Operation Date Upto")
+                                <div class="form-group">
+                                    @Html.TextBoxFor(m => m.DateDiscardedUpto, "{0:dd-MMM-yyyy}", new { @class = "form-control dtpicker", @placeholder = "Date To" })
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <p></p>
+                                <div style="float:right">
+                                    <button type="submit" class="btn btn-danger">Search</button>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+        <div class="box box-info">
+            <div class="box-body">
+                @{ int totalResult = Convert.ToInt32(TempData.Peek("TotalRecords"));
+                    int count = 0;
+                    count = Model.VesselWiseMooringOP_Details.Count;}
+                <div class="nav-tabs-custom">
+                    <ul class="nav nav-tabs">
+                        <li class="active">
+                            <a href="#AnomaliesRangeOFTide" class="tablinks" data-toggle="tab">Anomalies Result Total-@totalResult</a>
+                        </li>
+                        <li>
+                            <a href="#AnomaliesGraph" class="tablinks" data-toggle="tab">Graphical View</a>
+                        </li>
+
+                    </ul>
+                    <div class="tab-content" style="min-height: 650px">
+
+                        <div class="tab-pane active" id="AnomaliesRangeOFTide">
+                            @{
+
+                                if (count == 0)
+                                {
+                                    <div class="panel-group">
+                                        <div class="panel panel-info">
+                                            <div class="panel-body">
+                                                <p class="text-center">
+                                                    No Records Found!
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="table-responsive">
+                                        <table class="table no-margin table-striped" id="dataTable" width="100%" cellspacing="0">
+                                            <thead>
+                                                <tr>
+
+                                                    <th>Vessel Name</th>
+                                                    <th>Port Name</th>
+                                                    <th>Facility Name</th>
+                                                    <th>Berth Name</th>
+                                                    <th>Berth Type</th>
+                                                    <th>Fast Date</th>
+                                                    <th>Tidal Range (&gt;3.0m)</th>
+                                                    <th>Current (&gt;0.5Kts)</th>
+                                                    <th>Wind (&gt;20Kts)</th>
+                                                    <th>Air Temp (&lt;10/&gt;40Deg C)</th>
+                                                    <th>Squall</th>
+                                                    <th>Surging</th>
+                                                    <th>Sea Swell</th>
+                                                    <th>Passing Traffic Affect</th>
+                                                    <th>Continuous Fender Contact</th>
+                                                    <th>Any Damaged</th>
+                                                    <th>Details</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @{
+                                                    foreach (var record in Model.VesselWiseMooringOP_Details)
+                                                    {
+                                                                                                <tr>
+
+                                                                                                    <td>@record.VesselName</td>
+                                                                                                    <td>@record.PortName</td>
+                                                                                                    <td>@record.FacilityName</td>
+                                                                                                    <td>@record.BirthName</td>
+                                                                                                    <td>@record.BirthType</td>
+                                                                                                    <td style="width:100px;">
+                                                                                                        @{
+                                                                                                            DateTime? dt = record.FastDatetime;
+                                                                                                            if (dt != null)
+                                                                                                            {
+                                                                                                                @Html.Raw(dt.Value.ToString("dd-MMM-yyyy"))
+                                                                                                            }
+                                                                                                        }
+                                                                                                    </td>
+
+
+                                                                                                    @{
+
+
+                                                                                                        if (record.RangOfTide > 3.0m)
+                                                                                                        {
+                                                                                                            <td style="color:red">@record.RangOfTide</td>
+                                                                                                        }
+                                                                                                        else
+                                                                                                        {
+                                                                                                            <td>@record.RangOfTide</td>
+                                                                                                        }
+
+                                                                                                        if (record.CurrentSpeed > 0.5m)
+                                                                                                        {
+                                                                                                            <td style="color:red">@record.CurrentSpeed</td>
+                                                                                                        }
+                                                                                                        else
+                                                                                                        {
+                                                                                                            <td>@record.CurrentSpeed</td>
+                                                                                                        }
+
+                                                                                                        if (record.WindSpeed > 20m)
+                                                                                                        {
+                                                                                                            <td style="color:red">@record.WindSpeed</td>
+                                                                                                        }
+                                                                                                        else
+                                                                                                        {
+                                                                                                            <td>@record.WindSpeed</td>
+                                                                                                        }
+
+                                                                                                        if (record.AirTemprature < 10m & record.AirTemprature > 40m)
+                                                                                                        {
+                                                                                                            <td style="color:red">@record.AirTemprature</td>
+                                                                                                        }
+                                                                                                        else
+                                                                                                        {
+                                                                                                            <td>@record.AirTemprature</td>
+                                                                                                        }
+
+                                                                                                        if (record.AnySquall == "Yes")
+                                                                                                        {
+                                                                                                            <td style="color:red">@record.AnySquall</td>
+                                                                                                        }
+                                                                                                        else
+                                                                                                        {
+                                                                                                            <td>@record.AnySquall</td>
+                                                                                                        }
+
+                                                                                                        if (record.SurgingObserved == "Yes")
+                                                                                                        {
+                                                                                                            <td style="color:red">@record.SurgingObserved</td>
+                                                                                                        }
+                                                                                                        else
+                                                                                                        {
+                                                                                                            <td>@record.SurgingObserved</td>
+                                                                                                        }
+                                                                                                        if (record.Berth_exposed_SeaSwell == "Yes")
+                                                                                                        {
+                                                                                                            <td style="color:red">@record.Berth_exposed_SeaSwell</td>
+                                                                                                        }
+                                                                                                        else
+                                                                                                        {
+                                                                                                            <td>@record.Berth_exposed_SeaSwell</td>
+                                                                                                        }
+
+                                                                                                        if (record.Any_Affect_Passing_Traffic == "Yes")
+                                                                                                        {
+                                                                                                            <td style="color:red">@record.Any_Affect_Passing_Traffic</td>
+                                                                                                        }
+                                                                                                        else
+                                                                                                        {
+                                                                                                            <td>@record.Any_Affect_Passing_Traffic</td>
+                                                                                                        }
+
+                                                                                                        if (record.Ship_was_continuously_contact_with_fender == "No")
+                                                                                                        {
+                                                                                                            <td style="color:red">@record.Ship_was_continuously_contact_with_fender</td>
+                                                                                                        }
+                                                                                                        else
+                                                                                                        {
+                                                                                                            <td>@record.Ship_was_continuously_contact_with_fender</td>
+                                                                                                        }
+
+                                                                                                        if (record.Any_Rope_Damaged == "Yes")
+                                                                                                        {
+                                                                                                            <td style="color:red">@record.Any_Rope_Damaged</td>
+                                                                                                        }
+                                                                                                        else
+                                                                                                        {
+                                                                                                            <td>@record.Any_Rope_Damaged</td>
+                                                                                                        }
+                                                                                                    }
+
+                                                                                                    <td>
+                                                                                                        <button id="@record.OPId@record.ImoNo" title="View Operation Details" type="button" class="btn btn-link"
+                                                                                                                onclick="getOperationsReport(@record.OPId,@record.ImoNo)">
+                                                                                                            <i class="fa fa-info"></i>
+                                                                                                        </button>
+                                                                                                    </td>
+                                                                                                </tr>
+                                                    }
+                                                }
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                }
+                            }
+                        </div>
+
+                        <div class="tab-pane" id="AnomaliesGraph">
+                            <div class="col-md-8">
+                                <div class="box box-info">
+                                    <div class="box-header with-border">
+                                        <h3 class="box-title">
+                                            Mooring Operations
+                                        </h3>
+                                        @*<div class="pull-right">
+                                    <a href="~/Data/Reports/Anomalies" class="small-box-footer">
+                                        More Info <i class="fa fa-arrow-circle-right"></i>
+                                    </a>
+                                </div>*@
+                                    </div>
+                                    <div class="box-body" style="min-height: 250px">
+                                        <div style="height: 250px">
+                                            @Html.Partial("_CombineAnomaliesChart", (Shipment49Web.Common.GraphData)@ViewBag.CombinedAnomalies)
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        @*<div class="tab-pane active" id="AnomaliesCurrentForce">
+                    @{
+                        count = Model.AnomaliesCurrentForce.Count;
+                        if (count == 0)
+                        {
+                            <div class="panel-group">
+                                <div class="panel panel-info">
+                                    <div class="panel-body">
+                                        <p class="text-center">
+                                            No Records Found!
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="table-responsive">
+                                <table class="table no-margin table-striped" id="dataTable" width="100%" cellspacing="0">
+                                    <thead>
+                                        <tr>
+                                            <th>Vessel Name</th>
+                                            <th>Port Name</th>
+                                            <th>FacilityName</th>
+                                            <th>Birth Name</th>
+                                            <th>Birth Type</th>
+                                            <th>Fast Date</th>
+                                            <th>Current Force</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @{
+                                            foreach (var record in Model.AnomaliesCurrentForce)
+                                            {
+                                                <tr>
+                                                    <td>@record.VesselName</td>
+                                                    <td>@record.PortName</td>
+                                                    <td>@record.FacilityName</td>
+                                                    <td>@record.BirthName</td>
+                                                    <td>@record.BirthType</td>
+                                                    <td>
+                                                        @{
+                                                            DateTime? dt = record.FastDatetime;
+                                                            if (dt != null)
+                                                            {
+                                                                @Html.Raw(dt.Value.ToString("dd-MMM-yyyy"))
+                                                            }
+                                                        }
+                                                    </td>
+                                                    <td>@record.CurrentSpeed</td>
+                                                </tr>
+                                            }
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        }
+                    }
+                </div>
+
+                <div class="tab-pane active" id="AnomaliesWindForce">
+                    @{
+                        count = Model.AnomaliesWindForce.Count;
+                        if (count == 0)
+                        {
+                            <div class="panel-group">
+                                <div class="panel panel-info">
+                                    <div class="panel-body">
+                                        <p class="text-center">
+                                            No Records Found!
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="table-responsive">
+                                <table class="table no-margin table-striped" id="dataTable" width="100%" cellspacing="0">
+                                    <thead>
+                                        <tr>
+                                            <th>Vessel Name</th>
+                                            <th>Port Name</th>
+                                            <th>FacilityName</th>
+                                            <th>Birth Name</th>
+                                            <th>Birth Type</th>
+                                            <th>Fast Date</th>
+                                            <th>Wind Force</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @{
+                                            foreach (var record in Model.AnomaliesWindForce)
+                                            {
+                                                <tr>
+                                                    <td>@record.VesselName</td>
+                                                    <td>@record.PortName</td>
+                                                    <td>@record.FacilityName</td>
+                                                    <td>@record.BirthName</td>
+                                                    <td>@record.BirthType</td>
+                                                    <td>
+                                                        @{
+                                                            DateTime? dt = record.FastDatetime;
+                                                            if (dt != null)
+                                                            {
+                                                                @Html.Raw(dt.Value.ToString("dd-MMM-yyyy"))
+                                                            }
+                                                        }
+                                                    </td>
+                                                    <td>@record.WindSpeed</td>
+                                                </tr>
+                                            }
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        }
+                    }
+                </div>
+
+                <div class="tab-pane active" id="AnomaliesAnySquall">
+                    @{
+                        count = Model.AnomaliesAnySquall.Count;
+                        if (count == 0)
+                        {
+                            <div class="panel-group">
+                                <div class="panel panel-info">
+                                    <div class="panel-body">
+                                        <p class="text-center">
+                                            No Records Found!
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="table-responsive">
+                                <table class="table no-margin table-striped" id="dataTable" width="100%" cellspacing="0">
+                                    <thead>
+                                        <tr>
+                                            <th>Vessel Name</th>
+                                            <th>Port Name</th>
+                                            <th>FacilityName</th>
+                                            <th>Birth Name</th>
+                                            <th>Birth Type</th>
+                                            <th>Fast Date</th>
+                                            <th>Wind Force</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @{
+                                            foreach (var record in Model.AnomaliesAnySquall)
+                                            {
+                                                <tr>
+                                                    <td>@record.VesselName</td>
+                                                    <td>@record.PortName</td>
+                                                    <td>@record.FacilityName</td>
+                                                    <td>@record.BirthName</td>
+                                                    <td>@record.BirthType</td>
+                                                    <td>
+                                                        @{
+                                                            DateTime? dt = record.FastDatetime;
+                                                            if (dt != null)
+                                                            {
+                                                                @Html.Raw(dt.Value.ToString("dd-MMM-yyyy"))
+                                                            }
+                                                        }
+                                                    </td>
+                                                    <td>@record.AnySquall</td>
+                                                </tr>
+                                            }
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        }
+                    }
+                </div>
+
+                <div class="tab-pane active" id="AnomaliesAnySurgingObserved">
+                    @{
+                        count = Model.AnomaliesAnySurgingObserved.Count;
+                        if (count == 0)
+                        {
+                            <div class="panel-group">
+                                <div class="panel panel-info">
+                                    <div class="panel-body">
+                                        <p class="text-center">
+                                            No Records Found!
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="table-responsive">
+                                <table class="table no-margin table-striped" id="dataTable" width="100%" cellspacing="0">
+                                    <thead>
+                                        <tr>
+                                            <th>Vessel Name</th>
+                                            <th>Port Name</th>
+                                            <th>FacilityName</th>
+                                            <th>Birth Name</th>
+                                            <th>Birth Type</th>
+                                            <th>Fast Date</th>
+                                            <th>Wind Force</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @{
+                                            foreach (var record in Model.AnomaliesAnySurgingObserved)
+                                            {
+                                                <tr>
+                                                    <td>@record.VesselName</td>
+                                                    <td>@record.PortName</td>
+                                                    <td>@record.FacilityName</td>
+                                                    <td>@record.BirthName</td>
+                                                    <td>@record.BirthType</td>
+                                                    <td>
+                                                        @{
+                                                            DateTime? dt = record.FastDatetime;
+                                                            if (dt != null)
+                                                            {
+                                                                @Html.Raw(dt.Value.ToString("dd-MMM-yyyy"))
+                                                            }
+                                                        }
+                                                    </td>
+                                                    <td>@record.SurgingObserved</td>
+                                                </tr>
+                                            }
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        }
+                    }
+                </div>
+
+                <div class="tab-pane active" id="AnomaliesAnySeaSwell">
+                    @{
+                        count = Model.AnomaliesAnySeaSwell.Count;
+                        if (count == 0)
+                        {
+                            <div class="panel-group">
+                                <div class="panel panel-info">
+                                    <div class="panel-body">
+                                        <p class="text-center">
+                                            No Records Found!
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="table-responsive">
+                                <table class="table no-margin table-striped" id="dataTable" width="100%" cellspacing="0">
+                                    <thead>
+                                        <tr>
+                                            <th>Vessel Name</th>
+                                            <th>Port Name</th>
+                                            <th>FacilityName</th>
+                                            <th>Birth Name</th>
+                                            <th>Birth Type</th>
+                                            <th>Fast Date</th>
+                                            <th>Wind Force</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @{
+                                            foreach (var record in Model.AnomaliesAnySeaSwell)
+                                            {
+                                                <tr>
+                                                    <td>@record.VesselName</td>
+                                                    <td>@record.PortName</td>
+                                                    <td>@record.FacilityName</td>
+                                                    <td>@record.BirthName</td>
+                                                    <td>@record.BirthType</td>
+                                                    <td>
+                                                        @{
+                                                            DateTime? dt = record.FastDatetime;
+                                                            if (dt != null)
+                                                            {
+                                                                @Html.Raw(dt.Value.ToString("dd-MMM-yyyy"))
+                                                            }
+                                                        }
+                                                    </td>
+                                                    <td>@record.Berth_exposed_SeaSwell</td>
+                                                </tr>
+                                            }
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        }
+                    }
+                </div>
+
+                <div class="tab-pane active" id="AnomaliesAny_Affect_Passing_Traffic">
+                    @{
+                        count = Model.AnomaliesAny_Affect_Passing_Traffic.Count;
+                        if (count == 0)
+                        {
+                            <div class="panel-group">
+                                <div class="panel panel-info">
+                                    <div class="panel-body">
+                                        <p class="text-center">
+                                            No Records Found!
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="table-responsive">
+                                <table class="table no-margin table-striped" id="dataTable" width="100%" cellspacing="0">
+                                    <thead>
+                                        <tr>
+                                            <th>Vessel Name</th>
+                                            <th>Port Name</th>
+                                            <th>FacilityName</th>
+                                            <th>Birth Name</th>
+                                            <th>Birth Type</th>
+                                            <th>Fast Date</th>
+                                            <th>Wind Force</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @{
+                                            foreach (var record in Model.AnomaliesAny_Affect_Passing_Traffic)
+                                            {
+                                                <tr>
+                                                    <td>@record.VesselName</td>
+                                                    <td>@record.PortName</td>
+                                                    <td>@record.FacilityName</td>
+
+                                                    <td>@record.BirthName</td>
+                                                    <td>@record.BirthType</td>
+                                                    <td>
+                                                        @{
+                                                            DateTime? dt = record.FastDatetime;
+                                                            if (dt != null)
+                                                            {
+                                                                @Html.Raw(dt.Value.ToString("dd-MMM-yyyy"))
+                                                            }
+                                                        }
+                                                    </td>
+                                                    <td>@record.Any_Affect_Passing_Traffic</td>
+                                                </tr>
+                                            }
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        }
+                    }
+                </div>
+
+                <div class="tab-pane active" id="Anomaliesfender_Contact">
+                    @{
+                        count = Model.Anomaliesfender_Contact.Count;
+                        if (count == 0)
+                        {
+                            <div class="panel-group">
+                                <div class="panel panel-info">
+                                    <div class="panel-body">
+                                        <p class="text-center">
+                                            No Records Found!
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="table-responsive">
+                                <table class="table no-margin table-striped" id="dataTable" width="100%" cellspacing="0">
+                                    <thead>
+                                        <tr>
+                                            <th>Vessel Name</th>
+                                            <th>Port Name</th>
+                                            <th>FacilityName</th>
+                                            <th>Birth Name</th>
+                                            <th>Birth Type</th>
+                                            <th>Fast Date</th>
+                                            <th>Wind Force</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @{
+                                            foreach (var record in Model.Anomaliesfender_Contact)
+                                            {
+                                                <tr>
+                                                    <td>@record.VesselName</td>
+                                                    <td>@record.PortName</td>
+                                                    <td>@record.FacilityName</td>
+                                                    <td>@record.BirthName</td>
+                                                    <td>@record.BirthType</td>
+                                                    <td>
+                                                        @{
+                                                            DateTime? dt = record.FastDatetime;
+                                                            if (dt != null)
+                                                            {
+                                                                @Html.Raw(dt.Value.ToString("dd-MMM-yyyy"))
+                                                            }
+                                                        }
+                                                    </td>
+                                                    <td>@record.Ship_was_continuously_contact_with_fender</td>
+                                                </tr>
+                                            }
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        }
+                    }
+                </div>
+
+                <div class="tab-pane active" id="AnomaliesOFAirTemprature">
+                    @{
+                        count = Model.AnomaliesOFAirTemprature.Count;
+                        if (count == 0)
+                        {
+                            <div class="panel-group">
+                                <div class="panel panel-info">
+                                    <div class="panel-body">
+                                        <p class="text-center">
+                                            No Records Found!
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="table-responsive">
+                                <table class="table no-margin table-striped" id="dataTable" width="100%" cellspacing="0">
+                                    <thead>
+                                        <tr>
+                                            <th>Vessel Name</th>
+                                            <th>Port Name</th>
+                                            <th>FacilityName</th>
+                                            <th>Birth Name</th>
+                                            <th>Birth Type</th>
+                                            <th>Fast Date</th>
+                                            <th>Wind Force</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @{
+                                            foreach (var record in Model.AnomaliesOFAirTemprature)
+                                            {
+                                                <tr>
+                                                    <td>@record.VesselName</td>
+                                                    <td>@record.PortName</td>
+                                                    <td>@record.FacilityName</td>
+                                                    <td>@record.BirthName</td>
+                                                    <td>@record.BirthType</td>
+                                                    <td>
+                                                        @{
+                                                            DateTime? dt = record.FastDatetime;
+                                                            if (dt != null)
+                                                            {
+                                                                @Html.Raw(dt.Value.ToString("dd-MMM-yyyy"))
+                                                            }
+                                                        }
+                                                    </td>
+                                                    <td>@record.AirTemprature</td>
+                                                </tr>
+                                            }
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        }
+                    }
+                </div>*@
+                    </div>
+                </div>
+                <div class="text-center">
+                    <ul class="pagination">
+                        @{
+                            int totalRecords = Convert.ToInt32(TempData.Peek("TotalRecords"));
+
+                            int tot_pages = totalRecords / Shipment49Web.Common.CommonMethods.PAGESIZE;
+                            int remainder = totalRecords % Shipment49Web.Common.CommonMethods.PAGESIZE;
+
+                            tot_pages = remainder > 0 ? (tot_pages + 1) : tot_pages;
+
+                            int currPage = Convert.ToInt32(TempData.Peek("CurrentPage"));
+
+                            for (int cnt = 1; cnt <= tot_pages; cnt++)
+                            {
+                                if (cnt == currPage)
+                                {
+                                    <li class="active"><a href="#">@cnt</a></li>
+                                }
+                                else
+                                {
+                                    <li>@Html.ActionLink(cnt.ToString(), "Anomalies", "Reports", new { id = cnt }, null)</li>
+                                }
+                            }
+                        }
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+
+
+<div id="OperationModal" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Operation List</h4>
+            </div>
+            <div class="modal-body">
+                <div class="box-body">
+                    <div class="col-md-12">
+                        <div class="col-md-6">
+                            <dl class="dl-horizontal" id="opDetails1">
+                            </dl>
+                        </div>
+                        <div class="col-md-6">
+                            <dl class="dl-horizontal" id="opDetails2">
+                            </dl>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="nav-tabs-custom">
+                            <ul class="nav nav-tabs">
+                                <li class="active"><a href="#tabropedetails" class="tablinks" data-toggle="tab">Rope Details</a></li>
+                                <li><a href="#tabropetaildetails" class="tablinks" data-toggle="tab">Rope Tail Details</a></li>
+                            </ul>
+                        </div>
+                        <div class="tab-content" style="min-height: 650px">
+                            <div class="tab-pane active" id="tabropedetails">
+                                <div class="table-responsive">
+                                    <table class="table no-margin" width="100%" cellspacing="0">
+                                        <thead>
+                                            <tr>
+                                                <th>Winch No.</th>
+                                                <th>Location</th>
+                                                <th>Certificate</th>
+                                                <th>Lead 1</th>
+                                                <th>Lead 2</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="ropeDetails">
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="tab-pane" id="tabropetaildetails">
+                                <div class="table-responsive">
+                                    <table class="table no-margin" width="100%" cellspacing="0">
+                                        <thead>
+                                            <tr>
+                                                <th>Winch No.</th>
+                                                <th>Location</th>
+                                                <th>Certificate</th>
+                                                <th>Lead 1</th>
+                                                <th>Lead 2</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="ropeTailDetails">
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,295 @@
+﻿@model Shipment49Web.Areas.CrewReport.Controllers.FilterModel
+
+@{
+    ViewBag.Title = "Rope Inspection Report";
+    Layout = "~/Views/Shared/_LeftSideBar.cshtml";
+}
+
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+
+<script>
+
+    $(function () {
+        $('.dtpicker').datepicker({
+            autoclose: true, dateFormat: 'dd-mm-yy'
+        })
+    });
+
+    function getRopeDetails(vid, tailid, rid) {
+        $.ajax({
+            type: 'GET',
+            data: { vesselid: vid, ropetail: tailid, ropeid: rid },
+            url: '/data/ViewInspDetails?vesselid=' + vid + '&ropetail=' + tailid + '&ropeid=' + rid,
+            cache: false,
+            contentType: false,
+            processData: false,
+            success: function (response) {
+                if (response.Result == true) {
+                    $('#tableData').empty();
+                    var tr;
+                    for (var i = 0; i < response.Data.length; i++) {
+                        tr = $('<tr/>');
+                        tr.append("<td>" + response.Data[i].InspectDate + "</td>");
+                        tr.append("<td>" + response.Data[i].InspectBy + "</td>");
+                        tr.append("<td>" + response.Data[i].assignednumber + "</td>");
+                        tr.append("<td>" + response.Data[i].certificatenumber + "</td>");
+                        tr.append("<td>" + response.Data[i].ExternalRating_A + "</td>");
+                        tr.append("<td>" + response.Data[i].InternalRating_A + "</td>");
+                        tr.append("<td>" + response.Data[i].AverageRating_A + "</td>");
+                        tr.append("<td>" + response.Data[i].LengthOFAbrasion_A + "</td>");
+                        tr.append("<td>" + response.Data[i].DistanceOutboard_A + "</td>");
+                        tr.append("<td>" + response.Data[i].CutYarnCount_A + "</td>");
+                        tr.append("<td>" + response.Data[i].LengthOFGlazing_A + "</td>");
+                        tr.append("<td>" + response.Data[i].Chafe_guard_condition + "</td>");
+                        tr.append("<td>" + response.Data[i].Twist + "</td>");
+                        tr.append("<td>" + response.Data[i].Photo1 + "</td>");
+                        tr.append("<td>" + response.Data[i].Photo1 + "</td>");
+
+                        $('#tableData').append(tr);
+                    }
+                    $('#RopeModal').modal('show');
+                }
+                else {
+                    toastr["error"](response.Message);
+                }
+            },
+            failure: function (response) {
+                toastr["error"](response.Message);
+            }
+        });
+    }
+
+    function getRopeTailDetails(vid, tailid, rid) {
+        $.ajax({
+            type: 'GET',
+            data: { vesselid: vid, ropetail: tailid, ropeid: rid },
+            url: '/data/ViewInspDetails?vesselid=' + vid + '&ropetail=' + tailid + '&ropeid=' + rid,
+            cache: false,
+            contentType: false,
+            processData: false,
+            success: function (response) {
+                if (response.Result == true) {
+                    $('#tailData').empty();
+                    var tr;
+                    for (var i = 0; i < response.Data.length; i++) {
+                        tr = $('<tr/>');
+                        tr.append("<td>" + response.Data[i].InspectDate + "</td>");
+                        tr.append("<td>" + response.Data[i].InspectBy + "</td>");
+                        tr.append("<td>" + response.Data[i].assignednumber + "</td>");
+                        tr.append("<td>" + response.Data[i].certificatenumber + "</td>");
+                        tr.append("<td>" + response.Data[i].ExternalRating_B + "</td>");
+                        tr.append("<td>" + response.Data[i].InternalRating_B + "</td>");
+                        tr.append("<td>" + response.Data[i].AverageRating_B + "</td>");
+                        tr.append("<td>" + response.Data[i].LengthOFAbrasion_B + "</td>");
+                        tr.append("<td>" + response.Data[i].DistanceOutboard_B + "</td>");
+                        tr.append("<td>" + response.Data[i].CutYarnCount_B + "</td>");
+                        tr.append("<td>" + response.Data[i].LengthOFGlazing_B + "</td>");
+                        tr.append("<td>" + response.Data[i].Chafe_guard_condition + "</td>");
+                        tr.append("<td>" + response.Data[i].Twist + "</td>");
+                        tr.append("<td>" + response.Data[i].Photo1 + "</td>");
+                        tr.append("<td>" + response.Data[i].Photo1 + "</td>");
+                        $('#tailData').append(tr);
+                    }
+                    $('#RopeTailModal').modal('show');
+                }
+                else {
+                    toastr["error"](response.Message);
+                }
+            },
+            failure: function (response) {
+                toastr["error"](response.Message);
+            }
+        });
+    }
+
+</script>
+
+<div class="content-wrapper">
+    <section class="content-header">
+        <h1>
+            Rope Inspection Report
+        </h1>
+    </section>
+
+    <section class="content">
+        <div class="box box-info">
+            <div class="box-body">
+                <div class="row">
+                    @using (Html.BeginForm("RopeInspReport", "data", FormMethod.Post, new { area = "Reports" }))
+                    {
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                @Html.TextBox("DateFrom", Model.DateFrom, new { @class = "form-control dtpicker", @placeholder = "Date From" })
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                @Html.TextBox("DateTo", Model.DateUpto, new { @class = "form-control dtpicker", @placeholder = "Date To" })
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <div style="float:right">
+                                    <button type="submit" class="btn btn-danger">Search</button>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="box box-default">
+                    <div class="box-body">
+                        <div class="nav-tabs-custom">
+                            <ul class="nav nav-tabs">
+                                <li class="active"><a href="#ropeinspection" class="tablinks" data-toggle="tab">Rope Inspection</a></li>
+                                <li><a href="#ropetailinspection" class="tablinks" data-toggle="tab">Rope Tail Inspection</a></li>
+                            </ul>
+                            <div class="tab-content" style="min-height: 650px">
+                                <div class="tab-pane active" id="ropeinspection">
+                                    <div class="table-responsive table-striped">
+                                        <table class="table no-margin" id="dataTable" width="100%" cellspacing="0">
+                                            <thead>
+                                                <tr>
+                                                    <th>Inspection Date</th>
+                                                    <th>Inspected By</th>
+                                                    <th></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @{
+                                                    foreach (var record in Model.RopeInspectionList)
+                                                    {
+                                                        <tr>
+                                                            <td>@record.InspectDate</td>
+                                                            <td>@record.InspectBy</td>
+                                                            <td>
+                                                                <button id="@record.Id" title="View Details" type="button" class="btn btn-link" onclick="getRopeDetails('@record.VesselID', '@record.RopeTail', '@record.RopeId')"><i class="fa fa-info"></i></button>
+                                                            </td>
+                                                        </tr>
+                                                    }
+                                                }
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                <div class="tab-pane" id="ropetailinspection">
+                                    <div class="table-responsive table-striped">
+                                        <table class="table no-margin" id="dataTable" width="100%" cellspacing="0">
+                                            <thead>
+                                                <tr>
+                                                    <th>Inspection Date</th>
+                                                    <th>Inspected By</th>
+                                                    <th></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @{
+                                                    foreach (var record in Model.RopeTailInspectionList)
+                                                    {
+                                                        <tr>
+                                                            <td>@record.InspectDate</td>
+                                                            <td>@record.InspectBy</td>
+                                                            <td>
+                                                                <button id="@record.Id" title="View Details" type="button" class="btn btn-link" onclick="getRopeTailDetails('@record.VesselID', '@record.RopeTail', '@record.RopeId')"><i class="fa fa-info"></i></button>
+                                                            </td>
+                                                        </tr>
+                                                    }
+                                                }
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+<div id="RopeModal" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">ZONE - A (Chock or Fairlead Contact Area Zone)</h4>
+            </div>
+            <div class="modal-body">
+                <div class="table-responsive">
+                    <table class="table no-margin" width="100%" cellspacing="0">
+                        <thead>
+                            <tr>
+                                <th>Inspection Date</th>
+                                <th>Inspected By</th>
+                                <th>Winch No</th>
+                                <th>Certificate No.</th>
+                                <th>External</th>
+                                <th>Internal</th>
+                                <th>Average</th>
+                                <th>Length of Abrasion</th>
+                                <th>Distance From</th>
+                                <th>Cut Yarn Counted</th>
+                                <th>Length of Glazing</th>
+                                <th>Chafe Guard Condition</th>
+                                <th>Twist</th>
+                                <th>Photo 1</th>
+                                <th>Photo 2</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tableData">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div id="RopeTailModal" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">ZONE - B (Wich Drum Contact Area Zone)</h4>
+            </div>
+            <div class="modal-body">
+                <div class="table-responsive">
+                    <table class="table no-margin" width="100%" cellspacing="0">
+                        <thead>
+                            <tr>
+                                <th>Inspection Date</th>
+                                <th>Inspected By</th>
+                                <th>Winch No</th>
+                                <th>Certificate No.</th>
+                                <th>External</th>
+                                <th>Internal</th>
+                                <th>Average</th>
+                                <th>Length of Abrasion</th>
+                                <th>Distance From</th>
+                                <th>Cut Yarn Counted</th>
+                                <th>Length of Glazing</th>
+                                <th>Chafe Guard Condition</th>
+                                <th>Twist</th>
+                                <th>Photo 1</th>
+                                <th>Photo 2</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tailData">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>

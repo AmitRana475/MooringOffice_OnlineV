@@ -1,0 +1,858 @@
+﻿@model Shipment49Web.Areas.MooringOperation.Models.MODamageRopeClass
+
+@{
+    ViewBag.Title = "AddDamage";
+    Layout = "~/Views/Shared/_LayoutVessel7.cshtml";
+}
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.15/css/bootstrap-multiselect.css" type="text/css" />
+
+<style type="text/css">
+    .multiselect-container > li > a > label.checkbox {
+        width: 250px;
+    }
+
+    .dropdown-menu-custom-settings {
+        top: 0% !important;
+        left: 230px !important;
+        width: 100% !important;
+        background-color: #0f3976;
+    }
+
+
+    .btn-group.select-new-btn {
+        width: 100%;
+    }
+
+    .btn-group {
+        width: 100%;
+    }
+
+
+    button.multiselect.dropdown-toggle.btn.btn-default {
+        width: 100%;
+    }
+
+
+    .multiselect-container {
+        position: relative;
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+    }
+
+    .multiselect span {
+        float: left;
+    }
+
+    .btn .caret {
+        margin-left: 0;
+        float: right;
+    }
+
+    .caret {
+        margin-top: 8px;
+        border-top: 5px dashed;
+    }
+
+</style>
+
+
+
+
+
+
+
+<div class="content">
+    @if (TempData["Error"] != null)
+    {
+        <p class="alert alert-danger" id="errorMessage">@TempData["Error"]</p>
+    }
+    @if (TempData["Success"] != null)
+    {
+        <p class="alert alert-success" id="successMessage">@TempData["Success"]</p>
+    }
+
+    @using (Html.BeginForm("AddDamage", "Operation"))
+    {
+        @Html.AntiForgeryToken()
+        <div class="page-heading page-header-flex">
+            <div>
+                <h1 class="page-title">
+                    Add Damage Line
+                </h1>
+                <ol class="breadcrumb">
+                    <li><a href="">Home</a></li>
+                    <li><a href="">Form</a></li>
+                    <li><a>Create</a></li>
+                </ol>
+            </div>
+            <div class="form-actions">
+                <button type="submit" id="btnSubmit" name="btnSubmit" class="btn btn-success btn-width"><i class="uil uil-check mr-2"></i>Submit</button>
+                <button name="Reset" type="reset" class="btn btn-danger btn-width"><i class="uil uil-redo mr-2"></i>Reset</button>
+            </div>
+        </div>
+
+        <div class="wrapper wrapper-content">
+            <div class="container">
+                <!-- <h3 class="card-title">Damage Line</h3> -->
+                <div class="form-body">
+                    <div class="row ml-3">
+                        <div class="col-md-8 mx-auto">
+
+
+
+
+
+                            <div id="tabsecond">
+
+
+                                <div style="display:none">
+                                    @Html.EditorFor(model => model.MOPId, new { htmlAttributes = new { @class = "form-control", @maxlength = 10, @required = "true", } })
+
+                                </div>
+
+                                <div class="row form-group">
+                                    <label class="control-label">Winch on which damaged line is reeled</label>
+                                    @Html.DropDownListFor(model => model.RopeId, new SelectList(Model.RopeListUsingOp, "Value", "Text"), new { @class = "form-control select2", @required = "true", @onchange = "checkdata(this)" })
+                                </div>
+                                @*<div class="form-group">
+                                        <label class="control-label">Damage Date</label>
+                                        @Html.DropDownListFor(model => model.RopeId, new SelectList(Model.RopeListUsingOp, "Value", "Text"), new { @class = "form-control", @required = "true", @onchange = "FindCertificate()" })
+                                    </div>*@
+
+                                @*<div class="form-group">
+                                        <label class="control-label">Damage Date</label>
+                                        @Html.TextBoxFor(x => x.DamageDate, "{0:yyyy-MM-dd}", new { @class = "form-control", @required = "true", @type = "date" })
+                                    </div>*@
+
+
+                                <div class="row form-group">
+                                    <label class="control-label">Damage Location<sup>*</sup></label>
+                                    @Html.DropDownListFor(model => model.DamageLocation, new SelectList(Model.DamageLocations, "DamageLocationL", "DamageLocationL"), htmlAttributes: new { @class = "form-control", @required = "true", })
+                                </div>
+
+
+
+                                <div class="row form-group">
+                                    <label class="control-label">Damage Reason<sup>*</sup></label>
+                                    @Html.DropDownListFor(model => model.DamageReason, new SelectList(Model.DamageReasons, "DamageReasonL", "DamageReasonL"), htmlAttributes: new { @class = "form-control select2", @required = "true", })
+                                </div>
+
+
+                                <div class="row form-group">
+                                    <label class="control-label">Incident Report<sup>*</sup></label>
+                                    @Html.DropDownListFor(model => model.IncidentReport, new SelectList(Model.IncidentReports, "Value", "Text"), new { @class = "form-control", @required = "true", })
+
+                                </div>
+
+                                <div class="row form-group">
+                                    <label class="control-label">Incident Action<sup>*</sup></label>
+                                    @Html.DropDownListFor(model => model.IncidentAction, new SelectList(Model.IncidentActionList, "Value", "Text"), new { @class = "form-control", @Onchange = "FindAction()", @required = "true", })
+
+                                </div>
+                                <div id="Spliced" style="display:none">
+                                    <div class="row form-group">
+                                        <label class="control-label">Spliced Date<sup>*</sup></label>
+                                        @Html.DropDownListFor(model => model.SplicedDate, new SelectList(Model.SubDates, "Value", "Text"), new { @class = "form-control", @required = "true", })
+
+                                    </div>
+                                    <div class="row form-group">
+                                        <label class="control-label">Spliced Method<sup>*</sup></label>
+                                        @Html.EditorFor(model => model.SplicedMethod, new { htmlAttributes = new { @class = "form-control", @maxlength = 100, @required = "true", } })
+                                    </div>
+                                    <div class="row form-group">
+                                        <label class="control-label">Spliced By<sup>*</sup></label>
+                                        @Html.DropDownListFor(model => model.SplicingDoneBy, new SelectList(Model.SplicedByList, "Value", "Text"), new { @class = "form-control", @required = "true", })
+
+                                    </div>
+                                    <div class="row form-group">
+                                        <label class="control-label">Is Line Cropped ?<sup>*</sup></label>
+                                        @Html.DropDownListFor(model => model.IsCropped, new SelectList(Model.IsCroppedList, "Value", "Text"), new { @class = "form-control", @required = "true", })
+
+                                    </div>
+
+                                </div>
+                                <div id="Cropped" style="display:none">
+                                    <div class="row form-group">
+                                        <label class="control-label">Cropping Date<sup>*</sup></label>
+                                        @Html.DropDownListFor(model => model.CroppedDate, new SelectList(Model.SubDates, "Value", "Text"), new { @class = "form-control", @required = "true", })
+
+                                    </div>
+
+                                    <div class="row form-group">
+                                        <label class="control-label">Cropped Outboard End<sup>*</sup></label>
+                                        @Html.DropDownListFor(model => model.CroppedOutboardEnd, new SelectList(Model.CroppedOutboardEndList, "Value", "Text"), new { @class = "form-control", @required = "true", })
+
+                                    </div>
+                                    <div class="row form-group">
+                                        <label class="control-label">Length(mtrs)<sup>*</sup></label>
+                                        @Html.EditorFor(model => model.LengthofCroppedRope, new { htmlAttributes = new { @class = "form-control", @required = "true", @maxlength = 6, @onkeypress = "return isNumberKey(event)", @onKeyUp = "requiredValue(this)", @onchange = "CrpLngthChk" } })
+                                        <span id="messageLnth"></span>
+                                    </div>
+
+
+                                    <div class="row form-group">
+                                        <label class="control-label">Reasons of Cropping<sup>*</sup></label><br/>
+
+                                        @Html.DropDownListFor(model => model.ReasonofCropping, new SelectList(Model.CroppingReasonList, "Value", "Text"), new { @class = "form-control multiple-reason", @multiple = "multiple", @required = "true" })
+
+                                        @*@Html.DropDownListFor(model => model.RsCropping, new SelectList(Model.ReasonofCroppings, "CroppingReason", "CroppingReason"), new { @class = "form-control multiple-reason", @multiple = "multiple", @required = "true" })*@
+
+                                        @*@Html.DropDownListFor(model => model.ReasonofCropping, new SelectList(Model.CroppingReasonList, "Value", "Text"), new { @class = "form-control multiple-reason", @multiple = "multiple", @required = "true", })*@
+
+                                    </div>
+                                </div>
+
+                                <div id="Discarded" style="display:none">
+
+                                    <div class="row form-group">
+                                        <label class="control-label">Discarded Date<sup>*</sup></label>
+                                        @Html.DropDownListFor(model => model.DiscaredDate, new SelectList(Model.SubDates, "Value", "Text"), new { @class = "form-control", @required = "true", })
+
+                                    </div>
+
+                                    <div class="row form-group">
+                                        <label class="control-label">Reason for Out of Service<sup>*</sup></label>
+                                        @Html.DropDownListFor(model => model.ReasonOutofService, new SelectList(Model.OutofServiceReasonList, "Reason", "Reason"), new { @class = "form-control", @required = "true", @onchange = "OthReason(this)" })
+
+                                    </div>
+
+                                    @*<div class="form-group">
+                                            <label class="bmd-label-floating">Cropped Outboard End</label>
+                                            @Html.DropDownListFor(model => model.CroppedOutboardEnd, new SelectList(Model.CroppedOutboardEndList, "Value", "Text"), new { @class = "form-control", @required = "true", })
+
+                                        </div>*@
+
+                                    <div style="display:none" id="othR" class="row form-group">
+                                        <label class="control-label">Other Reason<sup>*</sup></label>
+                                        @Html.EditorFor(x => x.otherReason, new { htmlAttributes = new { @class = "form-control", @maxlength = 100, @required = "false" } })
+                                    </div>
+
+                                    <div class="row form-group" style="display:none" id="DivDamageObserved">
+                                        <label class="control-label">Reason Observed<sup>*</sup></label>
+                                        @Html.DropDownListFor(model => model.DamageObserved, new SelectList(Model.DamageObservedLists, "DamageObserved1", "DamageObserved1"), new { @class = "form-control", @required = "false" })
+
+                                    </div>
+
+                                </div>
+
+                                <div id="End-to-end" style="display:none">
+                                    <div class="row form-group">
+                                        <label class="control-label">End To End Date<sup>*</sup></label>
+                                        @Html.DropDownListFor(model => model.EndtoEndDoneDate, new SelectList(Model.SubDates, "Value", "Text"), new { @class = "form-control", @required = "true", })
+
+                                    </div>
+
+                                    <div class="row form-group">
+                                        <label class="control-label">Current Outboard End in use<sup>*</sup></label>
+                                        @Html.EditorFor(x => x.outboard, new { htmlAttributes = new { @class = "form-control", @readonly = "true", @required = "false" } })
+                                    </div>
+
+                                    <div class="row form-group">
+                                        <label class="control-label">Shifted Outboard End<sup>*</sup>  </label>
+                                        
+                                           
+                                            @Html.EditorFor(x => x.outboard1, new { htmlAttributes = new { @class = "form-control", @readonly = "true", @required = "false" } })
+                                        
+                                    </div>
+                                   
+                                </div>
+
+                                @*<div class="btn-next-con">
+                                        <input class="btn btn-primary pull-right" id="btnSubmit" name="btnSubmit" style="width: 12%;cursor:pointer;" type="submit" value="Save" />
+                                    </div>*@
+                            </div>
+
+
+
+                            @*<div class="row form-group ">
+                                    <label class="col-sm-4 col-form-label">
+                                        <label class="control-label">Winch on which damage line was reeled</label>
+                                    </label>
+                                    <div class="col-sm-8">
+                                        <select class="form-control select-control">
+                                            <option>hello</option>
+                                            <option>dfdfdf</option>
+                                        </select>
+                                        <div class="error"></div>
+                                    </div>
+                                </div>
+                                <div class="row form-group ">
+                                    <label class="col-sm-4 col-form-label">
+                                        <label class="control-label">Damage Location</label>
+                                    </label>
+                                    <div class="col-sm-8">
+                                        <select class="form-control select-control">
+                                            <option>hello</option>
+                                            <option>dfdfdf</option>
+                                        </select>
+                                        <div class="error"></div>
+                                    </div>
+                                </div>
+                                <div class="row form-group ">
+                                    <label class="col-sm-4 col-form-label">
+                                        <label class="control-label">Damage Reason</label>
+                                    </label>
+                                    <div class="col-sm-8">
+                                        <select class="form-control select-control">
+                                            <option>hello</option>
+                                            <option>amit</option>
+                                        </select>
+                                        <div class="error"></div>
+                                    </div>
+                                </div>
+                                <div class="row form-group ">
+                                    <label class="col-sm-4 col-form-label">
+                                        <label class="control-label">Incident Report</label>
+                                    </label>
+                                    <div class="col-sm-8">
+                                        <select class="form-control select-control">
+                                            <option>hello</option>
+                                            <option>amit</option>
+                                        </select>
+                                        <div class="error"></div>
+                                    </div>
+                                </div>
+                                <div class="row form-group ">
+                                    <label class="col-sm-4 col-form-label">
+                                        <label class="control-label">Action to the line after damage</label>
+                                    </label>
+                                    <div class="col-sm-8">
+                                        <select class="form-control select-control">
+                                            <option>hello</option>
+                                            <option>amit</option>
+                                        </select>
+                                        <div class="error"></div>
+                                    </div>
+                                </div>
+                                <div class="row form-group ">
+                                    <label class="col-sm-4 col-form-label">
+                                        <label class="control-label">Spliced date</label>
+                                    </label>
+                                    <div class="col-sm-8">
+                                        <select class="form-control select-control">
+                                            <option>hello</option>
+                                            <option>sdsd</option>
+                                        </select>
+                                        <div class="error"></div>
+                                    </div>
+                                </div>
+                                <div class="row form-group ">
+                                    <label class="col-sm-4 col-form-label">
+                                        <label class="control-label">Spliced method</label>
+                                    </label>
+                                    <div class="col-sm-8">
+                                        <select class="form-control select-control">
+                                            <option>hello</option>
+                                            <option>sdsd</option>
+                                        </select>
+                                        <div class="error"></div>
+                                    </div>
+                                </div>
+                                <div class="row form-group ">
+                                    <label class="col-sm-4 col-form-label">
+                                        <label class="control-label">Spliced by</label>
+                                    </label>
+                                    <div class="col-sm-8">
+                                        <select class="form-control select-control">
+                                            <option>hello</option>
+                                            <option>sdsd</option>
+                                        </select>
+                                        <div class="error"></div>
+                                    </div>
+                                </div>
+                                <div class="row form-group ">
+                                    <label class="col-sm-4 col-form-label">
+                                        <label class="control-label">IsLine Cropped</label>
+                                    </label>
+                                    <div class="col-sm-8">
+                                        <select class="form-control select-control">
+                                            <option>hello</option>
+                                            <option>sdsd</option>
+                                        </select>
+                                        <div class="error"></div>
+                                    </div>
+                                </div>
+                                <div class="row form-group ">
+                                    <label class="col-sm-4 col-form-label">
+                                        <label class="control-label">Cropped Outboard End</label>
+                                    </label>
+                                    <div class="col-sm-8">
+                                        <select class="form-control select-control">
+                                            <option>hello</option>
+                                            <option>amit</option>
+                                        </select>
+                                        <div class="error"></div>
+                                    </div>
+                                </div>
+                                <div class="row form-group ">
+                                    <label class="col-sm-4 col-form-label">
+                                        <label class="control-label">CroppedLine Lt.(mtrs)</label>
+                                    </label>
+                                    <div class="col-sm-8">
+                                        <select class="form-control select-control">
+                                            <option>hello</option>
+                                            <option>sdsd</option>
+                                        </select>
+                                        <div class="error"></div>
+                                    </div>
+                                </div>*@
+                            @*<div class="row form-group ">
+                                    <label class="col-sm-4 col-form-label">
+                                        <label class="control-label">Reason for Cropping</label>
+                                    </label>
+                                    <div class="col-sm-8">
+                                        <select class="form-control multiple-reason" multiple="multiple">
+                                            <option>reason1</option>
+                                            <option>reason2</option>
+                                            <option>reason3</option>
+                                        </select>
+                                        <div class="error"></div>
+                                    </div>
+                                </div>*@
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    }
+
+
+
+
+
+</div>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.15/js/bootstrap-multiselect.js"></script>
+<script>
+
+    $('#ReasonofCropping').multiselect({
+        includeSelectAllOption: true,
+        enableCaseInsensitiveFiltering: true,
+        maxHeight: 350,
+        numberDisplayed: 1,
+        onSelectAll: function () {
+        }
+    });
+</script>
+
+<script type="text/javascript">
+    function requiredValue(arg) {
+
+        debugger;
+        var id = arg.getAttribute('id');
+        var value = arg.value;
+
+        if (value > 999) {
+
+            var message = "";
+            if (id == "DiaMeter") {
+                message = document.getElementById('messageDia');
+            }
+            if (id == "LengthofCroppedRope") {
+                message = document.getElementById('messageLnth');
+            } if (id == "MBL") {
+                message = document.getElementById('messageMbl');
+            } if (id == "LDBF") {
+                message = document.getElementById('messageLdbf');
+            }
+            if (id == "WLL") {
+                message = document.getElementById('messageWll');
+            }
+
+            var goodColor = "#0C6";
+            var badColor = "#FF0000";
+
+            message.style.color = badColor;
+            message.innerHTML = "Value not greater then 999.99 !"
+            $("#" + id + "").val('');
+        }
+        else {
+            var message = "";
+            if (id == "DiaMeter") {
+                message = document.getElementById('messageDia');
+            }
+            if (id == "LengthofCroppedRope") {
+                message = document.getElementById('messageLnth');
+            } if (id == "MBL") {
+                message = document.getElementById('messageMbl');
+            } if (id == "LDBF") {
+                message = document.getElementById('messageLdbf');
+            }
+            if (id == "WLL") {
+                message = document.getElementById('messageWll');
+            }
+            message.innerHTML = ""
+        }
+
+    }
+</script>
+
+
+
+<script>
+    function checkdata(t) {
+
+        debugger;
+        var Id = t.value;
+
+        $.ajax({
+            type: 'POST',
+            dataType: 'json',
+            url: '/Operation/GetWinchlocation',
+            data: { 'Id': Id },
+            success: function (response) {
+                if (response.Result == true) {
+
+                    debugger;
+                    // $("#location").text(response.location);
+                    $("#outboard").val(response.outboard);
+                    // $("#asswinch").text(response.asswinch);
+                    $("#outboard1").val(response.outboard1);
+                    var outb = $("#outboard").val();
+                    var cc5 = $("#IncidentAction").val();
+                    if (cc5 == "End-to-end" && outb == "") {
+                        alert("End to End can not be apply for Unassigned Ropes!");
+                        document.getElementById("btnSubmit").disabled = true;
+                    }
+                    else {
+                        document.getElementById("btnSubmit").disabled = false;
+                    }
+                }
+                else {
+                    alert('An Error has occured. Please try again.');
+                }
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                //toastr["error"]('An Error has occured. Please try again.');
+                alert('An Error has occured. Please try again.');
+            }
+        });
+
+
+
+    }
+
+
+
+
+</script>
+
+
+<script>
+
+    function CrpLngthChk() {
+
+        var ropeid = $('#RopeId').val();
+        var crplength = $('#LengthofCroppedRope').val();
+        alert(ropeid);
+
+        if (crplength != "") {
+            var crpval = crplength;
+            $.ajax({
+                type: 'POST',
+                dataType: 'json',
+                url: '/Operation/CheckCroppingLength',
+                data: { 'crpval': crpval, 'RopeId': ropeid },
+                success: function (response) {
+                    if (response.Result == true) {
+
+                        debugger;
+                        var message = "";
+                        if (response.Message != "") {
+                            // $("#msgDiv").show();
+                            // $('#myModal').modal('show');
+                            var data = response.Message;
+                            //$('#messageID').text(data);
+
+
+                            message = document.getElementById('messageLnth');
+                            var goodColor = "#0C6";
+                            var badColor = "#FF0000";
+
+                            message.style.color = badColor;
+                            message.innerHTML = data;
+                            $('#LengthofCroppedRope').val('');
+                            //$("#" + id + "").val('');
+
+                            // $("#btnSubmit").attr("disabled", true);
+                        }
+                        else {
+                            // $("#msgDiv").hide();
+                            // $("#btnSubmit").attr("disabled", false);
+                        }
+                    }
+                    else {
+                        //alert('An Error has occured. Please try again.');
+                    }
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    //toastr["error"]('An Error has occured. Please try again.');
+                    // alert('An Error has occured. Please try again.');
+                }
+            });
+        }
+
+    }
+
+</script>
+
+
+<script>
+
+    function OthReason(t) {
+        var Id = t.value;
+        if (Id != "Other") {
+            $('#othR').hide();
+            document.getElementById("otherReason").required = false;
+        }
+        if (Id == "Other") {
+            $('#othR').show();
+            document.getElementById("otherReason").required = true;
+        }
+
+        if (Id == "Damaged") {
+            $("#DivDamageObserved").show();
+        }
+        else {
+            $("#DivDamageObserved").hide();
+        }
+    }
+
+    //function damageOb(t) {
+    //    var Id = t.value;
+    //    if (Id != "Mooring Operation") {
+
+    //        $('#mopr').hide();
+    //    }
+    //    if (Id == "Mooring Operation") {
+    //        $('#mopr').show();
+    //    }
+    //}
+
+    function isNumberKey(evt) {
+
+        var charCode = (evt.which) ? evt.which : event.keyCode
+        if (charCode != 46 && charCode > 31 && (charCode < 48 || charCode > 57))
+            return false;
+
+        return true;
+    }
+
+    //window.onload = function () {
+
+    //    $('#Spliced').hide();
+    //    $('#Cropped').hide();
+    //    $('#Discarded').hide();
+    //    $('#End-to-end').hide();
+    //};
+
+    //$(document).ready(function () {
+
+    //    $('#Spliced').hide();
+    //    $('#Cropped').hide();
+    //    $('#Discarded').hide();
+    //    $('#End-to-end').hide();
+    //});
+
+    window.onload = function () {
+
+        var Id = $("#RopeId").val();
+
+        $.ajax({
+            type: 'POST',
+            dataType: 'json',
+            url: '/Operation/GetWinchlocation',
+            data: { 'Id': Id },
+            success: function (response) {
+                if (response.Result == true) {
+
+
+                    // $("#location").text(response.location);
+                    $("#outboard").val(response.outboard);
+                    // $("#asswinch").text(response.asswinch);
+                    $("#outboard1").val(response.outboard1);
+                    var outb = $("#outboard").val();
+                    var cc5 = $("#IncidentAction").val();
+                    if (cc5 == "End-to-end" && outb == "") {
+                        alert("End to End can not be apply for Unassigned Ropes!");
+                        document.getElementById("btnSubmit").disabled = true;
+                    }
+                    else {
+                        document.getElementById("btnSubmit").disabled = false;
+                    }
+                }
+                else {
+                    alert('An Error has occured. Please try again.');
+                }
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                //toastr["error"]('An Error has occured. Please try again.');
+                alert('An Error has occured. Please try again.');
+            }
+        });
+
+
+
+        FindAction();
+
+
+    };
+
+
+    function FindAction() {
+
+        //var cc = $("#IncidentAction option:selected").text(); ReasonofCropping
+        var cc = $("#IncidentAction").val();
+        //alert(cc);
+
+        if (cc == "Spliced") {
+
+            document.getElementById("SplicedMethod").required = true;
+            document.getElementById("otherReason").required = false;
+            document.getElementById("CroppedOutboardEnd").required = false;
+            document.getElementById("LengthofCroppedRope").required = false;
+            document.getElementById("outboard").required = false;
+            document.getElementById("outboard1").required = false;
+            document.getElementById("ReasonofCropping").required = false;
+            document.getElementById("btnSubmit").disabled = false;
+            $('#Spliced').show();
+            $('#Cropped').hide();
+            $('#Discarded').hide();
+            $('#End-to-end').hide();
+
+
+            //var uid = document.getElementById("SplicedMethod").value;
+            //if (uid === "") {
+            //    document.getElementById("SplicedMethod").readOnly = false;
+            //}
+            //else { document.getElementById("SplicedMethod").readOnly = true; }
+
+
+            $("#IsCropped").change(function () {
+                var cur_value = $('option:selected', this).text();
+                if (cur_value == "Yes") {
+                    $('#Cropped').show();
+                    document.getElementById("CroppedOutboardEnd").required = true;
+                    document.getElementById("LengthofCroppedRope").required = true;
+                    document.getElementById("ReasonofCropping").required = true;
+
+                } else {
+                    $('#Cropped').hide();
+                    document.getElementById("CroppedOutboardEnd").required = false;
+                    document.getElementById("LengthofCroppedRope").required = false;
+                    document.getElementById("ReasonofCropping").required = false;
+
+                }
+            });
+
+        }
+        else if (cc == "Cropped") {
+            $('#Cropped').show();
+            $('#Spliced').hide();
+            $('#Discarded').hide();
+            $('#End-to-end').hide();
+
+            document.getElementById("CroppedOutboardEnd").required = true;
+            document.getElementById("LengthofCroppedRope").required = true;
+            document.getElementById("SplicedMethod").required = false;
+            document.getElementById("otherReason").required = false;
+            document.getElementById("outboard").required = false;
+            document.getElementById("outboard1").required = false;
+            document.getElementById("btnSubmit").disabled = false;
+        }
+        else if (cc == "Discarded") {
+            $('#Discarded').show();
+
+            document.getElementById("CroppedOutboardEnd").required = false;
+            document.getElementById("LengthofCroppedRope").required = false;
+            document.getElementById("SplicedMethod").required = false;
+            document.getElementById("otherReason").required = false;
+            document.getElementById("outboard").required = false;
+            document.getElementById("outboard1").required = false;
+            document.getElementById("ReasonofCropping").required = false;
+            document.getElementById("btnSubmit").disabled = false;
+            $('#Spliced').hide();
+            $('#Cropped').hide();
+            $('#End-to-end').hide();
+        }
+        else if (cc == "End-to-end") {
+            $('#End-to-end').show();
+            document.getElementById("outboard").required = true;
+            document.getElementById("outboard1").required = true;
+            document.getElementById("CroppedOutboardEnd").required = false;
+            document.getElementById("LengthofCroppedRope").required = false;
+            document.getElementById("SplicedMethod").required = false;
+            document.getElementById("ReasonofCropping").required = false;
+            document.getElementById("otherReason").required = false;
+
+            var outb = $("#outboard").val();
+            if (outb == "") {
+                alert("Unassigned Rope can not be End to End!");
+                document.getElementById("btnSubmit").disabled = true;
+            }
+            else {
+                document.getElementById("btnSubmit").disabled = false;
+            }
+
+            $('#Discarded').hide();
+            $('#Spliced').hide();
+            $('#Cropped').hide();
+        }
+        else {
+            $('#Spliced').hide();
+            $('#Cropped').hide();
+            $('#Discarded').hide();
+            $('#End-to-end').hide();
+
+
+            document.getElementById("SplicedMethod").required = false;
+            document.getElementById("CroppedOutboardEnd").required = false;
+            document.getElementById("LengthofCroppedRope").required = false;
+            document.getElementById("SplicedMethod").required = false;
+            document.getElementById("otherReason").required = false;
+            document.getElementById("outboard").required = false;
+            document.getElementById("outboard1").required = false;
+            document.getElementById("ReasonofCropping").required = false;
+            document.getElementById("btnSubmit").disabled = false;
+        }
+        //$('#CertificateNumber').val(cc);
+        //$("#LEQuipID").change(function () {
+        //    var cur_value = $('option:selected', this).text();
+        //    alert(cur_value);
+        //});
+
+    }
+
+    // var cc = $("#LEQuipID option:selected").text();
+    // $('#CertificateNumber').val(cc);
+
+</script>
+
+
+
+<script type="text/javascript">
+
+    setTimeout(function () {
+
+        $('#successMessage').fadeOut('fast');
+        $('#errorMessage').fadeOut('fast');
+    }, 3000);
+
+
+</script>
+
+
+
+
+
+
+
+
+
+
+

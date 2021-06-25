@@ -1,0 +1,60 @@
+﻿@model MenuLayer.MasterCommon
+
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_LeftSideBar.cshtml";
+}
+
+
+
+<div class="content-wrapper">
+    <section class="content-header">
+        <h1>
+            @ViewBag.Type
+        </h1>
+        <p class="pull-right">
+            @Html.ActionLink("Back to List", "Index", new { type = @ViewBag.Type })
+        </p>
+    </section>
+    <section class="content">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="box box-info">
+
+                    <div class="box-body">
+                        <div class="row">
+
+                            @using (Html.BeginForm("Create", "CommonType"))
+                            {
+                                @Html.AntiForgeryToken()
+                                @Html.HiddenFor(e => e.Type)
+                                @Html.HiddenFor(e => e.Id)
+
+                                <div class="form-horizontal">
+                                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                                    <div class="form-group">
+                                        @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })
+                                        <div class="col-md-8">
+                                            @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
+                                            @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="col-md-offset-2 col-md-10">
+                                            <input type="submit" value="Save" class="btn btn-default" />
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

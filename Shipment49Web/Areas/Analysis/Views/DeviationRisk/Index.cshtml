@@ -1,0 +1,248 @@
+﻿@model IEnumerable<AnalysisLayer.ChartData>
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<script src="~/Scripts/canvasjs.min.js"></script>
+@*<script type="text/javascript" src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>*@
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        $("#datefrom").datepicker();
+    });
+</script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        $("#dateto").datepicker();
+
+    });
+</script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#Ranks').multiselect({
+            includeSelectAllOption: true,
+
+            filterPlaceholder: 'Search',
+            enableCaseInsensitiveFiltering: true,
+            maxHeight: 250,
+            numberDisplayed: 1,
+            nonSelectedText: 'Rank'
+
+        });
+        $('#searchbtn').click(function () {
+            var selected = $("#Ranks option:selected");
+            var message = "";
+            selected.each(function () {
+                message += $(this).val() + ",";
+            });
+            $('#Rank').val(message);
+            //alert(message);
+        });
+    });
+</script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#vesselnames').multiselect({
+            includeSelectAllOption: true,
+
+            filterPlaceholder: 'Search',
+            enableCaseInsensitiveFiltering: true,
+            maxHeight: 250,
+            //buttonWidth: '150px',
+            numberDisplayed: 1,
+            nonSelectedText: 'Vessel'
+
+
+        });
+
+        $('#searchbtn').click(function () {
+            var selected = $("#vesselnames option:selected");
+            var message = "";
+            selected.each(function () {
+                message += $(this).val() + ",";
+
+            });
+            $('#VesselName').val(message);
+            //alert(message);
+        });
+
+
+    });
+</script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#fleettypes').multiselect({
+            includeSelectAllOption: true,
+
+            filterPlaceholder: 'Search',
+            enableCaseInsensitiveFiltering: true,
+            maxHeight: 250,
+            numberDisplayed: 1,
+            nonSelectedText: 'FleetType'
+
+        });
+        $('#searchbtn').click(function () {
+            var selected = $("#fleettypes option:selected");
+            var message = "";
+            selected.each(function () {
+                message += $(this).val() + ",";
+            });
+            $('#fleettype').val(message);
+            //alert(message);
+        });
+    });
+</script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#fleetnames').multiselect({
+            includeSelectAllOption: true,
+            filterPlaceholder: 'Search',
+            enableCaseInsensitiveFiltering: true,
+            maxHeight: 250,
+            numberDisplayed: 1,
+            nonSelectedText: 'FleetName'
+
+        });
+        $('#searchbtn').click(function () {
+            var selected = $("#fleetnames option:selected");
+            var message = "";
+            selected.each(function () {
+                message += $(this).val() + ",";
+            });
+            $('#fleetname').val(message);
+            //alert(message);
+        });
+    });
+</script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#statuss').multiselect({
+            includeSelectAllOption: true,
+            filterPlaceholder: 'Search',
+            enableCaseInsensitiveFiltering: true,
+            maxHeight: 250,
+            numberDisplayed: 1,
+            nonSelectedText: 'Rest / Work / Deviations'
+
+        });
+        $('#searchbtn').click(function () {
+            var selected = $("#statuss option:selected");
+            var message = "";
+            selected.each(function () {
+                message += $(this).val() + ",";
+            });
+            $('#status').val(message);
+            //alert(message);
+        });
+    });
+</script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        var values2 = '@ViewBag.fleettypebm1';
+        $('#fleettypes option').filter(function () {
+            return values2.indexOf($(this).text()) > -1; //Options text exists in array
+        }).prop('selected', true);
+
+        $("#fleettypes").multiselect("refresh");
+
+        //........................
+
+        var values2 = '@ViewBag.fleetnamebm1';
+        $('#fleetnames option').filter(function () {
+            return values2.indexOf($(this).text()) > -1; //Options text exists in array
+        }).prop('selected', true);
+
+        $("#fleetnames").multiselect("refresh");
+
+        //................
+
+        var values2 = '@ViewBag.vesselnamebm1';
+        $('#vesselnames option').filter(function () {
+            return values2.indexOf($(this).text()) > -1; //Options text exists in array
+        }).prop('selected', true);
+
+        $("#vesselnames").multiselect("refresh");
+
+        //................
+
+        var values2 = '@ViewBag.rankbm1';
+        $('#Ranks option').filter(function () {
+            return values2.indexOf($(this).text()) > -1; //Options text exists in array
+        }).prop('selected', true);
+
+        $("#Ranks").multiselect("refresh");
+
+        //................
+
+        var values2 = '@ViewBag.status1';
+        $('#statuss option').filter(function () {
+            return values2.indexOf($(this).text()) > -1; //Options text exists in array
+        }).prop('selected', true);
+
+        $("#statuss").multiselect("refresh");
+
+
+    });
+</script>
+
+
+<div class="page_title margin-3-bot">
+    <h2>Graphical Trend View</h2>
+</div>
+<div class="white-bg margin-3 fleet">
+    @using (Html.BeginForm("index", "deviationrisk", FormMethod.Get, new { area = "Analysis" }))
+    {
+
+        <div class="small-gutter row">
+            <div class="col-sm-3 col-xs-6 form-group">
+                @Html.ListBox("fleettypes", new SelectList(ViewBag.fleettypebm, "Value", "Text"))
+                <input id="fleettype" name="fleettype" type="hidden" />
+            </div>
+            <div class="col-sm-3 col-xs-6 form-group">
+                @Html.ListBox("fleetnames", new SelectList(ViewBag.fleetnamebm, "Value", "Text"))
+                <input id="fleetname" name="fleetname" type="hidden" />
+
+            </div>
+            <div class="col-sm-3 col-xs-6 form-group">
+                @Html.ListBox("vesselnames", new SelectList(ViewBag.vesselnamebm, "Value", "Text"))
+                <input id="VesselName" name="VesselName" type="hidden" />
+            </div>
+            <div class="col-sm-3 col-xs-6 form-group">
+                @Html.ListBox("Ranks", new SelectList(ViewBag.rankebm, "Value", "Text"))
+                <input id="Rank" name="Rank" type="hidden" />
+            </div>
+            @*<div class="col-sm-3 col-xs-6 form-group">
+                <select id="statuss" multiple="multiple">
+                    <option value="Work Hours">Work Hours</option>
+                    <option value="Rest Hours">Rest Hours</option>
+                    <option value="Deviation">Deviation</option>
+                </select>
+                <input id="status" name="status" type="hidden" />
+            </div>*@
+            <div class="col-sm-3 col-xs-6 form-group">
+                <input type="text" name="datefrom" id="datefrom" value="@ViewBag.datefrom" class="form-control" placeholder="Select Date From" />&ensp;
+            </div>
+            <div class="col-sm-3 col-xs-6 form-group">
+                <input type="text" name="dateto" id="dateto" value="@ViewBag.dateto" class="form-control" placeholder="Select Date To" />
+            </div>
+            <div class="col-sm-3 col-xs-12 form-group">
+                <button type="submit" value="Search" id="searchbtn" name="Searchbtn" class="btn peach-btn btn-block">Search</button>
+            </div>
+        </div>
+    }
+    @Html.Partial("_barchart")
+</div>
+
+
+

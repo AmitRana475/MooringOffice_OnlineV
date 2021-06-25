@@ -1,0 +1,301 @@
+﻿
+@model Shipment49Web.Areas.ResidualLabTests.Models.ResidualLabTestClass
+
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_LayoutVessel7.cshtml";
+}
+
+
+
+
+<style>
+    iframe {
+        height: 500px;
+        width: 500px;
+    }
+</style>
+
+
+<div class="page-heading page-header-flex">
+    <div>
+        <h1 class="page-title">
+            Residual Lab Test
+        </h1>
+        @*<ol class="breadcrumb">
+                <li><a href="">Home</a></li>
+                <li><a href="">Form</a></li>
+                <li><a>Create</a></li>
+            </ol>*@
+    </div>
+    @if (TempData["Error"] != null)
+    {
+        <p class="alert alert-danger" id="errorMessage">@TempData["Error"]</p>
+    }
+    @if (TempData["Success"] != null)
+    {
+        <p class="alert alert-success" id="successMessage">@TempData["Success"]</p>
+    }
+    <div>
+        <a class="btn btn-info" href="@Url.Action("addreslabtest", "ReslabTest")">
+            <i class="fa fa-plus-circle mr-2"></i>Add Line Res Strength Test
+        </a>
+    </div>
+
+</div>
+
+<div class="wrapper wrapper-content">
+    <div class="container">
+        <h3 class="card-title">Line Residual Lab Test</h3>
+
+
+        <div id="tbl" class="table-responsive">
+            <table class="table">
+                <thead class=" text-primary">
+                    <tr>
+                        <th style="display:none">Id</th>
+                        <th>Unique ID</th>
+                        <th>Cert.No.</th>
+                        <th>Location</th>
+                        <th>Manufacturer</th>
+                        <th>Lab Test Date</th>
+                        <th>Running hours in service</th>
+                        <th>Residual Strength as per Test Report (Percentage)</th>
+                        <th>Remarks</th>
+                        <th>View Attachment</th>
+                        @*<th width="120px">View</th>*@
+
+                        <th width="120px">Delete</th>
+
+                    </tr>
+                </thead>
+                <tbody>
+
+                    @foreach (var item in Model.ResidualLabTestList)
+                    {
+                        <tr>
+                            <td style="display:none"> @Html.DisplayFor(modelItem => item.Id)</td>
+                            <td> @Html.DisplayFor(modelItem => item.UniqueId)</td>
+                            <td> @Html.DisplayFor(modelItem => item.CertificateNumber)</td>
+                            <td> @Html.DisplayFor(modelItem => item.Location)</td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Name)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.LabTestDate)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.RunningHours)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.TestResults)
+                            </td>
+
+                            <td> @Html.DisplayFor(modelItem => item.Remarks)</td>
+
+                            <td>
+                                @if (item.attachment != null)
+                                {
+
+                                    var extn = item.attachment.Split('.').Last();
+
+
+                                    if (extn == "jpg" || extn == "JPG" || extn == "jpeg" || extn == "JPEG" || extn == "png" || extn == "PNG" || extn == "TIFF" || extn == "RAW" || extn == "BMP" || extn == "SVG" || extn == "PSD")
+                                    {
+
+                                        <a onclick='return showImages(this.id)' id="~/images/AttachFiles/@item.attachment">View Attachment</a>
+                                    }
+                                    else if (extn == "pdf" || extn == "PDF")
+                                    {
+                                        <a onclick='return showpdf(this.id)' id="~/images/AttachFiles/@item.attachment">View Attachment</a>
+
+                                    }
+                                    else
+                                    {
+                                        <a target="_blank" href="~/images/AttachFiles/@item.attachment">View Attachment</a>
+                                    }
+                                }
+                                else
+                                {
+                                    <a>No Attachment</a>
+                                    //"No Attachment";
+                                }
+
+                            </td>
+
+                            @*<td width="120px">
+                                    <a href="@Url.Action("View", "View")" class="btn btn-sm btn-light btn-view">
+                                        <i class="uil uil-eye mr-2"></i>View
+                                    </a>
+                                </td>*@
+
+                            <td width="100px">
+
+                                <button type="button" class="btn btn-sm btn-light btn-delete">
+                                    @Html.ActionLink("Delete", "Delete", "ReslabTest", new { id = item.Id, RopeId = item.RopeId }, new { onclick = "return confirm('Are you sure you want to delete this?');" })
+                                    <i class="uil uil-trash-alt mr-2"></i>
+                                </button>
+
+                            </td>
+
+
+                        </tr>
+                    }
+
+
+                </tbody>
+            </table>
+
+            <nav class="text-right">
+
+                <ul class="pagination">
+                    @{
+
+
+                        int totalRecords = Convert.ToInt32(TempData.Peek("TotalRecords"));
+
+                        int tot_pages = totalRecords / Shipment49Web.Common.CommonMethods.PAGESIZE;
+                        int remainder = totalRecords % Shipment49Web.Common.CommonMethods.PAGESIZE;
+
+                        tot_pages = remainder > 0 ? (tot_pages + 1) : tot_pages;
+
+                        int currPage = Convert.ToInt32(TempData.Peek("CurrentPage"));
+
+                        if (totalRecords > 0)
+                        {
+                            if (currPage == 0)
+                            {
+                                currPage = 1;
+                            }
+
+                            if (currPage != 1)
+                            {
+                                <li class="page-item"><a class="page-link" href="@Url.Action("Index", "ReslabTest" ,new { page = 1 })">First</a> </li>
+                            }
+
+                            if (currPage != tot_pages)
+                            {
+                                for (int cnt = currPage; cnt < (currPage + 10); cnt++)
+                                {
+                                    if (cnt == currPage)
+                                    {
+                                        <li class="page-item active"><a class="page-link" href="#">@cnt</a></li>
+                                    }
+                                    else
+                                    {
+                                        <li class="page-item"><a class="page-link" href="@Url.Action("Index", "ReslabTest" ,new { page = cnt })">@cnt.ToString()</a> </li>
+                                    }
+
+                                    if (cnt == tot_pages)
+                                    {
+                                        break;
+                                    }
+                                }
+                            }
+
+
+                            if (currPage == tot_pages)
+                            {
+                                <li class="page-item active"><a class="page-link" href="#">@tot_pages</a></li>
+                            }
+                            else
+                            {
+
+                                <li class="page-item"><a class="page-link" href="@Url.Action("Index", "ReslabTest" ,new { page = tot_pages })">Last</a> </li>
+                            }
+                        }
+                    }
+                </ul>
+
+            </nav>
+        </div>
+
+
+
+
+    </div>
+</div>
+
+
+<div id="ImageModal" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title"></h4>
+            </div>
+            <div class="modal-body">
+                <div class="box-body">
+                    <div style="text-align:center;  ">
+                        <img style="max-width:100%" id="imgName" />
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="PdfModal" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title"></h4>
+            </div>
+            <div class="modal-body">
+                <div class="box-body">
+                    <div style="text-align:center">
+                        <iframe id="myFrame" style="display:none;width:100%"></iframe>
+
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    function showImages(param) {
+        // var imgSrc = $(param).attr("src");
+        //alert(imgSrc);
+        $('#imgName').attr('src', param);
+        $('#ImageModal').modal('show');
+    }
+</script>
+
+<script>
+    function showpdf(param) {
+        // var imgSrc = $(param).attr("src");
+        // alert(param);
+
+        // /images/AttachFiles / _49 Web Street, Grey Box Web Application Vulnerability Assessment Report3798.pdf
+        var omyFrame = document.getElementById("myFrame");
+        omyFrame.style.display = "block";
+        omyFrame.src = param;
+        // omyFrame.load();
+        // $('#ifrID').attr('src', param);
+        $('#PdfModal').modal('show');
+    }
+</script>
+
+
+
+<script type="text/javascript">
+
+    setTimeout(function () {
+
+        $('#successMessage').fadeOut('fast');
+        $('#errorMessage').fadeOut('fast');
+    }, 3000);
+
+
+</script>
+

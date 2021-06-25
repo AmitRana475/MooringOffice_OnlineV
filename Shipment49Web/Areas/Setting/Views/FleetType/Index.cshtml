@@ -1,0 +1,86 @@
+﻿@model List<VesselLayer.FleetTypeClass>
+
+@{
+    ViewBag.Title = "Fleet Type";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    var grid = new WebGrid(canPage: true, rowsPerPage: 10);
+    grid.Bind(source: Model, rowCount: ViewBag.TotalRows, autoSortAndPage: false);
+}
+
+
+@{
+    if (!string.IsNullOrWhiteSpace(grid.SortColumn))
+    {
+        <script type="text/javascript">
+            $(document).ready(function () {
+
+                $('thead > tr > th > a[href*="sort=@grid.SortColumn"]').parent().append('@(grid.SortDirection == SortDirection.Ascending ? "▲" : "▼")');
+
+            });
+        </script>
+    }
+}
+
+<div class="page_title margin-3-bot">
+    <h2> Fleet Type</h2>
+</div>
+<div class="white-bg margin-3 fleet clearfix">
+    <div class="row margin-4-bot">
+        <div class="col-sm-2">
+            <a href="/setting/fleettype/create" class="btn btn-success btn-block">Create New</a>
+        </div>
+        <div class="col-sm-6 pull-right">
+            <div class="collapse navbar-collapse">
+                @using (Html.BeginForm("index", "fleettype", FormMethod.Get, new { area = "setting", @class = "navbar-form navbar-right" }))
+                {
+
+                    <div class="form-group">
+                        <input type="text" name="search" id="search" value="@ViewBag.search" class="form-control" placeholder="Fleet Type" />
+                    </div>
+                    <button type="submit" value="Search" class="btn peach-btn">Search</button>
+                }
+            </div>
+        </div>
+    </div>
+
+    @grid.Table(
+                             tableStyle: "table table-responsive table-borderd",
+                             columns:
+                             grid.Columns(
+
+                                 grid.Column(columnName: "FleetType", header: "Fleet Type"),
+                                 grid.Column(columnName: "AddedBy", header: "Added By"),
+                                 grid.Column("", style: "button action_text", header: "Action",
+                                         format:
+                                        @<text >
+                                        @Ajax.ActionLink("Edit", "Edit", new { id = item.Tid }, null)
+                                        @if (User.IsInRole("admin"))
+                                        {
+                                          <span>|</span> @Html.ActionLink("Delete", "delete", new { area = "setting", id = item.Tid }, new { onclick = "return confirm('The system will not delete Fleet Type in case it has associated data, please unselect this Fleet Type from all Vessels to permanently delete.');" })
+                                        }
+                                                </text>)
+                                                      ))
+
+<div class="row">
+    <div class="col-xs-12 text-right">
+        @grid.PagerList(mode: WebGridPagerModes.All, paginationStyle: "pagination pagination-small pagination-small")
+    </div>
+</div>
+
+<div id="message-listbm">
+    <font>@ViewBag.Messagegrid</font>
+</div>
+
+@*@Html.ActionLink("Go Back", "create", "vessel")*@
+
+
+</div>
+
+
+
+
+
+
+
+

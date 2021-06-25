@@ -1,0 +1,104 @@
+﻿@model CompanyLayer.Company
+@using Microsoft.AspNet.Identity
+
+@if (Request.IsAuthenticated)
+{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+
+<div id="formContainer">
+
+    <div id="formHeader">
+        <h3>Edit Company</h3>
+    </div>
+    <div id="formHeader" class="FlowupLabels">
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        
+
+          
+            @Html.HiddenFor(model => model.CompanyID)
+            @Html.TextBoxFor(model => model.FaxNo, new { @class = "hidden" })
+
+            <div class="fl_wrap focused">
+                @Html.LabelFor(model => model.CompanyName, new { @class = "fl_label" })
+
+                @Html.TextBoxFor(model => model.CompanyName, new { @class = "fl_input" })
+                @Html.ValidationMessageFor(model => model.CompanyName, "", new { @class = "text-danger" })
+
+            </div>
+
+                <div class="fl_wrap focused">
+                    @Html.LabelFor(model => model.EstablishYear, new { @class = "fl_label" })
+                  
+                    @Html.TextBoxFor(model => model.EstablishYear, new { @class = "fl_input" })
+                    @Html.ValidationMessageFor(model => model.EstablishYear, "", new { @class = "text-danger" })
+
+                </div>
+
+                <div class="fl_wrap focused">
+                    @Html.LabelFor(model => model.TotalEmployee, new { @class = "fl_label" })
+
+                    @Html.TextBoxFor(model => model.TotalEmployee, new { @class = "fl_input" })
+                    @Html.ValidationMessageFor(model => model.TotalEmployee, "", new { @class = "text-danger" })
+
+                </div>
+
+                <div class="fl_wrap focused">
+                    @Html.LabelFor(model => model.contectNo, new { @class = "fl_label" })
+
+                    @Html.TextBoxFor(model => model.contectNo, new { @class = "fl_input" })
+                    @Html.ValidationMessageFor(model => model.contectNo, "", new { @class = "text-danger" })
+
+                </div>
+
+                @*<div class="fl_wrap focused">
+                    @Html.LabelFor(model => model.FaxNo, new { @class = "fl_label" })
+
+                    @Html.TextBoxFor(model => model.FaxNo, new { @class = "hidden" })
+                    @Html.ValidationMessageFor(model => model.FaxNo, "", new { @class = "text-danger" })
+
+                </div>*@
+
+                <div class="fl_wrap focused">
+                    @Html.LabelFor(model => model.EmailID, new { @class = "fl_label" })
+
+                    @Html.TextBoxFor(model => model.EmailID, new { @class = "fl_input" })
+                    @Html.ValidationMessageFor(model => model.EmailID, "", new { @class = "text-danger" })
+
+                </div>
+
+                <div class="fl_wrap focused">
+                    @Html.LabelFor(model => model.WebSite, new { @class = "fl_label" })
+
+                    @Html.TextBoxFor(model => model.WebSite, new { @class = "fl_input" })
+                    @Html.ValidationMessageFor(model => model.WebSite, "", new { @class = "text-danger" })
+
+                </div>
+
+                <div class="fl_wrap focused">
+                    @Html.LabelFor(model => model.Address, new { @class = "fl_label" })
+                   
+                    @Html.TextAreaFor(model => model.Address, new { @class = "fl_input" })
+                    @Html.ValidationMessageFor(model => model.Address, "", new { @class = "text-danger" })
+
+                </div>
+                <br />
+                <br />
+                <div class="form-group">
+                    @*<div class="col-md-offset-2 col-md-10">*@
+                        <input type="submit" value="Submit" class="rf_submit"  />
+                    @*</div>*@
+                </div>
+               
+        }
+    </div>
+</div>
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>

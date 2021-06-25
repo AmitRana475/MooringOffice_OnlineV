@@ -1,0 +1,44 @@
+﻿
+@model Shipment49Web.Areas.MSPS.Models.ApproveIndex
+
+@using System.Text.RegularExpressions;
+
+<div class="table-responsive" id="dvListing6">
+	<table class="table table-striped">
+		<thead>
+			<tr>
+				<th class="text-center">Rev.No.</th>
+				<th>Revise Date</th>
+				<th>Content Path</th>
+				<th>Created By</th>
+				<th>Approve Date</th>
+				<th>Status</th>
+				@*<th>View Details</th>*@
+			</tr>
+		</thead>
+		<tbody>
+			@{Int32 count = 0; string correctContent = "";}
+			@foreach (var m in Model.contentListing)
+			{
+				//correctContent = Regex.Replace(@m.Content, "<.*?>", String.Empty);
+
+				<tr>
+					<td>@m.RNumber</td>
+
+					@*<td title="@correctContent">@(correctContent == null ? "" : correctContent.Length > 50 ? correctContent.Substring(0, 50) + "..." : correctContent )</td>*@
+
+					<td>@m.ReviseDate</td>
+					<td><a href="#"> @m.ContentPath</a></td>
+					<td>@m.CreateBy</td>
+					<td>@m.ApproveDate</td>
+					<td>@m.Status</td>
+					@*<td>
+						<a href="@Url.Action("CheckContent",new {id=m.Id })">
+							View Details
+						</a>
+					</td>*@
+				</tr>
+			}
+		</tbody>
+	</table>
+</div>

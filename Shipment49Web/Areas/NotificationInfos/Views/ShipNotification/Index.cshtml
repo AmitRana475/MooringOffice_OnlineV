@@ -1,0 +1,662 @@
+﻿@model Shipment49Web.Areas.NotificationInfos.Models.ShipNotificationClass
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_LayoutOthers.cshtml";
+}
+
+
+
+
+<script>
+
+
+
+    function AcknowledgeData() {
+
+
+
+
+
+        var inspections = []; // list object case1
+       // 'input[name="chk[]"]:checked'
+
+        $("#tbl1 input[name='case1']:checked").each(function () {
+
+            var image1 = ""; var image2 = ""; var photo1 = ""; var photo2 = "";
+
+            var ShipNotificationClass = {};
+            var row = $(this).closest("tr")[0];
+            //var row1 = $(this).closest("tr").find('input');
+            var cells = $(this).closest('tr').children('td');
+
+
+            ShipNotificationClass.id = row.cells[1].innerHTML;
+            ShipNotificationClass.VesselId = row.cells[2].innerHTML;
+            ShipNotificationClass.RopeId = row.cells[3].innerHTML;
+            ShipNotificationClass.NotificationType = row.cells[4].innerHTML;
+            ShipNotificationClass.LooseCertificateNum = row.cells[5].innerHTML;
+
+            inspections.push(ShipNotificationClass);
+        });
+
+
+
+       // alert(inspections);
+
+
+        inspections = JSON.stringify(inspections);
+
+        if (inspections == "[]") {
+            alert("Please Choose atleast one notification for Acknowledge !");
+            return;
+        }
+
+        $.ajax({
+            url: '@Url.Action("Acknowledge", "ShipNotification")',
+            type: "POST",
+            data: { 'inspections': inspections },
+            dataType: "json",
+            beforeSend: function (x) {
+                if (x && x.overrideMimeType) {
+                    x.overrideMimeType("application/j-son;charset=UTF-8");
+                }
+            },
+            success: function (result) {
+                //Write your code here
+               // alert(result);
+                window.location.href = result;
+            }
+        });
+
+
+
+        //$.ajax({
+        //    type: 'POST',
+        //    dataType: 'json',
+        //    url: '/LineInspection/InsertInspection',
+        //    //data: JSON.stringify(inspections),
+        //    data: { 'inspections': JSON.stringify(inspections) },
+        //    //contentType: "application/json; charset=utf-8",
+        //    //contentType: "application/json;",
+
+        //    success: function (r) {
+        //       // alert("Record(s) inserted.");
+        //    },
+        //    error: function (r) {
+        //        //alert(r.responseText);
+        //    }
+        //});
+
+    }
+
+</script>
+
+<div class="page-heading page-header-flex">
+    <div>
+        <h1 class="page-title">
+            @ViewBag.ArchivedMsg
+        </h1>
+        <ol class="breadcrumb">
+            <li><a href="">Home</a></li>
+            <li><a href="">Form</a></li>
+            <li><a>Create</a></li>
+        </ol>
+    </div>
+    <div class="form-actions">
+        @*<button type="button" class="btn btn-success"><i class="uil uil-check mr-2"></i>Acknowledge</button>*@
+        <button id="btnSubmit" onclick="AcknowledgeData()" type="button" name="btnSubmit" class="btn btn-success"><i class="uil uil-check mr-2"></i>Acknowledge</button>
+        @{
+            if (@ViewBag.ArchivedMsg == "Notifications")
+            {
+                <button type="button" onclick="GetArchive()" class="btn btn-danger"><i class="uil uil-redo mr-2"></i>Archives</button>
+            }
+            else
+            {
+                <a href="~/NotificationInfos/ShipNotification/Index" title="Go Back for Current Notifications " class="btn btn-info">
+                    <i class="uil uil-redo mr-2"></i>Go Back
+                </a>
+                @*<button type="button" class="btn btn-info"><i class="uil uil-redo mr-2"></i>Go Back</button>*@
+            }
+        }
+    </div>
+</div>
+
+<div class="wrapper wrapper-content">
+    <div class="container-fluid">
+        <div class="text-center mb-4">
+            <label class="p-2">Total unread office comments <i style="color:red"><a title="View all Notification on unread comments" href="@Url.Action("Index", "ShipNotification", new { Search = "unread" })">(@ViewBag.totalComment)</a></i></label>
+            <label class="p-2">Acknowledged <a title="View All Acknowledged Notifications" href="@Url.Action("Index", "ShipNotification", new { Search = "Ak" })" >(@ViewBag.totalA)</a></label>
+            <label class="p-2">To be Acknowledged <i style="color:red"><a title="View all Notificatiion To be Acknowledged" href="@Url.Action("Index", "ShipNotification", new { Search = "" })">(@ViewBag.totalNotA)</a></i></label>
+        </div>
+        <div class="table-responsive">
+            <table id="tbl1" class="table">
+                <thead>
+                    <tr>
+                        @*<th><input type="checkbox" name=""></th>*@
+                        <th><input type="checkbox" class="ml-2" id="selectall" onClick="selectall(this)" />Select All</th>
+                        <th style="display:none">Id</th>
+                        <th>Notifications</th>
+                        <th>Notification Date</th>
+                        <th>Ship Comments</th>
+                        <th>Office Comments</th>
+                        <th>Ack. Record</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @*<tr>
+                            <td><input type="checkbox" name=""></td>
+                            <td>test test sbmbf hdjd</td>
+                            <td><a href="#" data-toggle="modal" data-target="#addModal">1 comment</a></td>
+                            <td><a href="#" data-toggle="modal" data-target="#addModal">1 comment</a></td>
+                            <td>Not Acknowleged</td>
+                        </tr>*@
+
+                    @foreach (var item in Model.ShipnotificationList)
+                    {
+                    <tr>
+                        <td><input class="ml-2" name="case1" type="checkbox" />    &nbsp; </td>
+                        <td style="display:none"> @Html.DisplayFor(modelItem => item.Id)</td>
+                        <td style="display:none"> @Html.DisplayFor(modelItem => item.VesselId)</td>
+                        <td style="display:none"> @Html.DisplayFor(modelItem => item.RopeId)</td>
+                        <td style="display:none"> @Html.DisplayFor(modelItem => item.NotificationType)</td>
+                        <td style="display:none"> @Html.DisplayFor(modelItem => item.LooseCertificateNum)</td>
+                        @if (item.AckRecord == "Not yet acknowledged")
+                        {
+
+                            <td style="color:red"> @Html.DisplayFor(modelItem => item.Notification)</td>
+                        }
+                        else if (item.AckRecord == "This notification can not be acknowledged, kindly fulfill min inventory")
+                        {
+
+                            <td style="color:red"> @Html.DisplayFor(modelItem => item.Notification)</td>
+                        }
+                        else if (item.AckRecord == "This notification cannot be acknowledged, kindly discard this item")
+                        {
+
+                            <td style="color:red"> @Html.DisplayFor(modelItem => item.Notification)</td>
+                        }
+                        else if (item.AckRecord == "This notification cannot be acknowledged, kindly discard it")
+                        {
+                            <td style="color:red"> @Html.DisplayFor(modelItem => item.Notification)</td>
+                        }
+                        else
+                        {
+                            <td> @Html.DisplayFor(modelItem => item.Notification)</td>
+                        }
+                    <td> 
+                        @{ 
+                            var date = item.CreatedDate;
+                          @Html.Raw(date.ToString("dd MMM yyyy"));
+                        }
+                        </td>
+                        <td><a onclick="getComments(@item.Id)"> @Html.DisplayFor(modelItem => item.ShipCmnt)</a></td>
+
+                        @if (item.OfficeComments == 0)
+                        {
+                            <td>
+                                @Html.DisplayFor(modelItem => item.OfficeCmnt)
+                            </td>
+                        }
+                        else
+                        {
+                            if (item.IsRead == 0)
+                            {
+                                <td>
+                                    <a onclick="getCommentsOfc(@item.Id)"> @Html.DisplayFor(modelItem => item.OfficeCmnt)</a>
+                                </td>
+                            }
+                            else
+                            {
+                                <td>
+                                    <a onclick="getCommentsOfc(@item.Id)"> @Html.DisplayFor(modelItem => item.OfficeCmnt)</a>
+                                    <i class="uil uil-eye mr-2"></i>
+                                </td>
+                            }
+                        }
+
+
+                        @if (item.AckRecord == "Not yet acknowledged")
+                        {
+
+                            <td style="color:red"> @Html.DisplayFor(modelItem => item.AckRecord)</td>
+                        }
+                        else if (item.AckRecord == "This notification can not be acknowledged, kindly fulfill min inventory")
+                        {
+
+                            <td style="color:red"> @Html.DisplayFor(modelItem => item.AckRecord)</td>
+                        }
+                        else if (item.AckRecord == "This notification cannot be acknowledged, kindly discard this item")
+                        {
+
+                            <td style="color:red"> @Html.DisplayFor(modelItem => item.AckRecord)</td>
+                        }
+                        else
+                        {
+                            <td> @Html.DisplayFor(modelItem => item.AckRecord)</td>
+                        }
+
+
+
+
+                    </tr>
+                    }
+                </tbody>
+            </table>
+
+            <nav class="text-right">
+
+                <ul class="pagination">
+                    @{
+
+                        if (@ViewBag.ArchivedMsg == "Notifications")
+                        {
+
+
+                            int totalRecords = Convert.ToInt32(TempData.Peek("TotalRecords"));
+
+                            int tot_pages = totalRecords / Shipment49Web.Common.CommonMethods.PAGESIZE;
+                            int remainder = totalRecords % Shipment49Web.Common.CommonMethods.PAGESIZE;
+
+                            tot_pages = remainder > 0 ? (tot_pages + 1) : tot_pages;
+
+                            int currPage = Convert.ToInt32(TempData.Peek("CurrentPage"));
+
+                            if (totalRecords > 0)
+                            {
+                                if (currPage == 0)
+                                {
+                                    currPage = 1;
+                                }
+
+                                if (currPage != 1)
+                                {
+                                    <li class="page-item"><a class="page-link" href="@Url.Action("Index", "ShipNotification" ,new { page = 1 })">First</a> </li>
+                                }
+
+                                if (currPage != tot_pages)
+                                {
+                                    for (int cnt = currPage; cnt < (currPage + 10); cnt++)
+                                    {
+                                        if (cnt == currPage)
+                                        {
+                                            <li class="page-item active"><a class="page-link" href="#">@cnt</a></li>
+                                        }
+                                        else
+                                        {
+                                            <li class="page-item"><a class="page-link" href="@Url.Action("Index", "ShipNotification" ,new { page = cnt })">@cnt.ToString()</a> </li>
+                                        }
+
+                                        if (cnt == tot_pages)
+                                        {
+                                            break;
+                                        }
+                                    }
+                                }
+
+
+                                if (currPage == tot_pages)
+                                {
+                                    <li class="page-item active"><a class="page-link" href="#">@tot_pages</a></li>
+                                }
+                                else
+                                {
+
+                                    <li class="page-item"><a class="page-link" href="@Url.Action("Index", "ShipNotification" ,new { page = tot_pages })">Last</a> </li>
+                                }
+                            }
+
+                        }
+                        else
+                        {
+                            int totalRecords = Convert.ToInt32(TempData.Peek("TotalRecords"));
+
+                            int tot_pages = totalRecords / Shipment49Web.Common.CommonMethods.PAGESIZE;
+                            int remainder = totalRecords % Shipment49Web.Common.CommonMethods.PAGESIZE;
+
+                            tot_pages = remainder > 0 ? (tot_pages + 1) : tot_pages;
+
+                            int currPage = Convert.ToInt32(TempData.Peek("CurrentPage"));
+
+                            if (totalRecords > 0)
+                            {
+                                if (currPage == 0)
+                                {
+                                    currPage = 1;
+                                }
+
+                                if (currPage != 1)
+                                {
+                                    <li class="page-item"><a class="page-link" href="@Url.Action("Index", "ShipNotification" ,new { page = 1, Search = "search" })">First</a> </li>
+                                }
+
+                                if (currPage != tot_pages)
+                                {
+                                    for (int cnt = currPage; cnt < (currPage + 10); cnt++)
+                                    {
+                                        if (cnt == currPage)
+                                        {
+                                            <li class="page-item active"><a class="page-link" href="#">@cnt</a></li>
+                                        }
+                                        else
+                                        {
+                                            <li class="page-item"><a class="page-link" href="@Url.Action("Index", "ShipNotification" ,new { page = cnt, Search = "search" })">@cnt.ToString()</a> </li>
+                                        }
+
+                                        if (cnt == tot_pages)
+                                        {
+                                            break;
+                                        }
+                                    }
+                                }
+
+
+                                if (currPage == tot_pages)
+                                {
+                                    <li class="page-item active"><a class="page-link" href="#">@tot_pages</a></li>
+                                }
+                                else
+                                {
+
+                                    <li class="page-item"><a class="page-link" href="@Url.Action("Index", "ShipNotification" ,new { page = tot_pages })">Last</a> </li>
+                                }
+                            }
+                        }
+                    }
+                </ul>
+
+            </nav>
+        </div>
+    </div>
+</div>
+
+
+
+<div class="modal fade" id="addModal" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" onclick="refreshPage()" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Add Comment</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row form-group">
+                    <label class="col-md-3 col-sm-5 col-form-label">
+                        <label class="control-label">Write Comment</label>
+                    </label>
+                    <div class="col-md-9 col-sm-7">
+                        <textarea rows="2" id="newComment" maxlength="300" class="form-control" name=""></textarea>
+                        <input type="hidden" id="NotificationID" />
+                    </div>
+                </div>
+                <div class="form-actions">
+                    <button type="button" id="btnSave" class="btn btn-success"><i class="uil uil-check mr-2"></i>Add Comment</button>
+                </div>
+            </div>
+            <div class="modal-header">
+                <h4 class="modal-title">Comments List</h4>
+            </div>
+            <div class="modal-body">
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Comments</th>
+                                <th>Comments Date</th>
+                            </tr>
+                        </thead>
+                        <tbody id="commentsData"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<div class="modal fade" id="addModal1" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <div class="modal-header">
+                <h4 class="modal-title">Comments List</h4>
+            </div>
+            <div class="modal-body">
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Comments</th>
+                                <th>Comments Date</th>
+                            </tr>
+                        </thead>
+                        <tbody id="commentsData1"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<div class="modal fade" id="ArchiveModal" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Archives Notifications</h4>
+            </div>
+            @using (Html.BeginForm("Index", "ShipNotification"))
+            {
+                <div class="modal-body">
+                    @*<a class="btn btn-info mb-4" id="AddDam" href="damage-line-add.php">
+                            <i class="fa fa-plus-circle mr-2"></i>Search
+                        </a>*@
+                    @*<div class="form-group clearfix">
+                            <label class="label">Date From (Fast)</label>
+
+                            @Html.TextBoxFor(x => x.SearchFrom, "{0:yyyy-MM-dd}", new { @class = "form-control datepicker", @placeholder = "yyyy-mm-dd", @required = "true" })
+
+
+
+                        </div>*@
+                    <div class="row form-group">
+                        <label class="col-sm-4 col-form-label">
+                            <label class="control-label">Date From<sup>*</sup></label>
+                        </label>
+                        <div class="col-sm-8">
+                            @Html.TextBoxFor(x => x.SearchFrom, "{0:yyyy-MM-dd}", new { @class = "form-control", @placeholder = "yyyy-mm-dd", @autocomplete = "off", @type="date", @onkeydown = "return false", @required = "true" })
+                            <div class="error"></div>
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <label class="col-sm-4 col-form-label">
+                            <label class="control-label">Date To<sup>*</sup></label>
+                        </label>
+                        <div class="col-sm-8">
+                            @Html.TextBoxFor(x => x.SearchTo, "{0:yyyy-MM-dd}", new { @class = "form-control", @placeholder = "yyyy-mm-dd", @autocomplete = "off", @type = "date", @onkeydown = "return false", @required = "true" })
+                            <div class="error"></div>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-info">Archives Notifications Search</button>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+<script>
+    function GetArchive() {
+        $('#ArchiveModal').modal('show');
+    }
+</script>
+
+<script>
+    function selectall(source) {
+        checkboxes = document.getElementsByName('case1');
+        for (var i = 0, n = checkboxes.length; i < n; i++) {
+            checkboxes[i].checked = source.checked;
+        }
+    }
+</script>
+<script>
+    function getComments(Id) {
+        $('#NotificationID').val(Id);
+        $.ajax({
+            type: 'GET',
+            url: '/ShipNotification/ViewComments?notificationid=' + Id,
+            cache: false,
+            contentType: false,
+            processData: false,
+            success: function (response) {
+                if (response.Result == true) {
+                    $('#commentsData').empty();
+                    var tr;
+                    for (var i = 0; i < response.Data.length; i++) {
+                        tr = $('<tr/>');
+
+                       
+                        var date = response.Data[i].CreatedDate;
+                       //  var nowDate = new Date(parseInt(date.substr(6)));
+                        //var result = "";
+                      // result += nowDate.format("yyyy-mm-dd HH:MM");
+                        // result += nowDate.format("dd/mm/yyyy") + " : dd/mm/yyyy <br/>";
+                        tr.append("<td class='col-md-8'>" + response.Data[i].Comments + "</td>");
+                        tr.append("<td class='col-md-2'>" + response.Data[i].DisplayDate + "</td>");
+                        $('#commentsData').append(tr);
+                    }
+                    $('#addModal').modal('show');
+                }
+                else {
+                    // toastr["error"](response.Message);
+                }
+            },
+            failure: function (response) {
+                //toastr["error"](response.Message);
+            }
+        });
+
+
+    }
+</script>
+
+<script>
+    function getCommentsOfc(Id) {
+        $('#NotificationID').val(Id);
+        $.ajax({
+            type: 'GET',
+            url: '/ShipNotification/ViewCommentsOfc?notificationid=' + Id,
+            cache: false,
+            contentType: false,
+            processData: false,
+            success: function (response) {
+                if (response.Result == true) {
+                    $('#commentsData1').empty();
+                    var tr;
+                    for (var i = 0; i < response.Data.length; i++) {
+                        tr = $('<tr/>');
+
+                        // var myDate = new Date(1238540400000);
+                        var date = response.Data[i].CreatedDate;
+
+                        var nowDate = new Date(parseInt(date.substr(6)));
+                        //var result = "";
+                        //result += nowDate.format("ddd mmm dd yyyy HH:MM:ss");
+                        // result += nowDate.format("dd/mm/yyyy") + " : dd/mm/yyyy <br/>";
+                        tr.append("<td class='col-md-8'>" + response.Data[i].Comments + "</td>");
+                        tr.append("<td class='col-md-2'>" + response.Data[i].DisplayDate + "</td>");
+                        $('#commentsData1').append(tr);
+                    }
+                    $('#addModal1').modal('show');
+                }
+                else {
+                    // toastr["error"](response.Message);
+                }
+            },
+            failure: function (response) {
+                //toastr["error"](response.Message);
+            }
+        });
+
+
+    }
+</script>
+
+
+<script>
+    $('#btnSave').click(function () {
+
+        var notificationID = $('#NotificationID').val();
+
+
+
+        var newComment = $('#newComment').val();
+
+        if (newComment.length == 0) {
+            $("#newComment").focus();
+        }
+        else {
+            $.ajax({
+                type: 'POST',
+                dataType: 'json',
+                url: '/ShipNotification/AddComments',
+                data: { 'notificationid': notificationID, 'commentText': newComment },
+                success: function (response) {
+                    //if (response.Result == true) {
+                    //    toastr["success"]('Comment added successfully.');
+                    //    $('#AddCommentsModal').modal('hide');
+                    //    setInterval('refreshPage()', 2000);
+                    //}
+                    if (response.Result == true) {
+                        $('#commentsData').empty();
+                        $('#newComment').val('');
+                        var tr;
+                        for (var i = 0; i < response.Data.length; i++) {
+                            tr = $('<tr/>');
+
+                            // var myDate = new Date(1238540400000);
+                           // var date = response.Data[i].CreatedDate;
+
+                           // var nowDate = new Date(parseInt(date.substr(6)));
+                            //var result = "";
+                            //result += nowDate.format("ddd mmm dd yyyy HH:MM:ss");
+                            // result += nowDate.format("dd/mm/yyyy") + " : dd/mm/yyyy <br/>";
+                            tr.append("<td class='col-md-8'>" + response.Data[i].Comments + "</td>");
+                            tr.append("<td class='col-md-2'>" + response.Data[i].DisplayDate + "</td>");
+                           // tr.append("<td class='col-md-2'>" + nowDate + "</td>");
+                            $('#commentsData').append(tr);
+                        }
+                        //$('#addModal').modal('show');
+                    }
+                    else {
+                        toastr["error"]('An Error has occured. Please try again.');
+                    }
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    toastr["error"]('An Error has occured. Please try again.');
+                }
+            });
+        }
+    });
+</script>
+
+<script>
+    function refreshPage() {
+        location.reload();
+    }
+</script>
+
+<script>
+    $("#notiId").show();
+</script>
+
+
+<script type="text/javascript">
+    $('.datepicker').datepicker();
+
+    //$(".datepicker").datepicker({
+    //    dateFormat: 'yy-mm-dd'
+    //});
+</script>

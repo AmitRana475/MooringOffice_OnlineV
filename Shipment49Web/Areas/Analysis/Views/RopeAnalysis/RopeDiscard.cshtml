@@ -1,0 +1,205 @@
+﻿@model Shipment49Web.ViewModels.NotificationSearchViewModel
+@{
+    ViewBag.Title = "RopeDiscard";
+    Layout = "~/Views/Shared/_LeftSideBar.cshtml";
+}
+<style>
+    th {
+        background-color: #0e3876;
+        color:white;
+    }
+
+    th, td {
+        text-align: center !important;
+    }
+
+    .clsmonth {
+        background-color: #0e3876;
+        color: white;
+    }
+</style>
+
+<h1>Analysis - Lines Discard</h1>
+
+<div class="row">
+    <div class="col-md-3">
+        @if (ViewBag.FleetNames != null)
+        {
+            @Html.DropDownListFor(m => m.FleetName, new SelectList((List<MenuLayer.MasterCommon>)ViewBag.FleetNames, "Id", "Name"), "Fleet Name", htmlAttributes: new { @class = "form-control" })
+        }
+    </div>
+    <div class="col-md-3">
+        @if (ViewBag.FleetTypes != null)
+        {
+            @Html.DropDownListFor(m => m.FleetType, new SelectList((List<MenuLayer.MasterCommon>)ViewBag.FleetTypes, "Id", "Name"), "Fleet Type", htmlAttributes: new { @class = "form-control" })
+        }
+    </div>
+    <div class="col-md-3">
+        @if (ViewBag.VesselInfos != null)
+        {
+            @Html.DropDownListFor(m => m.VesselInfo, new SelectList((List<MenuLayer.VesselInfo>)ViewBag.VesselInfos, "Id", "Name"), "Vessel Name", htmlAttributes: new { @class = "form-control" })
+        }
+    </div>
+    <div class="col-md-3">
+        @if (ViewBag.TradePlatforms != null)
+        {
+            @Html.DropDownListFor(m => m.TradePlatform, new SelectList((List<MenuLayer.MasterCommon>)ViewBag.TradePlatforms, "Id", "Name"), "Trade", htmlAttributes: new { @class = "form-control" })
+        }
+    </div>
+</div>
+<div class="row mrg-top-10">
+    <div class="col-md-3">
+        @if (ViewBag.TradePlatforms != null)
+        {
+            @Html.DropDownListFor(m => m.TradePlatform, new SelectList((List<MenuLayer.MasterCommon>)ViewBag.TradePlatforms, "Id", "Name"), "Age Range", htmlAttributes: new { @class = "form-control" })
+        }
+    </div>
+    <div class="col-md-3">
+        @if (ViewBag.TradePlatforms != null)
+        {
+            @Html.DropDownListFor(m => m.TradePlatform, new SelectList((List<MenuLayer.MasterCommon>)ViewBag.TradePlatforms, "Id", "Name"), "Running Hours", htmlAttributes: new { @class = "form-control" })
+        }
+    </div>
+    <div class="col-md-3">
+        @Html.TextBoxFor(e => e.DateFrom, new { @class = "form-control datepicker1", @placeholder = "Date From" })
+    </div>
+    <div class="col-md-3">
+        @Html.TextBoxFor(e => e.DateTo, new { @class = "form-control datepicker2", @placeholder = "Date To" })
+    </div>
+</div>
+<div class="row mrg-top-10">
+    <div class="col-md-12">
+        <button type="submit" class="btn btn-danger" style="        float: right">Search</button>
+    </div>
+</div>
+<div class="row mrg-top-10">
+    <div class="col-md-12">
+        <strong>Showing Results from 01-Jan-2018 to 31-Dec-2018</strong>
+        <div style="        float: right">
+            <button type="submit" class="btn btn-dark btnswitch" data-type="1">Statistical</button>
+            <button type="submit" class="btn btn-default btnswitch" data-type="2">Graphical</button>
+        </div>
+    </div>
+</div>
+
+<div class="row mrg-top-30" id="dvstats">
+    <div class="col-md-6" style="        margin-left: auto;
+        margin-right: auto">
+        <table class="table table-bordered table-striped">
+            <tr>
+                <th>Duration</th>
+                <th>No. Of Lines Discarded</th>
+                <th>No. Of Lines Requiring Discard</th>
+            </tr>
+            <tr>
+                <td>Jan</td>
+                <td>55</td>
+                <td>50</td>
+            </tr>
+            <tr>
+                <td>Feb</td>
+                <td>59</td>
+                <td>52</td>
+            </tr>
+            <tr>
+                <td>Mar</td>
+                <td>68</td>
+                <td>60</td>
+            </tr>
+            <tr>
+                <td>Apr</td>
+                <td>73</td>
+                <td>68</td>
+            </tr>
+            <tr>
+                <td>May</td>
+                <td>95</td>
+                <td>89</td>
+            </tr>
+            <tr>
+                <td>Jun</td>
+                <td>109</td>
+                <td>99</td>
+            </tr>
+            <tr>
+                <td>Jul</td>
+                <td>146</td>
+                <td>122</td>
+            </tr>
+            <tr>
+                <td>Aug</td>
+                <td>124</td>
+                <td>110</td>
+            </tr>
+            <tr>
+                <td>Sep</td>
+                <td>110</td>
+                <td>100</td>
+            </tr>
+            <tr>
+                <td>Oct</td>
+                <td>92</td>
+                <td>88</td>
+            </tr>
+            <tr>
+                <td>Nov</td>
+                <td>101</td>
+                <td>90</td>
+            </tr>
+            <tr>
+                <td>Dec</td>
+                <td>104</td>
+                <td>85</td>
+            </tr>
+        </table>
+    </div>
+</div>
+<div class="row mrg-top-30" id="dvgraph">
+    <div class="col-md-12">
+        <div id="line-chart1">
+            <svg height="500"></svg>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+<link href="~/assets/plugins/barchart/nv.d3.css" rel="stylesheet" />
+    <script src="https://unpkg.com/gijgo@1.9.13/js/gijgo.min.js" type="text/javascript"></script>
+    <link href="https://unpkg.com/gijgo@1.9.13/css/gijgo.min.css" rel="stylesheet" type="text/css" />
+
+    <script src="~/assets/plugins/barchart/d3.min.js"></script>
+    <script src="~/assets/plugins/barchart/nv.d3.min.js"></script>
+    <script src="~/assets/plugins/barchart/nvd3.js"></script>
+
+    <script>
+        $(function () {
+            $('.datepicker1').datepicker({
+                uiLibrary: 'bootstrap4'
+            });
+
+            $('.datepicker2').datepicker({
+                uiLibrary: 'bootstrap4'
+            });
+
+            $('.btnswitch').click(function () {
+                var type = $(this).data('type');
+                if (type == '1') {
+                    $('#dvstats').show();
+                    $('#dvgraph').hide();
+                }
+                else {
+                    $('#dvstats').hide();
+                    $('#dvgraph').show();
+                }
+            });
+
+            setTimeout(function () {
+                $('#dvgraph').hide();
+            }, 300);
+        });
+    </script>
+}
+
+

@@ -1,0 +1,325 @@
+﻿@model UserLayer.UserClass
+
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/_LeftSideBar.cshtml";
+}
+
+
+@*<script src="~/ScriptBMS/angular.js"></script>
+    <script src="~/ScriptBMS/lodash.js"></script>
+    <script src="~/ScriptBMS/angularjs-dropdown-multiselect.js"></script>
+    <script src="~/Scripts/MyApp.js"></script>*@
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#vesselnames').multiselect({
+
+            filterPlaceholder: 'Search',
+            enableCaseInsensitiveFiltering: true,
+            maxHeight: 250,
+            //buttonWidth: '150px',
+            numberDisplayed: 2,
+            nonSelectedText: 'Select Vessels'
+
+
+        });
+
+        $('#btnsubmit').click(function () {
+            var selected = $("#vesselnames option:selected");
+            var message = "";
+            selected.each(function () {
+                message += $(this).val() + ",";
+
+            });
+            $('#VesselName').val(message);
+            //alert(message);
+        });
+    });
+</script>
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#FleetTypelst').multiselect({
+
+            filterPlaceholder: 'Search',
+            enableCaseInsensitiveFiltering: true,
+            maxHeight: 150,
+            //buttonWidth: '150px',
+            numberDisplayed: 2,
+            nonSelectedText: 'Select FleetType'
+
+
+        });
+
+        $('#btnsubmit').click(function () {
+            var selected = $("#FleetTypelst option:selected");
+            var message = "";
+            selected.each(function () {
+                message += $(this).val() + ",";
+
+            });
+            $('#Ftp').val(message);
+            //alert(message);
+        });
+    });
+</script>
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#FleetNamelst').multiselect({
+
+            filterPlaceholder: 'Search',
+            enableCaseInsensitiveFiltering: true,
+            maxHeight: 150,
+            //buttonWidth: '150px',
+            numberDisplayed: 2,
+            nonSelectedText: 'Select FleetName'
+
+
+        });
+
+        $('#btnsubmit').click(function () {
+            var selected = $("#FleetNamelst option:selected");
+            var message = "";
+            selected.each(function () {
+                message += $(this).val() + ",";
+
+            });
+            $('#FleetNames').val(message);
+            //alert(message);
+        });
+    });
+</script>
+
+
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+
+        var values2 = '@ViewBag.vesselnamebm1';
+        $('#vesselnames option').filter(function () {
+            return values2.indexOf($(this).text()) > -1; //Options text exists in array
+        }).prop('selected', true);
+
+        $("#vesselnames").multiselect("refresh");
+        //---------------------------------------------------------------
+         var values3 = '@ViewBag.FleetTypeR1';
+        $('#FleetTypelst option').filter(function () {
+            return values3.indexOf($(this).text()) > -1; //Options text exists in array
+        }).prop('selected', true);
+
+        $("#FleetTypelst").multiselect("refresh");
+        //---------------------------------------------------------------
+         var values4 = '@ViewBag.FleetNameR1';
+        $('#FleetNamelst option').filter(function () {
+            return values4.indexOf($(this).text()) > -1; //Options text exists in array
+        }).prop('selected', true);
+
+        $("#FleetNamelst").multiselect("refresh");
+
+
+    });
+</script>
+
+<div class="page_title margin-3-bot">
+    <h2>Edit User</h2>
+</div>
+<div class="white-bg margin-3 fleet clearfix">
+    <div class="row">
+        <div class="col-sm-6">
+            <div id="formContainer">
+                <div id="formHeader" class="FlowupLabels">
+                    @using (Html.BeginForm())
+                    {
+                        @Html.AntiForgeryToken()
+
+                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                        @Html.HiddenFor(model => model.UserId)
+
+                        <div class="fl_wrap focused">
+                            @Html.LabelFor(model => model.FullName, new { @class = "fl_label" })
+
+                            @Html.TextBoxFor(model => model.FullName, new { @class = "fl_input" })
+                            @Html.ValidationMessageFor(model => model.FullName, "", new { @class = "text-danger" })
+
+                        </div>
+
+                        <div class="fl_wrap focused">
+                            @Html.LabelFor(model => model.EmailId, new { @class = "fl_label" })
+
+                            @Html.TextBoxFor(model => model.EmailId, new { @class = "fl_input" })
+                            @Html.ValidationMessageFor(model => model.EmailId, "", new { @class = "text-danger" })
+                            @Html.Hidden("initialProductCode", Model.EmailId)
+
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-6 col-xs-12">
+                                <div class="fl_wrap focused">
+                                    @Html.LabelFor(model => model.Password, new { @class = "fl_label" })
+                                    @Html.TextBoxFor(model => model.Password, new { @class = "fl_input", @type = "password" })
+                                    @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="col-sm-6 col-xs-12">
+                                <div class="fl_wrap focused">
+                                    @Html.LabelFor(model => model.ConfirmPassowrd, new { @class = "fl_label" })
+                                    @Html.TextBoxFor(model => model.ConfirmPassowrd, new { @class = "fl_input", @type = "password" })
+                                    @Html.ValidationMessageFor(model => model.ConfirmPassowrd, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="small-gutter row">
+                            <div class="col-sm-6 col-xs-12">
+                                <div class="fl_wrap focused">
+                                    @Html.LabelFor(model => model.ContactNo, new { @class = "fl_label" })
+                                    @Html.TextBoxFor(model => model.ContactNo, new { @class = "fl_input" })
+                                    @Html.ValidationMessageFor(model => model.ContactNo, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="col-sm-6 col-xs-12">
+                                <div class="fl_wrap focused">
+                                    @Html.LabelFor(model => model.Designation, new { @class = "fl_label" })
+
+                                    @Html.TextBoxFor(model => model.Designation, new { @class = "fl_input" })
+                                    @Html.ValidationMessageFor(model => model.Designation, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+
+
+                        @*<div ng-app="CombineModule" class="fl_wrap focused">*@
+                        <div class="fl_wrap focused">
+                            @*<div ng-app="CombineModule" class="fl_wrap focused">*@
+                            @*@Html.LabelFor(model => model.VesselName)*@
+
+
+                            <div class="small-gutter row">
+                                @*<input checked="checked" id="RFleettype" name="RFleettype" type="radio" value="FleetType" />
+
+        <input checked="checked" id="RFleetName" name="RFleetName" type="radio" value="FleetName" />
+        <input checked="checked" id="RVessel" name="RVessel" type="radio" value="Vessels" />*@
+
+                                <label style="margin-left:15px"> Select to Assign : </label>
+
+                                @{
+                                   
+                                    if (Model.AssignVal == "FleetType")
+                                    {
+                                        @Html.RadioButton("RFleettype", "FleetType", true, new { @class = "radio-inline", style = "width: 15px; margin-left:35px; font-weight: 600; font-size: 12px; " }) <span>FleetType</span>
+                                        @Html.RadioButton("RFleettype", "FleetName", new { @class = "radio-inline", style = "width: 15px; margin-left:50px" }) <span>FleetName</span>
+                                        @Html.RadioButton("RFleettype", "VesselName", new { @class = "radio-inline", style = "width: 15px; margin-left:50px" }) <span>Vessels</span>
+                                    }
+
+                                    if (Model.AssignVal == "FleetName")
+                                    {
+                                        @Html.RadioButton("RFleettype", "FleetType", new { @class = "radio-inline", style = "width: 15px; margin-left:35px; font-weight: 600; font-size: 12px; " }) <span>FleetType</span>
+                                        @Html.RadioButton("RFleettype", "FleetName",true, new { @class = "radio-inline", style = "width: 15px; margin-left:50px" }) <span>FleetName</span>
+                                        @Html.RadioButton("RFleettype", "VesselName", new { @class = "radio-inline", style = "width: 15px; margin-left:50px" }) <span>Vessels</span>
+                                    }
+
+                                    if (Model.AssignVal == "VesselName")
+                                    {
+                                        @Html.RadioButton("RFleettype", "FleetType", new { @class = "radio-inline", style = "width: 15px; margin-left:35px; font-weight: 600; font-size: 12px; " }) <span>FleetType</span>
+                                        @Html.RadioButton("RFleettype", "FleetName", new { @class = "radio-inline", style = "width: 15px; margin-left:50px" }) <span>FleetName</span>
+                                        @Html.RadioButton("RFleettype", "VesselName", true, new { @class = "radio-inline", style = "width: 15px; margin-left:50px" }) <span>Vessels</span>
+                                    }
+
+                                }
+                            </div>
+                            <div id="VesselDiv">
+                                @Html.ListBox("vesselnames", new SelectList(ViewBag.vesselnamebm, "Value", "Text"))
+                                <input id="VesselName" name="VesselName" type="hidden" />
+
+                                @Html.ValidationMessageFor(model => model.AssignVal, "", new { @class = "text-danger" })
+                            </div>
+                            <div id="FtypeDiv">
+                                @Html.ListBox("FleetTypelst", new SelectList(ViewBag.FleetTypeR, "Value", "Text"))
+                                <input id="Ftp" name="Ftp" type="hidden" />
+
+                                @Html.ValidationMessageFor(model => model.AssignVal, "", new { @class = "text-danger" })
+                            </div>
+
+                            <div id="FNameDiv">
+                                @Html.ListBox("FleetNamelst", new SelectList(ViewBag.FleetNameR, "Value", "Text"))
+                                <input id="FleetNames" name="FleetNames" type="hidden" />
+
+                                @Html.ValidationMessageFor(model => model.AssignVal, "", new { @class = "text-danger" })
+                            </div>
+                            @*<div ng-controller="multiselecteddropdown" data-ng-model="VesselName">
+                                    <div ng-dropdown-multiselect="" options="Categories" selected-model="Skillsets" extra-settings="dropdownSetting" width="100%"></div>
+                                    <input id="VesselName" name="VesselName" type="hidden" value="{{Skillsets}}" />
+                                    @Html.ValidationMessageFor(model => model.VesselName, "", new { @class = "text-danger" })
+
+                                </div>*@
+
+                        </div>
+                        <div class="clearfix">&nbsp;</div>
+                        <div class="clearfix">&nbsp;</div>
+                        <div class="small-gutter row">
+                            <div class="col-sm-3 col-xs-6 form-group">
+                                <input id="btnsubmit" type="submit" value="Update" class="btn peach-btn btn-block" />
+                            </div>
+                            <div class="col-sm-4 col-xs-6 back_text margin-1-top">
+                                <i class="fa fa-chevron-left"></i>&nbsp; @Html.ActionLink("Back to List", "Index")
+                            </div>
+                        </div>
+                    }
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script type="text/javascript">
+
+    var radioValue = $("input[name='RFleettype']:checked").val();
+    //alert(radioValue);
+    if (radioValue == "VesselName") {
+        //alert("Your are a - " + radioValue); FtypeDiv FNameDiv
+        $("#VesselDiv").show();
+        $("#FtypeDiv").hide();
+        $("#FNameDiv").hide();
+    }
+    else if (radioValue == "FleetType") {
+        $("#VesselDiv").hide();
+        $("#FtypeDiv").show();
+        $("#FNameDiv").hide();
+    }
+    else if (radioValue == "FleetName") {
+        $("#VesselDiv").hide();
+        $("#FtypeDiv").hide();
+        $("#FNameDiv").show();
+    }
+
+    $(document).ready(function () {
+        $("input[name='RFleettype']").click(function () {
+            var radioValue = $("input[name='RFleettype']:checked").val();
+            if (radioValue == "VesselName") {
+                //alert("Your are a - " + radioValue); FtypeDiv FNameDiv
+                $("#VesselDiv").show();
+                $("#FtypeDiv").hide();
+                $("#FNameDiv").hide();
+            }
+            else if (radioValue == "FleetType") {
+                $("#VesselDiv").hide();
+                $("#FtypeDiv").show();
+                $("#FNameDiv").hide();
+            }
+            else if (radioValue == "FleetName") {
+                $("#VesselDiv").hide();
+                $("#FtypeDiv").hide();
+                $("#FNameDiv").show();
+            }
+        });
+
+    });
+</script>

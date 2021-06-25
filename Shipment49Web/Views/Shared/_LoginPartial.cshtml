@@ -1,0 +1,63 @@
+﻿@using Microsoft.AspNet.Identity
+@using MenuLayer
+
+@if (Request.IsAuthenticated)
+{
+    using (Html.BeginForm(FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+
+    <ul class="nav-right">
+        <li class="user-profile dropdown">
+            <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
+                <img class="profile-img img-fluid" src="assets/images/user.jpg" alt="">
+                <div class="user-info">
+                    <span class="name pdd-right-5">@UserRole.FullName</span>
+                    <i class="ti-angle-down font-size-10"></i>
+                </div>
+            </a>
+            <ul class="dropdown-menu">
+                <li>
+                    <a href="/Help/Index">
+                        <i class="ti-settings pdd-right-10"></i>
+                        <span>Help</span>
+                    </a>
+                </li>
+                @*<li>
+                    <a href="">
+                        <i class="ti-user pdd-right-10"></i>
+                        <span>Profile</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="">
+                        <i class="ti-email pdd-right-10"></i>
+                        <span>Inbox</span>
+                    </a>
+                </li>*@
+                <li role="separator" class="divider"></li>
+                <li>
+                    <a href="/Account/SignOut">
+                        <i class="ti-power-off pdd-right-10"></i>
+                        <span>Logout</span>
+                    </a>
+                </li>
+            </ul>
+        </li>
+        <li class="notifications dropdown">
+            <span class="counter">@UserRole.UserCNc</span>
+            <a href="/notification/certificates" title="Certificates">
+                <i class="fa fa-file-text-o"></i>
+            </a>
+        </li>
+        <li class="notifications dropdown">
+            <span class="counter">@UserRole.UserNc</span>
+            <a href="/notification/certificates" title="Certificates">
+                <i class="ti-bell"></i>
+            </a>
+        </li>        
+    </ul>
+
+    }
+}
+

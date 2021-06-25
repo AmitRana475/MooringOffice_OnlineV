@@ -1,0 +1,89 @@
+﻿@model MenuLayer.LoginEmp
+
+@{
+    ViewBag.Title = "Login";
+    Layout = "~/Views/Shared/_LayoutLogin.cshtml";
+}
+
+
+<style>
+    img.ship-logo {
+        left: 0;
+        margin: 0 auto;
+        position: absolute;
+        right: 30px;
+        text-align: center;
+        top: 5%;
+    }
+
+    img.ship-logo1 {
+        left: 0;
+        margin: 0 auto;
+        position: absolute;
+        right: 30px;
+        text-align: center;
+        /*! top: 15%; */
+    }
+</style>
+<div class="login_bg">
+    <div class="container">
+        <div class="col-sm-6 col-sm-offset-3">
+            <div class="wrapper-page login-warp">
+                <h2>
+                    <img src="http://work-ship.com/wp-content/uploads/2016/05/logo.png" alt="Shipping work and rest hrs" class="ship-logo">
+                    @*<img src="https://sci.work-ship.com/nwscilogo.jpg" alt="" class="ship-logo1">*@
+                </h2>
+                <div class="clearfix">&nbsp;</div>
+                <div class="clearfix">&nbsp;</div>
+                <div class="clearfix">&nbsp;</div>
+                <div class="clearfix">&nbsp;</div>
+                <div id="formContainer" style="align-items:center">
+                    @using (Html.BeginForm("login", "account", new { returnUrl = Request.QueryString["ReturnUrl"] }, FormMethod.Post))
+                    {
+                        @Html.AntiForgeryToken()
+                        <div id="formHeader" class="FlowupLabels">
+                            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                            @*<div class="form-group">*@
+                            @*@Html.LabelFor(model => model.UserName, htmlAttributes: new { @class = "control-label col-md-2" })*@
+                            <div class="fl_wrap focused" style="margin:0;width:100%;">
+
+                                @Html.LabelFor(model => model.UserName, new { @class = "fl_label" })
+                                @Html.TextBoxFor(model => model.UserName, new { @class = "fl_input" })
+                                @Html.ValidationMessageFor(model => model.UserName, "", new { @class = "text-danger" })
+
+                                @*@Html.EditorFor(model => model.UserName, new { htmlAttributes = new { @class = "form-control", placeholder = "Email " } })
+
+                                    @Html.ValidationMessageFor(model => model.UserName, "", new { @class = "text-danger" })*@
+
+
+                            </div>
+                           
+                            <br />
+                            <div class="fl_wrap focused" style="margin:0;width:100%;">
+                                @*@Html.LabelFor(model => model.Password, htmlAttributes: new { @class = "control-label col-md-2" })*@
+
+                                @Html.LabelFor(model => model.Password, new { @class = "fl_label" })
+                                @Html.PasswordFor(model => model.Password, new { @class = "fl_input" })
+                                @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
+
+                                @*<div class="col-md-10">
+                                        @Html.EditorFor(model => model.Password, new { htmlAttributes = new { @class = "form-control", placeholder = "Password" } })
+                                        @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
+                                    </div>*@
+                            </div>
+                            <br />
+                            <div class="form-group">
+                                <input type="submit" value="Login" class="login-btn btn-block" />
+                            </div>
+                            <div class="form-group text-center forr-pass">
+                                @Html.ActionLink("Forgot Password? ", "forgotpassword", "account")
+                            </div>
+                        </div>
+                    }
+
+                </div>
+                <div class="text-center copyright">&copy; 2018 - @DateTime.Now.Year (Work-Ship) Aqua 49 WebStreet Technologies Pvt. Ltd.</div>
+            </div>
+        </div>
+    </div>
+</div>

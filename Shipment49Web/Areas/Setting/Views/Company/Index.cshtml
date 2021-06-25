@@ -1,0 +1,33 @@
+﻿@model CompanyLayer.Company
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Company Detail</h2>
+
+@if (ViewBag.com1 == null)
+{
+    <div class="panel panel-default">
+        <hr />
+        <dl class="dl-horizontal">
+           
+            @Html.ActionLink("Create New Company", "create")
+
+            
+            <text>No detail availble in record</text>
+        </dl>
+    </div>
+
+    <p>
+        @Ajax.ActionLink("Back to Dashboard", "Index","home",new{@area= "Home" },null)
+    </p>
+}
+else
+{
+    
+    @Html.Partial("_CompanyIndex")
+}
+
+

@@ -1,0 +1,79 @@
+﻿@model IEnumerable<AnalysisLayer.ChartData>
+@{
+    ViewBag.Title = "StatisticalDetail";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+
+    var grid = new WebGrid(canPage: true, rowsPerPage: 10);
+    grid.Bind(source: Model, rowCount: ViewBag.TotalRows, autoSortAndPage: false);
+}
+
+@{
+    if (!string.IsNullOrWhiteSpace(grid.SortColumn))
+    {
+        <script type="text/javascript">
+            $(document).ready(function () {
+
+                $('thead > tr > th > a[href*="sort=@grid.SortColumn"]').parent().append('@(grid.SortDirection == SortDirection.Ascending ? "▲" : "▼")');
+
+            });
+        </script>
+    }
+}
+
+
+
+<div class="page_title margin-3-bot">
+    <h2> Statistical</h2>
+</div>
+
+<div class="white-bg margin-3 fleet">
+
+@using (Html.BeginForm("Statistical", "statisticaltrendview", FormMethod.Get, new { area = "analysis" }))
+{
+    <div class="col-sm-3 col-xs-12 form-group" style="float: right;">
+        <button type="submit" id="searchbtn1" name="searchTerm" value="searchTerm" class="btn btn-success btn-block">Export</button>
+
+
+
+    </div>
+    <br />
+
+}
+    <div class="row margin-4-bot">
+        <strong>Vessel Name : </strong> @ViewBag.vesselname &nbsp;&nbsp;  <strong>Range :</strong> @ViewBag.datefrom1  &nbsp;<strong>To</strong>&nbsp;  @ViewBag.dateto1
+    </div>
+
+    <div class="white-bg">
+
+        @grid.Table(
+           tableStyle: "table table-responsive table-borderd",
+           columns:
+              grid.Columns(
+
+                  grid.Column(columnName: "Rank", header: "Rank/Position "),
+                  grid.Column(columnName: "Deviation", header: "Deviation"),
+                  grid.Column(columnName: "Work", header: "Work-Hours"),
+                  grid.Column(columnName: "Rest", header: "Rest-Hours")
+
+               ))
+
+        @*<div class="row">
+            <div class="col-sm-6">
+                @grid.PagerList(mode: WebGridPagerModes.All, paginationStyle: "pagination pagination-small pagination-small")
+            </div>
+        </div>*@
+
+      
+
+    </div>
+
+    <div id="message-listbm">
+        <font>@ViewBag.Messagegrid</font>
+    </div>
+
+
+    <div class="back_text margin-5-top">
+        <i class="fa fa-chevron-left"></i>&nbsp; @Ajax.ActionLink("Back to List", "Index", null)
+    </div>
+</div>

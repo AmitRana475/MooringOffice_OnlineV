@@ -1,0 +1,135 @@
+﻿@model Reports.tblRopeInspectionSetting
+
+@{
+    ViewBag.Title = "Delete";
+    Layout = "~/Views/Shared/_LeftSideBar.cshtml";
+}
+
+
+<div class="content-wrapper">
+    <section class="content-header">
+        <h1>
+            Rope Inspection Setting
+        </h1>
+        <p class="pull-right">
+            @Html.ActionLink("Back to List", "Index")
+        </p>
+    </section>
+    <section class="content">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="box box-info">
+                    <div class="box-body">
+                        <div class="table-responsive table-striped">
+                            <table class="table no-margin" id="dataTable" width="100%" cellspacing="0">
+                                @using (Html.BeginForm("DeleteType", "RopeInspection"))
+                                {
+                                    <tr>
+                                        <th class="col-sm-2">
+                                            @Html.DisplayNameFor(model => model.MooringRopeType)
+                                        </th>
+                                        <td class="col-sm-1">
+                                            @Html.DisplayFor(model => model.MooringRopeTypeName)
+                                        </td>
+                                        <th class="col-sm-2">
+                                            @Html.DisplayNameFor(model => model.ManufacturerTypeName)
+                                        </th>
+                                        <td class="col-sm-1">
+                                            @Html.DisplayFor(model => model.ManufacturerTypeName)
+                                        </td>
+                                        <th class="col-sm-2">
+                                            @Html.DisplayNameFor(model => model.MaximumRunningHours)
+                                        </th>
+                                        <td class="col-sm-1">
+                                            @Html.DisplayFor(model => model.MaximumRunningHours)
+                                        </td>
+                                        <th class="col-sm-2">
+                                            @Html.DisplayNameFor(model => model.MaximumMonthsAllowed)
+                                        </th>
+                                        <td class="col-sm-1">
+                                            @Html.DisplayFor(model => model.MaximumMonthsAllowed)
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th class="col-sm-2">
+                                            @Html.DisplayNameFor(model => model.EndToEndMonth)
+                                        </th>
+                                        <td class="col-sm-1">
+                                            @Html.DisplayFor(model => model.EndToEndMonth)
+                                        </td>
+                                        <th class="col-sm-2">
+                                            @Html.DisplayNameFor(model => model.RotationOnWinches)
+                                        </th>
+                                        <td class="col-sm-1">
+                                            @Html.DisplayFor(model => model.RotationOnWinches)
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th class="col-sm-2">
+                                            @Html.DisplayNameFor(model => model.Rating1)
+                                        </th>
+                                        <td class="col-sm-1">
+                                            @Html.DisplayFor(model => model.Rating1)
+                                        </td>
+                                        <th class="col-sm-2">
+                                            @Html.DisplayNameFor(model => model.Rating2)
+                                        </th>
+                                        <td class="col-sm-1">
+                                            @Html.DisplayFor(model => model.Rating2)
+                                        </td>
+                                        <th class="col-sm-2">
+                                            @Html.DisplayNameFor(model => model.Rating3)
+                                        </th>
+                                        <td class="col-sm-1">
+                                            @Html.DisplayFor(model => model.Rating3)
+                                        </td>
+                                        <th class="col-sm-2">
+                                            @Html.DisplayNameFor(model => model.Rating4)
+                                        </th>
+                                        <td class="col-sm-1">
+                                            @Html.DisplayFor(model => model.Rating4)
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th class="col-sm-2">
+                                            @Html.DisplayNameFor(model => model.Rating5)
+                                        </th>
+                                        <td class="col-sm-1">
+                                            @Html.DisplayFor(model => model.Rating5)
+                                        </td>
+                                        <th class="col-sm-2">
+                                            @Html.DisplayNameFor(model => model.Rating6)
+                                        </th>
+                                        <td class="col-sm-1">
+                                            @Html.DisplayFor(model => model.Rating6)
+                                        </td>
+                                        <th class="col-sm-2">
+                                            @Html.DisplayNameFor(model => model.Rating7)
+                                        </th>
+                                        <td class="col-sm-1">
+                                            @Html.DisplayFor(model => model.Rating7)
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="col-sm-12" colspan="8">
+                                            <h4>
+                                                Are you sure you want to delete the above record ?
+                                            </h4>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="col-sm-12" colspan="8">
+                                            @Html.AntiForgeryToken()
+                                            @Html.HiddenFor(e => e.Id)
+                                            <input type="submit" value="Delete" class="btn btn-danger" />
+                                        </td>
+                                    </tr>
+                                }
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>

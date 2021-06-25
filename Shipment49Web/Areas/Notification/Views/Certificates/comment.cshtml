@@ -1,0 +1,57 @@
+﻿
+@{
+    ViewBag.Title = "comment";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+@*<script type="text/javascript">
+        $(document).ready(function () {
+            var dir = $('#dir').val();
+            var col = $('#col').val();
+
+            var header = $('th a[href*=' + col + ']');
+            if (dir == 'Ascending') {
+                header.text(header.text() + ' ▲');
+            }
+            if (dir == 'Descending') {
+                header.text(header.text() + ' ▼');
+            }
+
+        });
+    </script>*@
+
+
+<div class="page_title margin-3-bot">
+    <h2> Comment List</h2>
+</div>
+<div class="white-bg margin-3 fleet">
+    <div class="row margin-4-bot">
+        <div class="col-sm-2 col-xs-12">
+            @Ajax.ActionLink("Comment New", "create", "certificates", new { area = "notification", id = ViewBag.Nid }, null, new { @class = "btn btn-success btn-block" })
+        </div>
+        <div class="col-sm-6 col-xs-12 pull-right">
+            <div class="navbar-collapse">
+                @using (Html.BeginForm("comment", "certificates", FormMethod.Get, new { area = "notification", @class = "navbar-form navbar-right" }))
+                {
+                    <div class="form-group">
+                        <input type="text" name="search" class="form-control" placeholder="Comment By" />
+                    </div>
+                    <button type="submit" value="search" class="btn peach-btn">Search</button>
+                }
+            </div>
+        </div>
+    </div>
+
+    @Html.Partial("_certicomment")
+
+    <div id="message-listbm">
+        <font>@ViewBag.Messagegrid</font>
+    </div>
+    <div class="back_text margin-5-top">
+        <i class="fa fa-chevron-left"></i>&nbsp; @Ajax.ActionLink("Back to List", "Index", new { page = @ViewBag.page, fleettype = @ViewBag.fleettype, fleetname = @ViewBag.fleetname, search = @ViewBag.vname, datefrom = @ViewBag.datefrom, dateto = @ViewBag.dateto }, null)
+    </div>
+</div>
+
+
+

@@ -1,0 +1,102 @@
+﻿@model VesselLayer.Vessel
+
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@*<link href="~/Content/themes/jquery-ui.css" rel="stylesheet" />
+    <script src="~/Scripts/jquery-1.12.4.js"></script>*@
+
+
+<script type="text/javascript">
+    $(function () {
+        $("#FleetName").autocomplete({
+            source: '@Url.Action("AutoCompleteFN", "vesseldetails", "setting")',
+            minLength: 1
+        });
+    });
+
+</script>
+<script type="text/javascript">
+    $(function () {
+        $("#FleetType").autocomplete({
+            source: '@Url.Action("AutoCompleteFT", "vesseldetails", "setting")',
+            minLength: 1
+        });
+    });
+
+</script>
+<div class="page_title margin-3-bot">
+    <h2>Create Vessel</h2>
+</div>
+<div class="white-bg margin-3 fleet clearfix" id="formContainer">
+    <div class="row">
+        <div class="col-sm-6">
+            <div id="formHeader" class="FlowupLabels">
+
+                @using (Html.BeginForm())
+            {
+                @Html.AntiForgeryToken()
+
+
+                @*<p class="rf_notice">Vessel information will be unique</p>*@
+
+                <div class="fl_wrap focused">
+                    @Html.LabelFor(model => model.VesselName, new { @class = "fl_label" })
+                    @Html.TextBoxFor(model => model.VesselName, new { @class = "fl_input" })
+                    @Html.ValidationMessageFor(model => model.VesselName, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="fl_wrap">
+                    @Html.LabelFor(model => model.ImoNo, new { @class = "fl_label" })
+                    @Html.TextBoxFor(model => model.ImoNo, new { @class = "fl_input" })
+                    @Html.ValidationMessageFor(model => model.ImoNo, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="fl_wrap">
+                    @Html.LabelFor(model => model.Flag, new { @class = "fl_label" })
+                    @Html.TextBoxFor(model => model.Flag, new { @class = "fl_input" })
+                    @Html.ValidationMessageFor(model => model.Flag, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="fl_wrap">
+                    @Html.LabelFor(model => model.FleetName, new { @class = "fl_label" })
+                    @Html.TextBoxFor(model => model.FleetName, new { @class = "fl_input" })
+                    @Html.ValidationMessageFor(model => model.FleetName, "", new { @class = "text-danger" })
+                    @Ajax.ActionLink("Add New", "index", "fleetname", new { area = "setting" }, null, new { @class = "add_new" })
+                </div>
+
+                <div class="fl_wrap">
+                    @Html.LabelFor(model => model.FleetType, new { @class = "fl_label" })
+                    @Html.TextBoxFor(model => model.FleetType, new { @class = "fl_input" })
+                    @Html.ValidationMessageFor(model => model.FleetType, "", new { @class = "text-danger" })
+                    @Ajax.ActionLink("Add New", "index", "fleettype", new { area = "setting" }, null, new { @class = "add_new" })
+
+                </div>
+                <div class="small-gutter row">
+                    <div class="col-sm-3 col-xs-6 form-group">
+                        <input type="submit" value="Save" class="btn peach-btn btn-block btn-block" />
+                    </div>
+                    <div class="col-sm-4 col-xs-6 back_text margin-1-top">
+                        <i class="fa fa-chevron-left"></i>&nbsp; @Html.ActionLink("Back to List", "Index")
+                    </div>
+                </div>
+        }
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<!-- Start of Extra Demo Stuff -->
+<!-- End of Extra Demo Stuff -->
+<!-- Load the JS -->
+@*<script src="~/Scripts/jquery.min.js"></script>
+    <script src="~/Scripts/jquery.FlowupLabels.js"></script>
+    <script src="~/Scripts/main.js"></script>*@
+
+
+
+
+

@@ -1,0 +1,142 @@
+﻿@model IEnumerable<CertificationLayer.CertificationClass>
+
+@{
+
+    var grid = new WebGrid(canPage: true, rowsPerPage: 10);
+    grid.Bind(source: Model, rowCount: ViewBag.TotalRows, autoSortAndPage: false);
+}
+
+
+@{
+    if (!string.IsNullOrWhiteSpace(grid.SortColumn))
+    {
+        <script type="text/javascript">
+            $(document).ready(function () {
+
+                $('#gridMappings > thead > tr > th > a[href*="sort=@grid.SortColumn"]').parent().append('@(grid.SortDirection == SortDirection.Ascending ? "▲" : "▼")');
+
+            });
+        </script>
+    }
+}
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        $('#gridMappings > tbody > tr').each(function (index) {
+            var bb = $(this).children('td:nth-child(11)').text();
+            var values1 = bb.split("|");
+            if (values1[1].trim('') == 'Acknowledge') {
+
+                $(this).children('td').css("color", "Red" );
+            }
+
+        });
+    });
+</script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        // 1st replace first column header text with checkbox
+
+        $('#gridMappings  th').each(function (index) {
+            if ($.trim($(this).text().toString().toLowerCase()) === "{checkall}") {
+                $(this).text('');
+                $("<input/>", { type: "checkbox", id: "cbSelectAll", value: "" }).appendTo($(this));
+                //$(this).append("<span>All</span>");
+            }
+        });
+
+        //2nd click event for header checkbox for select /deselect all
+        $("#cbSelectAll").click(function () {
+            var ischecked = this.checked;
+            $('#gridMappings').find("input:checkbox").each(function () {
+                this.checked = ischecked;
+            });
+        });
+
+
+        //3rd click event for checkbox of each row
+
+        $("input[name='ids']").click(function () {
+           
+            var totalRows = $("#gridMappings td :checkbox").length;
+            var checked = $("#gridMappings td :checkbox:checked").length;
+
+
+            if (checked == totalRows) {
+                $("#gridMappings").find("input:checkbox").each(function () {
+
+                    this.checked = true;
+                });
+            }
+            else {
+                $("#cbSelectAll").removeAttr("checked");
+            }
+        });
+
+    });
+</script>
+
+<div>
+
+    @grid.Table(
+                  htmlAttributes: new
+                    {
+                        id = "gridMappings"
+                    },
+           tableStyle: "table table-responsive table-borderd",
+           columns:
+              grid.Columns(
+
+                  grid.Column(header: "{CheckAll}", format:
+                  @<text><input type="checkbox" value="@item.Nid" name="ids" /></text>),
+
+                  grid.Column(columnName: "ImportDate", header: "Import Date", format: item => item.ImportDate.ToString("dd-MMM-yyyy")),
+                  grid.Column(columnName: "VesselName", header: "Vessel Name"),
+                  grid.Column(columnName: "CName", header: "Certificate Name"),
+                  grid.Column(columnName: "DOI", header: "Issue Date", format: item => item.DOI.ToString("dd-MMM-yyyy")),
+                  grid.Column(columnName: "DOS", header: "Expiry Date", format: item => item.DOS.ToString("dd-MMM-yyyy")),
+                  grid.Column(columnName: "DOE", header: "Survey Due", format: item => item.DOE.ToString("dd-MMM-yyyy")),
+                  grid.Column(columnName: "AlertFrequency", header: "Alert Type"),
+                  grid.Column(columnName: "MasterAck", header: "Master Ack"),
+                  grid.Column(columnName: "HODAck", header: "HOD Ack"),
+                  grid.Column("", style: "button action_text", header: "Action",
+                          format:
+                        @<text >
+
+                        @Ajax.ActionLink("Comment (" + ((object)item.Comment1.Count) + ")", "comment", new { controller = "certificates", area = "notification", id = item.Nid }, null) |
+
+
+                        @if (item.Acknowledge == null || item.Acknowledge == string.Empty)
+                        {
+                            @Ajax.ActionLink("Acknowledge", "acknowledge", new { controller = "certificates", area = "notification", Page, datefrom = @ViewBag.datefrom, dateto = @ViewBag.dateto, search = @ViewBag.vname, fleetname = @ViewBag.fleetname, fleettype = @ViewBag.fleettype, id = item.Nid }, null)
+                        }
+                        else
+                        {
+                            <label style="color:green">@item.Acknowledge</label>
+                        }
+
+                        </text>),
+
+                   grid.Column("", style: "button action_text", header: "Detail",
+                          format:
+                        @<text >
+
+                        @Ajax.ActionLink("CertificateList", "index", "CertificateList", new { area = "Certificate" }, null)
+
+
+                        </text>)
+
+               ))
+
+    <div class="row">
+        <div class="col-sm-6">
+            @grid.PagerList(mode: WebGridPagerModes.All, paginationStyle: "pagination pagination-small pagination-small")
+        </div>
+    </div>
+    @*@Html.Hidden("dir", grid.SortDirection)
+        @Html.Hidden("col", grid.SortColumn)*@
+
+</div>

@@ -1,0 +1,289 @@
+﻿@model List<Shipment49Web.Common.Abrasion_DetailsList>
+
+@{
+    ViewBag.Title = "Dashboard";
+    Layout = "~/Views/Shared/_LeftSideBar.cshtml";
+}
+
+<style>
+    body {
+        font-family: Arial, Helvetica, sans-serif;
+    }
+
+    .icon-content {
+        border-radius: 5px;
+        cursor: pointer;
+        transition: 0.3s;
+    }
+
+        .icon-content:hover {
+            opacity: 0.7;
+        }
+
+    /* The Modal (background) */
+    .modal {
+        display: none; /* Hidden by default */
+        position: fixed; /* Stay in place */
+        /*z-index: 1;*/ /* Sit on top */
+        padding-top: 75px; /* Location of the box */
+        left: 0;
+        top: 0;
+        width: 100%; /* Full width */
+        height: 100%; /* Full height */
+        overflow: auto; /* Enable scroll if needed */
+        background-color: rgb(0,0,0); /* Fallback color */
+        background-color: rgba(0,0,0,0.9); /* Black w/ opacity */
+    }
+
+    /* Modal Content (image) */
+    .modal-content {
+        margin: auto;
+        display: block;
+        width: 100%;
+        max-width: 700px;
+    }
+
+    /* Caption of Modal Image */
+    #caption {
+        margin: auto;
+        display: block;
+        width: 80%;
+        max-width: 700px;
+        text-align: center;
+        color: #ccc;
+        padding: 10px 0;
+        height: 150px;
+    }
+
+    /* Add Animation */
+    .modal-content, #caption {
+        -webkit-animation-name: zoom;
+        -webkit-animation-duration: 0.6s;
+        animation-name: zoom;
+        animation-duration: 0.6s;
+    }
+
+    -webkit-keyframes zoom {
+        from
+
+    {
+        -webkit-transform: scale(0)
+    }
+
+    to {
+        -webkit-transform: scale(1)
+    }
+
+    }
+
+    keyframes zoom {
+        from
+
+    {
+        transform: scale(0)
+    }
+
+    to {
+        transform: scale(1)
+    }
+
+    }
+
+    /* The Close Button */
+    .close {
+        position: absolute;
+        top: 15px;
+        right: 35px;
+        color: #f1f1f1;
+        font-size: 40px;
+        font-weight: bold;
+        transition: 0.3s;
+    }
+
+        .close:hover,
+        .close:focus {
+            color: #bbb;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+    /* 100% Image Width on Smaller Screens */
+    media only screen and (max-width: 700px) {
+        .modal-content
+
+    {
+        width: 100%;
+    }
+    }
+</style>
+
+<div class="content-wrapper">
+    <section class="content-header">
+        <h1>
+            Abrasion Details
+        </h1>
+    </section>
+    <section class="content">
+        <div class="box box-info">
+            <div class="box-body">
+                <div class="table-responsive">
+                    <table class="table no-margin table-striped" id="dataTable" width="100%" cellspacing="0">
+                        <thead>
+                            <tr>
+                                @*<th>Rope ID</th>*@
+                                <th>Vessel</th>
+                                <th>Avg Rating</th>
+                                <th>Certificate Number</th>
+                                <th>Winch Number</th>
+                                <th>Inspect By</th>
+                                <th>Inspect Date</th>
+                                <th>Image 1</th>
+                                <th>Image 2</th>
+                                <th>Rope Summary</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var record in Model)
+                            {
+                            <tr>
+                                @*<td>@dataRow["RopeId"]</td>*@
+                                <td>@record.VesselName</td>
+                                <td class="text-center">@record.Rating</td>
+                                <td>@record.RopeCertificateNumber</td>
+                                <td>@record.AssignedNumber</td>
+                                <td>@record.InspectBy</td>
+                                <td style="width:100px;">
+                                    @{
+                                        DateTime? dt = record.InspectDate;
+                                        if (dt != null)
+                                        {
+                                            @Html.Raw(dt.Value.ToString("dd-MMM-yyyy"))
+                                        }
+                                    }
+                                </td>
+                                <td>
+                                    @{
+
+                                        string img_1 = record.Image1 == null ? string.Empty : record.Image1;
+                                        if (!string.IsNullOrEmpty(img_1))
+                                        {
+                                            <img class="icon-content" style="height:60px;width:80px;" src="~/images/InspectionImages/@img_1" onclick="showImages(this.src)" />
+                                        }
+                                    }
+                                </td>
+                                <td>
+                                    @{
+
+                                        string img_2 = record.Image2 == null ? string.Empty : record.Image2;
+                                        if (!string.IsNullOrEmpty(img_2))
+                                        {
+                                            <img class="icon-content" style="height:60px;width:80px;" src="~/images/InspectionImages/@img_2" onclick="showImages(this.src)" />
+                                        }
+                                    }
+                                </td>
+
+                                <td class="text-center">
+                                    <a href="~/Data/Reports/RopeSummary?rope=@record.RopeId&tail=0&vessel=@record.VesselID" title="Rope Details" target="_blank">
+                                        <i class="fa fa-list-ul"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+                <div class="text-center">
+                    <ul class="pagination">
+                        @{
+                            int Ratings = Convert.ToInt32(TempData.Peek("Ratings"));
+                            int totalRecords = Convert.ToInt32(TempData.Peek("TotalRecords"));
+
+                            int tot_pages = totalRecords / Shipment49Web.Common.CommonMethods.PAGESIZE;
+                            int remainder = totalRecords % Shipment49Web.Common.CommonMethods.PAGESIZE;
+
+                            tot_pages = remainder > 0 ? (tot_pages + 1) : tot_pages;
+
+                            int currPage = Convert.ToInt32(TempData.Peek("CurrentPage"));
+
+                            for (int cnt = 1; cnt <= tot_pages; cnt++)
+                            {
+                                if (cnt == currPage)
+                                {
+                                    <li class="active"><a href="#">@cnt</a></li>
+                                }
+                                else
+                                {
+                                    <li>@Html.ActionLink(cnt.ToString(), "AbrasionDetails", "Reports", new {id = Ratings, cp = cnt }, null)</li>
+                                }
+                            }
+                        }
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+
+<div id="myModal" class="modal">
+    <span id="pclose" style="border:4px solid white; color:white;" class="close">&nbsp;&times;&nbsp;</span>
+    <img class="modal-content" id="img01">
+    <div id="caption"></div>
+</div>
+
+
+@*<div id="myModal" class="modal fade" role="dialog">
+    <span style="display:none" id="pclose" class="close">&times;</span>
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button  type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Image</h4>
+            </div>
+            <div class="modal-body">
+                <div class="box-body">
+                    <div class="col-md-12 align-items-center">
+                        <img class="modal-content" id="img01" />
+                    </div>
+                </div>
+            </div>
+            <div id="caption" class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>*@
+
+
+<script>
+    function showImages(path) {
+
+        //$('#ConID_P').val(Id);
+
+        var http = new XMLHttpRequest();
+        http.open('HEAD', path, false);
+        http.send();
+        if (http.status === 200) {
+            var modal = document.getElementById("myModal");
+            var modalImg = document.getElementById("img01");
+            var captionText = document.getElementById("caption");
+            modal.style.display = "block";
+            modalImg.src = path;
+
+
+        }
+        else {
+
+            alert("Image exists here in Shipboard version but not imported. Kindly seek 'Export Attachment' folder from this Vessel and import to view the image.");
+
+        }
+        //captionText.innerHTML = this.alt;
+
+        //$('#AddCostModal').modal('show');
+    }
+
+    var span = document.getElementById("pclose");
+    span.onclick = function () {
+        $("#myModal").css('display', 'none');
+    }
+</script>

@@ -1,0 +1,33 @@
+﻿@{
+    ViewBag.Title = "Session Values";
+    Layout = "~/Views/Shared/_LeftSideBar.cshtml";
+}
+
+<div class="content-wrapper">
+    <section class="content-header">
+        <h1>
+            Session Values
+        </h1>
+    </section>
+    <section class="content">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="box box-info">
+                    <div class="box-body">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <strong>User ID</strong> - @Session["LoggedInUserID"]
+                            </div>
+                            <div class="col-md-4">
+                                <strong>User Email</strong> - @Session["LoggedInUserEmail"]
+                            </div>
+                            <div class="col-md-4">
+                                <strong>User Name</strong> - @HttpContext.Current.User.Identity.Name
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>

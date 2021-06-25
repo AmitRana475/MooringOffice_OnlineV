@@ -1,0 +1,126 @@
+﻿@model Shipment49Web.Common.FilterModel
+
+@{
+    ViewBag.Title = "Rope Cropping";
+    Layout = "~/Views/Shared/_LeftSideBar.cshtml";
+}
+
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+
+<script>
+    $(function () {
+        $('.dtpicker').datepicker({
+            dateFormat: 'dd-M-yy',
+            changeMonth: true,
+            changeYear: true,
+            autoclose: true,
+            maxDate: "+0D"
+        })
+    });
+</script>
+
+<div class="content-wrapper">
+    <section class="content-header">
+        <h1>
+            Rope Cropping
+        </h1>
+    </section>
+
+    <section class="content">
+        <div class="box box-info">
+            <div class="box-body">
+                <div class="row">
+                    @using (Html.BeginForm("RopeCropping", "reports", FormMethod.Post, new { area = "data" }))
+                    {
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                @Html.DropDownListFor(m => m.FleetNameIDs, new SelectList((List<Reports.tblCommon>)Model.FleetNames, "Id", "Name"), "Fleet Name", htmlAttributes: new { @class = "form-control" })
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                @Html.DropDownListFor(m => m.FleetTypeIDs, new SelectList((List<Reports.tblCommon>)Model.FleetTypes, "Id", "Name"), "Fleet Type", htmlAttributes: new { @class = "form-control" })
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                @Html.DropDownListFor(m => m.VesselIDs, new SelectList((List<Reports.VesselDetail>)Model.Vessels, "Id", "VesselName"), "Vessel Name", htmlAttributes: new { @class = "form-control" })
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                @Html.DropDownListFor(m => m.TradeIDs, new SelectList((List<Reports.tblCommon>)Model.TradePlatforms, "Id", "Name"), "Trade", htmlAttributes: new { @class = "form-control" })
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                @Html.DropDownListFor(m => m.VesselIDs, new SelectList((List<Reports.VesselDetail>)Model.Vessels, "Id", "VesselName"), "Age Range", htmlAttributes: new { @class = "form-control" })
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                @Html.DropDownListFor(m => m.VesselIDs, new SelectList((List<Reports.VesselDetail>)Model.Vessels, "Id", "VesselName"), "Running Hours", htmlAttributes: new { @class = "form-control" })
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                @Html.TextBoxFor(m => m.DateFrom, "{0:dd-MMM-yyyy}", new { @class = "form-control dtpicker", @placeholder = "Date From" })
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                @Html.TextBoxFor(m => m.DateUpto, "{0:dd-MMM-yyyy}", new { @class = "form-control dtpicker", @placeholder = "Date To" })
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <div style="float:right">
+                                    <button type="submit" class="btn btn-danger">Search</button>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="box box-default">
+                    <div class="box-body">
+                        <div class="table-responsive table-striped">
+                            <table class="table no-margin" id="dataTable" width="100%" cellspacing="0">
+                                <thead>
+                                    <tr>
+                                        <th>Assigned Location</th>
+                                        <th>Assigned Number</th>
+                                        <th>Certificate Number</th>
+                                        <th>Cropped Date</th>
+                                        <th>Cropped Outboard End</th>
+                                        <th>Length of Cropped Rope</th>
+                                        <th>Reason of Cropping</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @{
+                                        foreach (var record in Model.ListRopeCropping)
+                                        {
+                                            <tr>
+                                                <td>@record.AssignedLocation</td>
+                                                <td>@record.AssignedNumber</td>
+                                                <td>@record.CertificateNumber</td>
+                                                <td>@record.CroppedDate</td>
+                                                <td>@record.CroppedOutboardEnd</td>
+                                                <td>@record.LengthofCroppedRope</td>
+                                                <td>@record.reasonofcropping</td>
+                                            </tr>
+                                        }
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>

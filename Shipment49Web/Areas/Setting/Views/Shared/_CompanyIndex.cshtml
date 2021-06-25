@@ -1,0 +1,76 @@
+﻿@model CompanyLayer.Company
+
+<div class="white-bg margin-3 fleet">
+    <div class="row">
+        @Html.HiddenFor(model => model.CompanyID)
+        @Html.HiddenFor(model => model.FaxNo)
+        <div class="col-sm-2 form-group">
+            <b>@Html.DisplayNameFor(model => model.CompanyName)</b>
+        </div>
+        <div class="col-sm-4 form-group">
+            @Html.DisplayFor(model => model.CompanyName)
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-2 form-group">
+            <b>@Html.DisplayNameFor(model => model.EstablishYear)</b>
+        </div>
+        <div class="col-sm-4 form-group">
+            @Html.DisplayFor(model => model.EstablishYear)
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-2 form-group">
+            <b>@Html.DisplayNameFor(model => model.TotalEmployee)</b>
+        </div>
+        <div class="col-sm-4 form-group">
+            @Html.DisplayFor(model => model.TotalEmployee)
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-2 form-group">
+            <b>@Html.DisplayNameFor(model => model.FaxNo)</b>
+        </div>
+        <div class="col-sm-4 form-group">
+            @Html.DisplayFor(model => model.FaxNo)
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-2 form-group">
+            <b>@Html.DisplayNameFor(model => model.contectNo)</b>
+        </div>
+        <div class="col-sm-4 form-group">
+            @Html.DisplayFor(model => model.contectNo)
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-2 form-group">
+            <b>@Html.DisplayNameFor(model => model.EmailID)</b>
+        </div>
+        <div class="col-sm-4 form-group">
+            @Html.DisplayFor(model => model.EmailID)
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-2 form-group">
+            <b>@Html.DisplayNameFor(model => model.WebSite)</b>
+        </div>
+        <div class="col-sm-4 form-group">
+            @Html.DisplayFor(model => model.WebSite)
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-2 form-group">
+            <b>@Html.DisplayNameFor(model => model.Address)</b>
+        </div>
+        <div class="col-sm-4 form-group">
+            @Html.DisplayFor(model => model.Address)
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-2 form-group">
+            @Ajax.ActionLink("Edit Company   ", "Edit", new { id = Model.CompanyID }, null, new { @class = "btn peach-btn" })
+        </div>
+    </div>
+</div>
+

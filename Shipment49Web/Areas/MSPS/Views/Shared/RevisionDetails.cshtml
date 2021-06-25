@@ -1,0 +1,57 @@
+﻿@model Shipment49Web.Areas.MSPS.Models.RevisionIndex
+@using System.Text.RegularExpressions;
+
+<table class="table table-striped">
+	<thead>
+		<tr>
+			<th class="text-center">S.No.</th>
+
+			<th>Created Date</th>
+			<th>Revision Details</th>
+			@*<th>Page Title</th>
+				<th>Content</th>*@
+
+			<th>Change By</th>
+			<th>Approve By</th>
+			<th>Approved Date</th>
+
+
+
+
+
+		</tr>
+	</thead>
+	<tbody>
+		@{Int32 count = 0; string correctContent = "";}
+		@foreach (var m in Model.revisionListing)
+		{
+			correctContent = Regex.Replace(@m.Content, "<.*?>", String.Empty);
+
+			<tr>
+				<td>@(count += 1)</td>
+				<td>@m.CreatedDate</td>
+				<td><a href="javascript:void(0)" onclick="ViewRevisionDetails('@m.DocsId')"> @m.DocumentName >> @m.PageTitle >> @m.RNumber </a></td>
+				@*<td>@m.PageTitle</td>*@
+
+
+				@*<td title="@correctContent">@(correctContent == null ? "" : correctContent.Length > 50 ? correctContent.Substring(0, 50) + "..." : correctContent )</td>*@
+				@*<td>@correctContent</td>*@
+				<td>@m.CreatedBy</td>
+				<td>@m.ApprovedBy</td>
+				<td>@m.ApprovedDate</td>
+
+
+
+
+
+
+			</tr>
+
+		}
+
+	</tbody>
+</table>
+
+<script>
+	alert(1);
+</script>

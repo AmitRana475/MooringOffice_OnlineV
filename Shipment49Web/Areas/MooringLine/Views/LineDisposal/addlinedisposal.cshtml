@@ -1,0 +1,279 @@
+﻿@model Reports.RopeDisposal
+@{
+    /**/
+
+    ViewBag.Title = "addlinedisposal";
+    Layout = "~/Views/Shared/_LayoutVessel7.cshtml";
+}
+
+
+@using (Html.BeginForm("addlinedisposal", "LineDisposal"))
+{
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(e => e.Id)
+
+
+<div id="page-wrapper" class="content">
+    <div class="page-heading page-header-flex">
+        <div>
+            <h1 class="page-title">
+                Add Line Disposal
+            </h1>
+            @*<ol class="breadcrumb">
+            <li><a href="">Home</a></li>
+            <li><a href="">Form</a></li>
+            <li><a>Create</a></li>
+        </ol>*@
+        </div>
+            @if (TempData["Error"] != null)
+            {
+                <p class="alert alert-danger" id="errorMessage">@TempData["Error"]</p>
+            }
+            @if (TempData["Success"] != null)
+            {
+                <p class="alert alert-success" id="successMessage">@TempData["Success"]</p>
+            }
+            <div class="form-actions">
+                <button name="Submit" type="submit" id="btnSubmit" class="btn btn-success btn-width"><i class="uil uil-check mr-2"></i>Submit</button>
+                <button name="Reset" type="reset" id="btnReset" class="btn btn-danger btn-width"><i class="uil uil-redo mr-2"></i>Reset</button>
+                <a name="back" id="btnBack" onclick="goBack()" class="btn btn-primary btn-width"> << Go Back</a>
+            </div>
+        </div>
+
+        <div style="display:block" id="msgDiv">
+            <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+
+
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        </div>
+                        <div id="messageID" class="modal-body">
+                            ...
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div class="wrapper wrapper-content">
+            <div class="container">
+                <div class="form-body">
+                    <div class="row">
+                        <div class="col-md-8 mx-auto">
+                            <div class="row form-group ">
+                                <label class="col-sm-4 col-form-label">
+                                    <label class="control-label">Select Line<sup>*</sup></label>
+                                </label>
+                                <div class="col-sm-8">
+                                    @Html.DropDownListFor(model => model.RopeId, new SelectList(Model.MooringLineLists, "Id", "CertificateNumber"), "", htmlAttributes: new { @class = "form-control select2", @required = "true", @onchange = "checkdata(this)", })
+                                    <div class="error"></div>
+                                </div>
+                            </div>
+
+
+                            <div class="row form-group">
+                                <label class="col-sm-4 col-form-label">
+                                    <label class="control-label">Date Out of Service</label>
+                                </label>
+                                <div class="col-sm-8">
+                                    <label id="outofserdt" style="background-color:#ECECEC;border:none" class="form-control"></label>
+                                </div>
+                            </div>
+
+                            <div class="row form-group">
+                                <label class="col-sm-4 col-form-label">
+                                    <label class="control-label">Disposal Port Name<sup>*</sup></label>
+                                </label>
+                                <div class="col-sm-8">
+                                    @Html.DropDownListFor(model => model.DisposalPortName, Model.PortNameList, "", htmlAttributes: new { @class = "form-control select2", @required = "true",  })
+                                    @*@Html.DropDownListFor(model => model.DisposalPortName, Model.PortNameList, htmlAttributes: new { @class = "form-control select2", @required = "true" })*@
+
+
+                                    @*@Html.TextBoxFor(x => x.DisposalPortName, new { @class = "form-control", @required = "true", @maxlength = "50" })*@
+                                    <div class="error"></div>
+                                </div>
+                            </div>
+                            <div class="row form-group">
+                                <label class="col-sm-4 col-form-label">
+                                    <label class="control-label">Disposal Facility Name<sup>*</sup></label>
+                                </label>
+                                <div class="col-sm-8">
+                                    @Html.TextBoxFor(model => model.ReceptionFacilityName, new { @class = "form-control", @required = "true", @maxlength = "50" })
+                                    <div class="error"></div>
+                                </div>
+                            </div>
+                            <div class="row form-group">
+                                <label class="col-sm-4 col-form-label">
+                                    <label class="control-label">Disposal Date<sup>*</sup></label>
+                                </label>
+                                <div class="col-sm-8">
+                                    @Html.TextBoxFor(x => x.DisposalDate, "{0:yyyy-MM-dd}", new { @class = "form-control datepicker", @autocomplete = "Off",  @required = "true", @onchange = "datecheck(this)", @placeholder = "yyyy-mm-dd" })
+
+                                    <div class="error"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+}
+
+<script>
+    function datecheck(t) {
+        var dtvalue = t.value;
+        var RopeId = $("#RopeId").val();
+
+
+        $.ajax({
+            type: 'POST',
+            dataType: 'json',
+            url: '/LineDisposal/discarddatecheck',
+            data: { 'dtvalue': dtvalue, 'RopeId': RopeId },
+            success: function (response) {
+                if (response.Result == true) {
+
+
+                    if (response.Message != "") {
+
+                        alert(response.Message);
+
+                        $("#DisposalDate").val(response.instdate);
+
+                    }
+                }
+                else {
+                    alert('An Error has occured. Please try again.');
+                }
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+
+                alert('Please select the line and try again.');
+            }
+        });
+
+    }
+</script>
+<script>
+    function goBack() {
+        window.history.back();
+    }
+</script>
+<script>
+    $("#DisposalDate").keydown(function (e) {
+        e.preventDefault();
+    });
+</script>
+
+<script>
+    function damageOb(t) {
+        var Id = t.value;
+        if (Id != "Mooring Operation") {
+
+            $('#mopr').hide();
+        }
+        if (Id == "Mooring Operation") {
+            $('#mopr').show();
+        }
+    }
+</script>
+<script>
+    function OthReason(t) {
+        var Id = t.value;
+        if (Id != "Other") {
+
+            $('#othR').hide();
+        }
+        if (Id == "Other") {
+            $('#othR').show();
+        }
+    }
+</script>
+<script>
+    function checkdata(t) {
+        var Id = t.value;
+
+        $.ajax({
+            type: 'POST',
+            dataType: 'json',
+            url: '/LineDisposal/GetWinchlocation',
+            data: { 'Id': Id },
+            success: function (response) {
+                if (response.Result == true) {
+
+                    debugger;
+
+                    $("#outofserdt").text(response.outofserdt);
+
+                    var loc = response.outofserdt;
+                    
+
+                    if (loc == null || loc=="") {
+                        $("#outofserdt").text("Not Assigned");
+                    }
+                    
+
+                    if (response.msgdiv != "") {
+                        $("#msgDiv").show();
+                        $('#myModal').modal('show');
+                        var data = response.msgdiv;
+                        $('#messageID').text(data);
+
+                        $("#btnSubmit").attr("disabled", true);
+                    }
+                    else {
+                        $("#msgDiv").hide();
+                        $("#btnSubmit").attr("disabled", false);
+                    }
+                }
+                else {
+                    alert('An Error has occured. Please try again.');
+                }
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                //toastr["error"]('An Error has occured. Please try again.');
+                //alert('An Error has occured. Please try again.');
+            }
+        });
+
+    }
+</script>
+<script type="text/javascript">
+
+    setTimeout(function () {
+
+        $('#successMessage').fadeOut('fast');
+        $('#errorMessage').fadeOut('fast');
+    }, 3000);
+
+
+</script>
+
+
+
+
+<script type="text/javascript">
+    //$('.datepicker').datepicker();
+
+    $("#DisposalDate").datepicker({
+        endDate: 'today'
+    });
+
+</script>
+
+<script>
+    $('#btnReset').click(function () {
+        $("#RopeId").val(null).trigger("change");
+        
+        $("#outofserdt").text('');
+
+        
+
+
+    });
+</script>

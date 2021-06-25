@@ -1,0 +1,99 @@
+﻿
+
+@model Shipment49Web.Common.GraphData
+
+<div class="col-md-10">
+    <canvas id="@string.Format("myChartVW{0}", Model.chartId)" style="display: block;width: 300px;height: 200px;"></canvas>
+    <input type="hidden" id="@string.Format("hdnVW{0}", Model.chartId)" class="hdn" value="@Model.data" />
+    <input type="hidden" id="@string.Format("lblVW{0}", Model.chartId)" class="hdn" value="@ViewBag.ChartLables_VW" />
+    <input type="hidden" id="@string.Format("TTLVW{0}", Model.chartId)" class="hdn" value="@ViewBag.TitleHead_VW" />
+    <hr />
+</div>
+
+<script>
+  var Titles = $("@string.Format("#TTLVW{0}", Model.chartId)").val();
+    var lbls = $("@string.Format("#lblVW{0}", Model.chartId)").val().replace(/\u200B/g, '');
+    var data = $("@string.Format("#hdnVW{0}", Model.chartId)").val();
+    //var arr=  @ViewBag.ChartLables;
+
+
+    data = JSON.parse(data);
+    console.log(data);
+
+
+
+    var ctx = $("@string.Format("#myChartVW{0}", Model.chartId)");
+
+   var maxval = @Model.chartId;
+
+    var myChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+
+            labels: lbls.split(','),
+            datasets: data
+
+        },
+        options: {
+            "hover": {
+                "animationDuration": 0
+            },
+            "animation": {
+                "duration": 1,
+                "onComplete": function () {
+                    var chartInstance = this.chart,
+                        ctx = chartInstance.ctx;
+
+                    ctx.font = Chart.helpers.fontString(Chart.defaults.global.defaultFontSize, Chart.defaults.global.defaultFontStyle, Chart.defaults.global.defaultFontFamily);
+                    ctx.textAlign = 'center';
+                    ctx.textBaseline = 'bottom';
+
+                    this.data.datasets.forEach(function (dataset, i) {
+                        var meta = chartInstance.controller.getDatasetMeta(i);
+                        meta.data.forEach(function (bar, index) {
+                            var data = dataset.data[index];
+                            ctx.fillText(data, bar._model.x, bar._model.y - 5);
+                        });
+                    });
+                }
+            },
+            title: {
+                display: true,
+                text: Titles
+            },
+            legend: {
+                "display": true,
+                 align: 'left'
+            },
+            tooltips: {
+                "enabled": true
+            },
+            scales: {
+                yAxes: [{
+                    display: true,
+                    gridLines: {
+                        display: true
+                    },
+                    ticks: {
+                        max: maxval,
+                        display: true,
+                        beginAtZero: true
+                    }
+                }],
+                xAxes: [{
+                    gridLines: {
+                        display: false
+                    },
+                    ticks: {
+                        beginAtZero: true
+                    }
+                }]
+            }
+        }
+
+
+    });
+
+</script>
+
+

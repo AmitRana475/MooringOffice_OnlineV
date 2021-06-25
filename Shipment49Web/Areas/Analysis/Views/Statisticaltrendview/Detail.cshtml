@@ -1,0 +1,245 @@
+﻿@model IEnumerable<AnalysisLayer.ChartData>
+@{
+    ViewBag.Title = "Detail";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script src="~/Scripts/canvasjs.min.js"></script>
+@*<script type="text/javascript" src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>*@
+<div class="page_title margin-3-bot">
+    <h2>Graphical Detail</h2>
+</div>
+
+<div class="white-bg margin-3 fleet">
+    <div id="chartContainer" style="height: 450px; width: 100%;"></div>
+    <br />
+    <div id="chartContainer1" style="height: 450px; width: 100%;"></div>
+    <br />
+    <div id="chartContainer2" style="height: 450px; width: 100%;"></div>
+    <br />
+    @*<div class="form-group text-center">
+        <button class="btn peach-btn">@Ajax.ActionLink("Back to Statistical View ", "Index", null)</button>
+    </div>*@
+    <div class="back_text margin-5-top">
+        <i class="fa fa-chevron-left"></i>&nbsp; @Ajax.ActionLink("Back to List", "Index", null)
+    </div>
+
+</div>
+<script type="text/javascript">
+
+    var result =  @Html.Raw(ViewBag.DataPoints);
+    var dataPoints =[];
+    var dataPoints1 =[];
+    var dataPoints2 =[];
+    for(var i = 0; i < result.length; i++){
+        dataPoints.push({name:result[i].Rank, y:result[i].Work});
+        dataPoints1.push({name:result[i].Rank, y:result[i].Rest});
+        dataPoints2.push({name:result[i].Rank, y:result[i].Deviation});
+    }
+
+    CanvasJS.addColorSet("customColorSet1",
+     [
+     "#5d8aa8",
+     "#008000",
+     "#8db600",
+     "#4b5320",
+     "#a52a2a",
+     "#ff2052",
+     "#21abcd",
+     "#0000ff",
+     "#8a2be2",
+     "#cc0000",
+      "#66ff00",
+     "#cd7f32",
+     "#480607",
+
+
+
+        ]);
+
+            
+    $(function () {
+        var chart = new CanvasJS.Chart("chartContainer", {
+
+            exportEnabled: true,
+            animationEnabled: true,
+            exportFileName: " @ViewBag.vesselname WorkHours",
+
+            title: {
+                text: "@ViewBag.Datacount1"
+
+            },
+            colorSet:  "customColorSet1",
+
+            subtitles: [{
+                text: "Vessel Name : @ViewBag.vesselname  "+ "  Ranks : @ViewBag.rank "+"   Range : @ViewBag.datefrom1  To  @ViewBag.dateto1",
+                fontSize: 14
+            }],
+
+
+            data: [
+            {
+
+                showInLegend: true,
+                type: "pie",
+                startAngle: 240,
+                click: explodePie,
+                toolTipContent: "{name}: <strong>{y} Hrs </strong> ",
+                yValueFormatString: "##0.0#",
+                indexLabel: "{name} - {y} Hrs",
+
+                dataPoints:dataPoints
+
+            }
+
+            ]
+        });
+
+        chart.render();
+
+        var canvas = document.getElementsByClassName("canvasjs-chart-canvas")[0];
+        var context = canvas.getContext('2d');
+        var imageObj = new Image();
+        //imageObj.crossOrigin = "anonymous"; //https://developer.mozilla.org/en-US/docs/Web/HTML/CORS_enabled_image
+        
+        imageObj.onload = function () {
+            context.drawImage(imageObj, 5, 5, 60, 70);
+        }
+        imageObj.src = "https://sci.work-ship.com/nwscilogo.jpg";//'http://i.imgur.com/qWTEOfN.jpg'; // https://sci.work-ship.com/nwscilogo.jpg
+
+
+
+        function explodePie(e) {
+            for (var i = 0; i < e.dataSeries.dataPoints.length; i++) {
+                if (i !== e.dataPointIndex)
+                    e.dataSeries.dataPoints[i].exploded = false;
+            }
+        }
+
+    });
+
+    $(function () {
+        var chart = new CanvasJS.Chart("chartContainer1", {
+
+            exportEnabled: true,
+            animationEnabled: true,
+            exportFileName: " @ViewBag.vesselname RestHours",
+
+            title: {
+                text: "@ViewBag.Datacount2"
+
+            },
+            colorSet:  "customColorSet1",
+
+            subtitles: [{
+               text: "Vessel Name : @ViewBag.vesselname  "+ "  Ranks : @ViewBag.rank "+"   Range : @ViewBag.datefrom1  To  @ViewBag.dateto1",
+                fontSize: 14
+            }],
+
+
+            data: [
+            {
+
+                showInLegend: true,
+                type: "pie",
+                startAngle: 240,
+                click: explodePie,
+                toolTipContent: "{name}: <strong>{y} Hrs </strong> ",
+                yValueFormatString: "##0.0#",
+                indexLabel: "{name} - {y} Hrs",
+
+                dataPoints:dataPoints1
+
+            }
+
+
+            ]
+        });
+
+        chart.render();
+
+        var canvas = document.getElementsByClassName("canvasjs-chart-canvas")[1];
+        var context = canvas.getContext('2d');
+        var imageObj = new Image();
+        //imageObj.crossOrigin = "anonymous";//https://developer.mozilla.org/en-US/docs/Web/HTML/CORS_enabled_image
+
+        imageObj.onload = function () {
+            context.drawImage(imageObj, 5, 5, 60, 70);
+        }
+        imageObj.src = "https://sci.work-ship.com/nwscilogo.jpg";//'http://i.imgur.com/qWTEOfN.jpg'; // https://sci.work-ship.com/nwscilogo.jpg
+
+
+        function explodePie(e) {
+            for (var i = 0; i < e.dataSeries.dataPoints.length; i++) {
+                if (i !== e.dataPointIndex)
+                    e.dataSeries.dataPoints[i].exploded = false;
+            }
+        }
+
+    });
+
+
+    $(function () {
+        var chart = new CanvasJS.Chart("chartContainer2", {
+
+            exportEnabled: true,
+            animationEnabled: true,
+            exportFileName: " @ViewBag.vesselname Deviation",
+
+            title: {
+                text: "@ViewBag.Datacount3"
+
+            },
+
+            colorSet:  "customColorSet1",
+
+            subtitles: [{
+                text: "Vessel Name : @ViewBag.vesselname  "+ "  Ranks : @ViewBag.rank "+"   Range : @ViewBag.datefrom1  To  @ViewBag.dateto1",
+                fontSize: 14
+            }],
+
+
+            data: [
+            {
+
+                showInLegend: true,
+                type: "pie",
+                startAngle: 240,
+                click: explodePie,
+                toolTipContent: "{name}: <strong>{y} </strong> ",
+                yValueFormatString: "#0",
+                indexLabel: "{name} - {y}",
+
+                dataPoints:dataPoints2
+
+            }
+
+
+            ]
+        });
+
+        chart.render();
+
+        var canvas = document.getElementsByClassName("canvasjs-chart-canvas")[2];
+        var context = canvas.getContext('2d');
+        var imageObj = new Image();
+        //imageObj.crossOrigin = "anonymous";//https://developer.mozilla.org/en-US/docs/Web/HTML/CORS_enabled_image
+
+        imageObj.onload = function () {
+            context.drawImage(imageObj, 5, 5, 60, 70);
+        }
+        imageObj.src = "https://sci.work-ship.com/nwscilogo.jpg";//'http://i.imgur.com/qWTEOfN.jpg'; // https://sci.work-ship.com/nwscilogo.jpg
+
+
+        function explodePie(e) {
+            for (var i = 0; i < e.dataSeries.dataPoints.length; i++) {
+                if (i !== e.dataPointIndex)
+                    e.dataSeries.dataPoints[i].exploded = false;
+            }
+        }
+
+    });
+
+
+
+</script>
+

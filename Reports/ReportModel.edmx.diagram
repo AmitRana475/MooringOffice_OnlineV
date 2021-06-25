@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="13e3c609edea4018aa1605026ecd50ba" Name="Diagram1" ZoomLevel="85">
+        <EntityTypeShape EntityType="MorringOfficeModel.C__MigrationHistory" Width="1.5" PointX="5.75" PointY="0.75" />
+        <EntityTypeShape EntityType="MorringOfficeModel.AspNetRole" Width="1.5" PointX="5.75" PointY="4.625" />
+        <EntityTypeShape EntityType="MorringOfficeModel.AspNetUserClaim" Width="1.5" PointX="10.25" PointY="5.125" />
+        <EntityTypeShape EntityType="MorringOfficeModel.AspNetUserLogin" Width="1.5" PointX="10.25" PointY="7.875" />
+        <EntityTypeShape EntityType="MorringOfficeModel.AspNetUser" Width="1.5" PointX="8" PointY="3.375" />
+        <EntityTypeShape EntityType="MorringOfficeModel.AssignLooseEquipToWinch" Width="1.5" PointX="5.75" PointY="8.75" />
+        <EntityTypeShape EntityType="MorringOfficeModel.AssignRopeToWinch" Width="1.5" PointX="7.75" PointY="10.75" />
+        <EntityTypeShape EntityType="MorringOfficeModel.Certicationcomment" Width="1.5" PointX="9.75" PointY="10.75" />
+        <EntityTypeShape EntityType="MorringOfficeModel.Certication" Width="1.5" PointX="11.75" PointY="10.75" />
+        <EntityTypeShape EntityType="MorringOfficeModel.CertificateList" Width="1.5" PointX="12.75" PointY="0.75" />
+        <EntityTypeShape EntityType="MorringOfficeModel.ChafeGuard" Width="1.5" PointX="12.75" PointY="5.75" />
+        <EntityTypeShape EntityType="MorringOfficeModel.ChainStopper" Width="1.5" PointX="13.75" PointY="10.75" />
+        <EntityTypeShape EntityType="MorringOfficeModel.Comment" Width="1.5" PointX="14.75" PointY="0.75" />
+        <EntityTypeShape EntityType="MorringOfficeModel.CompanyInfo" Width="1.5" PointX="14.75" PointY="3.75" />
+        <EntityTypeShape EntityType="MorringOfficeModel.CrewDetail" Width="1.5" PointX="0.75" PointY="15.75" />
+        <EntityTypeShape EntityType="MorringOfficeModel.CrewReport" Width="1.5" PointX="2.75" PointY="15.75" />
+        <EntityTypeShape EntityType="MorringOfficeModel.DamageObserved" Width="1.5" PointX="14.75" PointY="7.75" />
+        <EntityTypeShape EntityType="MorringOfficeModel.DocsPage" Width="1.5" PointX="4.75" PointY="15.75" />
+        <EntityTypeShape EntityType="MorringOfficeModel.Document" Width="1.5" PointX="6.75" PointY="15.75" />
+        <EntityTypeShape EntityType="MorringOfficeModel.ImportLog" Width="1.5" PointX="8.75" PointY="15.75" />
+        <EntityTypeShape EntityType="MorringOfficeModel.JoiningShackle" Width="1.5" PointX="15.75" PointY="10.75" />
+        <EntityTypeShape EntityType="MorringOfficeModel.login" Width="1.5" PointX="16.75" PointY="0.75" />
+        <EntityTypeShape EntityType="MorringOfficeModel.LooseEDamageRecord" Width="1.5" PointX="16.75" PointY="3.75" />
+        <EntityTypeShape EntityType="MorringOfficeModel.LooseEDisposal" Width="1.5" PointX="10.75" PointY="16.75" />
+        <EntityTypeShape EntityType="MorringOfficeModel.LooseEType" Width="1.5" PointX="17.75" PointY="8.75" />
+        <EntityTypeShape EntityType="MorringOfficeModel.Membership" Width="1.5" PointX="17.75" PointY="11.75" />
+        <EntityTypeShape EntityType="MorringOfficeModel.Message" Width="1.5" PointX="12.75" PointY="17.75" />
+        <EntityTypeShape EntityType="MorringOfficeModel.MinimumRopeAndTailsSetting" Width="1.5" PointX="17.75" PointY="14.75" />
+        <EntityTypeShape EntityType="MorringOfficeModel.MooringLooseEquipInspection" Width="1.5" PointX="14.75" PointY="17.75" />
+        <EntityTypeShape EntityType="MorringOfficeModel.MooringRopeDetail" Width="1.5" PointX="16.75" PointY="17.75" />
+        <EntityTypeShape EntityType="MorringOfficeModel.MooringRopeInspection" Width="1.5" PointX="18.75" PointY="17.75" />
+        <EntityTypeShape EntityType="MorringOfficeModel.MooringRopeType" Width="1.5" PointX="18.75" PointY="0.75" />
+        <EntityTypeShape EntityType="MorringOfficeModel.MooringWinchDetail" Width="1.5" PointX="18.75" PointY="3.75" />
+        <EntityTypeShape EntityType="MorringOfficeModel.MOperationBirthDetail" Width="1.5" PointX="4.75" PointY="19.75" />
+        <EntityTypeShape EntityType="MorringOfficeModel.MOUsedWinchTbl" Width="1.5" PointX="6.75" PointY="19.75" />
+        <EntityTypeShape EntityType="MorringOfficeModel.NotificationComment" Width="1.5" PointX="19.75" PointY="7.75" />
+        <EntityTypeShape EntityType="MorringOfficeModel.Notification" Width="1.5" PointX="19.75" PointY="11.75" />
+        <EntityTypeShape EntityType="MorringOfficeModel.Rating" Width="1.5" PointX="20.75" PointY="0.75" />
+        <EntityTypeShape EntityType="MorringOfficeModel.ResidualLabTest" Width="1.5" PointX="20.75" PointY="2.75" />
+        <EntityTypeShape EntityType="MorringOfficeModel.Revision" Width="1.5" PointX="8.75" PointY="20.75" />
+        <EntityTypeShape EntityType="MorringOfficeModel.RopeCropping" Width="1.5" PointX="10.75" PointY="20.75" />
+        <EntityTypeShape EntityType="MorringOfficeModel.RopeDamageRecord" Width="1.5" PointX="20.75" PointY="17.75" />
+        <EntityTypeShape EntityType="MorringOfficeModel.RopeDisposal" Width="1.5" PointX="21.75" PointY="7.75" />
+        <EntityTypeShape EntityType="MorringOfficeModel.RopeEndtoEnd2" Width="1.5" PointX="21.75" PointY="11.75" />
+        <EntityTypeShape EntityType="MorringOfficeModel.RopeSplicingRecord" Width="1.5" PointX="22.75" PointY="0.75" />
+        <EntityTypeShape EntityType="MorringOfficeModel.RopeTail" Width="1.5" PointX="12.75" PointY="22.75" />
+        <EntityTypeShape EntityType="MorringOfficeModel.tblCommon" Width="1.5" PointX="0.75" PointY="6.625" />
+        <EntityTypeShape EntityType="MorringOfficeModel.tblFleetName" Width="1.5" PointX="22.75" PointY="16.75" />
+        <EntityTypeShape EntityType="MorringOfficeModel.tblFleetType" Width="1.5" PointX="22.75" PointY="19.75" />
+        <EntityTypeShape EntityType="MorringOfficeModel.tblLooseEquipInspectionSetting" Width="1.5" PointX="22.75" PointY="22.75" />
+        <EntityTypeShape EntityType="MorringOfficeModel.tblMasterRevision" Width="1.5" PointX="23.75" PointY="5.75" />
+        <EntityTypeShape EntityType="MorringOfficeModel.TblMenu" Width="1.5" PointX="23.75" PointY="8.75" />
+        <EntityTypeShape EntityType="MorringOfficeModel.tblNotification" Width="1.5" PointX="24.75" PointY="11.75" />
+        <EntityTypeShape EntityType="MorringOfficeModel.tblRopeInspectionSetting" Width="1.5" PointX="3" PointY="5.875" />
+        <EntityTypeShape EntityType="MorringOfficeModel.tblRopeTailInspectionSetting" Width="1.5" PointX="3" PointY="1.5" />
+        <EntityTypeShape EntityType="MorringOfficeModel.tblShipSpecificAttachment" Width="1.5" PointX="24.75" PointY="0.75" />
+        <EntityTypeShape EntityType="MorringOfficeModel.tblShipSpecificContent" Width="1.5" PointX="24.75" PointY="17.75" />
+        <EntityTypeShape EntityType="MorringOfficeModel.tblSmartMenu" Width="1.5" PointX="24.75" PointY="20.75" />
+        <EntityTypeShape EntityType="MorringOfficeModel.TblSubMenu" Width="1.5" PointX="24.75" PointY="23.75" />
+        <EntityTypeShape EntityType="MorringOfficeModel.TblSubSubMenu" Width="1.5" PointX="25.75" PointY="4.75" />
+        <EntityTypeShape EntityType="MorringOfficeModel.tempDocsPage" Width="1.5" PointX="6.75" PointY="25.75" />
+        <EntityTypeShape EntityType="MorringOfficeModel.TextEditor" Width="1.5" PointX="25.75" PointY="8.75" />
+        <EntityTypeShape EntityType="MorringOfficeModel.TrainingAttachment" Width="1.5" PointX="20.75" PointY="25.75" />
+        <EntityTypeShape EntityType="MorringOfficeModel.UserDetail" Width="1.5" PointX="8.75" PointY="26.75" />
+        <EntityTypeShape EntityType="MorringOfficeModel.UserInfo" Width="1.5" PointX="10.25" PointY="1.25" />
+        <EntityTypeShape EntityType="MorringOfficeModel.VesselDetail" Width="1.5" PointX="3" PointY="10.625" />
+        <EntityTypeShape EntityType="MorringOfficeModel.WinchBreakTestKit" Width="1.5" PointX="26.75" PointY="11.75" />
+        <EntityTypeShape EntityType="MorringOfficeModel.PortList" Width="1.5" PointX="26.75" PointY="0.75" />
+        <EntityTypeShape EntityType="MorringOfficeModel.View_Abrasion_Combined" Width="1.5" PointX="14.75" PointY="26.75" />
+        <EntityTypeShape EntityType="MorringOfficeModel.View_Abrasion_Combined_Details" Width="1.5" PointX="26.75" PointY="16.75" />
+        <EntityTypeShape EntityType="MorringOfficeModel.View_AbrasionDetails" Width="1.5" PointX="16.75" PointY="26.75" />
+        <EntityTypeShape EntityType="MorringOfficeModel.View_AnalysysExpenseVsDuration" Width="1.5" PointX="26.75" PointY="21.75" />
+        <EntityTypeShape EntityType="MorringOfficeModel.View_AverageRunningRopeHours" Width="1.5" PointX="22.75" PointY="27.75" />
+        <EntityTypeShape EntityType="MorringOfficeModel.View_ManufacturerPerformanceComparison" Width="1.5" PointX="28.75" PointY="8.75" />
+        <EntityTypeShape EntityType="MorringOfficeModel.View_MaxInspectDate" Width="1.5" PointX="28.75" PointY="0.75" />
+        <EntityTypeShape EntityType="MorringOfficeModel.View_MooringRopeDetails" Width="1.5" PointX="28.75" PointY="17.75" />
+        <EntityTypeShape EntityType="MorringOfficeModel.View_MooringRopeInspectionDetails" Width="1.5" PointX="18.75" PointY="28.75" />
+        <EntityTypeShape EntityType="MorringOfficeModel.View_Notifications" Width="1.5" PointX="28.75" PointY="28.75" />
+        <EntityTypeShape EntityType="MorringOfficeModel.View_OperationRecords" Width="1.5" PointX="4.75" PointY="29.75" />
+        <EntityTypeShape EntityType="MorringOfficeModel.View_OperationWiseRopes" Width="1.5" PointX="29.75" PointY="3.75" />
+        <EntityTypeShape EntityType="MorringOfficeModel.View_PredictionExpectency" Width="1.5" PointX="30.75" PointY="7.75" />
+        <EntityTypeShape EntityType="MorringOfficeModel.View_ReportAssignRopeToWinch" Width="1.5" PointX="30.75" PointY="0.75" />
+        <EntityTypeShape EntityType="MorringOfficeModel.View_ReportInspectionStatus" Width="1.5" PointX="10.75" PointY="30.75" />
+        <EntityTypeShape EntityType="MorringOfficeModel.View_ReportInspectionStatusDetails" Width="1.5" PointX="12.75" PointY="30.75" />
+        <EntityTypeShape EntityType="MorringOfficeModel.View_ReportLooseEquipmentInspection" Width="1.5" PointX="14.75" PointY="30.75" />
+        <EntityTypeShape EntityType="MorringOfficeModel.View_ResidualStrength_RopeLabResults" Width="1.5" PointX="30.75" PointY="16.75" />
+        <EntityTypeShape EntityType="MorringOfficeModel.View_RopeDamages" Width="1.5" PointX="30.75" PointY="20.75" />
+        <EntityTypeShape EntityType="MorringOfficeModel.View_RopeDetails" Width="1.5" PointX="30.75" PointY="24.75" />
+        <EntityTypeShape EntityType="MorringOfficeModel.View_RopeManufacturer" Width="1.5" PointX="24.75" PointY="30.75" />
+        <EntityTypeShape EntityType="MorringOfficeModel.View_RopesDamagedCroppedSplicedUsed" Width="1.5" PointX="30.75" PointY="30.75" />
+        <EntityTypeShape EntityType="MorringOfficeModel.View_RopesDiscardedAverageRating" Width="1.5" PointX="31.75" PointY="3.75" />
+        <EntityTypeShape EntityType="MorringOfficeModel.View_RopesDiscardedMonthsHours" Width="1.5" PointX="6.75" PointY="31.75" />
+        <EntityTypeShape EntityType="MorringOfficeModel.View_RopesOverdueInspection" Width="1.5" PointX="32.75" PointY="0.75" />
+        <EntityTypeShape EntityType="MorringOfficeModel.View_RopesOverdueInspection_Details" Width="1.5" PointX="32.75" PointY="6.75" />
+        <EntityTypeShape EntityType="MorringOfficeModel.View_RopesPendingInspection" Width="1.5" PointX="32.75" PointY="10.75" />
+        <EntityTypeShape EntityType="MorringOfficeModel.View_RopesPendingInspection_Details" Width="1.5" PointX="32.75" PointY="14.75" />
+        <EntityTypeShape EntityType="MorringOfficeModel.View_SatisfactoryRopes" Width="1.5" PointX="32.75" PointY="18.75" />
+        <EntityTypeShape EntityType="MorringOfficeModel.View_SatisfactoryRopes_Details" Width="1.5" PointX="32.75" PointY="22.75" />
+        <EntityTypeShape EntityType="MorringOfficeModel.View_TotalRopes" Width="1.5" PointX="32.75" PointY="31.75" />
+        <EntityTypeShape EntityType="MorringOfficeModel.View_UnSatisfactoryRopes" Width="1.5" PointX="24.75" PointY="33.75" />
+        <EntityTypeShape EntityType="MorringOfficeModel.View_UnSatisfactoryRopes_Details" Width="1.5" PointX="34.75" PointY="0.75" />
+        <EntityTypeShape EntityType="MorringOfficeModel.View_VesselWiseExpenseAnalysis" Width="1.5" PointX="34.75" PointY="9.75" />
+        <EntityTypeShape EntityType="MorringOfficeModel.vRopesCropped" Width="1.5" PointX="34.75" PointY="18.75" />
+        <EntityTypeShape EntityType="MorringOfficeModel.vRopesDamaged" Width="1.5" PointX="34.75" PointY="23.75" />
+        <EntityTypeShape EntityType="MorringOfficeModel.vRopesDetail" Width="1.5" PointX="26.75" PointY="34.75" />
+        <EntityTypeShape EntityType="MorringOfficeModel.vRopesDisposed" Width="1.5" PointX="34.75" PointY="27.75" />
+        <EntityTypeShape EntityType="MorringOfficeModel.vRopesEndToEnd" Width="1.5" PointX="28.75" PointY="34.75" />
+        <EntityTypeShape EntityType="MorringOfficeModel.vRopesSpliced" Width="1.5" PointX="30.75" PointY="34.75" />
+        <AssociationConnector Association="MorringOfficeModel.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" />
+        <AssociationConnector Association="MorringOfficeModel.FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId" />
+        <AssociationConnector Association="MorringOfficeModel.FK_UserInfo_AspNetUsers" />
+        <AssociationConnector Association="MorringOfficeModel.FK_tblRopeInspectionSetting_tblCommon" />
+        <AssociationConnector Association="MorringOfficeModel.FK_tblRopeTailInspectionSetting_tblCommon" />
+        <AssociationConnector Association="MorringOfficeModel.FK_VesselDetail_tblCommon_Fleet_Name" />
+        <AssociationConnector Association="MorringOfficeModel.FK_VesselDetail_tblCommon_FleetType" />
+        <AssociationConnector Association="MorringOfficeModel.FK_VesselDetail_tblCommon_TradePlatform" />
+        <AssociationConnector Association="MorringOfficeModel.AspNetUserRoles" />
+        <EntityTypeShape EntityType="MorringOfficeModel.tblWinchRotationSetting" Width="1.5" PointX="33.375" PointY="34.75" />
+        <EntityTypeShape EntityType="MorringOfficeModel.View_VesselWiseUniqueRopes_LatestInspection_NotOutOfService" Width="1.5" PointX="7.375" PointY="35.75" />
+        <EntityTypeShape EntityType="MorringOfficeModel.View_TailsDiscardedAverageRating" Width="1.5" PointX="15.375" PointY="35.75" />
+        <EntityTypeShape EntityType="MorringOfficeModel.View_TailsDiscardedMonthsHours" Width="1.5" PointX="35.375" PointY="31.75" />
+        <EntityTypeShape EntityType="MorringOfficeModel.View_RopesDamagedCroppedSplicedUsed2" Width="1.5" PointX="9.375" PointY="36.75" />
+        <EntityTypeShape EntityType="MorringOfficeModel.InputGeneralParticular" Width="1.5" PointX="17.375" PointY="36.75" />
+        <EntityTypeShape EntityType="MorringOfficeModel.InputMooringCalculation" Width="1.5" PointX="19.375" PointY="36.75" />
+        <EntityTypeShape EntityType="MorringOfficeModel.InputPrincipalParticular" Width="1.5" PointX="21.375" PointY="36.75" />
+        <EntityTypeShape EntityType="MorringOfficeModel.InputWindAndCurrentParameter" Width="1.5" PointX="37.375" PointY="0.75" />
+        <EntityTypeShape EntityType="MorringOfficeModel.InputWindArea" Width="1.5" PointX="37.375" PointY="4.75" />
+        <EntityTypeShape EntityType="MorringOfficeModel.OutputBasicCurrentParameter" Width="1.5" PointX="37.375" PointY="8.75" />
+        <EntityTypeShape EntityType="MorringOfficeModel.OutputBasicWindPartameter" Width="1.5" PointX="11.375" PointY="37.75" />
+        <EntityTypeShape EntityType="MorringOfficeModel.OutputCurrentWindLoad" Width="1.5" PointX="37.375" PointY="12.75" />
+        <EntityTypeShape EntityType="MorringOfficeModel.OutputCuurentForceCoefficient" Width="1.5" PointX="37.375" PointY="16.75" />
+        <EntityTypeShape EntityType="MorringOfficeModel.OutputFinalForcesAndMoment" Width="1.5" PointX="37.375" PointY="20.75" />
+        <EntityTypeShape EntityType="MorringOfficeModel.OutputMorringForcesCalculation" Width="1.5" PointX="23.375" PointY="37.75" />
+        <EntityTypeShape EntityType="MorringOfficeModel.OutputWindForceCoefficient" Width="1.5" PointX="37.375" PointY="24.75" />
+        <EntityTypeShape EntityType="MorringOfficeModel.OutputWindLoad" Width="1.5" PointX="37.375" PointY="28.75" />
+        <EntityTypeShape EntityType="MorringOfficeModel.WinchRotation" Width="1.5" PointX="37.375" PointY="32.75" />
+        <EntityTypeShape EntityType="MorringOfficeModel.View_FleetWiseIncidents2" Width="1.5" PointX="37.375" PointY="36.75" />
+        <EntityTypeShape EntityType="MorringOfficeModel.WinchBrakeTestAttachment" Width="1.5" PointX="5.375" PointY="38.75" />
+        <EntityTypeShape EntityType="MorringOfficeModel.View_FleetWiseIncidents" Width="1.5" PointX="13.375" PointY="38.75" />
+        <EntityTypeShape EntityType="MorringOfficeModel.vRopeSummaryInspection" Width="1.5" PointX="29.375" PointY="38.75" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

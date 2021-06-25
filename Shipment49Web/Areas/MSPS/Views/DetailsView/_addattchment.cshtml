@@ -1,0 +1,75 @@
+﻿@model Shipment49Web.Areas.MSPS.Models.DetailsViewModel
+
+
+<div class="container">
+    @using (Html.BeginForm("addattachment", "DetailsView", new { area = "MSPS" }, FormMethod.Post, htmlAttributes: new { enctype = "multipart/form-data", @class = "form-horizontal" }))
+    {
+        @Html.AntiForgeryToken()
+        @Html.HiddenFor(x => x.Mid)
+
+        <div class="form-group">
+            <div class="row">
+                <div class="col-md-12">
+                    @Html.Label("Add Attachment")
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="row">
+                <div class="col-md-6">
+                    @Html.TextBoxFor(model => model.shipmodel.AttachmentName, new { @class = "form-control", @placeholder = "Attachment Name" })
+                    @Html.ValidationMessageFor(model => model.shipmodel.AttachmentName, "", new { @class = "text-danger" })
+                </div>
+                <div class="col-md-6">
+                    @*<input name="file" type="file" class="form-control" multiple />*@
+                    <input name="file" id="fileToUpload" type="file" onchange="check()" class="form-control" multiple />
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.ListBox("ShipIds", new SelectList(ViewBag.ShipList, "Value", "Text"), new { @class = "form-control", @style = "height: 100px" })
+            @Html.ValidationMessageFor(model => model.shipmodel.ShipId, "", new { @class = "text-danger" })
+        </div>
+
+        <div class="small-gutter row">
+            <div class="col-sm-3 col-xs-6 form-group">
+                <input type="submit" id="btnSave" value="Save" class="btn peach-btn btn-block btn-primary" />
+            </div>
+            <div class="col-sm-4 col-xs-6 back_text margin-1-top">
+                <i class="fa fa-chevron-left"></i>&nbsp;
+                @*@Html.ActionLink("Back to List", "Index")*@
+
+                <a href="@Request.Url">Back</a>
+            </div>
+        </div>
+    }
+</div>
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#fileToUpload').change(function () {
+            var fp = $("#fileToUpload");
+            var lg = fp[0].files.length; // get length
+            var items = fp[0].files;
+            var fileSize = 0;
+            var fileName = document.getElementById('fileToUpload').value.toLowerCase();
+            if (!fileName.endsWith('.jpg') && !fileName.endsWith('.png') && !fileName.endsWith('.docx') && !fileName.endsWith('.doc') && !fileName.endsWith('.xlsx') && !fileName.endsWith('.xls') && !fileName.endsWith('.xlsm') && !fileName.endsWith('.pdf') && !fileName.endsWith('.txt')) {
+                alert('Please upload jpg, jpeg, png, xls, xlsm, xlsx, doc, docx, pdf and txt file only.');
+                document.getElementById("fileToUpload").value = null;
+                return false;
+            }
+
+            if (lg > 0) {
+                for (var i = 0; i < lg; i++) {
+                    fileSize = fileSize + items[i].size; // get file size
+                }
+                if (fileSize >= 10485760) {
+                    alert('File size must not be more than 10 MB');
+                    $('#fileToUpload').val('');
+                }
+            }
+        });
+    });
+</script>

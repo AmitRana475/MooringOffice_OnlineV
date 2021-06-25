@@ -1,0 +1,275 @@
+﻿@model Reports.MooringRopeInspection
+@{
+    ViewBag.Title = "viewinspection";
+    Layout = "~/Views/Shared/_LayoutVessel7.cshtml";
+}
+
+
+<div class="page-heading page-header-flex">
+    <div>
+        <h1 class="page-title">
+            View Mooring Line Inspection
+        </h1>
+
+    </div>
+
+    <div>
+        <div class="form-actions">
+
+            <a name="back" id="btnBack" onclick="goBack()" class="btn btn-primary btn-width"> << Go Back</a>
+        </div>
+    </div>
+
+</div>
+
+<div class="wrapper wrapper-content">
+    <div class="container-fluid">
+
+        <div id="Mydiv" class="table-responsive freeze-side1">
+            @{
+                int count = 1;
+            }
+
+
+
+            <table id="tbl1" class="table table-bordered" height="50">
+                <thead>
+                    @*<tr class="table-mark">
+                        <th></th>
+                        <th colspan="4"></th>
+                        <th colspan="7" class="bg-primary"><label>ZONE 1- Chock/Fairlead Hardware Contact Zone</label></th>
+                        <th colspan="7" class="bg-info"><label>ZONE 2- Tension Drum Contact Zone</label></th>
+                        <th colspan="4"></th>
+                    </tr>*@
+                    <tr>
+
+                        <th style="display:none">Id</th>
+
+                        <th><input type="checkbox" disabled checked="checked" id="selectall" onClick="selectall(this)" />Select All</th>
+                        <th>Winch #</th>
+                        <th>Line Position</th>
+                        <th>Line Type</th>
+                        <th>Unique ID</th>
+                        <th>Certificate Number</th>
+
+
+                        <th>External Abrasion(Rating)</th>
+                        <th>Internal Abrasion(Rating)</th>
+                        <th>Average(Rating)</th>
+                        <th>Length of Abrasion(Rating)</th>
+                        <th>Distance from outboard eye(meters)</th>
+                        <th>Cut Yarn Count(#)</th>
+                        <th>Length of Glazing(meters)</th>
+
+                        @*<th>External Abrasion(Rating)2</th>
+                        <th>Internal Abrasion(Rating)2</th>
+                        <th>Average(Rating)2</th>
+                        <th>Length of Abrasion(Rating)2</th>
+                        <th>Distance from outboard eye(meters)2</th>
+                        <th>Cut Yarn Count(#)2</th>
+                        <th>Length of Glazing(meters)2</th>*@
+
+                        <th>Chafe Guard</th>
+                        <th>Twist per(meter)</th>
+                        <th style="width:230px">View Image</th>
+                        <th style="width:230px">View Image</th>
+
+                        <th style="display:none">S.No</th>
+
+
+                    </tr>
+                </thead>
+                <tbody class="pane-vScroll">
+
+                    @foreach (var item in Model.AddInspectionList)
+                    {
+                        <tr>
+                            <td><input class="case1" name="case1" disabled checked="checked" type="checkbox" />    &nbsp; </td>
+                            <td style="display:none"> @Html.DisplayFor(modelItem => item.Id)</td>
+                            <td style="display:none"> @Html.DisplayFor(modelItem => item.RopeId)</td>
+                            <td style="display:none"> @Html.DisplayFor(modelItem => item.WinchId)</td>
+                            <td> @Html.DisplayFor(modelItem => item.AssignedNumber)</td>
+                            <td> @Html.DisplayFor(modelItem => item.Location)</td>
+                            <td>@Html.DisplayFor(modelItem => item.RopeType)</td>
+                            <td> @Html.DisplayFor(modelItem => item.UniqueId)</td>
+                            <td class="bg-primary-light"> @Html.DisplayFor(modelItem => item.CertificateNumber)</td>
+
+
+                            <td style="width:100px!important" class="bg-primary-light">
+
+
+                                @Html.DropDownListFor(m => m.ExternalRating_A, new SelectList(Model.CommonExtInt, "Value", "Text", item.ExternalRating_A), new { @class = "form-control", disabled = "disabled", @readonly = "readonly" })
+
+                            </td>
+                            <td style="width:100px!important" class="bg-primary-light">
+                                @Html.DropDownListFor(model => model.InternalRating_A, new SelectList(Model.CommonExtInt, "Value", "Text", item.InternalRating_A), new { @class = "form-control", disabled = "disabled", @readonly = "readonly" })
+
+                            </td>
+                            <td class="bg-primary-light">
+                                @Html.EditorFor(model => item.AverageRating_A, new { htmlAttributes = new { @class = "form-control", @required = "true", disabled = "disabled", @readonly = "readonly" } })
+                            </td>
+                            <td class="bg-primary-light">
+                                @Html.EditorFor(model => item.LengthOFAbrasion_A, new { htmlAttributes = new { @class = "form-control", @required = "true", @onkeypress = "return isNumberKey(event)", @maxlength = 5, disabled = "disabled", @readonly = "readonly", @onKeyUp = "requiredValue(this)" } })
+                            </td>
+                            <td class="bg-primary-light">
+                                @Html.EditorFor(model => item.DistanceOutboard_A, new { htmlAttributes = new { @class = "form-control", @required = "true", @onkeypress = "return isNumberKey(event)", @maxlength = 6, disabled = "disabled", @readonly = "readonly", @onKeyUp = "requiredValue1(this)" } })
+                            </td>
+                            <td class="bg-primary-light">
+                                @Html.EditorFor(model => item.CutYarnCount_A, new { htmlAttributes = new { @class = "form-control", @required = "true", @onkeypress = "return isNumberKey(event)", @maxlength = 5, disabled = "disabled", @readonly = "readonly", @onKeyUp = "requiredValue2(this)" } })
+                            </td>
+                            <td class="bg-info-light">
+                                @Html.EditorFor(model => item.LengthOFGlazing_A, new { htmlAttributes = new { @class = "form-control", @required = "true", @onkeypress = "return isNumberKey(event)", @maxlength = 6, disabled = "disabled", @readonly = "readonly", @onKeyUp = "requiredValue3(this)" } })
+                            </td>
+                            @*<td style="width:100px!important" class="bg-info-light">
+                                @Html.DropDownListFor(model => model.External1, new SelectList(Model.CommonExtInt, "Value", "Text", item.ExternalRating_B), new { @class = "form-control", disabled = "disabled", @readonly = "readonly" })
+
+                            </td>
+                            <td style="width:100px!important" class="bg-info-light">
+                                @Html.DropDownListFor(model => model.Internal1, new SelectList(Model.CommonExtInt, "Value", "Text", item.InternalRating_B), new { @class = "form-control", disabled = "disabled", @readonly = "readonly" })
+
+                            </td>
+                            <td class="bg-info-light">
+                                @Html.EditorFor(model => item.AverageRating_B, new { htmlAttributes = new { @class = "form-control", @required = "true", disabled = "disabled", @readonly = "readonly" } })
+                            </td>
+                            <td class="bg-info-light">
+                                @Html.EditorFor(model => item.LengthOFAbrasion_B, new { htmlAttributes = new { @class = "form-control", @required = "true", @onkeypress = "return isNumberKey(event)", @maxlength = 5, disabled = "disabled", @readonly = "readonly", @onKeyUp = "requiredValue4(this)" } })
+                            </td>
+                            <td class="bg-info-light">
+                                @Html.EditorFor(model => item.DistanceOutboard_B, new { htmlAttributes = new { @class = "form-control", @required = "true", @onkeypress = "return isNumberKey(event)", @maxlength = 6, disabled = "disabled", @readonly = "readonly", @onKeyUp = "requiredValue5(this)" } })
+                            </td>
+                            <td class="bg-info-light">
+                                @Html.EditorFor(model => item.CutYarnCount_B, new { htmlAttributes = new { @class = "form-control", @required = "true", @onkeypress = "return isNumberKey(event)", @maxlength = 5, disabled = "disabled", @readonly = "readonly", @onKeyUp = "requiredValue6(this)" } })
+                            </td>
+                            <td class="bg-info-light">
+                                @Html.EditorFor(model => item.LengthOFGlazing_B, new { htmlAttributes = new { @class = "form-control", @required = "true", @onkeypress = "return isNumberKey(event)", @maxlength = 6, disabled = "disabled", @readonly = "readonly", @onKeyUp = "requiredValue7(this)" } })
+                            </td>*@
+                            <td>
+                                @Html.DropDownListFor(model => item.Chafe_guard_condition, new SelectList(Model.ChafeGuard, "ChafeGuard", "ChafeGuard", item.Chafe_guard_condition), htmlAttributes: new { @class = "form-control", disabled = "disabled", @readonly = "readonly", @required = "true", @style = "width: 150px;", })
+
+                            </td>
+                            <td>
+                                @Html.EditorFor(model => item.Twist, new { htmlAttributes = new { @class = "form-control", @required = "true", @onkeypress = "return isNumberKey(event)", @maxlength = 5, disabled = "disabled", @readonly = "readonly", @min = "0", @Value = "0" } })
+                            </td>
+
+                            <td style="width:200px">
+
+                                @if (item.Image1 != "")
+                                {
+
+                                    <img style='width: 80px; height: 80px;border-radius: 5px;cursor: pointer;transition: 0.3s;' onclick='return showImageIns(this)' src="~/images/InspectionImages/@item.Image1">
+
+                                }
+                                else
+                                {
+                                    <img style='width: 80px; height: 80px;border-radius: 5px;cursor: pointer;transition: 0.3s;' src="~/images/noimage.png">
+
+                                }
+                            </td>
+
+                            <td style="width:200px">
+
+                                @if (item.Image2 != "")
+                                {
+
+                                    <img style='width: 80px; height: 80px;border-radius: 5px;cursor: pointer;transition: 0.3s;' onclick='return showImageIns(this)' src="@item.Image2">
+
+                                }
+                                else
+                                {
+                                    <img style='width: 80px; height: 80px;border-radius: 5px;cursor: pointer;transition: 0.3s;' src="~/images/noimage.png">
+
+                                }
+                            </td>
+
+                            <td style="display:none">@count </td>
+
+                            @{ count++; }
+                        </tr>
+                    }
+
+                </tbody>
+            </table>
+
+
+
+        </div>
+    </div>
+</div>
+
+<div id="ImageModalInspection" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title"></h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12 d-flex justify-content-center align-items-center">
+                        <img id="imgNameIns" />
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@*}*@
+
+
+
+
+
+
+
+<script>
+    function showImageIns(param) {
+        var imgSrc = $(param).attr("src");
+        //alert(imgSrc);
+        $('#imgNameIns').attr('src', imgSrc);
+        $('#ImageModalInspection').modal('show');
+    }
+</script>
+<script language=Javascript>
+      <!--
+
+    function isNumberKey(evt) {
+
+        var charCode = (evt.which) ? evt.which : event.keyCode
+        if (charCode != 46 && charCode > 31 && (charCode < 48 || charCode > 57))
+            return false;
+
+        return true;
+    }
+
+    //-->
+</script>
+
+<script>
+    function goBack() {
+        window.history.back();
+    }
+</script>
+
+
+<script>
+    $('.pane-hScroll').scroll(function () {
+        $('.pane-vScroll').width($('.pane-hScroll').width() + $('.pane-hScroll').scrollLeft());
+    });
+
+    //// Example 2
+    //$('.pane--table2').scroll(function () {
+    //    $('.pane--table2 table').width($('.pane--table2').width() + $('.pane--table2').scrollLeft());
+    //});
+</script>
+
+
+
+
+
+
+
+

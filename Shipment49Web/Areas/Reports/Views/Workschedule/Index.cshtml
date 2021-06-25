@@ -1,0 +1,95 @@
+﻿
+@{
+    ViewBag.Title = "Reports";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<script type="text/javascript">
+    $(document).ready(
+        function () {
+            $("#btn").click(
+
+                function () {
+                    $("#loading").show();
+                    $(".bms").hide();
+                    debugger;
+                    $.get('<%= Url.Action("../Workschedule/Reports") %>', {},
+                        function (data) {
+                            $('#result').html(data);
+                            $('#loading').hide();
+                            $(".bms").show();
+                        });
+                }
+            );
+        }
+    );
+</script>
+
+
+<script type="text/javascript">
+    $(function () {
+        $("#search").autocomplete({
+            source: '@Url.Action("AutoCompletecrew", "Workschedule", "Reports")',
+            minLength: 1
+        });
+    });
+
+</script>
+
+
+
+
+
+
+
+<div class="page_title margin-3-bot" style="height:51px">
+    <h2> Work-Schedule Report</h2>
+    <p id="loading" style="display: none; margin-top:-33px; text-align-last:right;" height="Auto">
+        <img src="~/images/loader4.gif" height="40" />&nbsp;&nbsp; Please Wait...
+    </p>
+</div>
+<div class="white-bg margin-3 fleet">
+    @using (Html.BeginForm("index", "workschedule", FormMethod.Get, new { area = "Reports" }))
+    {
+        <div class="small-gutter row">
+            <div class="col-sm-3 col-xs-12 form-group">
+                <input type="text" name="search" id="search" value="@ViewBag.vname" class="form-control" placeholder="Vessel Name" />
+            </div>
+            <div class="col-sm-3 col-xs-6 form-group">
+                @Html.DropDownList("datefrom", (SelectList)@ViewBag.month, new { @class = "form-control" })
+            </div>
+            <div class="col-sm-3 col-xs-6 form-group">
+                @Html.DropDownList("dateto", (SelectList)@ViewBag.year as IEnumerable<SelectListItem>, new { @class = "form-control" })
+            </div>
+            <div class="col-sm-3 col-xs-12 form-group">
+                <button id="btn" type="submit" value="Search" class="btn peach-btn btn-block">Search</button>
+            </div>
+        </div>
+    }
+
+    @if (ViewBag.vname != "")
+    {
+        @Html.Partial("_ReportViewerWorkschedule")
+        <div id="message-listbm" class="bms">
+            <font> @TempData["barmala"]</font>
+        </div>
+    }
+    else
+    {
+        <div id="message-listbm" class="bms">
+            <font>@ViewBag.Messagegrid</font>
+        </div>
+    }
+
+
+    @*<div id="loading" style="display: none; text-align-last:center;">
+        <p>
+            Please Wait... &nbsp;&nbsp; <img src="~/images/loader4.gif" height="50" />
+
+        </p>
+    </div>*@
+
+</div>
+
+
+

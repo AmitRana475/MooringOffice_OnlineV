@@ -1,0 +1,85 @@
+﻿@model Reports.tblLooseEquipInspectionSetting
+
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_LeftSideBar.cshtml";
+}
+
+<div class="content-wrapper">
+    <section class="content-header">
+        <h1>
+            Loose Inspection Settings
+        </h1>
+        <p class="pull-right">
+            @Html.ActionLink("Back to List", "Index")
+        </p>
+    </section>
+
+    <section class="content">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="box box-info">
+                    <div class="box-body">
+                        <div class="row">
+                            @using (Html.BeginForm("Create", "LooseEquipInspectionSetting"))
+                            {
+                                @Html.AntiForgeryToken()
+                                @Html.HiddenFor(e => e.Id)
+
+                                <div class="form-horizontal">
+                                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+                                    <div class="form-group">
+                                        @Html.LabelFor(model => model.EquipmentType, "Equipment Type", htmlAttributes: new { @class = "control-label col-md-3" })
+                                        <div class="col-md-7">
+                                            @Html.DropDownListFor(model => model.EquipmentType, new SelectList(Model.EquipmentTypeLists, "Value", "Text"), htmlAttributes: new { @class = "form-control" })
+                                            @Html.ValidationMessageFor(model => model.EquipmentType, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        @Html.LabelFor(model => model.InspectionFrequency, "Inspection Frequency", htmlAttributes: new { @class = "control-label col-md-3" })
+                                        <div class="col-md-7">
+                                            @Html.EditorFor(model => model.InspectionFrequency, new { htmlAttributes = new { @class = "form-control" } })
+                                            @Html.ValidationMessageFor(model => model.InspectionFrequency, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        @Html.LabelFor(model => model.MaximumRunningHours, "Maximum Running Hours", htmlAttributes: new { @class = "control-label col-md-3" })
+                                        <div class="col-md-7">
+                                            @Html.EditorFor(model => model.MaximumRunningHours, new { htmlAttributes = new { @class = "form-control" } })
+                                            @Html.ValidationMessageFor(model => model.MaximumRunningHours, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        @Html.LabelFor(model => model.MaximumMonthsAllowed, "Maximum Months Allowed", htmlAttributes: new { @class = "control-label col-md-3" })
+                                        <div class="col-md-7">
+                                            @Html.EditorFor(model => model.MaximumMonthsAllowed, new { htmlAttributes = new { @class = "form-control" } })
+                                            @Html.ValidationMessageFor(model => model.MaximumMonthsAllowed, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <div class="col-md-offset-3 col-md-7">
+                                            <input type="submit" value="Create" class="btn btn-primary" />
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

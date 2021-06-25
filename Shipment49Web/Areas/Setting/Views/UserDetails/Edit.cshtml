@@ -1,0 +1,166 @@
+﻿@model Reports.UserInfo
+
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/_LeftSideBar.cshtml";
+}
+
+<script src="~/js/CommonScriptFunctions.js"></script>
+
+<script>
+
+    $(function () {
+        $("#divVessels").hide();
+        $("#divFleetTypes").hide();
+        $("#divFleetNames").hide();
+
+        var userRole = $("#UserRole option:selected").text();
+        if (userRole == "Admin") {
+            $("#PermissionGroup").hide();
+        }
+        else {
+            $("#PermissionGroup").show();
+        }
+    });
+
+    window.onload = function () {
+      
+        var userRole = $("#getrole").val();
+        debugger;
+        if (userRole == "ADMIN") {
+            $("#PermissionGroup").show();
+            $("#UserRole").prop('disabled', false);
+        }
+        else {
+            $("#PermissionGroup").hide();
+            $("#UserRole").prop('disabled', true);
+        }
+    };
+
+    $(function () {
+
+        var permissionType = $("#PermissionType").val();
+       
+        if (permissionType == "VESSELS") {
+            $("#rdVessel").prop("checked", true);
+            $("#divVessels").show();
+            $("#divFleetTypes").hide();
+            $("#divFleetNames").hide();
+        }
+        else if (permissionType == "FLEETTYPES") {
+            $("#rdFleetType").prop("checked", true);
+            $("#divVessels").hide();
+            $("#divFleetTypes").show();
+            $("#divFleetNames").hide();
+        }
+        else if (permissionType == "FLEETNAMES") {
+            $("#rdFleetName").prop("checked", true);
+            $("#divVessels").hide();
+            $("#divFleetTypes").hide();
+            $("#divFleetNames").show();
+        }
+        else {
+            $("#divVessels").hide();
+            $("#divFleetTypes").hide();
+            $("#divFleetNames").hide();
+        }
+    });
+
+</script>
+
+<div class="content-wrapper">
+    <section class="content-header">
+        <h1>
+            User Management
+        </h1>
+        <p class="pull-right">
+            @Html.ActionLink("Back to List", "Index", new { type = @ViewBag.Type })
+        </p>
+    </section>
+    <section class="content">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="box box-info">
+                    <div class="box-body">
+                        <div class="row">
+                            @using (Html.BeginForm("Edit", "UserDetails"))
+                            {
+                                @Html.AntiForgeryToken()
+                                @Html.HiddenFor(m => m.UserID)
+                                @Html.HiddenFor(m => m.PermissionType)
+
+                                <div class="form-horizontal">
+                                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                                    <div class="form-group">
+                                        @Html.LabelFor(model => model.UserRole, "User Role", htmlAttributes: new { @class = "control-label col-md-2" })
+                                        <div class="col-md-4">
+                                            @Html.DropDownListFor(model => model.UserRole, new SelectList(Model.UserRoles, "Value", "Text"), new { @class = "form-control" })
+                                            @Html.ValidationMessageFor(model => model.UserRole, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        @Html.LabelFor(model => model.EmailAddress, "Email Address", htmlAttributes: new { @class = "control-label col-md-2" })
+                                        <div class="col-md-4">
+                                            @Html.EditorFor(model => model.EmailAddress, new { htmlAttributes = new { @class = "form-control", @disabled = "true", @type = "email" } })
+                                            @Html.ValidationMessageFor(model => model.EmailAddress, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        @Html.LabelFor(model => model.FullName, "Full Name", htmlAttributes: new { @class = "control-label col-md-2" })
+                                        <div class="col-md-4">
+                                            @Html.EditorFor(model => model.FullName, new { htmlAttributes = new { @class = "form-control", @required = "true" } })
+                                            @Html.ValidationMessageFor(model => model.FullName, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        @Html.LabelFor(model => model.ContactNumber, "Contact Number", htmlAttributes: new { @class = "control-label col-md-2" })
+                                        <div class="col-md-4">
+                                            @Html.EditorFor(model => model.ContactNumber, new { htmlAttributes = new { @class = "form-control" } })
+                                            @Html.ValidationMessageFor(model => model.ContactNumber, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <input type="hidden" id="getrole" value="@ViewBag.Role" />
+                                    </div>
+                                    <div  class="form-group" id="PermissionGroup">
+                                        @Html.Label("Permission Types", htmlAttributes: new { @class = "control-label col-md-2" })
+                                        <div class="col-md-4">
+                                            <label class="radio-inline"><input type="radio" name="choose" id="rdAll">All</label>
+                                            <label class="radio-inline"><input type="radio" name="choose" id="rdVessel">Vessels</label>
+                                            <label class="radio-inline"><input type="radio" name="choose" id="rdFleetType">Fleet Types</label>
+                                            <label class="radio-inline"><input type="radio" name="choose" id="rdFleetName">Fleet Names</label>
+                                        </div>
+                                        @Html.Label("Permissions", htmlAttributes: new { @class = "control-label col-md-2", @id = "Choose" })
+                                        <div class="col-md-4">
+                                            <div id="divVessels">
+                                                <div>
+                                                    @Html.ListBoxFor(m => m.VesselIMOs, new SelectList(Model.VesselList, "ImoNo", "VesselName"), new { @class = "form-control listbox" })
+                                                </div>
+                                            </div>
+                                            <div id="divFleetTypes">
+                                                <div>
+                                                    @Html.ListBoxFor(m => m.FTypeIDs, new SelectList(Model.FleetTypeList, "Id", "Name"), new { @class = "form-control listbox" })
+                                                </div>
+                                            </div>
+                                            <div id="divFleetNames">
+                                                <div>
+                                                    @Html.ListBoxFor(m => m.FNameIDs, new SelectList(Model.FleetNameList, "Id", "Name"), new { @class = "form-control listbox" })
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="col-md-offset-2 col-md-10">
+                                            <input type="submit" value="Save" class="btn btn-primary" />
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+

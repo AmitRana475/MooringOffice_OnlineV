@@ -1,0 +1,107 @@
+﻿@{
+    ViewBag.Title = "Confirmation";
+    Layout = "~/Views/Shared/_LeftSideBar.cshtml";
+}
+
+<div class="content-wrapper">
+    <section class="content-header">
+        <h1>
+            Confirmation
+        </h1>
+    </section>
+    <section class="content">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="box box-info">
+                    <div class="box-body">
+                        <div class="row">
+                            <div style="min-height: 200px; margin: 20px 20px 20px 20px">
+                                @*@TempData["Result"]*@
+                                @if (TempData["Result"] != null)
+                                {
+                                    <p style="font-weight:bold" id="ResultMessage">@TempData["Result"]</p>
+                                }
+                                @if (TempData["Error"] != null)
+                                {
+                                    <p style="color:red" id="errorMessage">@TempData["Error"]</p>
+                                }
+                                @if (TempData["Success"] != null)
+                                {
+                                    <p style="color:green" class="alert alert-success" id="successMessage">@TempData["Success"]</p>
+                                    <input type="hidden" id="Pchange" value="@TempData["Success"]" />
+                                }
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+<script>
+
+    window.onload = function () {
+        var success = $("#Pchange").val();
+       
+        if (success != "") {
+            alert('Your Current Session Expired. Please login again.');
+
+            var abc = '@Url.Action("SignOut", "Account")';
+            var path = abc.replace('/setting','');
+            // SessionExp
+
+            $.ajax({
+                type: 'POST',
+                url: path,
+
+                 dataType: 'json',
+                // url: '/Account/SignOut',
+                //data: { 'Id': Id },
+                success: function (response) {
+                    if (response.Result == true) {
+                       // window.location.href = "/Account/Login/"
+                    }
+                    else {
+                        //alert('An Error has occured. Please try again.');
+                    }
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+
+                    // alert('An Error has occured. Please try again.');
+                }
+            });
+
+
+
+        }
+
+    };
+
+    @*function Update() {
+        alert('out');
+
+        $.ajax({
+            type: 'GET',
+             url: @Url.Action("SignOut", "Account"),
+            datatype: "html",
+           // dataType: 'json',
+           // url: '/Account/SignOut',
+            //data: { 'Id': Id },
+            success: function (response) {
+                if (response.Result == true) {
+                    debugger;
+                }
+                else {
+                    //alert('An Error has occured. Please try again.');
+                }
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+
+                // alert('An Error has occured. Please try again.');
+            }
+        });
+    };*@
+
+</script>

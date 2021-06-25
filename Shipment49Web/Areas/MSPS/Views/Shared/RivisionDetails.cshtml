@@ -1,0 +1,89 @@
+﻿@model Shipment49Web.Areas.MSPS.Models.RevisionIndex
+@using System.Text.RegularExpressions;
+
+<link rel="stylesheet" href="~/css/style.css">
+<table class="table table-striped">
+	<thead>
+		<tr>
+			<th class="text-center">S.No.</th>
+
+			<th>Created Date</th>
+			<th>Revision Details</th>
+			<th>Change By</th>
+			<th>Approve By</th>
+			<th>Approved Date</th>
+
+
+
+
+
+		</tr>
+	</thead>
+	<tbody>
+		@{Int32 count = 0; string correctContent = "";}
+		@if (Model.revisionViewListing != null)
+		{
+			foreach (var m in Model.revisionViewListing)
+			{
+				correctContent = Regex.Replace(@m.Content, "<.*?>", String.Empty);
+
+			<tr>
+				<td>@(count += 1)</td>
+				<td>@m.CreatedDate</td>
+				<td><a href="javascript:void(0)" onclick="ViewRevisionDetails('@m.DocsId')"> @m.DocumentName >> @m.PageTitle >> @m.RNumber </a></td>
+				@*<td>@m.PageTitle</td>*@
+
+
+				@*<td title="@correctContent">@(correctContent == null ? "" : correctContent.Length > 50 ? correctContent.Substring(0, 50) + "..." : correctContent )</td>*@
+				@*<td>@correctContent</td>*@
+				<td>@m.CreatedBy</td>
+				<td>@m.ApprovedBy</td>
+				<td>@m.ApprovedDate</td>
+
+
+
+
+
+
+			</tr>
+
+
+
+			}
+		}
+
+	</tbody>
+</table>
+
+
+<div style="display:none" class="container--compare-blocks">
+	<div class="compare-block compare-block-two">
+		<header class="small-title">2nd HTML Block</header>
+		<!-- element containing our 2nd set of html for comparison -->
+		<div class="block" id="block2">
+
+			<div>@Model.Content </div>
+		</div>
+	</div>
+	<div style="display:none" class="compare-block compare-block-one">
+		<header class="small-title">1st HTML Block</header>
+		<!-- element containing our 1st set of html for comparison -->
+		<div class="block" id="block1">
+
+			<div>@Model.Content1 </div>
+		</div>
+	</div>
+</div>
+
+<div style="margin-top:60px">
+	<article style="margin-top:20px" class="container--diff">
+		<header style="text-align:center" class="title">
+			Revision Details
+		</header>
+		<!-- results of our comparison will be inserted here -->
+		<section id="diff" class="diff"></section>
+	</article>
+</div>
+
+<script src="~/js/libs/jquery-1.11.1.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="~/js/index.js" type="text/javascript" charset="utf-8"></script>

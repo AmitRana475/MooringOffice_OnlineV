@@ -1,0 +1,40 @@
+﻿@model IEnumerable<NotificationLayer.CommentClass>
+
+@{
+
+    var grid = new WebGrid(canPage: true, rowsPerPage: 10);
+    grid.Bind(source: Model, rowCount: ViewBag.TotalRows, autoSortAndPage: false);
+}
+
+@{
+    if (!string.IsNullOrWhiteSpace(grid.SortColumn))
+    {
+        <script type="text/javascript">
+            $(document).ready(function () {
+
+                $('thead > tr > th > a[href*="sort=@grid.SortColumn"]').parent().append('@(grid.SortDirection == SortDirection.Ascending ? "▲" : "▼")');
+
+            });
+        </script>
+    }
+}
+
+<div>
+    @grid.Table(
+    tableStyle: "table table-responsive table-borderd",
+    columns:
+    grid.Columns(
+        grid.Column(columnName: "CDate", header: "Comment Date", format: item => item.CDate.ToString("dd-MMM-yyyy")),
+        grid.Column(columnName: "Comment", header: "Comment"),
+        grid.Column(columnName: "CommentBy", header: "Comment By")
+        ))
+
+    <div class="row">
+        <div class="col-sm-6">
+            @grid.PagerList(mode: WebGridPagerModes.All, paginationStyle: "pagination pagination-small pagination-small")
+        </div>
+    </div>
+    @*@Html.Hidden("dir", grid.SortDirection)
+    @Html.Hidden("col", grid.SortColumn)*@
+
+</div>

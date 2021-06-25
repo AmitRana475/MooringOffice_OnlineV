@@ -1,0 +1,109 @@
+﻿
+@{
+    ViewBag.Title = "Comment";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+        
+}
+
+
+@*<script type="text/javascript">
+
+    $(document).ready(function () {
+        var dir = $('#dir').val();
+        var col = $('#col').val();
+
+        var header = $('th a[href*=' + col + ']');
+        if (dir == 'Ascending') {
+            header.text(header.text() + ' ▲');
+        }
+        if (dir == 'Descending') {
+            header.text(header.text() + ' ▼');
+        }
+
+
+    });
+</script>*@
+
+
+<div class="page_title margin-3-bot">
+    <h2> Comment List</h2>
+</div>
+<div class="white-bg margin-3 fleet">
+    <div class="row margin-4-bot">
+        <div class="col-sm-2 col-xs-12">
+            @Ajax.ActionLink("Comment New", "create", "deviations", new { area = "notification", id = ViewBag.Nid }, null, new { @class = "btn btn-success btn-block" })
+        </div>
+        <div class="col-sm-6 col-xs-12 pull-right">
+            <div class="navbar-collapse">
+                @using (Html.BeginForm("comment", "deviations", FormMethod.Get, new { area = "notification", @class = "navbar-form navbar-right" }))
+                {
+                    <div class="form-group">
+                        <input type="text" name="search" class="form-control" placeholder="Comment By" />
+                    </div>
+                    <button type="submit" value="search" class="btn peach-btn">Search</button>
+                }
+
+            </div>
+        </div>
+    </div>
+
+    @Html.Partial("_comment")
+
+
+    <div id="message-listbm">
+        <font>@ViewBag.Messagegrid</font>
+    </div>
+    <div class="back_text margin-5-top">
+        <i class="fa fa-chevron-left"></i>&nbsp; @Ajax.ActionLink("Back to List", "Index", new { page = @ViewBag.page, fleettype = @ViewBag.fleettype, fleetname = @ViewBag.fleetname, search = @ViewBag.vname, datefrom = @ViewBag.datefrom, dateto = @ViewBag.dateto }, null)
+    </div>
+
+</div>
+
+
+
+
+@*<h2>comment</h2>
+
+    <p>
+        @Html.ActionLink("Create New", "Create")
+    </p>
+    <table class="table">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Nid)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Comment)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CommentBy)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CDate)
+            </th>
+            <th></th>
+        </tr>
+
+    @foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Nid)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Comment)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CommentBy)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CDate)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id=item.Cid }) |
+                @Html.ActionLink("Details", "Details", new { id=item.Cid }) |
+                @Html.ActionLink("Delete", "Delete", new { id=item.Cid })
+            </td>
+        </tr>
+    }
+
+    </table>*@

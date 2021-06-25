@@ -1,0 +1,128 @@
+﻿@model List<UserLayer.ImportLogClass>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    var grid = new WebGrid(canPage: true, canSort: true, rowsPerPage: 10);
+    grid.Bind(source: Model, rowCount: ViewBag.TotalRows, autoSortAndPage: false);
+}
+
+@{
+    if (!string.IsNullOrWhiteSpace(grid.SortColumn))
+    {
+        <script type="text/javascript">
+            $(document).ready(function () {
+
+                $('#gridImportlog > thead > tr > th > a[href*="sort=@grid.SortColumn"]').parent().append('@(grid.SortDirection == SortDirection.Ascending ? "▲" : "▼")');
+
+            });
+        </script>
+    }
+}
+
+<div class="page_title margin-3-bot">
+    <h2>Import-Log Details</h2>
+</div>
+<div class="white-bg margin-3 fleet clearfix">
+    <div class="row margin-3-bot">
+        <div class="col-sm-6 pull-right">
+            @using (Html.BeginForm("index", "importlog", FormMethod.Get, new { area = "setting", @class = "navbar-form navbar-right" }))
+            {
+
+                <div class="form-group">
+                    <input type="text" name="search" id="search" value="@ViewBag.search" class="form-control" placeholder="Vessel Name,Imported by " />
+                </div>
+                <button type="submit" value="Search" class="btn peach-btn">Search</button>
+            }
+        </div>
+    </div>
+
+
+    @grid.Table(
+                     htmlAttributes: new
+                     {
+                         id = "gridImportlog"
+                     },
+                        tableStyle: "table table-responsive table-borderd",
+                        columns:
+                        grid.Columns(
+
+                            grid.Column(columnName: "VesselName", header: "Vessel Name"),
+                            grid.Column(columnName: "DateImported", header: "Last Import", format: item => item.DateImported.ToString("dd-MMM-yyyy")),
+                            grid.Column(columnName: "DataAvailbleTill", header: "Last Data Available Till", format: item => item.DataAvailbleTill != null ? item.DataAvailbleTill.ToString("dd-MMM-yyyy") : "Data Not Available"),
+                            grid.Column(columnName: "DateImportFrom", header: "Date Import From", format: item => item.DateImportFrom != null ? item.DateImportFrom.ToString("dd-MMM-yyyy") : "Data Not Available"),
+                            grid.Column(columnName: "DateImportTo", header: "Date Import To", format: item => item.DateImportTo != null ? item.DateImportTo.ToString("dd-MMM-yyyy") : "Data Not Available"),
+                             grid.Column(columnName: "Filenames", header: "File Name"),
+                            grid.Column(columnName: "ImportedBy", header: "Imported By")
+
+
+                            ))
+
+    <div class="row">
+        <div class="col-xs-12 text-right">
+            @grid.PagerList(mode: WebGridPagerModes.All, paginationStyle: "pagination pagination-small pagination-small")
+        </div>
+    </div>
+    @*@Html.Hidden("dir", grid.SortDirection)
+        @Html.Hidden("col", grid.SortColumn)*@
+
+    <div id="message-listbm">
+        <font>@ViewBag.Messagegrid</font>
+    </div>
+
+</div>
+
+
+
+
+
+@*<p>
+        @Html.ActionLink("Create New", "Create")
+    </p>
+    <table class="table">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.DateImported)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DateImportFrom)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DateImportTo)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.VesselName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DataAvailbleTill)
+            </th>
+            <th></th>
+        </tr>
+
+    @foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.DateImported)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DateImportFrom)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DateImportTo)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.VesselName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DataAvailbleTill)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
+                @Html.ActionLink("Details", "Details", new { id=item.Id }) |
+                @Html.ActionLink("Delete", "Delete", new { id=item.Id })
+            </td>
+        </tr>
+    }
+
+    </table>*@

@@ -1,0 +1,153 @@
+﻿@model List<AnalysisLayer.ChartData>
+
+@{
+
+    var grid = new WebGrid(canPage: true, rowsPerPage: 10);
+    grid.Bind(source: Model, rowCount: ViewBag.TotalRows, autoSortAndPage: false);
+}
+
+@*<script type="text/javascript">
+    $(function () {
+        // clone table to display "before"
+        // var beforeTable = $('#example').clone().removeAttr('id').appendTo('#before')
+        // code for grouping in "after" table
+        var $rows = $('#example tbody tr');
+        var items = [],
+         itemtext = [],
+        currGroupStartIdx = 0;
+        $rows.each(function (i) {
+            var $this = $(this);
+            var itemCell = $(this).find('td:eq(0)')
+            var item = itemCell.text();
+            itemCell.remove();
+            if ($.inArray(item, itemtext) === -1) {
+                itemtext.push(item);
+                items.push([i, item]);
+                groupRowSpan = 1;
+                currGroupStartIdx = i;
+                $this.data('rowspan', 1)
+            } else {
+                var rowspan = $rows.eq(currGroupStartIdx).data('rowspan') + 1;
+                $rows.eq(currGroupStartIdx).data('rowspan', rowspan);
+            }
+
+        });
+
+
+
+        $.each(items, function (i) {
+            var $row = $rows.eq(this[0]);
+            var rowspan = $row.data('rowspan');
+            $row.prepend('<td rowspan="' + rowspan + '">' + this[1] + '</td>');
+        });
+
+
+    });
+
+</script>*@
+
+@{
+    if (!string.IsNullOrWhiteSpace(grid.SortColumn))
+    {
+        <script type="text/javascript">
+            $(document).ready(function () {
+
+                $('thead > tr > th > a[href*="sort=@grid.SortColumn"]').parent().append('@(grid.SortDirection == SortDirection.Ascending ? "▲" : "▼")');
+
+            });
+        </script>
+    }
+}
+
+<div id="example">
+
+
+    @grid.Table(
+           tableStyle: "table table-responsive table-borderd",
+
+           columns:
+              grid.Columns(
+
+            grid.Column(columnName: "VesselName", header: "Vessel Name"),
+                  grid.Column(columnName: "Deviation", header: "Deviation"),
+                  grid.Column(columnName: "Work", header: "Work Hours"),
+                  grid.Column(columnName: "Rest", header: "Rest Hours"),
+
+                   grid.Column("", style: "button action_text ", header: "Action",
+                          format:
+                        @<text >
+                         @Ajax.ActionLink("Statistical", "statistical", new { controller = "statisticaltrendview", area = "Analysis", vesselname = item.VesselName, rank = ViewBag.rankbm1, datefrom = ViewBag.datefrom, dateto = ViewBag.dateto }, null) |
+                        @Ajax.ActionLink("Graphical", "detail", new { controller = "statisticaltrendview", area = "Analysis", vesselname = item.VesselName, rank= ViewBag.rankbm1, datefrom = ViewBag.datefrom, dateto= ViewBag.dateto }, null) 
+                   
+                        </text>)
+
+
+               ))
+
+             
+
+
+
+    <div class="row">
+        <div class="col-sm-6">
+            @grid.PagerList(mode: WebGridPagerModes.All, paginationStyle: "pagination pagination-small pagination-small")
+        </div>
+    </div>
+    @*@Html.Hidden("dir", grid.SortDirection)
+    @Html.Hidden("col", grid.SortColumn)*@
+
+</div>
+
+@*<table class="table">
+        <tr>
+
+
+            <th>
+                Vessel Name
+            </th>
+
+            <th>
+                Rank/Position
+            </th>
+            <th>
+                Deviation
+            </th>
+
+            <th>
+                Work Hours
+            </th>
+
+            <th>
+                Rest Hours
+            </th>
+
+
+        </tr>
+
+        @foreach (var item in Model)
+            {
+            <tr>
+                @Html.HiddenFor(modelItem => item.VesselId)
+                <td>
+                    @Html.DisplayFor(modelItem => item.VesselName)
+                </td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.Rank)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Deviation)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Work)
+                </td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.Rest)
+                </td>
+
+
+            </tr>
+        }
+
+    </table>*@

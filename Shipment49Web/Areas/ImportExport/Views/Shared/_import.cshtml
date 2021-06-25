@@ -1,0 +1,79 @@
+﻿<h3 class="heading-s2">
+    Import File
+</h3>
+<div class="row">
+    @*<div class="col-sm-12 form-group">
+            <input type="file" name="photo" id="photo" multiple />
+        </div>*@
+    <div class="col-sm-12 form-group">
+        <input type="file" name="photo" id="photo" onchange="check()" multiple />
+        @*<input type="file" name="photo" id="photo" onchange="check()" accept="application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" />*@
+     
+    </div>
+
+    <div class="clearfix"></div>
+    <div class="col-sm-4">
+        <input name="submit" type="submit" value="Import Text" id="Import" class="btn peach-btn btn-block btn-info" />
+    </div>
+    <div class="col-sm-4">
+        <input name="submit" type="submit" value="Import Attachments" id="Import" class="btn peach-btn btn-block btn-warning" />
+    </div>
+</div>
+@*<div align="center" id="jigsawbar" style="width: 100px; margin-left: 200px; height: 18px;max-height: 18px"></div>*@
+<div align="center" style="height:51px">
+    <p id="loading" style="display: none; margin-top:-33px; text-align-last:center;" height="Auto">
+        <img src="~/images/loader4.gif" height="40" />&nbsp;&nbsp; Please Wait...
+    </p>
+</div>
+<div align="center" id="bmsname1">
+    @* <h4  style="color: Red">@ViewBag.bmsname</h4>*@
+    @Html.Partial("_importexport")
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#photo').change(function () {
+            var fp = $("#photo");
+            var lg = fp[0].files.length; // get length
+            var items = fp[0].files;
+            var fileSize = 0;
+            var fileName = document.getElementById('photo').value.tolowerCase();
+            if (!fileName.endsWith('.xlsx') && !fileName.endsWith('.xls')) {
+                alert('Please upload excel file only.');
+                document.getElementById("photo").value = null;
+                return false;
+            }
+            if (lg > 0) {
+                for (var i = 0; i < lg; i++) {
+                    fileSize = fileSize + items[i].size; // get file size
+                }
+                if (fileSize >= 10485760) {
+                    alert('File size must not be more than 10 MB');
+                    $('#photo').val('');
+                }
+            }
+
+        });
+    });
+</script>
+
+
+
+
+
+
+
+
+
+
+
+@*<script>
+        function check() {
+            var fileName = document.getElementById('photo').value.toLowerCase();
+            if (!fileName.endsWith('.xlsx') && !fileName.endsWith('.xls')) {
+                alert('Please upload excel file only.');
+                document.getElementById("photo").value = null;
+                return false;
+            }
+        }
+    </script>*@

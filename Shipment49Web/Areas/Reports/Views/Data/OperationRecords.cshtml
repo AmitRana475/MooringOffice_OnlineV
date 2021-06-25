@@ -1,0 +1,246 @@
+﻿@model Shipment49Web.Areas.CrewReport.Controllers.FilterModel
+
+@{
+    ViewBag.Title = "Operation Records";
+    Layout = "~/Views/Shared/_LeftSideBar.cshtml";
+}
+
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+
+<script>
+
+    $(function () {
+        $('.dtpicker').datepicker({
+            autoclose: true, dateFormat: 'dd-mm-yy'
+        })
+    });
+
+
+    function getDamages(opid) {
+        $.ajax({
+            type: 'GET',
+            url: '/data/ViewDamageRecords?opid=' + opid,
+            cache: false,
+            contentType: false,
+            processData: false,
+            success: function (response) {
+                if (response.Result == true) {
+                    $('#ropeData').empty();
+                    var tr;
+                    for (var i = 0; i < response.Data.length; i++) {
+
+                        tr = $('<tr/>');
+                        tr.append("<td>" + response.Data[i].CertificateNumber + "</td>");
+                        tr.append("<td>" + response.Data[i].AssignedNumber + "</td>");
+                        tr.append("<td>" + response.Data[i].AssignedLocation + "</td>");
+                        tr.append("<td>" + response.Data[i].IncidentReport + "</td>");
+                        tr.append("<td>" + response.Data[i].IncidentActlion + "</td>");
+
+                        $('#ropeData').append(tr);
+                    }
+                    $('#DamageRopeModal').modal('show');
+                }
+                else {
+                    toastr["error"](response.Message);
+                }
+            },
+            failure: function (response) {
+                toastr["error"](response.Message);
+            }
+        });
+    }
+
+    function getOperations(opid) {
+        $.ajax({
+            type: 'GET',
+            url: '/data/GetOperationDetails?opid=' + opid,
+            cache: false,
+            contentType: false,
+            processData: false,
+            success: function (response) {
+                if (response.Result == true) {
+                    $('#opDetails1').empty();
+                    $('#opDetails2').empty();
+
+                    $('#opDetails1').append("<dt>Port Name</dt><dd>" + response.Data.PortName + "</dd>");
+                    $('#opDetails1').append("<dt>Birth Name</dt><dd>" + response.Data.BirthName + "</dd>");
+                    $('#opDetails1').append("<dt>Birth Type</dt><dd>" + response.Data.BirthType + "</dd>");
+                    $('#opDetails1').append("<dt>Fast DateTime</dt><dd>" + response.Data.FastDatetime + "</dd>");
+                    $('#opDetails1').append("<dt>Cast DateTime</dt><dd>" + response.Data.CastDatetime + "</dd>");
+                    $('#opDetails1').append("<dt>Mooring Type</dt><dd>" + response.Data.MooringType + "</dd>");
+                    $('#opDetails1').append("<dt>Draft Arrival FWD</dt><dd>" + response.Data.DraftArrivalFWD + "</dd>");
+                    $('#opDetails1').append("<dt>Draft Arrival AWT</dt><dd>" + response.Data.DraftArrivalAWT + "</dd>");
+                    $('#opDetails1').append("<dt>Draft Departure FWD</dt><dd>" + response.Data.DraftDepartureFWD + "</dd>");
+                    $('#opDetails1').append("<dt>Draft Departure AFT</dt><dd>" + response.Data.DraftDepartureAWT + "</dd>");
+                    $('#opDetails1').append("<dt>Depth at Birth</dt><dd>" + response.Data.DepthAtBerth + "</dd>");
+                    $('#opDetails1').append("<dt>Berth Side</dt><dd>" + response.Data.BerthSide + "</dd>");
+
+                    $('#opDetails2').append("<dt>Vessel Condition</dt><dd>" + response.Data.VesselCondition + "</dd>");
+                    $('#opDetails2').append("<dt>Ship Access</dt><dd>" + response.Data.ShipAccess + "</dd>");
+                    $('#opDetails2').append("<dt>Range of Tide</dt><dd>" + response.Data.RangOfTide + "</dd>");
+                    $('#opDetails2').append("<dt>Wind Direction</dt><dd>" + response.Data.WindDirection + "</dd>");
+                    $('#opDetails2').append("<dt>Wind Speed</dt><dd>" + response.Data.WindSpeed + "</dd>");
+                    $('#opDetails2').append("<dt>Any Squall</dt><dd>" + response.Data.AnySquall + "</dd>");
+                    $('#opDetails2').append("<dt>Current Speed</dt><dd>" + response.Data.CurrentSpeed + "</dd>");
+                    $('#opDetails2').append("<dt>Berth Exposed SeaSwell</dt><dd>" + response.Data.Berth_exposed_SeaSwell + "</dd>");
+                    $('#opDetails2').append("<dt>Surging Observed</dt><dd>" + response.Data.SurgingObserved + "</dd>");
+                    $('#opDetails2').append("<dt>Any Affect Passing Traffic</dt><dd>" + response.Data.Any_Affect_Passing_Traffic + "</dd>");
+                    $('#opDetails2').append("<dt>Ship Fender Contact</dt><dd>" + response.Data.Ship_was_continuously_contact_with_fender + "</dd>");
+                    $('#opDetails2').append("<dt>Any Rope Damaged</dt><dd>" + response.Data.Any_Rope_Damaged + "</dd>");
+                    $('#OperationModal').modal('show');
+                }
+                else {
+                    toastr["error"](response.Message);
+                }
+            },
+            failure: function (response) {
+                toastr["error"](response.Message);
+            }
+        });
+    }
+
+</script>
+
+<div class="content-wrapper">
+    <section class="content-header">
+        <h1>
+            Operation Records
+        </h1>
+    </section>
+
+    <section class="content">
+        <div class="box box-info">
+            <div class="box-body">
+                <div class="row">
+                    @using (Html.BeginForm("RopeInspReport", "data", FormMethod.Post, new { area = "Reports" }))
+                    {
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                @Html.TextBox("DateFrom", Model.DateFrom, new { @class = "form-control dtpicker", @placeholder = "Date From" })
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                @Html.TextBox("DateTo", Model.DateUpto, new { @class = "form-control dtpicker", @placeholder = "Date To" })
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <div style="float:right">
+                                    <button type="submit" class="btn btn-danger">Search</button>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="box box-default">
+                    <div class="box-body">
+                        <div class="table-responsive table-striped">
+                            <table class="table no-margin" id="dataTable" width="100%" cellspacing="0">
+                                <thead>
+                                    <tr>
+                                        <th>Port Name</th>
+                                        <th>All Fast</th>
+                                        <th>Cast Off</th>
+                                        <th>Berth Name</th>
+                                        <th>View Damage Rope</th>
+                                        <th>View Mooring OP</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @{
+                                        foreach (var record in Model.ListOperationRecords)
+                                        {
+                                            <tr>
+                                                <td>@record.PortName</td>
+                                                <td>@record.FastDatetime</td>
+                                                <td>@record.CastDatetime</td>
+                                                <td>@record.BirthName</td>
+                                                <td>
+                                                    <button id="@record.OPId" title="View Details" type="button" class="btn btn-link"
+                                                            onclick="getDamages('@record.OPId')">
+                                                        <i class="fa fa-info"></i>
+                                                    </button>
+                                                </td>
+                                                <td>
+                                                    <button id="@record.OPId" title="View Details" type="button" class="btn btn-link"
+                                                            onclick="getOperations('@record.OPId')">
+                                                        <i class="fa fa-info"></i>
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        }
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+<div id="DamageRopeModal" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Damaged Rope List</h4>
+            </div>
+            <div class="modal-body">
+                <div class="table-responsive">
+                    <table class="table no-margin" width="100%" cellspacing="0">
+                        <thead>
+                            <tr>
+                                <th>Certificate No.</th>
+                                <th>Assigned Winch</th>
+                                <th>Assigned Location</th>
+                                <th>Incident Report</th>
+                                <th>Incident Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="ropeData">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="OperationModal" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Mooring Operation</h4>
+            </div>
+            <div class="modal-body">
+                <div class="box-body">
+                    <div class="col-md-12">
+                        <div class="col-md-6">
+                            <dl class="dl-horizontal" id="opDetails1">
+                            </dl>
+                        </div>
+                        <div class="col-md-6">
+                            <dl class="dl-horizontal" id="opDetails2">
+                            </dl>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,1028 @@
+﻿@model Shipment49Web.Common.RopeSummaryReport
+
+@{
+    ViewBag.Title = "Rope Summary";
+    Layout = "~/Views/Shared/_LeftSideBar.cshtml";
+}
+
+<style>
+
+  
+    iframe {
+        height: 500px;
+        width: 500px;
+    }
+
+
+    body {
+        font-family: Arial, Helvetica, sans-serif;
+    }
+
+    .icon-content {
+        border-radius: 5px;
+        cursor: pointer;
+        transition: 0.3s;
+    }
+
+        .icon-content:hover {
+            opacity: 0.7;
+        }
+
+    /* The Modal (background) */
+    .modal {
+        display: none; /* Hidden by default */
+        position: fixed; /* Stay in place */
+        /*z-index: 1;*/ /* Sit on top */
+        padding-top: 75px; /* Location of the box */
+        left: 0;
+        top: 0;
+        width: 100%; /* Full width */
+        height: 100%; /* Full height */
+        overflow: auto; /* Enable scroll if needed */
+        background-color: rgb(0,0,0); /* Fallback color */
+        background-color: rgba(0,0,0,0.9); /* Black w/ opacity */
+    }
+
+    /* Modal Content (image) */
+    .modal-content {
+        margin: auto;
+        display: block;
+        width: 100%;
+        max-width: 700px;
+    }
+
+    /* Caption of Modal Image */
+    #caption {
+        margin: auto;
+        display: block;
+        width: 80%;
+        max-width: 700px;
+        text-align: center;
+        color: #ccc;
+        padding: 10px 0;
+        height: 150px;
+    }
+
+    /* Add Animation */
+    .modal-content, #caption {
+        -webkit-animation-name: zoom;
+        -webkit-animation-duration: 0.6s;
+        animation-name: zoom;
+        animation-duration: 0.6s;
+    }
+
+    -webkit-keyframes zoom {
+        from
+
+    {
+        -webkit-transform: scale(0)
+    }
+
+    to {
+        -webkit-transform: scale(1)
+    }
+
+    }
+
+    keyframes zoom {
+        from
+
+    {
+        transform: scale(0)
+    }
+
+    to {
+        transform: scale(1)
+    }
+
+    }
+
+    /* The Close Button */
+    .close {
+        position: absolute;
+        top: 15px;
+        right: 35px;
+        color: #f1f1f1;
+        font-size: 40px;
+        font-weight: bold;
+        transition: 0.3s;
+    }
+
+        .close:hover,
+        .close:focus {
+            color: #bbb;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+    /* 100% Image Width on Smaller Screens */
+    media only screen and (max-width: 700px) {
+        .modal-content
+
+    {
+        width: 100%;
+    }
+    }
+</style>
+
+
+<div class="content-wrapper">
+    <section class="content-header">
+
+        @if (@ViewBag.IsTail == 0)
+        {
+            <h1>Line Summary</h1>
+        }
+        else
+        {
+            <h1>Rope-Tail Summary</h1>
+        }
+
+    </section>
+    @{
+        int count = 0;
+    }
+    <section class="content">
+
+        <div class="box box-info">
+            <div class="box-body">
+                @{
+                    count = Model.RopesDetailList.Count;
+                    if (count == 0)
+                    {
+                        <div class="panel-group">
+                            <div class="panel panel-info">
+                                <div class="panel-body">
+                                    <p class="text-center">
+                                        No Records Found!
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="table-responsive table-striped">
+                            <table class="table no-margin" id="dataTable" width="100%" cellspacing="0">
+                                <tbody>
+                                    @foreach (var record in Model.RopesDetailList)
+                                    {
+                                        <tr>
+                                            <th>Vessel Name</th>
+                                            <th>Rope Type</th>
+                                            <th>Unique ID</th>
+                                            <th>Certificate Number</th>
+                                            <th>Manufacturer</th>
+                                            <th>Rope Construction</th>
+                                            <th>Received Date</th>
+                                            <th>Installed Date</th>
+                                            <th>Inspection Due Date</th>
+                                        </tr>
+                                        <tr>
+                                            <td>@record.VesselName</td>
+                                            <td>@record.RopeType</td>
+                                            <td>@record.UniqueID</td>
+                                            <td>@record.CertificateNumber</td>
+                                            <td>@record.Manufacturer</td>
+                                            <td>@record.RopeConstruction</td>
+                                            <td>
+                                                @{
+                                                    DateTime? rcvd_dt = record.ReceivedDate;
+                                                    if (rcvd_dt != null)
+                                                    {
+                                                        @Html.Raw(rcvd_dt.Value.ToString("dd-MMM-yyyy"))
+                                                    }
+                                                }
+                                            </td>
+                                            <td>
+                                                @{
+                                                    DateTime? inst_dt = record.InstalledDate;
+                                                    if (inst_dt != null)
+                                                    {
+                                                        @Html.Raw(inst_dt.Value.ToString("dd-MMM-yyyy"))
+                                                    }
+                                                }
+                                            </td>
+                                            <td>
+                                                @{
+                                                    DateTime? insp_dt = record.InspectionDueDate;
+                                                    if (insp_dt != null)
+                                                    {
+                                                        @Html.Raw(insp_dt.Value.ToString("dd-MMM-yyyy"))
+                                                    }
+                                                }
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th>Diameter</th>
+                                            <th>Length</th>
+                                            <th>MBL</th>
+                                            <th>LDBF</th>
+                                            <th>WLL</th>
+                                            <th>Rope Tagging</th>
+                                            <th>Curr Running Hrs</th>
+                                            <th>Cost (in $)</th>
+                                            <th>Attachment</th>
+                                        </tr>
+                                        <tr>
+                                            <td>@record.DiaMeter</td>
+                                            <td>@record.Length</td>
+                                            <td>@record.MBL</td>
+                                            <td>@record.LDBF</td>
+                                            <td>@record.WLL</td>
+                                            <td>@record.RopeTagging</td>
+                                            <td>@record.CurrentRunningHours</td>
+                                            <td>
+                                                @{
+                                                    if (record.CostUsd != null)
+                                                    {
+                                                        @Html.Raw(Convert.ToDecimal(string.Format("{0:F2}", record.CostUsd)));
+                                                    }
+                                                }
+                                            </td>
+                                            <td>
+                                                @if (Model.RopeAttachment != "No Attachment")
+                                                {
+
+                                                    var extn = Model.RopeAttachment.Split('.').Last();
+
+
+                                                    if (extn == "jpg" || extn == "JPG" || extn == "jpeg" || extn == "JPEG" || extn == "png" || extn == "PNG" || extn == "TIFF" || extn == "RAW" || extn == "BMP" || extn == "SVG" || extn == "PSD")
+                                                    {
+
+                                                        <a onclick='return showImages(this.id)' style="cursor:pointer" id="~/images/AttachFiles/@Model.RopeAttachment">View Attachment</a>
+                                                    }
+                                                    else if (extn == "pdf" || extn == "PDF")
+                                                    {
+                                                        <a onclick='return showpdf(this.id)' style="cursor:pointer" id="~/images/AttachFiles/@Model.RopeAttachment">View Attachment</a>
+
+                                                    }
+                                                    else
+                                                    {
+                                                        <a target="_blank" href="~/images/AttachFiles/@Model.RopeAttachment">View Attachment</a>
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    <a>No Attachment</a>
+                                                    //"No Attachment";
+                                                }
+
+
+
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+                }
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="box box-default">
+                    <div class="box-body">
+                        <div class="nav-tabs-custom">
+                            <ul class="nav nav-tabs">
+                                <li class="active"><a href="#ropeinspected" class="tablinks" data-toggle="tab">Inspection</a></li>
+                                @if (@ViewBag.IsTail == 0)
+                                {
+                                    <li><a href="#ropeendtoend" class="tablinks" data-toggle="tab">End to End</a></li>
+                                    <li><a href="#ropeWinchRotation" class="tablinks" data-toggle="tab">Winch Rotation</a></li>
+                                }
+                                <li><a href="#ropesplicing" class="tablinks" data-toggle="tab">Splicing</a></li>
+                                <li><a href="#ropecropping" class="tablinks" data-toggle="tab">Cropping</a></li>
+                                <li><a href="#ropedamage" class="tablinks" data-toggle="tab">Damage</a></li>
+                                <li><a href="#ropediscard" class="tablinks" data-toggle="tab">Discard</a></li>
+                                <li><a href="#ropedisposal" class="tablinks" data-toggle="tab">Disposal</a></li>
+                                <li><a href="#residual" class="tablinks" data-toggle="tab">Residual</a></li>
+                            </ul>
+                            <div class="tab-content" style="min-height: 650px">
+                                <div class="tab-pane active" id="ropeinspected">
+                                    @{
+                                        count = Model.RopesInspectedList.Count;
+                                        if (count == 0)
+                                        {
+                                            <div class="panel-group">
+                                                <div class="panel panel-info">
+                                                    <div class="panel-body">
+                                                        <p class="text-center">
+                                                            No Records Found!
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <div class="table-responsive table-striped">
+                                                <table class="table no-margin" id="dataTable" width="100%" cellspacing="0">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Inspect Date</th>
+                                                            <th>Inspect By</th>
+                                                            <th>External Rating A</th>
+                                                            <th>Internal Rating A</th>
+                                                            <th>Average Rating A</th>
+                                                            <th>Length Of Abrasion A</th>
+                                                            <th>Distance Outboard A</th>
+                                                            <th>Cut Yarn Count A</th>
+                                                            <th>Length Of Glazing A</th>
+                                                            <th>External Rating B</th>
+                                                            <th>Internal Rating B</th>
+                                                            <th>Average Rating B</th>
+                                                            <th>Length Of Abrasion B</th>
+                                                            <th>Distance Outboard B</th>
+                                                            <th>Cut Yarn Count B</th>
+                                                            <th>Length Of Glazing B</th>
+                                                            <th>Chafe Guard Condition</th>
+                                                            <th>Twist</th>
+                                                            <th>Image 1</th>
+                                                            <th>Image 2</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        @{
+                                                            foreach (var record in Model.RopesInspectedList)
+                                                            {
+                                                                <tr>
+                                                                    <td>
+                                                                        @{
+                                                                            DateTime? dt = record.InspectDate;
+                                                                            if (dt != null)
+                                                                            {
+                                                                                @Html.Raw(dt.Value.ToString("dd-MMM-yyyy"))
+                                                                            }
+                                                                        }
+                                                                    </td>
+                                                                    <td>@record.InspectBy</td>
+                                                                    <td>@record.ExternalRating_A</td>
+                                                                    <td>@record.InternalRating_A</td>
+                                                                    <td>@record.AverageRating_A</td>
+                                                                    <td>@record.LengthOFAbrasion_A</td>
+                                                                    <td>@record.DistanceOutboard_A</td>
+                                                                    <td>@record.CutYarnCount_A</td>
+                                                                    <td>@record.LengthOFGlazing_A</td>
+                                                                    <td>@record.ExternalRating_B</td>
+                                                                    <td>@record.InternalRating_B</td>
+                                                                    <td>@record.AverageRating_B</td>
+                                                                    <td>@record.LengthOFAbrasion_B</td>
+                                                                    <td>@record.DistanceOutboard_B</td>
+                                                                    <td>@record.CutYarnCount_B</td>
+                                                                    <td>@record.LengthOFGlazing_B</td>
+                                                                    <td>@record.Chafe_guard_condition</td>
+                                                                    <td>@record.Twist</td>
+                                                                    <td>
+                                                                        @{
+
+                                                                            string img_1 = record.Image1 == null ? string.Empty : record.Image1;
+                                                                            if (!string.IsNullOrEmpty(img_1))
+                                                                            {
+                                                                                <img class="icon-content" style="height:60px;width:80px;" src="~/images/InspectionImages/@img_1" onclick="showImages(this.src)" />
+                                                                            }
+                                                                        }
+                                                                    </td>
+                                                                    <td>
+                                                                        @{
+
+                                                                            string img_2 = record.Image2 == null ? string.Empty : record.Image2;
+                                                                            if (!string.IsNullOrEmpty(img_2))
+                                                                            {
+                                                                                <img class="icon-content" style="height:60px;width:80px;" src="~/images/InspectionImages/@img_2" onclick="showImages(this.src)" />
+                                                                            }
+                                                                        }
+                                                                    </td>
+
+                                                                    @*<td>
+                                                @{
+                                                    string photo1 = record.Image1;
+                                                    if (string.IsNullOrEmpty(photo1))
+                                                    {
+                                                        @Html.Raw("No Photo Attached");
+                                                    }
+                                                    else
+                                                    {
+                                                        @Html.Raw(photo1);
+                                                    }
+                                                }
+                                            </td>
+                                            <td>
+                                                @{
+                                                    string photo2 = record.Image2;
+                                                    if (string.IsNullOrEmpty(photo2))
+                                                    {
+                                                        @Html.Raw("No Photo Attached");
+                                                    }
+                                                    else
+                                                    {
+                                                        @Html.Raw(photo2);
+                                                    }
+                                                }
+                                            </td>*@
+                                                                </tr>
+                                                            }
+                                                        }
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        }
+                                    }
+                                </div>
+
+                                @if (@ViewBag.IsTail == 0)
+                                {
+                                    <div class="tab-pane" id="ropeendtoend">
+                                        @{
+                                            count = Model.RopesEndToEndList.Count;
+                                            if (count == 0)
+                                            {
+                                                <div class="panel-group">
+                                                    <div class="panel panel-info">
+                                                        <div class="panel-body">
+                                                            <p class="text-center">
+                                                                No Records Found!
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            }
+                                            else
+                                            {
+                                                <div class="table-responsive table-striped">
+                                                    <table class="table no-margin" id="dataTable" width="100%" cellspacing="0">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>End to End Date</th>
+                                                                <th>Current Outbound End is Use</th>
+                                                                <th>Port Name</th>
+                                                                @*<th>Fast Datetime</th>*@
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            @{
+                                                                foreach (var record in Model.RopesEndToEndList)
+                                                                {
+                                                                    <tr>
+                                                                        <td>
+                                                                            @{
+                                                                                DateTime? dt = record.EndtoEndDoneDate;
+                                                                                if (dt != null)
+                                                                                {
+                                                                                    @Html.Raw(dt.Value.ToString("dd-MMM-yyyy"))
+                                                                                }
+                                                                            }
+                                                                        </td>
+                                                                        <td>
+                                                                            @{
+                                                                                bool inUse = (bool)record.CurrentOutboadEndinUse;
+                                                                                if (inUse)
+                                                                                {
+                                                                                    @Html.Raw("A")
+                                                                                }
+                                                                                else
+                                                                                {
+                                                                                    @Html.Raw("B")
+                                                                                }
+                                                                            }
+                                                                        </td>
+                                                                        <td>@record.PortName</td>
+                                                                        @*<td>@record.FastDatetime</td>*@
+                                                                    </tr>
+                                                                }
+                                                            }
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            }
+                                        }
+                                    </div>
+
+                                    <div class="tab-pane" id="ropeWinchRotation">
+                                        @{
+                                            count = Model.WinchRotationDue_Detail.Count;
+                                            if (count == 0)
+                                            {
+                                                <div class="panel-group">
+                                                    <div class="panel panel-info">
+                                                        <div class="panel-body">
+                                                            <p class="text-center">
+                                                                No Records Found!
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            }
+                                            else
+                                            {
+                                                <div class="table-responsive table-striped">
+                                                    <table class="table no-margin" id="dataTable" width="100%" cellspacing="0">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>Winch Assigned</th>
+                                                                <th>Assigned Date</th>
+                                                                <th>Winch Location</th>
+                                                                <th>Winch Lead</th>
+                                                                <th>Running Hours on Lead</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            @{
+                                                                foreach (var record in Model.WinchRotationDue_Detail)
+                                                                {
+                                                                    <tr>
+                                                                        <td>@record.AssignedNumber</td>
+                                                                        <td>
+                                                                            @{
+                                                                                DateTime? dt = record.AssignedDate;
+                                                                                if (dt != null)
+                                                                                {
+                                                                                    @Html.Raw(dt.Value.ToString("dd-MMM-yyyy"))
+                                                                                }
+                                                                            }
+                                                                        </td>
+                                                                        <td>@record.Location</td>
+                                                                        <td>@record.lead</td>
+                                                                        <td>@record.CurrentLeadRunningHours</td>
+                                                                    </tr>
+                                                                }
+                                                            }
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            }
+                                        }
+                                    </div>
+                                }
+
+                                <div class="tab-pane" id="ropesplicing">
+                                    @{
+                                        count = Model.RopesSplicedList.Count;
+                                        if (count == 0)
+                                        {
+                                            <div class="panel-group">
+                                                <div class="panel panel-info">
+                                                    <div class="panel-body">
+                                                        <p class="text-center">
+                                                            No Records Found!
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <div class="table-responsive table-striped">
+                                                <table class="table no-margin" id="dataTable" width="100%" cellspacing="0">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Splicing Done Date</th>
+                                                            <th>Splicing Done By</th>
+                                                            <th>Splicing Method</th>
+                                                            <th>Port Name</th>
+
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        @{
+                                                            foreach (var record in Model.RopesSplicedList)
+                                                            {
+                                                                <tr>
+                                                                    <td>
+                                                                        @{
+                                                                            DateTime? dt = record.SplicingDoneDate;
+                                                                            if (dt != null)
+                                                                            {
+                                                                                @Html.Raw(dt.Value.ToString("dd-MMM-yyyy"))
+                                                                            }
+                                                                        }
+                                                                    </td>
+                                                                    <td>@record.SplicingDoneBy</td>
+                                                                    <td>@record.SplicingMethod</td>
+                                                                    <td>@record.PortName</td>
+
+
+                                                                </tr>
+                                                            }
+                                                        }
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        }
+                                    }
+                                </div>
+                                <div class="tab-pane" id="ropecropping">
+                                    @{
+                                        count = Model.RopesCroppedList.Count;
+                                        if (count == 0)
+                                        {
+                                            <div class="panel-group">
+                                                <div class="panel panel-info">
+                                                    <div class="panel-body">
+                                                        <p class="text-center">
+                                                            No Records Found!
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <div class="table-responsive table-striped">
+                                                <table class="table no-margin" id="dataTable" width="100%" cellspacing="0">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Cropped Date</th>
+                                                            <th>Cropped Outboard End</th>
+                                                            <th>Length of Cropped Rope</th>
+                                                            <th>Reason of Cropping</th>
+                                                            <th>Port Name</th>
+                                                            @*<th>Fast Datetime</th>*@
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        @{
+                                                            foreach (var record in Model.RopesCroppedList)
+                                                            {
+                                                                <tr>
+                                                                    <td>
+                                                                        @{
+                                                                            DateTime? dt = record.CroppedDate;
+                                                                            if (dt != null)
+                                                                            {
+                                                                                @Html.Raw(dt.Value.ToString("dd-MMM-yyyy"))
+                                                                            }
+                                                                        }
+                                                                    </td>
+                                                                    <td>@record.CroppedOutboardEnd</td>
+                                                                    <td>@record.LengthofCroppedRope</td>
+                                                                    <td>@record.ReasonofCropping</td>
+                                                                    <td>@record.PortName</td>
+                                                                    @*<td>@record.FastDatetime</td>*@
+
+                                                                </tr>
+                                                            }
+                                                        }
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        }
+                                    }
+                                </div>
+                                <div class="tab-pane" id="ropedamage">
+                                    @{
+                                        count = Model.RopesDamagedList.Count;
+                                        if (count == 0)
+                                        {
+                                            <div class="panel-group">
+                                                <div class="panel panel-info">
+                                                    <div class="panel-body">
+                                                        <p class="text-center">
+                                                            No Records Found!
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <div class="table-responsive table-striped">
+                                                <table class="table no-margin" id="dataTable" width="100%" cellspacing="0">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Damage Date</th>
+                                                            <th>Damage Observed</th>
+                                                            <th>Incident Report</th>
+                                                            <th>Port Name</th>
+
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        @{
+                                                            foreach (var record in Model.RopesDamagedList)
+                                                            {
+                                                                <tr>
+                                                                    <td>
+                                                                        @{
+                                                                            DateTime? dt = record.DamageDate;
+                                                                            if (dt != null)
+                                                                            {
+                                                                                @Html.Raw(dt.Value.ToString("dd-MMM-yyyy"))
+                                                                            }
+                                                                        }
+                                                                    </td>
+                                                                    <td>@record.DamageObserved</td>
+                                                                    <td>@record.IncidentReport</td>
+                                                                    <td>@record.PortName</td>
+
+                                                                </tr>
+                                                            }
+                                                        }
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        }
+                                    }
+                                </div>
+                                <div class="tab-pane" id="ropediscard">
+                                    @{
+                                        count = Model.RopesDiscardedList.Count;
+                                        if (count == 0)
+                                        {
+                                            <div class="panel-group">
+                                                <div class="panel panel-info">
+                                                    <div class="panel-body">
+                                                        <p class="text-center">
+                                                            No Records Found!
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <div class="table-responsive table-striped">
+                                                <table class="table no-margin" id="dataTable" width="100%" cellspacing="0">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Out of Service Date</th>
+                                                            <th>Reason Out of Service</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        @{
+                                                            foreach (var record in Model.RopesDiscardedList)
+                                                            {
+                                                                <tr>
+                                                                    <td>
+                                                                        @{
+                                                                            DateTime? dt = record.OutofServiceDate;
+                                                                            if (dt != null)
+                                                                            {
+                                                                                @Html.Raw(dt.Value.ToString("dd-MMM-yyyy"))
+                                                                            }
+                                                                        }
+                                                                    </td>
+                                                                    <td>@record.ReasonOutofService</td>
+                                                                </tr>
+                                                            }
+                                                        }
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        }
+                                    }
+                                </div>
+                                <div class="tab-pane" id="ropedisposal">
+                                    @{
+                                        count = Model.RopesDisposedList.Count;
+                                        if (count == 0)
+                                        {
+                                            <div class="panel-group">
+                                                <div class="panel panel-info">
+                                                    <div class="panel-body">
+                                                        <p class="text-center">
+                                                            No Records Found!
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <div class="table-responsive table-striped">
+                                                <table class="table no-margin" id="dataTable" width="100%" cellspacing="0">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Disposal Date</th>
+                                                            <th>Certificate Number</th>
+                                                            <th>Disposal Port Name</th>
+                                                            <th>Reception Facility Name</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        @{
+                                                            foreach (var record in Model.RopesDisposedList)
+                                                            {
+                                                                <tr>
+                                                                    <td>
+                                                                        @{
+                                                                            DateTime? dt = record.DisposalDate;
+                                                                            if (dt != null)
+                                                                            {
+                                                                                @Html.Raw(dt.Value.ToString("dd-MMM-yyyy"))
+                                                                            }
+                                                                        }
+                                                                    </td>
+                                                                    <td>@record.CertificateNumber</td>
+                                                                    <td>@record.DisposalPortName</td>
+                                                                    <td>@record.ReceptionFacilityName</td>
+                                                                </tr>
+                                                            }
+                                                        }
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        }
+                                    }
+                                </div>
+
+                                <div class="tab-pane" id="residual">
+                                    @{
+                                        count = Model.ResidualLabTestList.Count;
+                                        if (count == 0)
+                                        {
+                                            <div class="panel-group">
+                                                <div class="panel panel-info">
+                                                    <div class="panel-body">
+                                                        <p class="text-center">
+                                                            No Records Found!
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <div class="table-responsive table-striped">
+                                                <table class="table no-margin" id="dataTable" width="100%" cellspacing="0">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Lab Test Date</th>
+                                                            <th>Running Hours</th>
+                                                            <th>Test Result</th>
+                                                            <th>Attachment</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        @{
+                                                            foreach (var record in Model.ResidualLabTestList)
+                                                            {
+                                                        <tr>
+                                                            <td>@record.LabTestDate</td>
+                                                            <td>@record.RunningHours</td>
+                                                            <td>@record.TestResults</td>
+                                                            <td>
+                                                                @if (@record.attachment != "")
+                                                                {
+
+                                                                    var extn = record.attachment.Split('.').Last();
+
+
+                                                                    if (extn == "jpg" || extn == "JPG" || extn == "jpeg" || extn == "JPEG" || extn == "png" || extn == "PNG" || extn == "TIFF" || extn == "RAW" || extn == "BMP" || extn == "SVG" || extn == "PSD")
+                                                                    {
+
+                                                                        <a onclick='return showImages(this.id)' style="cursor:pointer" id="~/images/AttachFiles/@record.attachment">View Attachment</a>
+                                                                    }
+                                                                    else if (extn == "pdf" || extn == "PDF")
+                                                                    {
+                                                                        <a onclick='return showpdf(this.id)' style="cursor:pointer" id="~/images/AttachFiles/@record.attachment">View Attachment</a>
+
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <a target="_blank" href="~/images/AttachFiles/@record.attachment">View Attachment</a>
+                                                                    }
+                                                                }
+                                                                else
+                                                                {
+                                                                    <a>No Attachment</a>
+                                                                    //"No Attachment";
+                                                                }
+
+
+
+
+</tr>
+                                                            }
+                                                        }
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        }
+                                    }
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+
+
+
+<div id="myModal" class="modal">
+    <span id="pclose" class="close">&times;</span>
+    <img class="modal-content" id="img01">
+    <div id="caption"></div>
+</div>
+
+
+<script>
+    function showImages(path) {
+
+        //$('#ConID_P').val(Id);
+
+        var http = new XMLHttpRequest();
+        http.open('HEAD', path, false);
+        http.send();
+        if (http.status === 200) {
+            var modal = document.getElementById("myModal");
+            var modalImg = document.getElementById("img01");
+            var captionText = document.getElementById("caption");
+            modal.style.display = "block";
+            modalImg.src = path;
+
+
+        }
+        else {
+
+            alert("Image exists here in Shipboard version but not imported. Kindly seek 'Export Attachment' folder from this Vessel and import to view the image.");
+
+        }
+        //captionText.innerHTML = this.alt;
+
+        //$('#AddCostModal').modal('show');
+    }
+
+    var span = document.getElementById("pclose");
+    span.onclick = function () {
+        $("#myModal").css('display', 'none');
+    }
+</script>
+
+
+
+
+
+<div id="ImageModal" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title"></h4>
+            </div>
+            <div class="modal-body">
+                <div class="box-body">
+                    <div style="text-align:center;  ">
+                        <img style="max-width:100%" id="imgName" />
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="PdfModal" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title"></h4>
+            </div>
+            <div class="modal-body">
+                <div class="box-body">
+                    <div style="text-align:center">
+                        <iframe id="myFrame" style="display:none;width:100%"></iframe>
+
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    function showImages(param) {
+        // var imgSrc = $(param).attr("src");
+        //alert(imgSrc);
+        $('#imgName').attr('src', param);
+        $('#ImageModal').modal('show');
+    }
+</script>
+
+<script>
+    function showpdf(param) {
+        // var imgSrc = $(param).attr("src");
+        // alert(param);
+
+        // /images/AttachFiles / _49 Web Street, Grey Box Web Application Vulnerability Assessment Report3798.pdf
+        var omyFrame = document.getElementById("myFrame");
+        omyFrame.style.display = "block";
+        omyFrame.src = param;
+        // omyFrame.load();
+        // $('#ifrID').attr('src', param);
+        $('#PdfModal').modal('show');
+    }
+</script>

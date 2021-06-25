@@ -1,0 +1,910 @@
+﻿@model Shipment49Web.Areas.MSPS.Models.DetailsViewModel
+@{
+    /**/
+
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_LayoutOthers.cshtml";
+}
+
+
+
+<style>
+    a {
+        text-decoration: none;
+        display: inline-block;
+        padding: 8px 16px;
+    }
+
+        a:hover {
+            background-color: #ddd;
+            color: black;
+        }
+
+    input#searchtextbox {
+        padding: 2px 8px;
+        border: solid 1px #ccc;
+        border-radius: 3px;
+    }
+
+        input#searchtextbox:focus {
+            outline: #007fa5;
+        }
+        .previous {
+        background-color: #f1f1f1;
+        color: black;
+        width: 110px;
+        max-width: 100%;
+        text-align: center;
+    }
+
+    .next {
+        background-color: #4CAF50;
+        color: white;
+        border-radius: 4px !important;
+        width: 110px;
+        max-width: 100%;
+        text-align: center;
+    }
+
+    .round {
+        border-radius: 50%;
+    }
+
+
+    #tdcontent {
+        display: inline-block;
+        width: 320px;
+        white-space: nowrap;
+        overflow: hidden !important;
+        text-overflow: ellipsis;
+    }
+
+    .alert {
+        padding: 8px 15px !important;
+        margin-bottom: 20px;
+        border: 1px solid transparent;
+        border-radius: 4px;
+    }
+
+    .next {
+        background-color: #4CAF50;
+        color: white;
+        border-radius: 4px !important;
+    }
+
+    .previous {
+        background-color: #dcdcdc !important;
+        color: black;
+        border-radius: 4px !important;
+    }
+
+   
+
+</style>
+
+<div class="content-wrapper">
+    <section class="content-header">
+        <h1>
+            @*@Model.BreadCrumb*@
+        </h1>
+    </section>
+
+    <section class="content">
+        <div class="row">
+
+            <div class="col-md-9" id="seconddiv">
+                @if (TempData["title"] != null)
+                {
+                    <p class="alert alert-success">@TempData["title"]</p>
+                }
+
+               
+            </div>
+            <div class="col-md-3" id="seconddiv">
+                <div class="text-right mb-4">
+                    <a href="" onclick="prvbtn()" class="previous">&laquo; Previous</a>
+                    <a href="" onclick="nxtbtn()" class="next">Next &raquo;</a>
+                </div>
+            </div>
+
+            <div class="col-md-12">
+                <div class="nav-tabs-custom">
+                    <ul class="nav nav-tabs">
+                        <li class="active"><a href="#generaldata" class="tablinks" data-toggle="tab" onclick="openCity(event, 'generaldata')">General Data</a></li>
+                        <li><a href="#shipspecificdata" class="tablinks" data-toggle="tab" onclick="openCity(event, 'shipspecificdata')">Ship Specific Data</a></li>
+                        <li><a href="#shipspecificattachments" class="tablinks" data-toggle="tab" onclick="openCity(event, 'shipspecificattachments')">Ship Specific Attachment</a></li>
+                        <li><a href="#revisiondetails" class="tablinks" data-toggle="tab" onclick="openCity(event, 'revisiondetails')">Revision</a></li>
+
+                        <li style="float:right;padding-left: 10px;">
+                            <button onclick="pdfgenerate()">
+                                <i class="fa fa-file-pdf-o" aria-hidden="true">  PDF</i>
+                            </button>
+                        </li>
+                        <li style="float:right">
+                            <input id="searchtextbox" type="text" placeholder="Search.." name="search">
+                            <button onclick="searchTextData()" id="btnSearch">Search</button>
+
+                        </li>
+
+                    </ul>
+
+                    <div></div>
+                    <br />
+
+                    <div id="firstdiv" class="tab-content" style="min-height: 650px;">
+                        <div class="tab-pane active" id="generaldata">
+                            <div class="form-group">
+                                <div class="col-md-10">
+                                    <div class="input-group">
+                                        @Html.TextAreaFor(m => m.Content, new { rows = "20", style = "resize:none;width:770px;", @class = "form-control input-lg textarea-editor" })
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane" id="shipspecificdata">
+                            <section id="loginForm">
+                                <div class="form-horizontal">
+                                    <div class="form-group">
+                                        <div class="col-md-12">
+                                            @*@Html.DropDownListFor(p => p.ShipId, new SelectList(ViewBag.ShipList, "Value", "Text"), "--Select Vessel--", new { @class = "form-control", style = "width:400px;" })*@
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="col-md-10">
+                                            <div class="pull-left">
+                                                @Html.TextAreaFor(m => m.Content1, new { rows = "20", style = "resize:none;width:770px;", @class = "form-control input-lg textarea-editor" })
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                </div>
+                            </section>
+                        </div>
+                        <div class="tab-pane" id="shipspecificattachments">
+                            <div id="indextab">
+                                <div class="form-horizontal">
+                                    <div id="addattachment" class="row">
+                                        <div class="col-sm-12 col-xs-12">
+                                            <a class="btn btn-success btn-block">Add Attachment</a>
+                                        </div>
+                                        @*<button name="Submit" type="submit" class="btn btn-success btn-width"><i class="uil mr-2"></i>Submit</button>*@
+                                    </div>
+                                    <div class="content">
+                                        <div class="container-fluid">
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <div class="card">
+                                                        <div class="card-content user_listingtbl">
+                                                            <div class="table-responsive" id="dvListing">
+                                                                <table class="table table-striped">
+                                                                    <thead>
+                                                                        <tr>
+                                                                            <th class="col-md-10">Attachment Name</th>
+                                                                            <th class="col-md-2">Download</th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody id="attachmentBody"></tbody>
+
+                                                                </table>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div style="display:none" id="dvAddatt">
+                                @Html.Partial("_addattchment")
+                            </div>
+                        </div>
+                        <div class="tab-pane" id="revisiondetails">
+                            <div id="indextab2">
+                                <div class="content">
+                                    <div class="container-fluid">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="card">
+                                                    <div class="card-content user_listingtbl">
+                                                        <div class="table-responsive" id="dvListing6">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+
+
+                    </div>
+                </div>
+
+                <div id="divLoader" style="display:none; height:10px;width:10px;text-align:center"> <img height="100" width="100" src="~/images/loader4.gif" alt="Loader" /> </div>
+
+                <div class="tab-pane" style="display:none" id="searchdata">
+
+                    <div id="indextab2">
+                        <div class="content">
+
+                            <div class="container-fluid">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="card">
+                                            <div class="card-content user_listingtbl">
+
+                                                <div class="modal-body">
+                                                    <p id="srchtitle" style="font-size:x-large;background-color:lemonchiffon">
+                                                        <br />
+                                                    </p>
+                                                    <div class="table-responsive">
+                                                        <table class="table">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>S.No.</th>
+                                                                    <th>Menu Name</th>
+                                                                    @*<th>Search Area</th>*@
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody id="sData"></tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                @*<div style="display:none" id="searchdata">
+                @Html.Partial("_searchData",Model)
+            </div>*@
+            </div>
+        </div>
+    </section>
+</div>
+
+
+
+
+<div class="modal fade"  id="searchModal"  role="document">
+    <div  class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Search Area </h4>
+            </div>
+            <div  class="modal-dialog">
+                <div>
+
+                    <div id="searchContent">
+                        ...
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="showVideo" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title"></h4>
+            </div>
+            <div class="modal-body">
+                <div class="box-body">
+                    <div class="col-md-12 align-items-center">
+                        @*<img id="imgNameIns" />*@
+                        <video id="videoID" controls>
+                            @*/images/AttachFiles/sample-mp4-file8590.mp4*@
+                            <source type="video/mp4" src=" ">
+                        </video>
+
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="PdfModal" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title"></h4>
+            </div>
+            <div class="modal-body">
+                <div class="box-body">
+                    <div style="text-align:center">
+                        <iframe id="myFrame" style="display:none;width:100%"></iframe>
+
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="ImageModal" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title"></h4>
+            </div>
+            <div class="modal-body">
+                <div class="box-body">
+                    <div style="text-align:center">
+                        <img id="imgName" />
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function searchTextData() {
+
+        var stext = $("#searchtextbox").val();
+
+       // $("#srchtitle").html("Search Results of <b>" + stext + "</b>. Click on any index item to open selected results !")
+
+        //var stitle = $("#srchtitle").text();
+
+        var stitle = "Search Results of { " + stext + " }. Click on any index item to open selected results !";
+
+        if (stext == "") {
+            alert("Please fill some text in search input !");
+            return;
+        }
+        $("#firstdiv").hide();
+        $("#seconddiv").hide();
+        $("#searchdata").hide();
+        $("#divLoader").show();
+
+        $.ajax({
+            type: 'GET',
+            url: '/MSMP/_searchData?searchText=' + stext,
+            //url: '/MSMP/_searchData',
+            //data: { 'searchText': 'and' },
+            // dataType: 'json',
+            cache: false,
+            contentType: false,
+            processData: false,
+            success: function (response) {
+                //debugger;
+                //alert(response);
+                if (response.Result == true) {
+
+                    $("#firstdiv").hide();
+                    $("#seconddiv").hide();
+                    $("#searchdata").show();
+
+                    $("#srchtitle").text(stitle);
+
+                    $('#sData').empty();
+                    var tr; var sno = 0; var mid = 0;
+                    for (var i = 0; i < response.Data.length; i++) {
+                        tr = $('<tr/>');
+
+                        sno++;
+                        mid = response.Data[i].Mid;
+
+                        tr.append("<td class='col-md-3'>" + sno + "</td>");
+
+                        tr.append("<td   class='col-md-8'> <a onclick='checksearchtext(" + mid + ")' href='#'>" + response.Data[i].MenuName + "</a></td>");
+                        //tr.append("<td id='tdcontent' class='col-md-3'>" + response.Data[i].Content + "</td>");
+                        $('#sData').append(tr);
+                    }
+
+                    $("#divLoader").hide();
+                    //$('#addModal').modal('show');
+                }
+                else {
+                    // toastr["error"](response.Message);
+                }
+            },
+            failure: function (response) {
+                //toastr["error"](response.Message);
+            }
+        });
+
+
+    }
+</script>
+
+
+@*<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.5.3/jspdf.min.js"></script>*@
+
+<div style="display:none" id="dialog">
+    <a id="pdfdwnld" target="_blank" download href="~/images/AttachFiles/@Session["PDFtitle"]"></a>
+</div>
+
+<script>
+
+    function pdfgenerate() {
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("generatePDF")',
+            dataType: 'json',
+            //data: { id: id, textval: seltext },
+            contentType: 'application/json; charset=utf-8',
+            success: function (pagetitle) {
+                debugger;
+                //alert(4345);
+                //var ss = pagetitle;
+                //debugger;
+                //$('#Content').summernote('code', ss);
+
+            },
+            error: function (ts) {
+                debugger;
+               
+                $("#pdfdwnld")[0].click();
+                alert("PDF generated successfully !");
+
+               // alert(ts.responseText)
+            //error: function (ex) {
+               // $('#Content').summernote('code', "");
+
+            }
+        });
+        return false;
+    }
+
+</script>
+<script>
+
+    function pdfgenerate3() {
+
+        // $("#pdfdwnld")[0].click();
+
+        debugger;
+
+        $.ajax({
+            type: 'POST',
+            dataType: 'json',
+            url: '/MSMP/generatePDF',
+            data: { 'Id': 1 },
+            success: function (response) {
+
+
+                debugger;
+                if (response.Result == true) {
+
+                    alert(533);
+                    $("#pdfdwnld")[0].click();
+                }
+                //var doc = new jsPDF();
+                //var elementHTML = data;
+                //var specialElementHandlers = {
+                //    '#elementH': function (element, renderer) {
+                //        return true;
+                //    }
+                //};
+                //doc.fromHTML(elementHTML, 15, 15, {
+                //    'width': '100%',
+                //    'elementHandlers': specialElementHandlers
+                //});
+
+                //// Save the PDF
+                //doc.save('sample-document.pdf');
+
+            },
+            error: function (data) {
+
+            }
+        });
+
+    }
+</script>
+
+<script>
+    function nxtbtn() {
+        // alert(22);
+        debugger;
+        var qrStr = window.location.search;
+        if (qrStr == "") {
+           // qrStr = 0;
+            qrStr = '@ViewBag.qrstrID';
+        }
+        else {
+            qrStr = qrStr.split("?")[1].split("=")[1];
+        }
+        //alert(qrStr);
+        $.ajax({
+            type: 'POST',
+            dataType: 'json',
+            url: '/MSMP/Nxtbtn',
+            data: { 'Id': qrStr },
+            success: function (response) {
+                debugger;
+                if (response.Result == true) {
+
+                    var check = response.Id;
+
+                    var currentURL = window.location.href = window.location.protocol + "//" + window.location.host + "/MooringManual/MSMP";
+                    window.location.href = currentURL + "?id=" + check;
+
+                    //alert(check);
+                    //$("#location").text(response.location);
+                }
+
+            },
+            //error: function (XMLHttpRequest, textStatus, errorThrown) {
+
+            //    alert('An Error has occured. Please try again.');
+            //}
+        });
+
+    }
+</script>
+
+<script>
+    function prvbtn() {
+        // alert(22);
+        debugger;
+        var qrStr = window.location.search;
+        if (qrStr == "") {
+            //qrStr = 0;
+            qrStr = '@ViewBag.qrstrID';
+        }
+        else {
+            qrStr = qrStr.split("?")[1].split("=")[1];
+        }
+        //alert(qrStr);
+        $.ajax({
+            type: 'POST',
+            dataType: 'json',
+            url: '/MSMP/Prvbtn',
+            data: { 'Id': qrStr },
+            success: function (response) {
+                debugger;
+                if (response.Result == true) {
+
+                    var check = response.Id;
+
+                    var currentURL = window.location.href = window.location.protocol + "//" + window.location.host + "/MooringManual/MSMP";
+                    window.location.href = currentURL + "?id=" + check;
+
+                    //alert(check);
+                    //$("#location").text(response.location);
+                }
+
+            },
+            //error: function (XMLHttpRequest, textStatus, errorThrown) {
+
+            //    alert('An Error has occured. Please try again.');
+            //}
+        });
+
+    }
+</script>
+
+<script>
+    function openCity(evt, cityName) {
+        debugger;
+
+        $("#firstdiv").show();
+        $("#seconddiv").show();
+        $("#searchdata").hide();
+
+        var i, tabcontent, tablinks;
+        tabcontent = document.getElementsByClassName("tab-pane");
+
+        for (i = 0; i < tabcontent.length; i++) {
+            tabcontent[i].style.display = "none";
+        }
+
+        tablinks = document.getElementsByClassName("tablinks");
+        for (i = 0; i < tablinks.length; i++) {
+            tablinks[i].className = tablinks[i].className.replace(" active", "");
+        }
+
+        document.getElementById(cityName).style.display = "block";
+        evt.currentTarget.className += " active";
+
+        if (cityName == "revision") {
+            searchindex('1');
+        }
+        if (cityName == "revisiondetails") {
+            searchindex1('1');
+        }
+        if (cityName == "generaldata") {
+            getGeneralData();
+        }
+        if (cityName == "shipspecificattachments") {
+            getattachments();
+        }
+        if (cityName == "shipspecificdata") {
+            getcontent();
+        }
+
+
+
+    }
+</script>
+
+<script>
+
+    function searchindex1(page) {
+        $("#dvListing6").html("");
+        var mid = 16;
+        var ai = {
+            page: page,
+        }
+        $.ajax({
+            type: "post",
+            url: 'MSMP/_revisiondetails?mid=' + mid + "&page=" + page,
+            data: JSON.stringify(ai),
+            datatype: "json",
+            success: function (data) {
+                if (data.trim() != "") {
+                    $("#dvListing6").fadeIn("fast");
+                    $("#dvListing6").html("");
+                    $("#dvListing6").html(data);
+                }
+                else {
+                    $("#dvListing6").html("");
+                    $("#dvListing6").html('<div class="text-danger card-avatar text-center"><img class="imgnorecord" src="../Include/Admin/img/norecord.png"/><br/>no record found</div>');
+                }
+            },
+            error: function (data) {
+                $("#dvListing6").html("");
+                $("#dvListing6").html(data);
+            }
+        });
+    }
+</script>
+
+<script>
+    function getattachments() {
+
+
+        $.ajax({
+            type: 'GET',
+            url: '/MSMP/Viewattachments',
+            cache: false,
+            contentType: false,
+            processData: false,
+            success: function (response) {
+                if (response.Result == true) {
+                    $('#attachmentBody').empty();
+                    var tr;
+                    for (var i = 0; i < response.Data.length; i++) {
+                        tr = $('<tr/>');
+                        debugger;
+                        var extn = response.Data[i].Attachment.slice(response.Data[i].Attachment.lastIndexOf('.'))
+
+                        tr.append("<td class='col-md-6'>" + response.Data[i].AttachmentName + "</td>");
+                        //tr.append("<td class='col-md-2'>" + response.Data[i].Attachment + "</td>");
+
+
+                        if (extn == ".jpg" || extn == ".JPG" || extn == ".jpeg" || extn == ".JPEG" || extn == ".png" || extn == ".PNG" || extn == ".TIFF" || extn == ".RAW" || extn == ".BMP" || extn == ".SVG" || extn == ".PSD") {
+                            //tr.append("<td class='col-md-4'> <a  href='/images/AttachFiles/filepath/" + response.Data[i].ShipId + "/" + response.Data[i].Attachment + "'>Download Attachment</a></td>");
+                            tr.append("<td class='col-md-4'> <a onclick='return showImages(this.id)'  id='/images/AttachFiles/filepath/" + response.Data[i].ShipId + "/" + response.Data[i].Attachment + "'>View Attachment</a></td>");
+                        }
+                        else if (extn == ".mp4" || extn == ".mkv" || extn == ".flv" || extn == ".gif" || extn == ".wmv" || extn == ".avi" || extn == ".amv" || extn == ".mpg" || extn == ".3gp") {
+                            tr.append("<td class='col-md-4'> <a onclick='return showVd(this.id)'  id='/images/AttachFiles/filepath/" + response.Data[i].ShipId + "/" + response.Data[i].Attachment + "'>View Attachment</a></td>");
+                        }
+                        else if (extn == ".pdf" || extn == ".PDF") {
+                            tr.append("<td class='col-md-4'> <a onclick='return showpdf(this.id)'  id='/images/AttachFiles/filepath/" + response.Data[i].ShipId + "/" + response.Data[i].Attachment + "'>View Attachment</a></td>");
+                        }
+                        else {
+
+                            tr.append("<td class='col-md-4'> <a  target='_blank'   href='/images/AttachFiles/filepath/" + response.Data[i].ShipId + "/" + response.Data[i].Attachment + "'>View Attachment</a></td>");
+                        }
+
+
+
+                        $('#attachmentBody').append(tr);
+                    }
+                    // $('#addModal').modal('show');
+                }
+                else {
+                    // toastr["error"](response.Message);
+                }
+            },
+            failure: function (response) {
+                //toastr["error"](response.Message);
+            }
+        });
+
+
+    }
+</script>
+
+
+<script>
+    function showImages(param) {
+        //var imgSrc = $(param).attr("src");
+        alert(param)
+        $('#imgName').attr('src', param);
+        $('#ImageModal').modal('show');
+    }
+</script>
+
+
+<script>
+    function showpdf(param) {
+        // var imgSrc = $(param).attr("src");
+        // alert(param);
+
+        // /images/AttachFiles / _49 Web Street, Grey Box Web Application Vulnerability Assessment Report3798.pdf
+        var omyFrame = document.getElementById("myFrame");
+        omyFrame.style.display = "block";
+        omyFrame.src = param;
+        // omyFrame.load();
+        // $('#ifrID').attr('src', param);
+        $('#PdfModal').modal('show');
+    }
+</script>
+
+<script>
+    function showVd(param) {
+        var video = document.getElementById('videoID');
+        video.src = param;
+        video.load();
+        //$('#videoID').attr('src', param);
+        $('#showVideo').modal('show');
+    }
+</script>
+
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.2/summernote.js"></script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('.textarea-editor').summernote(
+            {
+                height: 550,
+                width: 900,
+                minHeight: null,
+                maxHeight: null,
+                focus: true,
+                toolbar: [],
+            });
+
+
+
+
+        $('#searchContent').summernote(
+            {
+                height: 550,
+                width: 600,
+                minHeight: null,
+                maxHeight: null,
+                focus: true,
+                toolbar: [],
+            });
+    });
+</script>
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.2/summernote.css" rel="stylesheet">
+
+<script>
+
+    function getcontent() {
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("GetSpecificContent")',
+            dataType: 'json',
+            //data: { id: id, textval: seltext },
+            success: function (pagetitle) {
+                var ss = pagetitle;
+                debugger;
+                $('#Content1').summernote('code', ss);
+
+            },
+            error: function (ex) {
+                $('#Content1').summernote('code', "");
+
+            }
+        });
+        return false;
+    }
+
+</script>
+
+
+
+
+<script>
+
+    function getGeneralData() {
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("GetGdata")',
+            dataType: 'json',
+            //data: { id: id, textval: seltext },
+            success: function (pagetitle) {
+                var ss = pagetitle;
+                //debugger;
+                $('#Content').summernote('code', ss);
+
+            },
+            error: function (ex) {
+                $('#Content').summernote('code', "");
+
+            }
+        });
+        return false;
+    }
+
+</script>
+
+
+<script>
+    function checksearchtext(mid) {
+
+        //alert(mid);
+        $('#searchModal').modal('show');
+
+        var stext = $("#searchtextbox").val();
+
+        var $summernotes = $('[data-control="summernote-container"]');
+        $summernotes.find('.note-toolbar').hide();
+
+
+         $.ajax({
+            type: 'POST',
+             url: '@Url.Action("GetSearchContent")',
+             data: { 'Mid': mid, 'searchT': stext },
+            dataType: 'json',
+            //data: { id: id, textval: seltext },
+             success: function (pagetitle) {
+                 debugger;
+                var ss = pagetitle;
+                debugger;
+                //$('#searchContent').text(ss);
+                //content
+                $('#searchContent').summernote('code', ss);
+
+            },
+            error: function (ex) {
+                $('#searchContent').summernote('code', "");
+
+            }
+        });
+        return false;
+
+    }
+</script>
+
+<script>
+    $('#addattachment').click(function (e) {
+        $('#indextab').hide();
+        $('#dvAddatt').show();
+    });
+</script>
+
+<script>
+    window.onload = function () {
+        getGeneralData();
+    };
+</script>
+<script>
+    $("#moorId").show();
+</script>

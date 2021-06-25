@@ -1,0 +1,280 @@
+﻿@model Shipment49Web.Areas.MooringLine.Models.MooringRopeInspections
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_LayoutVessel7.cshtml";
+}
+
+
+
+
+
+<div class="page-heading page-header-flex">
+    <div>
+        <h1 class="page-title">
+            Mooring Line Inspection
+        </h1>
+        @*<ol class="breadcrumb">
+            <li><a href="">Home</a></li>
+            <li><a href="">Form</a></li>
+            <li><a>Create</a></li>
+        </ol>*@
+    </div>
+    @if (TempData["Error1"] != null)
+    {
+        <p class="alert alert-danger" id="errorMessage">@TempData["Error"]</p>
+    }
+    @if (TempData["Success"] != null)
+    {
+        <p class="alert alert-success" id="successMessage">@TempData["Success"]</p>
+    }
+        <div>
+            <a class="btn btn-info" href="@Url.Action("addlineinspection", "LineInspection")">
+                <i class="fa fa-plus-circle mr-2"></i>Add new inspection record
+            </a>
+            <a name="back" id="btnBack" onclick="goBack()" class="btn btn-primary btn-width"> << Go Back</a>
+
+        </div>
+</div>
+
+<div class="wrapper wrapper-content">
+    <div class="container">
+        <div class="panel panel-default mb-6">
+            @using (Html.BeginForm("Index", "LineInspection"))
+            {
+                <div class="panel-body">
+                    <div class="row form-group">
+                        <label class="col-md-2 col-sm-3 col-form-label mt-0 mt-sm-3">
+                            <label class="control-label">Choose year</label>
+                        </label>
+                        <div class="col-md-3 col-sm-5">
+                           
+                            @Html.DropDownListFor(model => model.Years, new SelectList(Model.YearList), htmlAttributes: new { @class = "form-control select2",@name="Years", @width = "100px", @required = "true", })
+
+                        </div>
+                    </div>
+
+                    <button type="submit" id="btnSub"  class="btn btn-info">Search</button>
+                </div>
+            }
+            </div>
+        <div class="table-responsive">
+            <table class="table table-child-highlight">
+                <thead class="thead-dark">
+                    <tr>
+                        <th style="display:none">Id</th>
+                        <th>Inspect By</th>
+                        <th>Inspect Date</th>
+                        @*<th width="160px">View</th>*@
+                        <th width="160px">Edit</th>
+                        <th width="160px">View</th>
+                        <th width="160px">Delete</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+
+
+                    @foreach (var item in Model.RopeInspectionList)
+                    {
+
+
+                    <tr>
+                        <td style="display:none"> @Html.DisplayFor(modelItem => item.InspectionId)</td>
+                        <td> @Html.DisplayFor(modelItem => item.InspectBy)</td>
+                        <td> @Html.DisplayFor(modelItem => item.InspectDate)</td>
+
+                        @* <td width="160px">
+            <a href="mooring-line-inspection-view.php" class="btn btn-sm btn-light btn-view">
+                <i class="uil uil-eye mr-2"></i>View
+            </a>
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "editinspection", new { InspectionId = item.InspectionId }) |
+            @Html.ActionLink("Delete", "Delete", new { InspectionId = item.InspectionId }, new { onclick = "return confirm('Are sure wants to delete?');" })
+        </td>*@
+
+                        <td width="120px">
+                            <a href="@Url.Action("editinspection", "LineInspection", new { InspectionId = item.InspectionId })" class="btn btn-sm btn-light btn-edit">
+                                <i class="uil uil-edit-alt mr-2"></i>Edit
+                            </a>
+                        </td>
+
+                        <td width="120px">
+                            <a href="@Url.Action("viewinspection", "LineInspection", new { InspectionId = item.InspectionId })" class="btn btn-sm btn-light btn-edit">
+                                <i class="uil-edit-alt mr-2"></i>View
+                            </a>
+                        </td>
+
+                        <td width="100px">
+
+                            <button type="button" class="btn btn-sm btn-light btn-delete">
+                                @Html.ActionLink("Delete", "Delete", "LineInspection", new { InspectionId = item.InspectionId }, new { onclick = "return confirm('Are sure wants to delete?');" })
+                                <i class="uil uil-trash-alt mr-2"></i>
+                            </button>
+
+                        </td>
+
+
+                    </tr>
+                    }
+
+                </tbody>
+            </table>
+
+            <nav class="text-right">
+              
+                <ul class="pagination">
+                    @{
+                        @*int totalRecords = Convert.ToInt32(TempData.Peek("TotalRecords"));
+
+            int tot_pages = totalRecords / Shipment49Web.Common.CommonMethods.PAGESIZE;
+            int remainder = totalRecords % Shipment49Web.Common.CommonMethods.PAGESIZE;
+
+            tot_pages = remainder > 0 ? (tot_pages + 1) : tot_pages;
+
+            int currPage = Convert.ToInt32(TempData.Peek("CurrentPage"));
+
+            for (int cnt = 1; cnt <= tot_pages; cnt++)
+            {
+                if (cnt == currPage)
+                {
+                    <li class="active"><a href="#">@cnt</a></li>
+                }
+                else
+                {
+                    <li>@Html.ActionLink(cnt.ToString(), "Index", "LineInspection", new { page = cnt }, null)</li>
+                }
+            }*@
+
+                        int totalRecords = Convert.ToInt32(TempData.Peek("TotalRecords"));
+
+                        int tot_pages = totalRecords / Shipment49Web.Common.CommonMethods.PAGESIZE;
+                        int remainder = totalRecords % Shipment49Web.Common.CommonMethods.PAGESIZE;
+
+                        tot_pages = remainder > 0 ? (tot_pages + 1) : tot_pages;
+
+                        int currPage = Convert.ToInt32(TempData.Peek("CurrentPage"));
+
+                        if (totalRecords > 0)
+                        {
+                            if (currPage == 0)
+                            {
+                                currPage = 1;
+                            }
+
+                            if (currPage != 1)
+                            {
+                                <li class="page-item"><a class="page-link" href="@Url.Action("Index", "LineInspection" ,new { page = 1 })">First</a> </li>
+                            }
+
+                            if (currPage != tot_pages)
+                            {
+                                for (int cnt = currPage; cnt < (currPage + 10); cnt++)
+                                {
+                                    if (cnt == currPage)
+                                    {
+                                        <li class="page-item active"><a class="page-link" href="#">@cnt</a></li>
+                                    }
+                                    else
+                                    {
+                                        <li class="page-item"><a class="page-link" href="@Url.Action("Index", "LineInspection" ,new { page = cnt })">@cnt.ToString()</a> </li>
+                                    }
+
+                                    if (cnt == tot_pages)
+                                    {
+                                        break;
+                                    }
+                                }
+                            }
+
+
+                            if (currPage == tot_pages)
+                            {
+                                <li class="page-item active"><a class="page-link" href="#">@tot_pages</a></li>
+                            }
+                            else
+                            {
+
+                                <li class="page-item"><a class="page-link" href="@Url.Action("Index", "LineInspection" ,new { page = tot_pages })">Last</a> </li>
+                            }
+                        }
+                    }
+                </ul>
+
+            </nav>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    function BtnUpdateStatus(Id) {
+
+        $.ajax({
+            type: 'POST',
+            dataType: 'json',
+            url: '/AssignLine/Shifttoinactive',
+            data: { 'Id': Id },
+            success: function (response) {
+                if (response.Result == true) {
+                    alert('Status Updated successfully.');
+                    //toastr["success"]('Status Updated successfully.');
+                    window.location.reload();
+
+                }
+                else {
+                    alert('An Error has occured. Please try again.');
+                    // toastr["error"]('An Error has occured. Please try again.');
+                }
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                //toastr["error"]('An Error has occured. Please try again.');
+                alert('An Error has occured. Please try again.');
+            }
+        });
+
+    };
+    //}
+</script>
+
+<script type="text/javascript">
+
+    setTimeout(function () {
+
+        $('#successMessage').fadeOut('fast');
+        $('#errorMessage').fadeOut('fast');
+    }, 3000);
+
+
+</script>
+<script>
+    // $('#Years option:selected').val('2021');
+
+    debugger;
+
+    
+
+     var data = '@TempData["Error"]';
+    if (data == '')
+    {
+      
+        document.getElementById("Years").selectedIndex = "7";
+    }
+
+
+   
+    //window.onload = function () {
+    //    document.getElementById("Years").selectedIndex = "7";
+    //}
+
+    //window.onload = init;
+    
+
+</script>
+
+
+<script>
+    function goBack() {
+        window.history.back();
+    }
+</script>

@@ -1,0 +1,174 @@
+﻿
+
+<script type="text/javascript">
+
+    var result =  @Html.Raw(ViewBag.DataPoints);
+    var dataPoints =[];
+    var dataPoints1 =[];
+    var dataPoints2 =[];
+
+   
+
+    var result1 =  '@ViewBag.status2';
+
+    var myhours = "Hours";
+
+    if (result1 == '3') {
+        myhours = "No. of Deviations";
+    }
+
+    for(var i = 0; i < result.length; i++){
+        if(result1=='1')
+        {
+
+            dataPoints.push({label:result[i].Months, y:result[i].Work});
+
+        }
+        if(result1=='2')
+        {
+
+            dataPoints1.push({label:result[i].Months, y:result[i].Rest});
+
+        }
+        if(result1=='3')
+        {
+
+            dataPoints2.push({label:result[i].Months, y:result[i].Deviation});
+        }
+        if(result1=='4')
+        {
+            dataPoints.push({label:result[i].Months, y:result[i].Work});
+            dataPoints1.push({label:result[i].Months, y:result[i].Rest});
+        }
+        if(result1=='5')
+        {
+            dataPoints.push({label:result[i].Months, y:result[i].Work});
+            dataPoints2.push({label:result[i].Months, y:result[i].Deviation});
+        }
+        if(result1=='6')
+        {
+
+            dataPoints1.push({label:result[i].Months, y:result[i].Rest});
+            dataPoints2.push({label:result[i].Months, y:result[i].Deviation});
+        }
+
+        if(result1=='7')
+        {
+
+
+            dataPoints.push({label:result[i].Months, y:result[i].Work});
+            dataPoints1.push({label:result[i].Months, y:result[i].Rest});
+            dataPoints2.push({label:result[i].Months, y:result[i].Deviation});
+        }
+    }
+
+    $(function () {
+        var chart = new CanvasJS.Chart("chartContainer7", {
+            title: {
+                text: "@ViewBag.Datacount", 
+                fontSize: 30,
+                padding: 10,
+                margin: 35,
+                //backgroundColor: "#FFFFE0",
+                //borderThickness: 1,
+                //cornerRadius: 5,
+                fontWeight: "bold"
+            },
+            exportEnabled: true,
+            animationEnabled: true,
+            axisX: {
+                //valueFormatString: "dd",
+                interval: 1,
+                //title: "Day wise",
+                title: "Vessels :   @ViewBag.vesselname     "+ " Ranks : @ViewBag.rank"+"        Range : @ViewBag.datefrom1  To @ViewBag.dateto1",
+                labelFontColor: "black",
+                titleFontColor: "black",
+                titleFontSize: 14
+                //intervalType: "date"
+
+            },
+            axisY: {
+                includeZero: true,
+                title: myhours,
+                titleFontSize:20,
+                labelFontColor: "black",
+                titleFontColor: "black"
+                //valueFormatString: "#0.#,."
+                //prefix: "Hrs "
+            },
+
+            toolTip: {
+                shared: true,
+
+                //content: function (e) {
+                //    var body;
+                //    var head;
+                //    head = "<span style = 'color:DodgerBlue; '><strong>" + (e.entries[0].dataPoint.x) + " sec</strong></span><br/>";
+
+                //    body = "<span style= 'color:" + e.entries[0].dataSeries.color + "'> " + e.entries[0].dataSeries.name + "</span>: <strong>" + e.entries[0].dataPoint.y + "</strong>  m/s<br/> <span style= 'color:" + e.entries[1].dataSeries.color + "'> " + e.entries[1].dataSeries.name + "</span>: <strong>" + e.entries[1].dataPoint.y + "</strong>  m";
+
+                //    return (head.concat(body));
+                //}
+                content: "<span style='\"'color: {color};'\"'><strong>{name}</strong></span> <span style='\"'color: Black;'\"'>{y}</span> "
+            },
+            legend: {
+                fontSize: 18
+
+            },
+            data: [
+            {
+                type: "spline",
+                name: "Work Hours",
+                showInLegend: true,
+                //markerSize: 0,
+                color: "rgba(96,17,227,.8)",
+
+                dataPoints:dataPoints
+
+            },
+            {
+
+                type: "spline",
+                name: "Rest Hours",
+                showInLegend: true,
+
+                color: "rgba(134,180,2,.8)",
+               dataPoints:dataPoints1
+            },
+            {
+                type: "spline",
+                name: "Deviation",
+                showInLegend: true,
+                //markerSize: 0,
+                color: "rgba(250, 45, 4,.8)",
+                dataPoints:dataPoints2
+
+            }
+
+
+            ]
+        });
+
+        chart.render();
+
+        var canvas = document.getElementsByClassName("canvasjs-chart-canvas")[0];
+        var context = canvas.getContext('2d');
+        var imageObj = new Image();
+        ////imageObj.crossOrigin = "anonymous"; //https://developer.mozilla.org/en-US/docs/Web/HTML/CORS_enabled_image
+        imageObj.onload = function () {
+            context.drawImage(imageObj, 1, 1, 60, 70);
+        }
+        imageObj.src = "https://sci.work-ship.com/nwscilogo.jpg";//'http://i.imgur.com/qWTEOfN.jpg'; // https://sci.work-ship.com/nwscilogo.jpg
+        alert('loaded');
+
+    });
+
+   
+</script>
+
+
+
+
+<div id="chartContainer7" style="height: 450px; width: 100%;">
+
+</div>

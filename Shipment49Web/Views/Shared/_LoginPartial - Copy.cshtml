@@ -1,0 +1,33 @@
+﻿@using Microsoft.AspNet.Identity
+@using MenuLayer
+
+@if (Request.IsAuthenticated){
+    using (Html.BeginForm(FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+        <ul class="nav-right">
+            @*<li>@Html.ActionLink("NC", "Register", "Account", routeValues: null, htmlAttributes: new { id = "registerLink" })</li>*@
+            @*<li>@Html.ActionLink("C NC", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" })</li>*@
+            <li class="hidden-sm hidden-xs">
+                <a href="/notification/deviations" title="Deviations">
+                    <i class="fa fa-bell" aria-hidden="true"></i><span class="badge">@UserRole.UserNc</span>
+                </a>
+            </li>
+            <li class="hidden-sm hidden-xs">
+                <a href="/notification/certificates" title="Certificates">
+                    <i class="fa fa-file-text-o" aria-hidden="true"></i><span class="badge">@UserRole.UserCNc</span>
+                </a>
+            </li>
+            <li>
+                @*Welcome:  @User.Identity.GetUserName()!*@
+                Welcome:  @UserRole.FullName!
+            </li>
+            <li>
+                @Html.ActionLink("Help", "index", new { controller = "help", area = "helps"})
+            </li>
+            <li>  @Html.ActionLink("Logout", "SignOut", "account", new { area = "" }, new { })</li>
+        </ul>
+
+    }
+}
+

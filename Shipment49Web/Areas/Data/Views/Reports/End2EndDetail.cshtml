@@ -1,0 +1,199 @@
+﻿@model Shipment49Web.Common.RopeSummaryReport
+
+@{
+    ViewBag.Title = "End2EndDetail";
+    Layout = "~/Views/Shared/_LeftSideBar.cshtml";
+}
+
+
+@*<link href="http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.0.3/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <link href="http://cdn.rawgit.com/davidstutz/bootstrap-multiselect/master/dist/css/bootstrap-multiselect.css" rel="stylesheet" type="text/css" />*@
+
+
+<link href="~/Content/Chart.css" rel="stylesheet" />
+<script src="~/js/CommonScriptFunctions.js"></script>
+<script src="~/Scripts/Chart.min.js"></script>
+
+
+<div class="content-wrapper">
+    <section class="content-header">
+        <h1>
+            End to End Detail
+        </h1>
+    </section>
+
+    <section class="content">
+        <div class="box box-info">
+            <div class="box-body">
+                @{ int count = 0;}
+                <div class="nav-tabs-custom">
+                    <ul class="nav nav-tabs">
+                        <li class="active">
+                            <a href="#GraphView" class="tablinks" data-toggle="tab">Over-Due Graphical</a>
+                        </li>
+                        <li>
+                            <a href="#End2EndDue" class="tablinks" data-toggle="tab">Over-Due Statistical</a>
+                        </li>
+                        <li>
+                            <a href="#End2EndUpcoming" class="tablinks" data-toggle="tab">Upcoming List</a>
+                        </li>
+
+                    </ul>
+                    <div class="tab-content" style="min-height: 650px">
+                        <div class="tab-pane active" id="GraphView">
+                            @{
+                                count = Model.End2EndDue_Detail.Count;
+                                if (count == 0)
+                                {
+                                    <div class="panel-group">
+                                        <div class="panel panel-info">
+                                            <div class="panel-body">
+                                                <p class="text-center">
+                                                    No Records Found!
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                                else
+                                {
+
+                                    <div style="height: 250px">
+                                        @Html.Partial("_End2EndWinchRotationChart", (Shipment49Web.Common.GraphData)@ViewBag.End2EndWinch)
+                                    </div>
+                                }
+
+                            }
+                        </div>
+
+                        <div class="tab-pane" id="End2EndDue">
+                            @{
+                                count = Model.End2EndDue_Detail.Count;
+                                if (count == 0)
+                                {
+                                    <div class="panel-group">
+                                        <div class="panel panel-info">
+                                            <div class="panel-body">
+                                                <p class="text-center">
+                                                    No Records Found!
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="table-responsive">
+                                        <table class="table no-margin table-striped" id="dataTable" width="100%" cellspacing="0">
+                                            <thead>
+                                                <tr>
+                                                    <th>Vessel Name</th>
+                                                    <th>Certificate Number</th>
+                                                    <th>Manufacture</th>
+                                                    <th>Rope Type</th>
+                                                    <th>Due Date</th>
+                                                    @*<th>Details</th>*@
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @{
+                                                    foreach (var record in Model.End2EndDue_Detail)
+                                                    {
+                                                        <tr>
+                                                            <td>@record.VesselName</td>
+                                                            <td>@record.CertificateNumber</td>
+                                                            <td>@record.Name</td>
+                                                            <td>@record.RopeType</td>
+                                                            <td>
+                                                                @{
+                                                                    DateTime? dt = record.End2EndDue;
+                                                                    if (dt != null)
+                                                                    {
+                                                                        @Html.Raw(dt.Value.ToString("dd-MMM-yyyy"))
+                                                                    }
+                                                                }
+                                                            </td>
+                                                            @*<td>
+                                                                    <a href="~/Data/Reports/RopeSummary?rope=@record.RopeId&tail=@record.RopeTail&vessel=@record.VesselID" title="Rope Details" target="_blank">
+                                                                        <i class="fa fa-list-ul"></i>
+                                                                    </a>
+                                                                </td>*@
+                                                        </tr>
+                                                    }
+                                                }
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                }
+                            }
+                        </div>
+                        <div class="tab-pane" id="End2EndUpcoming">
+                            @{
+                                count = Model.End2EndUpcoming_Detail.Count;
+                                if (count == 0)
+                                {
+                                    <div class="panel-group">
+                                        <div class="panel panel-info">
+                                            <div class="panel-body">
+                                                <p class="text-center">
+                                                    No Records Found!
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="table-responsive">
+                                        <table class="table no-margin table-striped" id="dataTable" width="100%" cellspacing="0">
+                                            <thead>
+                                                <tr>
+                                                    <th>Vessel Name</th>
+                                                    <th>Certificate Number</th>
+                                                    <th>Manufacture</th>
+                                                    <th>Rope Type</th>
+                                                    <th>Due Date</th>
+                                                    @*<th>Details</th>*@
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @{
+                                                    foreach (var record in Model.End2EndUpcoming_Detail)
+                                                    {
+                                                        <tr>
+                                                            <td>@record.VesselName</td>
+                                                            <td>@record.CertificateNumber</td>
+                                                            <td>@record.Name</td>
+                                                            <td>@record.RopeType</td>
+                                                            <td>
+                                                                @{
+                                                                    DateTime? dt = record.End2EndDue;
+                                                                    if (dt != null)
+                                                                    {
+                                                                        @Html.Raw(dt.Value.ToString("dd-MMM-yyyy"))
+                                                                    }
+                                                                }
+                                                            </td>
+                                                            @*<td>
+                                                                    <a href="~/Data/Reports/RopeSummary?rope=@record.RopeId&tail=@record.RopeTail&vessel=@record.VesselID" title="Rope Details" target="_blank">
+                                                                        <i class="fa fa-list-ul"></i>
+                                                                    </a>
+                                                                </td>*@
+                                                        </tr>
+                                                    }
+                                                }
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                }
+                            }
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+

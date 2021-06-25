@@ -1,0 +1,66 @@
+﻿@model VesselLayer.Vessel
+
+@{
+    ViewBag.Title = "Detail";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Vessel Detail</h2>
+
+<div class="panel panel-default">
+
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.VesselID)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.VesselID)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.VesselName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.VesselName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ImoNo)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ImoNo)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Flag)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Flag)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.FleetName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.FleetName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.FleetType)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.FleetType)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

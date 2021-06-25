@@ -1,0 +1,56 @@
+﻿
+
+@model Shipment49Web.Common.GraphData
+
+<div class="col-md-10">
+    <canvas id="pie-chart" width="800" height="350"></canvas>
+    @*<canvas id="@string.Format("myChart{0}", Model.chartId)" style="display: block;width: 300px;height: 200px;"></canvas>*@
+    <input type="hidden" id="@string.Format("hdn{0}", Model.chartId)" class="hdn" value="@Model.data" />
+    @*<input type="hidden" id="@string.Format("lbl{0}", Model.chartId)" class="hdn" value="@ViewBag.ChartLables_RTW" />
+    <input type="hidden" id="@string.Format("TTL{0}", Model.chartId)" class="hdn" value="@ViewBag.TitleHead_RTW" />*@
+    <hr />
+</div>
+
+
+
+<script>
+     var data = $("@string.Format("#hdn{0}", Model.chartId)").val();
+    data = JSON.parse(data);
+    console.log(data);
+    debugger;
+
+
+    new Chart(document.getElementById("pie-chart"), {
+        type: 'doughnut',
+        data:{
+            labels: data.labels,
+            datasets: [{
+                label: 'Number of Reasons Count',
+                backgroundColor: data.backgroundColor,
+                data: data.data,
+                borderColor: 'white',
+                borderWidth: 5,
+                hoverBackgroundColor: data.backgroundColor,
+                
+            }]
+        },
+        showDatapoints: true,
+        options: {
+            title: {
+                display: true,
+                text: data.label
+            },
+            tooltips: {
+                enabled: true,
+                intersect: false
+            }
+        }
+        
+
+    });
+
+    
+</script>
+
+
+

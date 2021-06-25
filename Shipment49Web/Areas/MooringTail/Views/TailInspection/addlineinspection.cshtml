@@ -1,0 +1,925 @@
+﻿@model Reports.MooringRopeInspection
+@{
+    ViewBag.Title = "addlineinspection";
+    Layout = "~/Views/Shared/_LayoutVessel7.cshtml";
+}
+
+@*<style>
+
+
+        table {
+            border-collapse: collapse;
+            background: white;
+            table-layout: fixed;
+            width: 100%;
+        }
+
+        th, td {
+            padding: 8px 16px;
+            border: 1px solid #ddd;
+            width: 160px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .pane {
+            background: #eee;
+        }
+
+        .pane-hScroll {
+            overflow: auto;
+            width: 400px;
+            background: lightgray;
+        }
+
+        .pane-vScroll {
+            overflow-y: auto;
+            overflow-x: hidden;
+            height: 300px;
+            background: white;
+        }
+
+        .pane--table2 {
+            width: 400px;
+            overflow-x: scroll;
+        }
+
+            .pane--table2 th, .pane--table2 td {
+                width: auto;
+                min-width: 160px;
+            }
+
+            .pane--table2 tbody {
+                overflow-y: scroll;
+                overflow-x: hidden;
+                display: block;
+                height: 200px;
+            }
+
+            .pane--table2 thead {
+                display: table-row;
+            }
+
+    </style>*@
+
+<script type="text/javascript">
+    $('.datepicker').datepicker();
+</script>
+
+<style>
+    iframe {
+        height: 500px;
+        width: 500px;
+    }
+</style>
+
+<script type="text/javascript">
+    function onUploadControlFileUploadComplete(s, e) {
+        if (e.isValid)
+            $("#uploadedImage").attr("src", e.callbackData);
+        setElementVisible("uploadedImage", e.isValid);
+    }
+    function onImageLoad() {
+        var externalDropZone = $("#externalDropZone");
+        var uploadedImage = $("#uploadedImage");
+        uploadedImage.css({
+            left: (externalDropZone.width() - uploadedImage.width()) / 2,
+            top: (externalDropZone.height() - uploadedImage.height()) / 2
+        });
+        setElementVisible("dragZone", false);
+    }
+    function setElementVisible(elementId, visible) {
+        var el = $("#" + elementId);
+        if (visible)
+            el.show();
+        else
+            el.hide();
+    }
+</script>
+
+
+
+<script>
+    function selectall(source) {
+        checkboxes = document.getElementsByName('case1');
+        for (var i = 0, n = checkboxes.length; i < n; i++) {
+            checkboxes[i].checked = source.checked;
+        }
+    }
+</script>
+
+
+<script>
+    function showpdf(param) {
+        // var imgSrc = $(param).attr("src");
+        //alert(param);
+
+        // /images/AttachFiles / _49 Web Street, Grey Box Web Application Vulnerability Assessment Report3798.pdf
+        var omyFrame = document.getElementById("myFrame");
+        omyFrame.style.display = "block";
+        omyFrame.src = param;
+        // omyFrame.load();
+        // $('#ifrID').attr('src', param);
+        $('#PdfModal').modal('show');
+    }
+</script>
+
+<div id="PdfModal" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title"></h4>
+            </div>
+            <div class="modal-body">
+                <div class="box-body">
+                    <div style="text-align:center">
+                        <iframe id="myFrame" style="display:none;width:100%"></iframe>
+
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="page-heading page-header-flex">
+    <div>
+        <h1 class="page-title">
+            Mooring Line Inspection Add
+        </h1>
+        @*<ol class="breadcrumb">
+            <li><a href="">Home</a></li>
+            <li><a href="">Form</a></li>
+            <li><a>Create</a></li>
+        </ol>*@
+    </div>
+    <div>
+        <div class="form-actions">
+            <button type="submit" id="btnSubmit" onclick="SaveData()" class="btn btn-success btn-width"><i class="uil uil-check mr-2"></i>Submit</button>
+            <button type="reset" class="btn btn-danger btn-width"><i class="uil uil-redo mr-2"></i>Reset</button>
+            <a name="back" id="btnBack" onclick="goBack()" class="btn btn-primary btn-width"> << Go Back</a>
+        </div>
+    </div>
+</div>
+
+<div class="wrapper wrapper-content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-offset-2 col-md-8">
+                <div class="download-btn text-center mb-5">
+                    @*<p class="btn btn-info">*@
+                        @*<a class="uil uil-import mr-2" target="_blank" href="~/images/InspectionImages/MOORING ROPES INSPECTION GUIDE.pdf">Inspection Guidance</a>*@
+
+
+                        <a class="btn btn-info" onclick="showpdf(this.id)" id="~/images/InspectionImages/MOORING ROPES INSPECTION GUIDE.pdf"><i class="uil uil-import mr-2"></i>Inspection Guidance</a>
+                    @*</p>*@
+
+                    <button type="reset" onclick="location.href='@Url.Action("DownloadExcelSheet", "TailInspection")'" class="btn btn-info"><i class="uil uil-import mr-2"></i>Inspection Excel</button>
+                </div>
+                <div class="panel panel-default mb-6">
+                    <div class="panel-body">
+                        <div class="row form-group">
+                            <label class="col-md-2 col-sm-3 col-form-label mt-0 mt-sm-3">
+                                <label class="control-label">Inspection Date<sup>*</sup></label>
+                            </label>
+                            <div class="col-md-4 col-sm-3">
+
+                                @Html.TextBoxFor(x => x.InspectDate, "{0:yyyy-MM-dd}", new { @class = "form-control datepicker", @autocomplete = "Off", @readOnly = "true", @required = "true", @placeholder = "yyyy-mm-dd" })
+                                <span id="messageInsdt"></span>
+                            </div>
+                            <label class="col-md-2 col-sm-3 col-form-label mt-0 mt-sm-3">
+                                <label class="control-label">Inspection by<sup>*</sup></label>
+                            </label>
+                            <div class="col-md-4 col-sm-3">
+                                @Html.EditorFor(model => model.InspectBy, new { htmlAttributes = new { @class = "form-control", @maxlength = 70, @required = "true", } })
+                                <span id="messageInsby"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="Mydiv" class="table-responsive freeze-side1">
+            @{
+                int count = 1;
+            }
+            <table id="tbl1" class="table table-bordered" height="50">
+                <thead>
+                    @*<tr class="table-mark">
+                            <th></th>
+                            <th colspan="4"></th>
+                            <th colspan="7" class="bg-primary"><label>ZONE -A (Chock or Fairlead Contact area zone)</label></th>
+                            <th colspan="7" class="bg-info"><label>ZONE -A (Winch drum Contact area zone)</label></th>
+                            <th colspan="4"></th>
+                        </tr>*@
+                    <tr>
+                        @*<th>
+            <input type="checkbox">
+            <span class="ml-2">Winch no.</span>
+        </th>
+        <th>Location</th>
+        <th>LineType</th>
+        <th>UIdent. No</th>
+        <th>C. No.</th>
+        <th>External</th>
+        <th>Iternal</th>
+        <th>Average</th>
+        <th>Length of Abrasion</th>
+        <th>Distace from outboard eye</th>
+        <th>Cut Yarn Counted</th>
+        <th>Length of Glazing</th>
+        <th>External</th>
+        <th>Iternal</th>
+        <th>Average</th>
+        <th>Length of Abrasion</th>
+        <th>Distace from outboard eye</th>
+        <th>Cut Yarn Counted</th>
+        <th>Length of Glazing</th>
+        <th>Chafe Guard</th>
+        <th>Twist</th>
+        <th>Photo 1</th>
+        <th>Photo 2</th>*@
+
+
+                        <th style="display:none">Id</th>
+                        @*<th>
+            <input type="checkbox" id="selectall" onClick="selectall(this)" />
+            <span class="ml-2">Winch no.</span>
+        </th>*@
+
+                        <th><input type="checkbox" class="ml-2" id="selectall" onClick="selectall(this)" />Select All</th>
+                        <th>Winch #</th>
+                        <th>Line Position</th>
+                        <th>Line Type</th>
+                        <th>Unique ID</th>
+                        <th>Certificate Number</th>
+
+
+
+
+                        <th>External Abrasion(Rating)</th>
+                        <th>Internal Abrasion(Rating)</th>
+                        <th>Average(Rating)</th>
+                        <th>Length of Abrasion(Rating)</th>
+                        <th>Distance from outboard eye(meters)</th>
+                        <th>Cut Yarn Count(#)</th>
+                        <th>Length of Glazing(meters)</th>
+
+                        <th>Chafe Guard</th>
+                        <th>Twist per(meter)</th>
+                        <th style="width:230px">Photo1</th>
+                        <th style="width:230px">Photo2</th>
+                        <th style="display:none">S.No</th>
+
+
+
+
+
+
+                    </tr>
+                </thead>
+                <tbody>
+
+
+                    @foreach (var item in Model.AddInspectionList)
+                    {
+                        <tr>
+                            <td><input class="ml-2" name="case1" type="checkbox" />    &nbsp; </td>
+                            <td style="display:none"> @Html.DisplayFor(modelItem => item.Id)</td>
+                            <td style="display:none"> @Html.DisplayFor(modelItem => item.RopeId)</td>
+                            <td style="display:none"> @Html.DisplayFor(modelItem => item.WinchId)</td>
+
+                            @*<td>
+                                    <input type="checkbox"><span class="ml-2">@item.AssignedNumber</span>
+                                </td>*@
+
+                            <td> @Html.DisplayFor(modelItem => item.AssignedNumber)</td>
+                            <td> @Html.DisplayFor(modelItem => item.Location)</td>
+                            <td>@Html.DisplayFor(modelItem => item.RopeType)</td>
+                            <td> @Html.DisplayFor(modelItem => item.UniqueId)</td>
+                            <td> @Html.DisplayFor(modelItem => item.CertificateNumber)</td>
+
+
+
+
+                            <td style="width:100px!important">
+                                @Html.DropDownListFor(model => model.ExternalRating_A, new SelectList(Model.CommonExtInt, "Value", "Text"), "", new { @class = "form-control" })
+
+                            </td>
+                            <td style="width:100px!important">
+                                @Html.DropDownListFor(model => model.InternalRating_A, new SelectList(Model.CommonExtInt, "Value", "Text"), "", new { @class = "form-control" })
+
+                            </td>
+                            <td>
+                                @Html.EditorFor(model => model.AverageRating_A, new { htmlAttributes = new { @class = "form-control", @required = "true", disabled = "disabled", @readonly = "readonly" } })
+                            </td>
+                            <td>
+                                @Html.EditorFor(model => model.LengthOFAbrasion_A, new { htmlAttributes = new { @class = "form-control", @required = "true", @onkeypress = "return isNumberKey(event)", @maxlength = 5, @Value = "0.00", @onKeyUp = "requiredValue(this)" } })
+                            </td>
+                            <td>
+                                @Html.EditorFor(model => model.DistanceOutboard_A, new { htmlAttributes = new { @class = "form-control", @required = "true", @onkeypress = "return isNumberKey(event)", @maxlength = 6, @Value = "0.00", @onKeyUp = "requiredValue1(this)" } })
+                            </td>
+                            <td>
+                                @Html.EditorFor(model => model.CutYarnCount_A, new { htmlAttributes = new { @class = "form-control", @required = "true", @onkeypress = "return isNumberKey(event)", @maxlength = 5, @Value = "0.00", @onKeyUp = "requiredValue2(this)" } })
+                            </td>
+                            <td>
+                                @Html.EditorFor(model => model.LengthOFGlazing_A, new { htmlAttributes = new { @class = "form-control", @required = "true", @onkeypress = "return isNumberKey(event)", @maxlength = 6, @Value = "0.00", @onKeyUp = "requiredValue3(this)" } })
+                            </td>
+
+
+                            <td>
+                                @Html.DropDownListFor(model => model.Chafe_guard_condition, new SelectList(Model.ChafeGuard, "ChafeGuard", "ChafeGuard"), "", htmlAttributes: new { @class = "form-control select2", @required = "true", @style = "width: 150px;", })
+
+                            </td>
+                            <td>
+                                @Html.EditorFor(model => model.Twist, new { htmlAttributes = new { @class = "form-control", @required = "true", @onkeypress = "return isNumberKey(event)", @maxlength = 5, @min = "0", @Value = "0" } })
+                            </td>
+                            <td style="width:200px">
+                                <div style="width:200px" id="dZUpload" class="dropzone">
+                                    <div class="dz-defaultdz-message"></div>
+                                </div>
+                            </td>
+                            <td style="width:200px">
+                                <div style="width:200px" id="dZUpload1" class="dropzone">
+                                    <div class="dz-defaultdz-message"></div>
+                                </div>
+                            </td>
+                            <td style="display:none">@count </td>
+
+                            @{ count++; }
+                        </tr>
+                    }
+
+
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+<script language=Javascript>
+      <!--
+
+    function isNumberKey(evt) {
+
+        var charCode = (evt.which) ? evt.which : event.keyCode
+        if (charCode != 46 && charCode > 31 && (charCode < 48 || charCode > 57))
+            return false;
+
+        return true;
+    }
+
+    //-->
+</script>
+
+<script>
+
+    $("#Mydiv [id*='External']").change(function () {
+        // debugger;
+        var cells = $(this).closest('tr').children('td');
+        var value1 = cells.eq(9).find('select').val();
+        var value2 = cells.eq(10).find('select').val();
+        var x = parseInt(value1) + parseInt(value2);
+        var value3 = x / 2;
+        var iNum = value3;
+        var ss = iNum.toFixed();
+        cells.eq(11).text(ss);
+        //cells.eq(9).text(new Number(value1) * new Number(value2));
+        //var state = $(this).parent().parent().find("input[id*='cboState']").val();
+    });
+
+
+
+    $("#Mydiv [id*='Internal']").change(function () {
+        // debugger;
+        var cells = $(this).closest('tr').children('td');
+        var value1 = cells.eq(9).find('select').val();
+        var value2 = cells.eq(10).find('select').val();
+        var x = parseInt(value1) + parseInt(value2);
+        var value3 = x / 2;
+        var iNum = value3;
+        var ss = iNum.toFixed();
+        cells.eq(11).text(ss);
+    });
+
+
+    //$("#Mydiv [id*='External1']").change(function () {
+    //    //debugger;
+    //    var cells = $(this).closest('tr').children('td');
+    //    var value1 = cells.eq(16).find('select').val();
+    //    var value2 = cells.eq(17).find('select').val();
+    //    var x = parseInt(value1) + parseInt(value2);
+    //    var value3 = x / 2;
+    //    var iNum = value3;
+    //    var ss = iNum.toFixed();
+    //    cells.eq(18).text(ss);
+    //});
+
+    //$("#Mydiv [id*='Internal1']").change(function () {
+    //   // debugger;
+    //    var cells = $(this).closest('tr').children('td');
+    //    var value1 = cells.eq(16).find('select').val();
+    //    var value2 = cells.eq(17).find('select').val();
+    //    var x = parseInt(value1) + parseInt(value2);
+    //    var value3 = x / 2;
+    //    var iNum = value3;
+    //    var ss = iNum.toFixed();
+    //    cells.eq(18).text(ss);
+    //});
+
+
+</script>
+
+<script type="text/javascript">
+
+    setTimeout(function () {
+
+        $('#successMessage').fadeOut('fast');
+        $('#errorMessage').fadeOut('fast');
+    }, 3000);
+
+
+</script>
+
+<script type="text/javascript">
+    $('.datepicker').datepicker();
+</script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/4.3.0/min/dropzone.min.css" rel="stylesheet" type="text/css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/4.3.0/min/dropzone.min.js" type="text/javascript"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        Dropzone.autoDiscover = false;
+
+
+        //var myDropzone = new Dropzone(".dropzone", {
+        //    //maxFilesize: 10,
+        //    acceptedFiles: ".jpeg,.jpg,.png,.gif"
+        //});
+
+        $(".dropzone").dropzone({
+
+            acceptedFiles: 'image/*',
+            url: "GenericHandler.ashx",
+            maxFiles: 1,
+            maxFilesize: .20,
+            thumbnailWidth: null,
+            thumbnailHeight: null,
+            init: function () {
+                this.on("thumbnail", function (file, dataUrl) {
+                    $('.dz-image').last().find('img').attr({ width: '100%', height: '100%' });
+                }),
+                    this.on("success", function (file) {
+                        $('.dz-image').css({ "width": "100%", "height": "auto" });
+                    }),
+                    this.on("error", function (file, errorMessage) {
+                        var check = file.accepted;
+                        if (check == false) {
+                            var sizechk = file.size;
+                            var rr = sizechk / 1024;
+                            if (rr > 200) {
+                                alert("Max file size allowed to upload is 200 kb, current file is size :- " + rr.toFixed(2) + " kb.");
+                                this.removeFile(file);
+
+                            } else {
+                                alert("error : " + errorMessage);
+                                this.removeFile(file);
+
+                            }
+
+                        }
+                    });
+            },
+            addRemoveLinks: true,
+
+            //acceptedFiles: ".jpeg,.jpg,.png,.gif",
+            //acceptedFiles: 'image/jpeg,image/png,image/gif,image/jpg,application/pdf',
+            success: function (file, response) {
+
+                var imgName = response;
+                file.previewElement.classList.add("dz-success");
+                console.log("Successfully uploaded :" + imgName);
+            },
+            error: function (file, response) {
+                file.previewElement.classList.add("dz-error");
+            }
+        });
+    });
+</script>
+
+@*<script type="text/javascript">
+
+        Dropzone.autoDiscover = false;
+
+        var myDropzone = new Dropzone(".dropzone", {
+            maxFilesize: 10,
+            acceptedFiles: ".jpeg,.jpg,.png,.gif"
+        });
+
+    </script>*@
+
+
+
+
+<script type="text/javascript">
+    //$('.datepicker').datepicker();
+
+    $("#InspectDate").datepicker({
+        endDate: 'today'
+    });
+</script>
+
+<script>
+
+
+
+    function SaveData() {
+
+        debugger;
+
+        var image1 = ""; var image2 = ""; var photo1 = ""; var photo2 = "";
+        var ratingcheck = 0; var notacptable = 0; var certno = ""; var chfguard = 0; var ratingcheck5 = 0;
+
+
+        var Insby = $("#InspectBy").val();
+        var Insdt = $("#InspectDate").val();
+        if (Insby == "") {
+
+            var msg = "Please fill name / rank of the person carrying out inspection"
+            $('#messageInsby').text(msg);
+            $('#messageInsby').css("color", "red");
+
+            return;
+        }
+        if (Insdt == "") {
+
+            var msg = "Inspected Date can not be null !"
+            $('#messageInsdt').text(msg);
+            $('#messageInsdt').css("color", "red");
+
+
+            return;
+        }
+
+
+
+        var inspections = []; // list object
+        //$('#tbl1 > tbody  > tr').each(function () { //loop in table list
+
+        $("#tbl1 input[name=case1]:checked").each(function () {
+
+            var MooringRopeInspection = {};
+            var row = $(this).closest("tr")[0];
+            //var row1 = $(this).closest("tr").find('input');
+            var cells = $(this).closest('tr').children('td');
+            debugger;
+
+            var cntSrNo = row.cells[20].innerHTML;
+
+            image1 = "";
+            image2 = "";
+            photo1 = "";
+            photo2 = "";
+
+            var count = (cntSrNo - 1) * 2;
+            var count1 = count + 1;
+
+            $('.dropzone')[count].dropzone.files.forEach(function (file) {
+                debugger;
+                image1 = file.name;
+                photo1 = file.previewElement.querySelector("img").src;
+            });
+
+            $('.dropzone')[count1].dropzone.files.forEach(function (file) {
+                debugger;
+                image2 = file.name;
+                photo2 = file.previewElement.querySelector("img").src;
+            });
+
+            MooringRopeInspection.ExternalRating_A = cells.eq(9).find('select').val();
+            MooringRopeInspection.InternalRating_A = cells.eq(10).find('select').val();
+            MooringRopeInspection.LengthOFAbrasion_A = cells.eq(12).find('input').val();
+            //MooringRopeInspection.AverageRating_A = cells.find("td:eq(11) input[type='text']").val();
+            MooringRopeInspection.AverageRating_A = row.cells[11].innerHTML;
+
+            var str = MooringRopeInspection.AverageRating_A;
+            var lngth = str.length;
+            if (lngth > 2) {
+                ratingcheck = 1;
+                //alert("Please Insert External or Internal Rating !");
+                //return;
+            }
+
+            MooringRopeInspection.RopeId = row.cells[2].innerHTML;
+            MooringRopeInspection.WinchId = row.cells[3].innerHTML;
+            MooringRopeInspection.DistanceOutboard_A = cells.eq(13).find('input').val();
+            MooringRopeInspection.CutYarnCount_A = cells.eq(14).find('input').val();
+            MooringRopeInspection.LengthOFGlazing_A = cells.eq(15).find('input').val();
+            MooringRopeInspection.Chafe_guard_condition = cells.eq(16).find('select').val();
+            if (MooringRopeInspection.Chafe_guard_condition == "Not Acceptable") {
+
+                if (image1 == "" && image2 == "") {
+
+                    notacptable = 1;
+                    certno = row.cells[8].innerHTML;
+                }
+            }
+
+            if (MooringRopeInspection.Chafe_guard_condition == "") {
+
+                chfguard = 1;
+            }
+            if (MooringRopeInspection.AverageRating_A >= 5 ) {
+
+                if (image1 == "" && image2 == "") {
+
+                    ratingcheck5 = 1;
+                    certno = row.cells[8].innerHTML;
+                }
+            }
+
+            MooringRopeInspection.Twist = cells.eq(17).find('input').val();
+            MooringRopeInspection.Image1 = image1;
+            MooringRopeInspection.Image2 = image2;
+            MooringRopeInspection.Photo1 = photo1;
+            MooringRopeInspection.Photo2 = photo2;
+            //MooringRopeInspection.Photo2 = this.cells[28].innerHTML;
+            //Movie.Year = this.cells[2].innerHTML;
+            MooringRopeInspection.InspectBy = $("#InspectBy").val();
+            MooringRopeInspection.InspectDate = $("#InspectDate").val();
+            inspections.push(MooringRopeInspection);
+        });
+
+
+        debugger;
+       // alert(inspections);
+
+        if (notacptable == 1) {
+
+            alert("Due to the reported condition of Line ID {" + certno + "}, it is compulsory to attach atleast 1 photograph where maximum abrasion/ damage is observed, please browse and attach photographs !");
+            return;
+        }
+
+        if (ratingcheck != 0) {
+
+            alert("Please Insert External or Internal Rating !");
+            return;
+        }
+        if (chfguard != 0) {
+
+            alert("Please select an option from Chafe Guard !");
+            return;
+        }
+        if (ratingcheck5 != 0) {
+
+            alert("Due to the reported condition of Line ID {" + certno + "}, it is compulsory to attach atleast 1 photograph when rating equal or greater than 5, please browse and attach photographs !");
+            return;
+        }
+        inspections = JSON.stringify(inspections);
+
+        if (inspections == "[]") {
+            alert("Please Choose atleast 1 line to inspect by selecting checkbox in the first column !");
+            return;
+        }
+
+        $.ajax({
+            url: '@Url.Action("InsertInspection", "TailInspection")',
+            type: "POST",
+            data: { 'inspections': inspections },
+            dataType: "json",
+            beforeSend: function (x) {
+                if (x && x.overrideMimeType) {
+                    x.overrideMimeType("application/j-son;charset=UTF-8");
+                }
+            },
+            success: function (result) {
+                window.location.href = result;
+            }
+        });
+
+    }
+
+</script>
+
+<script type="text/javascript">
+    var indexcheck = 0;
+    //$('td').click(function () {
+    $('td').on('click', function () {
+        //alert(344);
+        var row_index = $(this).parent().index('tr');
+        indexcheck = row_index;
+        // alert(indexcheck);
+        // var col_index = $(this).index('tr:eq(' + row_index + ') td');
+    });
+
+    $('td').keydown(function (evt) {
+        // if (evt.keyCode == 40) {
+        //event.preventDefault();
+
+        //alert(5553);
+        //var cellindex = $(this).index()
+        var rowindex = $(this).parents('tr').index() + 1;
+        indexcheck = rowindex;
+
+        //   $(this).parents('table').find('tr:eq(' + rowindex + ') td:eq(' + cellindex + ')').focus()
+        //}
+    });
+
+    $("#tbl1").on("click", "td", function () {
+        var row_index = $(this).parent().index('tr');
+        indexcheck = row_index;
+
+
+        //alert(indexcheck);
+    });
+
+    function requiredValue(arg) {
+        var id = arg.getAttribute('id');
+        var value = arg.value;
+
+        var last2 = value.slice(-2);
+        if (last2 == "..") {
+            alert("Only one decimal allowed!");
+            $("#tbl1").children().children().eq(indexcheck).children().eq(12).find('input').val('0.00');
+        }  
+
+        if (value > 99) {
+            alert("Value in 'Length of Abrasion A' cannot greater than 2 digits & 2 decimal places !");
+            //var ssd = $("#tbl1").children().children().eq(2).children().eq(12).index('tr');
+
+            debugger;
+            $("#tbl1").children().children().eq(indexcheck).children().eq(12).find('input').val('0.00');
+
+        }
+    }
+
+    function requiredValue1(arg) {
+        var id = arg.getAttribute('id');
+        var value = arg.value;
+        var last2 = value.slice(-2);
+        if (last2 == "..") {
+            alert("Only one decimal allowed!");
+            $("#tbl1").children().children().eq(indexcheck).children().eq(13).find('input').val('0.00');
+        }  
+
+        if (value > 999.99) {
+            alert("Value in 'Distance from outboard eye A' cannot greater than 3 digits & 2 decimal places !");
+            //$('#tbl1 td').eq(13).html('0.00');
+            //$('#tbl1 td').eq(13).find("input").val('0.00');
+
+            debugger;
+            $("#tbl1").children().children().eq(indexcheck).children().eq(13).find('input').val('0.00');
+
+
+
+        }
+    }
+
+    function requiredValue2(arg) {
+        var id = arg.getAttribute('id');
+        var value = arg.value;
+
+        var last2 = value.slice(-2);
+        if (last2 == "..") {
+            alert("Only one decimal allowed!");
+            $("#tbl1").children().children().eq(indexcheck).children().eq(14).find('input').val('0.00');
+        }  
+
+        if (value > 99) {
+            alert("Value in 'Cut Yarn counted A' cannot greater than 2 digits & 2 decimal places !");
+            // $('#tbl1 td').eq(14).html('0.00');
+            //$('#tbl1 td').eq(14).find("input").val('0.00');
+            $("#tbl1").children().children().eq(indexcheck).children().eq(14).find('input').val('0.00');
+        }
+    }
+
+    function requiredValue3(arg) {
+        var id = arg.getAttribute('id');
+        var value = arg.value;
+
+        var last2 = value.slice(-2);
+        if (last2 == "..") {
+            alert("Only one decimal allowed!");
+            $("#tbl1").children().children().eq(indexcheck).children().eq(15).find('input').val('0.00');
+        }  
+
+        if (value > 999.99) {
+            alert("Value in 'Length of Glazing A' cannot greater than 3 digits & 2 decimal places !");
+            //$('#tbl1 td').eq(15).html('0.00');
+            // $('#tbl1 td').eq(15).find("input").val('0.00');
+            $("#tbl1").children().children().eq(indexcheck).children().eq(15).find('input').val('0.00');
+        }
+    }
+
+    function requiredValue4(arg) {
+        var id = arg.getAttribute('id');
+        var value = arg.value;
+
+        var last2 = value.slice(-2);
+        if (last2 == "..") {
+            alert("Only one decimal allowed!");
+            $("#tbl1").children().children().eq(indexcheck).children().eq(19).find('input').val('0.00');
+        }  
+
+        if (value > 99) {
+            alert("Value in 'Length of Abrasion B' cannot greater than 2 digits & 2 decimal places !");
+            //$('#tbl1 td').eq(19).html('0.00');
+            //$('#tbl1 td').eq(19).find("input").val('0.00');
+            $("#tbl1").children().children().eq(indexcheck).children().eq(19).find('input').val('0.00');
+        }
+    }
+
+    function requiredValue5(arg) {
+        var id = arg.getAttribute('id');
+        var value = arg.value;
+
+        var last2 = value.slice(-2);
+        if (last2 == "..") {
+            alert("Only one decimal allowed!");
+            $("#tbl1").children().children().eq(indexcheck).children().eq(20).find('input').val('0.00');
+        }  
+
+        if (value > 999.99) {
+            alert("Value in 'Distance from outboard eye B' cannot greater than 3 digits & 2 decimal places !");
+            //$('#tbl1 td').eq(20).html('0.00');
+            //$('#tbl1 td').eq(20).find("input").val('0.00');
+            $("#tbl1").children().children().eq(indexcheck).children().eq(20).find('input').val('0.00');
+        }
+    }
+
+    function requiredValue6(arg) {
+        var id = arg.getAttribute('id');
+        var value = arg.value;
+
+        var last2 = value.slice(-2);
+        if (last2 == "..") {
+            alert("Only one decimal allowed!");
+            $("#tbl1").children().children().eq(indexcheck).children().eq(21).find('input').val('0.00');
+        }  
+
+        if (value > 99) {
+            alert("Value in 'Cut Yarn counted B' cannot greater than 2 digits & 2 decimal places !");
+            //$('#tbl1 td').eq(21).html('0.00');
+            // $('#tbl1 td').eq(21).find("input").val('0.00');
+            $("#tbl1").children().children().eq(indexcheck).children().eq(21).find('input').val('0.00');
+        }
+    }
+
+    function requiredValue7(arg) {
+        var id = arg.getAttribute('id');
+        var value = arg.value;
+
+
+        var last2 = value.slice(-2);
+        if (last2 == "..") {
+            alert("Only one decimal allowed!");
+            $("#tbl1").children().children().eq(indexcheck).children().eq(22).find('input').val('0.00');
+        }  
+
+        if (value > 999.99) {
+            alert("Value in 'Length of Glazing B' cannot greater than 3 digits & 2 decimal places !");
+            //$('#tbl1 td').eq(22).html('0.00');
+            // $('#tbl1 td').eq(22).find("input").val('0.00');
+            $("#tbl1").children().children().eq(indexcheck).children().eq(22).find('input').val('0.00');
+        }
+    }
+
+</script>
+
+<script>
+    $('.pane-hScroll').scroll(function () {
+        $('.pane-vScroll').width($('.pane-hScroll').width() + $('.pane-hScroll').scrollLeft());
+    });
+
+    //// Example 2
+    //$('.pane--table2').scroll(function () {
+    //    $('.pane--table2 table').width($('.pane--table2').width() + $('.pane--table2').scrollLeft());
+    //});
+</script>
+
+<script>
+    function goBack() {
+        window.history.back();
+    }
+</script>
+
+@*<script type="text/javascript">
+        //Get Row Index and Get Column Index when cell is clicked
+        $('td').click(function () {
+            //alert(344);
+            var row_index = $(this).parent().index('tr');
+
+           // var col_index = $(this).index('tr:eq(' + row_index + ') td');
+
+           // alert('Row Index # ' + (row_index) + ' Column Index # ' + (col_index) + ' using index');
+
+        });
+
+    </script>*@

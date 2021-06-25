@@ -1,0 +1,221 @@
+﻿@model Shipment49Web.Areas.InsDisCriteria.Models.InsDisCriteriaClass
+@{
+    ViewBag.Title = "taildiscardsetting";
+    Layout = "~/Views/Shared/_LayoutOthers.cshtml";
+}
+
+
+
+<div class="page-heading page-header-flex">
+    <div>
+        <h1 class="page-title">
+            Inspection Discard Criteria
+        </h1>
+        @*<ol class="breadcrumb">
+                <li><a href="">Home</a></li>
+                <li><a href="">Form</a></li>
+                <li><a>Create</a></li>
+            </ol>*@
+    </div>
+    @if (TempData["Error"] != null)
+    {
+        <p class="alert alert-danger" id="errorMessage">@TempData["Error"]</p>
+    }
+    @if (TempData["Success"] != null)
+    {
+        <p class="alert alert-success" id="successMessage">@TempData["Success"]</p>
+    }
+
+</div>
+
+<div class="wrapper wrapper-content">
+    <div class="container">
+
+
+        <label>The values are set by your office for inspection, discard, end to end and winch rotation settings. Where value = '0', it means the field is either not defined or infinite. </label>
+
+
+        <div id="tbl1"  class="table-responsive">
+            <table class="table">
+                <thead class=" text-primary">
+                    <tr>
+                        <th>Manufacturer Name</th>
+                        <th>Rope Type</th>
+                        <th>Max Running Hrs.</th>
+                        <th>Max Duration Allowed(months)</th>
+                        <th>Rating1</th>
+                        <th>Rating2</th>
+                        <th>Rating3</th>
+                        <th>Rating4</th>
+                        <th>Rating5</th>
+                        <th>Rating6</th>
+                        <th>Rating7</th>
+
+                    </tr>
+                </thead>
+                <tbody>
+
+                    @foreach (var item in Model.InsDisCriteriaList1)
+                    {
+
+
+                        <tr>
+
+                            <td> @Html.DisplayFor(modelItem => item.Name)</td>
+                            <td> @Html.DisplayFor(modelItem => item.RopeType)</td>
+                            <td> @Html.DisplayFor(modelItem => item.MaximumRunningHours)</td>
+                            <td> @Html.DisplayFor(modelItem => item.MaximumMonthsAllowed)</td>
+                            <td> @Html.DisplayFor(modelItem => item.Rating1)</td>
+                            <td> @Html.DisplayFor(modelItem => item.Rating2)</td>
+                            <td> @Html.DisplayFor(modelItem => item.Rating3)</td>
+                            <td> @Html.DisplayFor(modelItem => item.Rating4)</td>
+                            <td> @Html.DisplayFor(modelItem => item.Rating5)</td>
+                            <td> @Html.DisplayFor(modelItem => item.Rating6)</td>
+                            <td> @Html.DisplayFor(modelItem => item.Rating7)</td>
+
+
+
+
+                        </tr>
+                    }
+
+                </tbody>
+            </table>
+        </div>
+
+
+
+        <nav class="text-right">
+
+            <ul class="pagination">
+                @{
+
+
+                    int totalRecords = Convert.ToInt32(TempData.Peek("TotalRecords"));
+
+                    int tot_pages = totalRecords / Shipment49Web.Common.CommonMethods.PAGESIZE;
+                    int remainder = totalRecords % Shipment49Web.Common.CommonMethods.PAGESIZE;
+
+                    tot_pages = remainder > 0 ? (tot_pages + 1) : tot_pages;
+
+                    int currPage = Convert.ToInt32(TempData.Peek("CurrentPage"));
+
+                    if (totalRecords > 0)
+                    {
+                        if (currPage == 0)
+                        {
+                            currPage = 1;
+                        }
+
+                        if (currPage != 1)
+                        {
+                            <li class="page-item"><a class="page-link" href="@Url.Action("taildiscardsetting", "InspectDiscardCriteria" ,new { page = 1 })">First</a> </li>
+                        }
+
+                        if (currPage != tot_pages)
+                        {
+                            for (int cnt = currPage; cnt < (currPage + 10); cnt++)
+                            {
+                                if (cnt == currPage)
+                                {
+                                    <li class="page-item active"><a class="page-link" href="#">@cnt</a></li>
+                                }
+                                else
+                                {
+                                    <li class="page-item"><a class="page-link" href="@Url.Action("taildiscardsetting", "InspectDiscardCriteria" ,new { page = cnt })">@cnt.ToString()</a> </li>
+                                }
+
+                                if (cnt == tot_pages)
+                                {
+                                    break;
+                                }
+                            }
+                        }
+
+
+                        if (currPage == tot_pages)
+                        {
+                            <li class="page-item active"><a class="page-link" href="#">@tot_pages</a></li>
+                        }
+                        else
+                        {
+
+                            <li class="page-item"><a class="page-link" href="@Url.Action("taildiscardsetting", "InspectDiscardCriteria" ,new { page = tot_pages })">Last</a> </li>
+                        }
+                    }
+                }
+            </ul>
+
+        </nav>
+        @*<nav class="text-right">
+
+                <ul class="pagination">
+                    @{
+
+
+                        int totalRecords1 = Convert.ToInt32(TempData.Peek("TotalRecords1"));
+
+                        int tot_pages1 = totalRecords1 / Shipment49Web.Common.CommonMethods.PAGESIZE;
+                        int remainder1 = totalRecords1 % Shipment49Web.Common.CommonMethods.PAGESIZE;
+
+                        tot_pages1 = remainder1 > 0 ? (tot_pages1 + 1) : tot_pages1;
+
+                        int currPage1 = Convert.ToInt32(TempData.Peek("CurrentPage1"));
+
+                        if (totalRecords1 > 0)
+                        {
+                            if (currPage1 == 0)
+                            {
+                                currPage1 = 1;
+                            }
+
+                            if (currPage1 != 1)
+                            {
+                                <li class="page-item"><a class="page-link" href="@Url.Action("Index", "InspectDiscardCriteria" ,new { page = 1 })">First</a> </li>
+                            }
+
+                            if (currPage1 != tot_pages1)
+                            {
+                                for (int cnt = currPage1; cnt < (currPage1 + 10); cnt++)
+                                {
+                                    if (cnt == currPage1)
+                                    {
+                                        <li class="page-item active"><a class="page-link" href="#">@cnt</a></li>
+                                    }
+                                    else
+                                    {
+                                        <li class="page-item"><a class="page-link" href="@Url.Action("Index", "InspectDiscardCriteria" ,new { page = cnt })">@cnt.ToString()</a> </li>
+                                    }
+
+                                    if (cnt == tot_pages1)
+                                    {
+                                        break;
+                                    }
+                                }
+                            }
+
+
+                            if (currPage1 == tot_pages1)
+                            {
+                                <li class="page-item active"><a class="page-link" href="#">@tot_pages1</a></li>
+                            }
+                            else
+                            {
+
+                                <li class="page-item"><a class="page-link" href="@Url.Action("Index", "InspectDiscardCriteria" ,new { page = tot_pages1 })">Last</a> </li>
+                            }
+                        }
+                    }
+                </ul>
+
+            </nav>*@
+    </div>
+</div>
+<script>
+    $("#precrtID").show();
+    $("#precrtID1").show();
+    $("#precrtID2").show();
+    $("#precrtID3").show();
+</script>
+
+

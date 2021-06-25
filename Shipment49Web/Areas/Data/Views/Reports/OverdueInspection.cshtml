@@ -1,0 +1,387 @@
+﻿@*@model List<Reports.View_RopesOverdueInspection_Details>*@
+@model Shipment49Web.Common.RopeSummaryReport
+
+@{
+    ViewBag.Title = "Overdue Inspection";
+    Layout = "~/Views/Shared/_LeftSideBar.cshtml";
+}
+
+<div class="content-wrapper">
+    <section class="content-header">
+        <h1>
+            Inspection Status
+        </h1>
+    </section>
+
+    <section class="content">
+        <div class="box box-info">
+            <div class="box-body">
+                <input type="hidden" id="Currenttab" value="@TempData["Tabs"].ToString()" />
+                <div class="nav-tabs-custom">
+                    <ul id="tabmenu" class="nav nav-tabs">
+
+                        <li id="tab1" class="">
+                            <a href="#overdue" class="tablinks" data-toggle="tab">Overdue Inspection</a>
+                        </li>
+                        <li id="tab2" class="">
+                            <a href="#due" class="tablinks" data-toggle="tab">Due Inspection</a>
+                        </li>
+
+                    </ul>
+                    <div class="tab-content" style="min-height: 650px">
+                        <div class="" id="overdue">
+                            <div class="table-responsive table-striped">
+                                <table class="table no-margin" id="dataTable" width="100%" cellspacing="0">
+                                    <thead>
+                                        <tr>
+                                            <th>Vessel Name</th>
+                                            <th>Certificate Number</th>
+                                            <th>Rope Type</th>
+                                            <th>Manufacturer</th>
+                                            <th>Line / Rope-Tail</th>
+                                            <th>Installed Date</th>
+                                            <th>Last Inspection Date</th>
+                                            <th>Next Inspection Due Date</th>
+                                            <th>Details</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @{
+                                            foreach (var record in Model.OverdueInspectionList)
+                                            {
+                                                <tr>
+                                                    <td>@record.VesselName</td>
+                                                    <td>@record.CertificateNumber</td>
+                                                    <td>@record.RopeType</td>
+                                                    <td>@record.ManufacturerName</td>
+                                                    <td>
+                                                        @{
+                                                            if (record.RopeTail == 0)
+                                                            {
+                                                                @Html.Raw("Line")
+                                                            }
+                                                            else
+                                                            {
+                                                                @Html.Raw("Rope-Tail")
+                                                            }
+                                                        }
+                                                    </td>
+                                                    <td>
+                                                        @{
+                                                            DateTime? dt = record.InstalledDate;
+                                                            if (dt != null)
+                                                            {
+                                                                @Html.Raw(dt.Value.ToString("dd-MMM-yyyy"))
+                                                            }
+                                                        }
+                                                    </td>
+                                                    <td>
+                                                        @{
+                                                            DateTime? dt1 = record.LastInspectionDate;
+                                                            if (dt1 != null)
+                                                            {
+                                                                @Html.Raw(dt1.Value.ToString("dd-MMM-yyyy"))
+                                                            }
+                                                        }
+                                                    </td>
+                                                    <td>
+                                                        @{
+                                                            DateTime? dt2 = record.InspectionDueDate;
+                                                            if (dt2 != null)
+                                                            {
+                                                                @Html.Raw(dt2.Value.ToString("dd-MMM-yyyy"))
+                                                            }
+                                                        }
+                                                    </td>
+                                                    <td>
+                                                        <a href="~/Data/Reports/RopeSummary?rope=@record.RopeID&tail=@record.RopeTail&vessel=@record.VesselID" title="Rope Details" target="_blank">
+                                                            <i class="fa fa-list-ul"></i>
+                                                        </a>
+                                                    </td>
+                                                </tr>
+                                            }
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="text-center">
+                                <ul class="pagination">
+                                    @{
+                                        int totalRecords = Convert.ToInt32(TempData.Peek("TotalRecords_Overdue"));
+
+                                        int tot_pages = totalRecords / Shipment49Web.Common.CommonMethods.PAGESIZE;
+                                        int remainder = totalRecords % Shipment49Web.Common.CommonMethods.PAGESIZE;
+
+                                        tot_pages = remainder > 0 ? (tot_pages + 1) : tot_pages;
+
+                                        int currPage = Convert.ToInt32(TempData.Peek("CurrentPage_Overdue"));
+
+                                        if (totalRecords > 0)
+                                        {
+                                            if (currPage == 0)
+                                            {
+                                                currPage = 1;
+                                            }
+
+                                            if (currPage != 1)
+                                            {
+                                                <li>@Html.ActionLink("First", "OverdueInspection", "reports", new { o = 1, tab = "tab1" }, null)</li>
+                                            }
+
+                                            if (currPage != tot_pages)
+                                            {
+                                                for (int cnt = currPage; cnt < (currPage + 10); cnt++)
+                                                {
+                                                    if (cnt == currPage)
+                                                    {
+                                                        <li class="active"><a href="#">@cnt</a></li>
+                                                    }
+                                                    else
+                                                    {
+                                                        <li>@Html.ActionLink(cnt.ToString(), "OverdueInspection", "reports", new { o = cnt, tab = "tab1" }, null)</li>
+                                                    }
+
+                                                    if (cnt == tot_pages)
+                                                    {
+                                                        break;
+                                                    }
+                                                }
+                                            }
+                                            @*else
+                            {
+                                for (int cnt = (currPage - 10); cnt < currPage; cnt++)
+                                {
+                                    if (cnt == currPage)
+                                    {
+                                        <li class="active"><a href="#">@cnt</a></li>
+                                    }
+                                    else
+                                    {
+                                        <li>@Html.ActionLink(cnt.ToString(), "Index", "NotificationInfo", new { id = cnt }, null)</li>
+                                    }
+                                }
+                            }*@
+
+                                            if (currPage == tot_pages)
+                                            {
+                                                <li class="active"><a href="#">@tot_pages</a></li>
+                                            }
+                                            else
+                                            {
+                                                <li>@Html.ActionLink("Last", "OverdueInspection", "reports", new { o = tot_pages, tab = "tab1" }, null)</li>
+                                            }
+                                        }
+                                    }
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="" id="due">
+                            <div class="table-responsive table-striped">
+                                <table class="table no-margin" id="dataTable" width="100%" cellspacing="0">
+                                    <thead>
+                                        <tr>
+                                            <th>Vessel Name</th>
+                                            <th>Certificate Number</th>
+                                            <th>Rope Type</th>
+                                            <th>Manufacturer</th>
+                                            <th>Line / Rope-Tail</th>
+                                            <th>Installed Date</th>
+                                            <th>Last Inspection Date</th>
+                                            <th>Next Inspection Due Date</th>
+                                            <th>Details</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @{
+                                            foreach (var record in Model.PendingInspectionList)
+                                            {
+                                                <tr>
+                                                    <td>@record.VesselName</td>
+                                                    <td>@record.CertificateNumber</td>
+                                                    <td>@record.RopeType</td>
+                                                    <td>@record.ManufacturerName</td>
+                                                    <td>
+                                                        @{
+                                                            if (record.RopeTail == 0)
+                                                            {
+                                                                @Html.Raw("Line")
+                                                            }
+                                                            else
+                                                            {
+                                                                @Html.Raw("Rope-Tail")
+                                                            }
+                                                        }
+                                                    </td>
+                                                    <td>
+                                                        @{
+                                                            DateTime? dt = record.InstalledDate;
+                                                            if (dt != null)
+                                                            {
+                                                                @Html.Raw(dt.Value.ToString("dd-MMM-yyyy"))
+                                                            }
+                                                        }
+                                                    </td>
+                                                    <td>
+                                                        @{
+                                                            DateTime? dt1 = record.LastInspectionDate;
+                                                            if (dt1 != null)
+                                                            {
+                                                                @Html.Raw(dt1.Value.ToString("dd-MMM-yyyy"))
+                                                            }
+                                                        }
+                                                    </td>
+                                                    <td>
+                                                        @{
+                                                            DateTime? dt2 = record.InspectionDueDate;
+                                                            if (dt2 != null)
+                                                            {
+                                                                @Html.Raw(dt2.Value.ToString("dd-MMM-yyyy"))
+                                                            }
+                                                        }
+                                                    </td>
+                                                    <td>
+                                                        <a href="~/Data/Reports/RopeSummary?rope=@record.RopeID&tail=@record.RopeTail&vessel=@record.VesselID" title="Rope Details" target="_blank">
+                                                            <i class="fa fa-list-ul"></i>
+                                                        </a>
+                                                    </td>
+                                                </tr>
+                                            }
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="text-center">
+
+                                <ul class="pagination">
+                                    @{
+                                        int totalRecords2 = Convert.ToInt32(TempData.Peek("TotalRecords_Pending"));
+
+                                        int tot_pages2 = totalRecords2 / Shipment49Web.Common.CommonMethods.PAGESIZE;
+                                        int remainder2 = totalRecords2 % Shipment49Web.Common.CommonMethods.PAGESIZE;
+
+                                        tot_pages2 = remainder2 > 0 ? (tot_pages2 + 1) : tot_pages2;
+
+                                        int currPage2 = Convert.ToInt32(TempData.Peek("CurrentPage_Pending"));
+
+                                        if (totalRecords2 > 0)
+                                        {
+                                            if (currPage2 == 0)
+                                            {
+                                                currPage2 = 1;
+                                            }
+
+                                            if (currPage2 != 1)
+                                            {
+                                                <li>@Html.ActionLink("First", "OverdueInspection", "reports", new { p = 1, tab = "tab2" }, null)</li>
+                                            }
+
+                                            if (currPage2 != tot_pages2)
+                                            {
+                                                for (int cnt = currPage2; cnt < (currPage2 + 10); cnt++)
+                                                {
+                                                    if (cnt == currPage2)
+                                                    {
+                                                        <li class="active"><a href="#">@cnt</a></li>
+                                                    }
+                                                    else
+                                                    {
+                                                        <li>@Html.ActionLink(cnt.ToString(), "OverdueInspection", "reports", new { p = cnt, tab = "tab2" }, null)</li>
+                                                    }
+
+                                                    if (cnt == tot_pages2)
+                                                    {
+                                                        break;
+                                                    }
+                                                }
+                                            }
+                                            @*else
+                            {
+                                for (int cnt = (currPage - 10); cnt < currPage; cnt++)
+                                {
+                                    if (cnt == currPage)
+                                    {
+                                        <li class="active"><a href="#">@cnt</a></li>
+                                    }
+                                    else
+                                    {
+                                        <li>@Html.ActionLink(cnt.ToString(), "Index", "NotificationInfo", new { id = cnt }, null)</li>
+                                    }
+                                }
+                            }*@
+
+                                            if (currPage2 == tot_pages2)
+                                            {
+                                                <li class="active"><a href="#">@tot_pages2</a></li>
+                                            }
+                                            else
+                                            {
+                                                <li>@Html.ActionLink("Last", "OverdueInspection", "reports", new { p = tot_pages2, tab = "tab2" }, null)</li>
+                                            }
+                                        }
+                                    }
+                                </ul>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+<script>
+    window.onload = function () {
+        var current = $("#Currenttab").val();
+        //alert(stab);
+        $("#overdue").removeClass("tab-pane active");
+        $("#due").removeClass("tab-pane active");
+        //$("#overdue").removeClass("tab-pane");
+        //$("#due").removeClass("tab-pane");
+        //$("#tab1").addClass("active");
+        //$("#tab2").addClass("active");
+        
+     
+        
+        $("#tabmenu li").each(function () {
+
+            // alert($(this).attr("id"));
+
+
+
+            var selText = $(this).attr("id");///User selected value...****
+             //alert(selText);
+            //debugger;
+            if (selText == current) {
+                $(this).closest("li").addClass("active");
+                if (current == "tab1") {
+                    $("#overdue").removeClass("tab-pane");
+                    $("#overdue").addClass("tab-pane active");
+                    $("#due").addClass("tab-pane");
+                }
+                else {
+                    //$("#tab2").addClass("active");
+                    $("#due").removeClass("tab-pane");
+                    $("#due").addClass("tab-pane active");
+                    $("#overdue").addClass("tab-pane")
+                }
+            }
+            else {
+                $(this).removeClass("active");
+                if (current == "tab1") {
+                    $("#overdue").removeClass("tab-pane");
+                    $("#overdue").addClass("tab-pane active");
+                    $("#due").addClass("tab-pane");
+                }
+                else {
+                    //$("#tab2").addClass("active");
+                    $("#due").removeClass("tab-pane");
+                    $("#due").addClass("tab-pane active");
+                    $("#overdue").addClass("tab-pane")
+                }
+            }
+        })
+        
+    };
+</script>

@@ -1,0 +1,67 @@
+﻿@model VesselLayer.Vessel
+
+@{
+    ViewBag.Title = "Detail";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="page_title margin-3-bot">
+    <h2>Vessel Detail</h2>
+</div>
+<div class="white-bg margin-3 fleet">
+    <div class="row">
+        <div class="col-sm-2 form-group">
+            <b>@Html.DisplayNameFor(model => model.VesselID)</b>
+        </div>
+        <div class="col-sm-4 form-group">
+            @Html.DisplayFor(model => model.VesselID)
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-2 form-group">
+            <b>@Html.DisplayNameFor(model => model.VesselName)</b>
+        </div>
+        <div class="col-sm-4 form-group">
+            @Html.DisplayFor(model => model.VesselName)
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-2 form-group">
+            <b>@Html.DisplayNameFor(model => model.ImoNo)</b>
+        </div>
+        <div class="col-sm-4 form-group">
+            @Html.DisplayFor(model => model.ImoNo)
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-2 form-group">
+            <b> @Html.DisplayNameFor(model => model.Flag)</b>
+        </div>
+        <div class="col-sm-4 form-group">
+            @Html.DisplayFor(model => model.Flag)
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-2 form-group">
+            <b>@Html.DisplayNameFor(model => model.FleetName)</b>
+        </div>
+        <div class="col-sm-4 form-group">
+            @Html.DisplayFor(model => model.FleetName)
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-2 form-group">
+            <b>@Html.DisplayNameFor(model => model.FleetType)</b>
+        </div>
+        <div class="col-sm-4 form-group">
+            @Html.DisplayFor(model => model.FleetType)
+        </div>
+    </div>
+    <div class="row margin-3-top">
+        <div class="col-sm-1 form-group">
+            @Html.ActionLink("Edit", "Edit", new { id = Model.Id }, new { @class = "btn peach-btn btn-block" })
+        </div>
+        <div class="col-sm-2 back_text margin-1-top">
+            <i class="fa fa-chevron-left"></i>&nbsp; @Html.ActionLink("Back to List", "Index")
+        </div>
+    </div>
+</div>

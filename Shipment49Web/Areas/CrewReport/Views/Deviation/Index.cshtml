@@ -1,0 +1,96 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+@*<link href="~/Content/themes/jquery-ui.css" rel="stylesheet" />
+<script src="~/Scripts/jquery-1.12.4.js"></script>*@
+
+<script type="text/javascript">
+    $(function () {
+        $("#search").autocomplete({
+            source: '@Url.Action("AutoCompletecrew", "deviation", "CrewReport")',
+            minLength: 1
+        });
+    });
+
+</script>
+<script type="text/javascript">
+    $(function () {
+        $("#username").autocomplete({
+            source: '@Url.Action("AutoCompletecrew1", "deviation", "CrewReport")',
+            minLength: 1
+
+        });
+    });
+
+</script>
+<script type="text/javascript">
+    $(function () {
+
+        $("#search").autocomplete({
+            change: function (event, ui) {
+                var bla = $('#search').val();
+                $.ajax({
+                    type: 'Get',
+                    data: { id: bla },
+                    url: '@Url.Action("AutoCompletecrewbm", "deviation")'
+
+                    //success: function (result)
+                    //{
+                    //    alert('hi');
+                    //}
+                })
+
+            }
+        });
+    });
+
+
+</script>
+
+
+
+<div class="container">
+    <h2> Deviations</h2>
+    <nav class="navbar navbar-default">
+
+        <div class="container-fluid-right">
+
+            <div>
+                @using (Html.BeginForm("index", "deviation", FormMethod.Get, new { area = "CrewReport", @class = "navbar-form navbar-left" }))
+                {
+
+                    <div class="form-group">
+                        <input type="text" name="search" id="search" value="@ViewBag.vname" class="form-control" placeholder="vessel Name" />&ensp;
+                        <input type="text" name="username" id="username" value="@ViewBag.username" class="form-control" placeholder="Crew Name" />&ensp;
+                        @Html.DropDownList("datefrom", (SelectList)@ViewBag.month, new { @class = "form-control" })
+                        @Html.DropDownList("dateto", (SelectList)@ViewBag.year as IEnumerable<SelectListItem>, new { @class = "form-control" })
+
+                    </div>
+                    <button type="submit" value="Search" class="btn btn-success">Search</button>
+
+                }
+            </div>
+
+        </div>
+    </nav>
+
+   
+
+    @if (ViewBag.vname != "" && ViewBag.username != "")
+    {
+        @Html.Partial("_DeviationReportViewer")
+        <div id="message-listbm">
+            <font> @TempData["barmala"]</font>
+        </div>
+    }
+    else
+    {
+        <div id="message-listbm">
+            <font>@ViewBag.Messagegrid</font>
+        </div>
+    }
+
+</div>

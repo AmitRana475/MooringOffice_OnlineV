@@ -1,0 +1,80 @@
+﻿@*@model IEnumerable<UserLayer.UserClass>*@
+
+@using PagedList;
+@using PagedList.Mvc;
+@model IPagedList<UserLayer.UserClass>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>User Details</h2>
+<div class="panel-heading">
+    <p>
+        @Html.ActionLink("Create New", "create")
+    </p>
+</div>
+<div class="panel panel-default">
+    <table class="table table-hover">
+        <tr class="panel-heading">
+            <th>
+                @Html.DisplayNameFor(model => model.FirstOrDefault().FullName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FirstOrDefault().ContactNo)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FirstOrDefault().Designation)
+            </th>
+
+            
+            <th>
+                @Html.DisplayNameFor(model => model.FirstOrDefault().EmailId)
+            </th>
+            
+            <th>Action</th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            using (Html.BeginForm("delete", "userdetails", new { area = "setting", id = item.UserId }))
+            {
+            <tr>
+                @Html.HiddenFor(modelItem => item.UserId)
+                <td>
+                    @Html.DisplayFor(modelItem => item.FullName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ContactNo)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Designation)
+                </td>
+                
+                <td>
+                    @Html.DisplayFor(modelItem => item.EmailId)
+                </td>
+                
+
+                <td>
+                    @Ajax.ActionLink("View", "Detail", new { id = item.UserId },null) |
+                    @Ajax.ActionLink("Edit", "Edit", new { id = item.UserId },null) |
+                    <input style="background: #fff; border: -0px; font-weight: normal; margin: 0 0;"
+                           type="submit" value="Delete" onclick="return confirm('Are you sure you want to delete this permanently ? ');" />
+                </td>
+            </tr>
+            }
+        }
+
+    </table>
+
+    <div id="message-listbm">
+        <font>@ViewBag.Messagegrid</font>
+    </div>
+
+    <div style="margin-left: 2%">
+        @Html.PagedListPager(Model, page => Url.Action("index", new { page }), new PagedListRenderOptions() { Display = PagedListDisplayMode.IfNeeded, DisplayPageCountAndCurrentLocation = true })
+    </div>
+
+</div>

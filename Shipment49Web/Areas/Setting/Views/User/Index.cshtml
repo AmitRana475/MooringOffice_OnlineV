@@ -1,0 +1,95 @@
+﻿@model List<UserLayer.UserClass>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    var grid = new WebGrid(canPage: true, rowsPerPage: 10);
+    grid.Bind(source: Model, rowCount: ViewBag.TotalRows, autoSortAndPage: false);
+
+}
+
+@*<script src="~/Scripts/jquery-1.12.4.js"></script>*@
+
+@{
+    if (!string.IsNullOrWhiteSpace(grid.SortColumn))
+    {
+        <script type="text/javascript">
+            $(document).ready(function () {
+
+                $('#griduser > thead > tr > th > a[href*="sort=@grid.SortColumn"]').parent().append('@(grid.SortDirection == SortDirection.Ascending ? "▲" : "▼")');
+
+            });
+        </script>
+    }
+}
+
+
+
+<div class="container">
+    <h2> User Details</h2>
+
+    <nav class="navbar navbar-default">
+
+        <div class="container-fluid-right">
+            <div class="navbar-header">
+
+                <a href="/setting/user/create" class="navbar-brand">Create New</a>
+                @*@Ajax.ActionLink("Create New", "create", "user", new { area = "setting" , @class = "navbar-brand" },null)*@
+
+            </div>
+            <div class="collapse navbar-collapse">
+                @using (Html.BeginForm("index", "user", FormMethod.Get, new { area = "setting", @class = "navbar-form navbar-right" }))
+                {
+                    <div class="form-group">
+                        <input type="text" name="search" value="@ViewBag.search" class="form-control" placeholder="Name/Designation/Email" />
+                    </div>
+                    <button type="submit" value="Search" class="btn btn-success">Search</button>
+                    
+                }
+            </div>   
+        </div>
+        </nav>
+        
+    <div>
+
+        @grid.Table(
+       htmlAttributes: new
+       {
+           id = "griduser"
+       },
+              tableStyle: "table table-responsive table-borderd",
+              columns:
+              grid.Columns(
+
+                  grid.Column(columnName: "FullName", header: "Name"),
+                  grid.Column(columnName: "ContactNo", header: "Phone"),
+                  grid.Column(columnName: "Designation", header: "Designation"),
+                  grid.Column(columnName: "EmailId", header: "Email"),
+                  grid.Column("", style: "button", header: "Action",
+                          format:
+                        @<text >
+
+                        @Ajax.ActionLink("View", "Detail", new {  id = item.UserId },null) |
+                        @Ajax.ActionLink("Edit", "Edit", new {  id = item.UserId },null) |
+                        @Html.ActionLink("Delete", "delete", new { area = "setting", id = item.UserId }, new { onclick = "return confirm('Are you sure you want to delete this permanently ?');" })
+
+                        </text>)
+                  ))
+
+        <div class="row">
+            <div class="col-sm-6">
+                @grid.PagerList(mode: WebGridPagerModes.All, paginationStyle: "pagination pagination-small pagination-small")
+            </div>
+        </div>
+        @*@Html.Hidden("dir", grid.SortDirection)
+        @Html.Hidden("col", grid.SortColumn)*@
+
+    </div>
+
+    <div id="message-listbm">
+        <font>@ViewBag.Messagegrid</font>
+    </div>
+
+</div>
+

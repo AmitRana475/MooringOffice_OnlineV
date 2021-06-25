@@ -1,0 +1,486 @@
+﻿
+@model Reports.RopeCropping
+@{
+    /**/
+
+    ViewBag.Title = "addlinecropping";
+    Layout = "~/Views/Shared/_LayoutVessel7.cshtml";
+
+}
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.15/css/bootstrap-multiselect.css" type="text/css" />
+
+<style type="text/css">
+    .multiselect-container > li > a > label.checkbox {
+        width: 250px;
+    }
+
+    .dropdown-menu-custom-settings {
+        top: 0% !important;
+        left: 230px !important;
+        width: 100% !important;
+        background-color: #0f3976;
+    }
+</style>
+
+
+@using (Html.BeginForm("addlinecropping", "TailCropping"))
+{
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(e => e.Id)
+
+    <div id="page-wrapper" class="content">
+        <div class="page-heading page-header-flex">
+            <div>
+                <h1 class="page-title">
+                    Add RopeTail Cropping
+                </h1>
+                @*<ol class="breadcrumb">
+                        <li><a href="">Home</a></li>
+                        <li><a href="">Form</a></li>
+                        <li><a>Create</a></li>
+                    </ol>*@
+
+                @if (TempData["Error"] != null)
+                {
+                    <p class="alert alert-danger" id="errorMessage">@TempData["Error"]</p>
+                }
+                @if (TempData["Success"] != null)
+                {
+                    <p class="alert alert-success" id="successMessage">@TempData["Success"]</p>
+                }
+            </div>
+            <div class="form-actions">
+                <button name="Submit" type="submit" class="btn btn-success btn-width"><i class="uil uil-check mr-2"></i>Submit</button>
+                <button name="Reset" type="reset" id="btnReset" class="btn btn-danger btn-width"><i class="uil uil-redo mr-2"></i>Reset</button>
+                <a name="back" id="btnBack" onclick="goBack()" class="btn btn-primary btn-width"> << Go Back</a>
+            </div>
+        </div>
+
+        <div style="display:block" id="msgDiv">
+            <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+
+
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        </div>
+                        <div id="messageID" class="modal-body">
+                            ...
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div class="wrapper wrapper-content">
+            <div class="container">
+                <div class="form-body">
+                    <div class="row">
+                        <div class="col-md-8 mx-auto">
+                            <div class="row form-group ">
+                                <label class="col-sm-4 col-form-label">
+                                    <label class="control-label">Select RopeTail<sup>*</sup></label>
+                                </label>
+                                <div class="col-sm-8">
+
+                                    @Html.DropDownListFor(model => model.RopeId, new SelectList(Model.MooringLineLists, "Id", "CertificateNumber"), "", htmlAttributes: new { @class = "form-control select2", @required = "true", @onchange = "checkdata(this)", })
+                                    <div class="error"></div>
+                                </div>
+                            </div>
+                            @*<div class="row form-group ">
+                                    <label class="col-sm-4 col-form-label">
+                                        <label class="control-label">Outboard end in use</label>
+                                    </label>
+                                    <div class="col-sm-8">
+                                        A
+                                    </div>
+                                </div>
+
+
+                                <div class="row form-group ">
+                                    <label class="col-sm-4 col-form-label">
+                                        <label class="control-label">Line Winch assigned</label>
+                                    </label>
+                                    <div class="col-sm-8">
+                                        dgdg
+                                    </div>
+                                </div>
+                                <div class="row form-group">
+                                    <label class="col-sm-4 col-form-label">
+                                        <label class="control-label">Line Location Assigned</label>
+                                    </label>
+                                    <div class="col-sm-8">
+                                        sfdfsf
+                                    </div>
+                                </div>*@
+
+
+
+                            <div class="row form-group">
+                                <label class="col-sm-4 col-form-label">
+                                    <label class="control-label">Outboard end in use</label>
+                                </label>
+                                <div class="col-sm-8">
+                                    <label id="currentOutb" style="background-color:#ECECEC;border:none" class="form-control"></label>
+                                </div>
+                            </div>
+
+                            <div class="row form-group">
+                                <label class="col-sm-4 col-form-label">
+                                    <label class="control-label">RopeTail Winch assigned</label>
+                                </label>
+                                <div class="col-sm-8">
+                                    <label id="asswinch" style="background-color:#ECECEC;border:none" class="form-control"></label>
+                                </div>
+                            </div>
+                            <div class="row form-group">
+                                <label class="col-sm-4 col-form-label">
+                                    <label class="control-label">RopeTail Location Assigned</label>
+                                </label>
+                                <div class="col-sm-8">
+                                    <label id="location" style="background-color:#ECECEC;border:none" class="form-control"></label>
+                                </div>
+                            </div>
+
+
+                            <div class="row form-group">
+                                <label class="col-sm-4 col-form-label">
+                                    <label class="control-label">Cropped Date<sup>*</sup></label>
+                                </label>
+                                <div class="col-sm-8">
+                                    @Html.TextBoxFor(x => x.CroppedDate, "{0:yyyy-MM-dd}", new { @class = "form-control datepicker", @autocomplete = "Off", @required = "true", @onchange = "datecheck(this)", @placeholder = "yyyy-mm-dd" })
+                                    <div class="error"></div>
+                                </div>
+                            </div>
+                            <div class="row form-group ">
+                                <label class="col-sm-4 col-form-label">
+                                    <label class="control-label">Cropped Outboard End<sup>*</sup></label>
+                                </label>
+                                <div class="col-sm-8">
+                                    <div class="">
+                                        @Html.RadioButtonFor(model => model.CroppedOutboardEnd, "true", new { id = "A", @checked = true })
+                                        @Html.Label("A", "A")
+                                        &nbsp;
+                                        @Html.RadioButtonFor(model => model.CroppedOutboardEnd, "false", new { id = "B" })
+                                        @Html.Label("B", "B")
+                                    </div>
+                                    <div class="error"></div>
+                                </div>
+                            </div>
+                            <div class="row form-group">
+                                <label class="col-sm-4 col-form-label">
+                                    <label class="control-label">Total Already Cropped Lt.(mtrs)</label>
+                                </label>
+                                <div class="col-sm-8">
+                                    <label id="ttlcrpd" style="background-color:#ECECEC;border:none" class="form-control"></label>
+                                </div>
+                            </div>
+                            <div class="row form-group">
+                                <label class="col-sm-4 col-form-label">
+                                    <label class="control-label">Cropped RopeTail Lt.(mtrs)<sup>*</sup></label>
+                                </label>
+                                <div class="col-sm-8">
+                                    @Html.TextBoxFor(x => x.LengthofCroppedRope, new { @class = "form-control listbox", @maxlength = 6, @onkeypress = "return isNumberKey(event)", @onKeyUp = "requiredValue(this)", @required = "true", @onchange = "CrpLngthChk();" })
+                                    <span id="messageLnth"></span>
+                                </div>
+                            </div>
+                            <div class="row form-group ">
+                                <label class="col-sm-4 col-form-label">
+                                    <label class="control-label">Reason for Cropping<sup>*</sup></label>
+                                </label>
+                                <div class="col-sm-8">
+
+
+                                    @*@Html.DropDownListFor(model => model.ReasonofCropping, new SelectList(Model.ReasonofCroppings, "CroppingReason", "CroppingReason"), "", new { @class = "form-control select2", @required = "true" })*@
+
+                                    @Html.DropDownListFor(model => model.RsCropping, new SelectList(Model.ReasonofCroppings, "CroppingReason", "CroppingReason"), new { @class = "form-control multiple-reason", @multiple = "multiple", @required = "true" })
+
+
+                                    <div class="error"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+
+<script type="text/javascript">
+    function requiredValue(arg) {
+
+
+        debugger;
+        var id = arg.getAttribute('id');
+        var value = arg.value;
+
+        if (value > 999.99) {
+
+            var message = "";
+            if (id == "LengthofCroppedRope") {
+                message = document.getElementById('messageLnth');
+            }
+
+
+            var goodColor = "#0C6";
+            var badColor = "#FF0000";
+
+            message.style.color = badColor;
+            message.innerHTML = "Value can not greater then 999.99 !"
+            $("#" + id + "").val('');
+        }
+        else {
+            var message = "";
+            if (id == "LengthofCroppedRope") {
+                message = document.getElementById('messageLnth');
+            }
+
+            message.innerHTML = ""
+        }
+
+    }
+</script>
+
+
+<script>
+    $("#CroppedDate").keydown(function (e) {
+        e.preventDefault();
+    });
+</script>
+
+<script language=Javascript>
+      <!--
+    function isNumberKey(evt) {
+
+        var charCode = (evt.which) ? evt.which : event.keyCode
+        if (charCode != 46 && charCode > 31 && (charCode < 48 || charCode > 57))
+            return false;
+
+        return true;
+    }
+    //-->
+</script>
+
+<script>
+    function ropecropped(t) {
+        var Id = t.value;
+        if (Id == "No") {
+
+            $('#crpddiv').hide();
+        }
+        if (Id == "Yes") {
+            $('#crpddiv').show();
+        }
+    }
+</script>
+
+<script>
+    function datecheck(t) {
+        var dtvalue = t.value;
+        var RopeId = $("#RopeId").val();
+
+        //alert(Id);
+        $.ajax({
+            type: 'POST',
+            dataType: 'json',
+            url: '/TailCropping/Installdatecheck',
+            data: { 'dtvalue': dtvalue, 'RopeId': RopeId },
+            success: function (response) {
+                if (response.Result == true) {
+
+                    debugger;
+                    if (response.Message != "") {
+                        $("#CroppedDate").val(response.instdate);
+                        alert(response.Message);
+                    }
+                }
+                else {
+                    alert('An Error has occured. Please try again.');
+                }
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+
+                // alert('An Error has occured. Please try again.');
+            }
+        });
+
+    }
+</script>
+
+<script>
+
+    //function CrpLngthChk() {
+    //    debugger;
+    //    var ropeid = $('#RopeId').val();
+
+    $("#LengthofCroppedRope").keyup(function () {
+
+        var ropeid = $('#RopeId').val();
+        var crplength = $('#LengthofCroppedRope').val();
+        //alert(ropeid);
+
+        $("#msgDiv").hide();
+        var crpval = crplength;
+        $.ajax({
+            type: 'POST',
+            dataType: 'json',
+            url: '/TailCropping/CheckCroppingLength',
+            data: { 'crpval': crpval, 'RopeId': ropeid },
+            success: function (response) {
+                if (response.Result == true) {
+
+                    debugger;
+                    if (response.Message != "") {
+                        $("#msgDiv").show();
+                        $('#myModal').modal('show');
+                        var data = response.Message;
+                        $('#messageID').text(data);
+
+                        $('#LengthofCroppedRope').val('');
+
+                        // $("#btnSubmit").attr("disabled", true);
+                    }
+                    else {
+                        $("#msgDiv").hide();
+                        // $("#btnSubmit").attr("disabled", false);
+                    }
+                }
+                else {
+                    //alert('An Error has occured. Please try again.');
+                }
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                //toastr["error"]('An Error has occured. Please try again.');
+                // alert('An Error has occured. Please try again.');
+            }
+        });
+
+    });
+    //}
+
+</script>
+<script>
+    function checkdata(t) {
+        var Id = t.value;
+
+        $.ajax({
+            type: 'POST',
+            dataType: 'json',
+            url: '/TailCropping/GetWinchlocation',
+            data: { 'Id': Id },
+            success: function (response) {
+                if (response.Result == true) {
+
+                    debugger;
+                    $("#ttlcrpd").text(response.ttlcrpd);
+                    $("#location").text(response.location);
+                    $("#currentOutb").text(response.outboard);
+                    $("#asswinch").text(response.asswinch);
+                    $("#currentOutb1").text(response.outboard1);
+
+                    var loc = response.location;
+                    var asswi = response.asswinch;
+                    var crntOut = response.outboard;
+
+                    if (loc == null || loc == "") {
+                        $("#location").text("Not Assigned");
+                    }
+                    if (asswi == null || asswi == "") {
+                        $("#asswinch").text("Not Assigned");
+                    }
+                    if (crntOut == null || crntOut == "") {
+                        $("#currentOutb").text("Not Assigned");
+                    }
+                }
+                else {
+                    alert('An Error has occured. Please try again.');
+                }
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                //toastr["error"]('An Error has occured. Please try again.');
+                // alert('An Error has occured. Please try again.');
+            }
+        });
+
+    }
+</script>
+
+
+<script type="text/javascript">
+
+    setTimeout(function () {
+
+        $('#successMessage').fadeOut('fast');
+        $('#errorMessage').fadeOut('fast');
+    }, 3000);
+
+
+</script>
+
+@*<script>
+        $(document).ready(function () {
+            $("#CroppedDate").datepicker({
+                dateFormat: "yy-mm-dd",
+                //minDate: -0,
+                //maxDate: "+0M +0D"
+                maxDate: 0
+
+            });
+        });
+    </script>*@
+
+
+<script>
+    $('#btnReset').click(function () {
+        $("#RopeId").val(null).trigger("change");
+        $("#ReasonofCropping").val(null).trigger("change");
+        $("#ttlcrpd").text('');
+        $("#location").text('');
+        $("#currentOutb").text('');
+        $("#asswinch").text('');
+        $("#currentOutb1").text('');
+
+
+
+    });
+</script>
+
+<script type="text/javascript">
+    //$('.datepicker').datepicker();
+
+    $("#CroppedDate").datepicker({
+        endDate: 'today'
+    });
+
+
+
+</script>
+
+
+<script>
+    function goBack() {
+        window.history.back();
+    }
+</script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.15/js/bootstrap-multiselect.js"></script>
+<script>
+
+    $('#RsCropping').multiselect({
+        includeSelectAllOption: true,
+        enableCaseInsensitiveFiltering: true,
+        maxHeight: 350,
+        numberDisplayed: 1,
+        onSelectAll: function () {
+        }
+    });
+</script>
+
+
+
+

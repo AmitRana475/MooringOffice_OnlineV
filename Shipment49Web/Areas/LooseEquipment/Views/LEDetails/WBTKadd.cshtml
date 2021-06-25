@@ -1,0 +1,319 @@
+﻿
+@model Reports.WinchBreakTestKit
+@{
+    ViewBag.Title = "WBTKadd";
+    Layout = "~/Views/Shared/_LayoutVessel7.cshtml";
+}
+
+
+
+
+<script>
+
+    function compcheck() {
+
+        var dateFrom = document.getElementById("ReceivedDate").value;
+
+        var dateTo = document.getElementById("InstalledDate").value;
+
+        if (dateFrom > dateTo) {
+            alert("Installed date can not less than Received Date !");
+            document.getElementById("InstalledDate").value = dateFrom;
+        }
+
+        //$("#InstalledDate").val(dateTo)
+    };
+</script>
+
+
+<script>
+
+    window.onload = function () {
+
+        var isvalue = $("#IsRopeInstalled").val();
+
+        if (isvalue === 'Yes') {
+            eventTwo();
+            $("#secondRad").prop('checked', true);
+            $("#firstRad").prop('checked', false);
+
+        }
+        else {
+            eventOne();
+            $("#firstRad").prop('checked', true);
+            $("#secondRad").prop('checked', false);
+
+            // $('input:radio[id="firstRad"]').filter('[value="No"]').attr('checked', true);
+        }
+
+        var uid = document.getElementById("UniqueID").value;
+        if (uid === "") {
+            document.getElementById("UniqueID").readOnly = false;
+        }
+        else { document.getElementById("UniqueID").readOnly = true; }
+    };
+
+    function eventOne() {
+        $('#instdt').hide();
+        $("#IsRopeInstalled").val("No");
+        $("#InstalledDate").prop('required', false);
+    };
+    function eventTwo() {
+        $('#instdt').show();
+        $("#IsRopeInstalled").val("Yes");
+        $("#InstalledDate").prop('required', true);
+    };
+</script>
+
+
+
+<div class="content">
+    @using (Html.BeginForm("WBTKadd", "LEDetails"))
+    {
+        <div class="page-heading page-header-flex">
+            <div>
+                <h1 class="page-title">
+                    Loose Equipment Details / Add Winch Break Test Kit
+                </h1>
+                <ol class="breadcrumb">
+                    <li><a href="">Home</a></li>
+                    <li><a href="">Form</a></li>
+                    <li><a>Create</a></li>
+                </ol>
+            </div>
+            <div class="form-actions">
+                <button name="Submit" type="submit" class="btn btn-success btn-width"><i class="uil uil-check mr-2"></i>Submit</button>
+                <button name="Reset" type="reset" id="btnReset" class="btn btn-danger btn-width"><i class="uil uil-redo mr-2"></i>Reset</button>
+            </div>
+        </div>
+
+
+        <div class="wrapper wrapper-content">
+            <div class="container">
+                @if (TempData["Error"] != null)
+                {
+                    <p class="alert alert-danger" id="errorMessage">@TempData["Error"]</p>
+                }
+                @if (TempData["Success"] != null)
+                {
+                    <p class="alert alert-success" id="successMessage">@TempData["Success"]</p>
+                }
+                <div class="form-body">
+                    <div class="row">
+                        @Html.AntiForgeryToken()
+                        @Html.HiddenFor(e => e.Id)
+
+
+                        <div class="col-md-8 mx-auto">
+                            @*<div class="row form-group ">
+                                    <label class="col-sm-4 col-form-label">
+                                        <label class="control-label">Line Type<sup>*</sup></label>
+                                    </label>
+                                    <div class="col-sm-8">
+                                        @Html.DropDownListFor(model => model.RopeTypeId, new SelectList(Model.MooringRopeTypeLists, "Value", "Text"), htmlAttributes: new { @class = "form-control select2", @required = "true", })
+                                        @Html.ValidationMessageFor(model => model.RopeTypeId, "", new { @class = "text-danger" })
+                                        <div class="error"></div>
+                                    </div>
+                                </div>*@
+                            <div style="display:none">
+                                @Html.EditorFor(model => model.LooseETypeId, new { htmlAttributes = new { @class = "form-control", @required = "true", } })
+
+                            </div>
+
+                            <div class="row form-group">
+                                <label class="col-sm-4 col-form-label">
+                                    <label class="control-label">Unique Identification No.<sup>*</sup></label>
+                                </label>
+                                <div class="col-sm-8">
+                                    @Html.EditorFor(model => model.UniqueID, new { htmlAttributes = new { @class = "form-control", @required = "true", } })
+                                    @Html.ValidationMessageFor(model => model.UniqueID, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            <div class="row form-group">
+                                <label class="col-sm-4 col-form-label">
+                                    <label class="control-label">Certificate Number<sup>*</sup></label>
+                                </label>
+                                <div class="col-sm-8">
+                                    @Html.EditorFor(model => model.CertificateNumber, new { htmlAttributes = new { @class = "form-control", @required = "true", } })
+                                    @Html.ValidationMessageFor(model => model.CertificateNumber, "", new { @class = "text-danger" })
+                                    <div class="error"></div>
+                                </div>
+                            </div>
+
+
+                            <div class="row form-group">
+                                <label class="col-sm-4 col-form-label">
+                                    <label class="control-label">Manufacturer Name<sup>*</sup></label>
+                                </label>
+                                <div class="col-sm-8">
+                                    @Html.EditorFor(model => model.ManufacturerName, new { htmlAttributes = new { @class = "form-control", @required = "true", } })
+                                    @Html.ValidationMessageFor(model => model.ManufacturerName, "", new { @class = "text-danger" })
+                                    <div class="error"></div>
+                                </div>
+                            </div>
+                            <div class="row form-group">
+                                <label class="col-sm-4 col-form-label">
+                                    <label class="control-label">Received Date<sup>*</sup></label>
+                                </label>
+                                <div class="col-sm-8">
+                                    @*<input type="text" class="form-control datepicker" placeholder="dd-mm-yyyy">*@
+                                    @*@Html.EditorFor(model => model.ReceivedDate, "{0:dd-MMM-yyyy}", new { htmlAttributes = new { @class = "form-control dtpicker", @required = "true", } })*@
+
+
+                                    @Html.TextBoxFor(x => x.ReceivedDate, "{0:yyyy-MM-dd}", new { @autocomplete = "off", @class = "form-control datepicker", @placeholder = "yyyy-mm-dd", @required = "true" })
+
+                                    @*@Html.EditorFor(model => model.ReceivedDate, "{0:dd-MMM-yyyy}", new { htmlAttributes = new { @class = "form-control", @type = "date", @required = "true", } })*@
+
+                                    @Html.ValidationMessageFor(model => model.ReceivedDate, "", new { @class = "text-danger " })
+                                    <div class="error"></div>
+                                </div>
+                            </div>
+                            <div class="row form-group ">
+                                <label class="col-sm-4 col-form-label">
+                                    <label class="control-label">Is this Loose Eq. installed and in use? <sup>*</sup></label>
+                                </label>
+                                <div class="col-sm-8">
+                                    <label class="select_radio" onclick="eventOne()">
+                                        <input type="radio" id="firstRad" name="football_program" checked="checked"> <span class="label-text">No</span>
+
+
+                                    </label>
+                                    <label class="select_radio" onclick="eventTwo()">
+                                        <input type="radio" id="secondRad" name="football_program"> <span class="label-text">Yes</span>
+                                    </label>
+                                    <div class="error"></div>
+                                </div>
+                            </div>
+
+                            <div style="display:none;">
+                                @Html.TextBoxFor(m => m.IsRopeInstalled)
+                            </div>
+
+                            <div class="row form-group">
+                                <label class="col-sm-4 col-form-label">
+                                    <label class="control-label">Installed Date</label>
+                                </label>
+                                <div class="col-sm-8">
+                                    @*<input type="text" class="form-control datepicker" placeholder="dd-mm-yyyy">*@
+                                    @Html.TextBoxFor(x => x.InstalledDate, "{0:yyyy-MM-dd}", new { @autocomplete = "off", @class = "form-control datepicker", @placeholder = "yyyy-mm-dd", @onchange = "compcheck()", @required = "false" })
+
+                                    @Html.ValidationMessageFor(model => model.InstalledDate, "", new { @class = "text-danger " })
+                                    <div class="error"></div>
+                                </div>
+                            </div>
+                            <div class="row form-group">
+                                <label class="col-sm-4 col-form-label">
+                                    <label class="control-label">Remarks</label>
+                                </label>
+                                <div class="col-sm-8">
+                                    @Html.EditorFor(model => model.Remarks, new { htmlAttributes = new { @class = "form-control" } })
+                                    <div class="error"></div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+
+    }
+</div>
+
+<script>
+    $("#ReceivedDate").keydown(function (e) {
+        e.preventDefault();
+    });
+
+    $("#InstalledDate").keydown(function (e) {
+        e.preventDefault();
+    });
+</script>
+<script language=Javascript>
+      <!--
+    function isNumberKey(evt) {
+
+        var charCode = (evt.which) ? evt.which : event.keyCode
+        if (charCode != 46 && charCode > 31 && (charCode < 48 || charCode > 57))
+            return false;
+
+        return true;
+    }
+    //-->
+</script>
+
+<script type="text/javascript">
+    function requiredValue(arg) {
+
+        debugger;
+        var id = arg.getAttribute('id');
+        var value = arg.value;
+
+        if (value > 999) {
+
+            var message = "";
+            if (id == "DiaMeter") {
+                message = document.getElementById('messageDia');
+            }
+            if (id == "Length") {
+                message = document.getElementById('messageLnth');
+            } if (id == "MBL") {
+                message = document.getElementById('messageMbl');
+            } if (id == "LDBF") {
+                message = document.getElementById('messageLdbf');
+            }
+            if (id == "WLL") {
+                message = document.getElementById('messageWll');
+            }
+
+            var goodColor = "#0C6";
+            var badColor = "#FF0000";
+
+            message.style.color = badColor;
+            message.innerHTML = "Value not greater then 999.99 !"
+            $("#" + id + "").val('');
+        }
+        else {
+            var message = "";
+            if (id == "DiaMeter") {
+                message = document.getElementById('messageDia');
+            }
+            if (id == "Length") {
+                message = document.getElementById('messageLnth');
+            } if (id == "MBL") {
+                message = document.getElementById('messageMbl');
+            } if (id == "LDBF") {
+                message = document.getElementById('messageLdbf');
+            }
+            if (id == "WLL") {
+                message = document.getElementById('messageWll');
+            }
+            message.innerHTML = ""
+        }
+
+    }
+</script>
+
+<script type="text/javascript">
+
+    //setTimeout(function () {
+    //    debugger;
+    //    $("#successMessage").hide('blind', {}, 500)
+    //}, 5000);
+
+
+    setTimeout(function () {
+
+        $('#successMessage').fadeOut('fast');
+        $('#errorMessage').fadeOut('fast');
+    }, 3000);
+
+
+</script>
+<script type="text/javascript">
+    $('.datepicker').datepicker();
+</script>

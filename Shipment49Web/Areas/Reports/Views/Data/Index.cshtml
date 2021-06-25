@@ -1,0 +1,134 @@
+﻿@model Shipment49Web.Areas.CrewReport.Controllers.FilterModel
+
+@{
+    ViewBag.Title = "Reports";
+    Layout = "~/Views/Shared/_LeftSideBar.cshtml";
+}
+
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+@*<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>*@
+
+<script>
+    $(function () {
+        $('.dtpicker').datepicker({
+            autoclose: true
+        })
+    });
+</script>
+
+
+<div class="content-wrapper">
+    <section class="content-header">
+        <h1>
+            Inspection Status
+        </h1>
+    </section>
+
+    <section class="content">
+        <div class="box box-info">
+            <div class="box-body">
+                <div class="row">
+                    @using (Html.BeginForm("index", "data", FormMethod.Get, new { area = "Reports" }))
+                    {
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                @Html.DropDownListFor(m => m.FleetID, new SelectList((List<Reports.tblFleetName>)Model.FleetNames, "Fid", "FleetName"), "Fleet Name", htmlAttributes: new { @class = "form-control" })
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                @Html.DropDownListFor(m => m.FleetTypeID, new SelectList((List<Reports.tblFleetType>)Model.FleetTypes, "Tid", "FleetType"), "Fleet Type", htmlAttributes: new { @class = "form-control" })
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                @Html.DropDownListFor(m => m.VesselID, new SelectList((List<Reports.VesselDetail>)Model.Vessels, "Id", "VesselName"), "Vessel Name", htmlAttributes: new { @class = "form-control" })
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                @Html.DropDownListFor(m => m.TradeID, new SelectList((List<Reports.tblCommon>)Model.TradePlatforms, "Id", "Name"), "Trade", htmlAttributes: new { @class = "form-control" })
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                @Html.DropDownListFor(m => m.VesselID, new SelectList((List<Reports.VesselDetail>)Model.Vessels, "Id", "VesselName"), "Age Range", htmlAttributes: new { @class = "form-control" })
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                @Html.DropDownListFor(m => m.VesselID, new SelectList((List<Reports.VesselDetail>)Model.Vessels, "Id", "VesselName"), "Running Hours", htmlAttributes: new { @class = "form-control" })
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                @Html.TextBox("DateFrom", "", new { @class = "form-control dtpicker", @placeholder = "Date From" })
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                @Html.TextBox("DateTo", "", new { @class = "form-control dtpicker", @placeholder = "Date To" })
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <div style="float:right">
+                                    <button type="submit" class="btn btn-danger">Search</button>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="box box-default">
+                    <div class="box-body">
+                        <div class="table-responsive table-striped">
+                            <table class="table no-margin" id="dataTable" width="100%" cellspacing="0">
+                                <thead>
+                                    <tr>
+                                        <th>Vessel Name</th>
+                                        <th>Inspect By</th>
+                                        <th>Inspect Date</th>
+                                        <th>Loose Equipment Type</th>
+                                        <th>Number</th>
+                                        <th>Condition</th>
+                                        <th>Remarks</th>
+                                        <th>Import Date</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @{
+                                        foreach (var record in Model.ResultList)
+                                        {
+                                            <tr>
+                                                <td>@record.VesselName</td>
+                                                <td>@record.InspectBy</td>
+                                                <td>
+                                                    @{
+                                                        if (record.InspectDate.HasValue)
+                                                        {
+                                                            @record.InspectDate.Value.ToString("MMM-dd-yyyy");
+                                                        }
+                                                    }
+                                                </td>
+                                                <td>@record.LooseEquipmentType</td>
+                                                <td>@record.Number</td>
+                                                <td>@record.Condition</td>
+                                                <td>@record.Remarks</td>
+                                                <td>@record.ImportDate</td>
+                                            </tr>
+                                        }
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>

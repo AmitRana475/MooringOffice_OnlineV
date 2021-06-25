@@ -1,0 +1,412 @@
+﻿@model Shipment49Web.Areas.MooringOperation.Models.OperationListClass
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_LayoutVessel7.cshtml";
+}
+
+
+@*<script src="~/assetsV/select2/dist/js/select2.min.js" type='text/javascript'></script>
+    <link href="~/assetsV/select2/dist/css/select2.min.css" rel='stylesheet' type='text/css'>*@
+
+@*<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/datepicker/1.0.10/datepicker.min.css" integrity="sha512-YdYyWQf8AS4WSB0WWdc3FbQ3Ypdm0QCWD2k4hgfqbQbRCJBEgX0iAegkl2S1Evma5ImaVXLBeUkIlP6hQ1eYKQ==" crossorigin="anonymous" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/datepicker/1.0.10/datepicker.min.js" integrity="sha512-RCgrAvvoLpP7KVgTkTctrUdv7C6t7Un3p1iaoPr1++3pybCyCsCZZN7QEHMZTcJTmcJ7jzexTO+eFpHk4OCFAg==" crossorigin="anonymous"></script>*@
+
+
+@*<script>
+        $(document).ready(function () {
+            $("#PortName").select2();
+            $("#FacilityName").select2();
+            //$("#Years").select2("2021");
+        });
+    </script>*@
+
+<div class="content">
+
+    <div class="page-heading page-header-flex">
+        <div>
+            <h1 class="page-title">
+                Mooring Operation Records
+            </h1>
+            <ol class="breadcrumb">
+                <li><a href="">Home</a></li>
+                <li><a href="">Form</a></li>
+                <li><a>Create</a></li>
+            </ol>
+        </div>
+
+        <div>
+
+            @Html.ActionLink("Add Mooring Operation", "AddOperation", "Operation", new { }, new { @class = "btn btn-info" })
+            @*<a class="btn btn-info" href="mooring-op-add.php">
+                    <i class="fa fa-plus-circle mr-2"></i>Create Operation
+                </a>*@
+        </div>
+    </div>
+
+    <div class="wrapper wrapper-content">
+        <div class="container">
+            @if (TempData["Error"] != null)
+            {
+                <p class="alert alert-danger" id="errorMessage">@TempData["Error"]</p>
+            }
+            @if (TempData["Success"] != null)
+            {
+                <p class="alert alert-success" id="successMessage">@TempData["Success"]</p>
+            }
+            <div class="panel panel-default mb-6">
+                @using (Html.BeginForm("Index", "Operation"))
+                {
+                    <div class="panel-body">
+                        <div class="row row-xs">
+                            <div class="col-md-3 col-sm-6">
+                                <div class="form-group clearfix">
+                                    <label class="bmd-label-floating">Select Port Name</label>
+                                    @Html.DropDownListFor(model => model.PortName, Model.PortNameList, htmlAttributes: new { @class = "form-control select2", onchange = "GetFacility()" })
+
+                                </div>
+                            </div>
+                            <div class="col-md-3 col-sm-6">
+                                <div class="form-group clearfix">
+                                    <label class="bmd-label-floating">Select Facility Name</label>
+                                    @Html.DropDownListFor(model => model.FacilityName, Model.FacilityNameList, htmlAttributes: new { @class = "form-control select2" })
+
+                                </div>
+                            </div>
+                            <div class="col-md-3 col-sm-6">
+                                <div class="form-group clearfix">
+                                    <label class="bmd-label-floating">Date From (Fast)</label>
+										<!--<input data-toggle="datepicker">-->
+                                    @Html.TextBoxFor(x => x.DateFrom, "{0:yyyy-MM-dd}", new { @class = "form-control datepicker", @dateFormat= "yyyy-mm-dd", @readonly="true", @placeholder = "yyyy-mm-dd", @required = "true" })
+
+                                    @Html.ValidationMessageFor(model => model.DateFrom, "", new { @class = "text-danger " })
+
+                                </div>
+                            </div>
+                            <div class="col-md-3 col-sm-6">
+                                <div class="form-group clearfix">
+                                    <label class="bmd-label-floating">Date To (Fast)</label>
+
+                                    @Html.TextBoxFor(x => x.DateTo, "{0:yyyy-MM-dd}", new { @class = "form-control datepicker", @readonly = "true", @placeholder = "yyyy-mm-dd", @required = "true" })
+
+                                    @Html.ValidationMessageFor(model => model.DateTo, "", new { @class = "text-danger " })
+
+                                </div>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-info">Search</button>
+						<button type="submit" class="btn btn-danger">Reset</button>
+
+
+
+
+
+                        @*<div class="form-group clearfix">
+                            <button class="btn btn-primary pull-Right" type="submit" style="cursor:pointer">
+                                Search
+                            </button>
+                        </div>*@
+                    </div>
+                }
+            </div>
+
+        </div>
+        <div class="container-fluid">
+
+            <div class="table-responsive">
+                <table class="table table-child-highlight">
+                    <thead class=" text-primary">
+                        <tr>
+
+                            @*<th style="display:none">Id</th>*@
+                            <th>Port Name</th>
+                            <th>Facility Name</th>
+                            <th>All Fast</th>
+                            <th>Cast Off</th>
+                            <th>View Operation</th>
+                            <th>View Damage</th>
+                            <th width="100px">Action</th>
+
+
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                        @foreach (var item in Model.OperationList)
+                        {
+                            <tr>
+                                @*<td style="display:none"> @Html.DisplayFor(modelItem => item.Id)</td>*@
+                                <td> @Html.DisplayFor(modelItem => item.PortName)</td>
+                                <td> @Html.DisplayFor(modelItem => item.FacilityName)</td>
+                                <td>
+                                    @{
+                                        DateTime? FastDatetime = item.FastDatetime;
+                                        if (FastDatetime != null)
+                                        {
+                                            @Html.Raw(FastDatetime.Value.ToString("yyyy-MM-dd HH:mm"))
+                                        }
+                                    }
+                                   
+                                </td>
+                                <td>
+                                    @{
+                                        DateTime? CastDatetime = item.CastDatetime;
+                                        if (CastDatetime != null)
+                                        {
+                                            @Html.Raw(CastDatetime.Value.ToString("yyyy-MM-dd HH:mm"))
+                                        }
+                                    }
+                                    
+                                </td>
+                                <td width="160px">
+                                    <a href="~/MooringOperation/Operation/ViewOperation?OpId=@item.OPId" title="Mooring Operation Details" target="_blank">
+                                        <i class="uil uil-eye mr-2"></i>View Details
+                                    </a>
+                                </td>
+                                <td width="160px">
+                                    @*<button id="@item.OPId" title="View Operation Details" type="button" class="btn btn-link"
+                                            onclick="getOperations(@item.OPId,@item.VesselID)">
+                                        <i class="fa fa-list-ul"></i>
+                                    </button>*@
+
+                                    @{
+
+
+                                        if (item.Any_Rope_Damaged == "Yes")
+                                        {
+                                            <button id="@item.OPId" title="View Damage Ropes" type="button" class="btn btn-sm btn-light btn-view"
+                                                    onclick="getDamagesOP(@item.OPId,@item.VesselID)">
+                                                @*<i class="uil uil-eye mr-2"></i>View Damage Record*@
+                                                <i class="uil uil-eye mr-2"></i>View Damage Record
+                                            </button>
+
+
+                                        }
+                                        else
+                                        {
+                                            <a href="~/MooringOperation/Operation/AddDamage?OpId=@item.OPId" title="Mooring Operation Details" class="btn btn-sm btn-light btn-add" target="_blank">
+                                                <i class="uil uil-plus-circle mr-2"></i>Add Damage Record
+                                            </a>
+                                        }
+                                    }
+                                </td>
+
+                                <td width="100px">
+                                    @*@Html.ActionLink("Edit", "Edit", new { id = item.Id }) |*@
+                                   
+                                    <button type="button" class="btn btn-sm btn-light btn-delete">
+                                        <i class="uil uil-trash-alt mr-2"></i>
+                                        @Html.ActionLink("Delete", "Delete", new { OpId = item.OPId, VesselId = item.VesselID }, new {  @onclick = "return confirm('Are you sure you want to delete this?');" })
+
+                                    </button>
+
+                                </td>
+
+
+                            </tr>
+                        }
+
+                    </tbody>
+                </table>
+                <nav class="text-right">
+                    @*<ul class="pagination">
+                        <li class="disabled"><a href="#" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a></li>
+                        <li class="active"><a href="#">1 <span class="sr-only">(current)</span></a></li>
+                        <li><a href="#">2</a></li>
+                        <li><a href="#">3</a></li>
+                        <li><a href="#" aria-label="Next"><span aria-hidden="true">»</span></a></li>
+                    </ul>*@
+
+                    <ul class="pagination">
+                        @{
+                            int totalRecords = Convert.ToInt32(TempData.Peek("TotalRecords"));
+
+                            int tot_pages = totalRecords / Shipment49Web.Common.CommonMethods.PAGESIZE;
+                            int remainder = totalRecords % Shipment49Web.Common.CommonMethods.PAGESIZE;
+
+                            tot_pages = remainder > 0 ? (tot_pages + 1) : tot_pages;
+
+                            int currPage = Convert.ToInt32(TempData.Peek("CurrentPage"));
+
+                            for (int cnt = 1; cnt <= tot_pages; cnt++)
+                            {
+                                if (cnt == currPage)
+                                {
+                                    <li class="active"><a href="#">@cnt</a></li>
+                                }
+                                else
+                                {
+                                    <li>@Html.ActionLink(cnt.ToString(), "Index", "Operation", new { cp = cnt }, null)</li>
+                                }
+                            }
+                        }
+                    </ul>
+
+                </nav>
+            </div>
+        </div>
+    </div>
+
+
+</div>
+
+
+<div class="modal fade" id="DamageRopeModal" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Damage Line List</h4>
+            </div>
+            <div class="modal-body">
+                <a class="btn btn-info mb-4" id="AddDam" href="damage-line-add.php">
+                    <i class="fa fa-plus-circle mr-2"></i>Add Line Damage
+                </a>
+                <div class="table-responsive">
+                    <table class="table table-child-highlight">
+                        <thead>
+                            <tr>
+                                <th>Certificate No.</th>
+                                <th>Assigned Winch</th>
+                                <th>Location</th>
+                                <th>Incident Report</th>
+                                <th>Incident Action</th>
+                                <th width="100px">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="ropeData">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+
+    function getDamagesOP(x, y) {
+        var opid = x;
+        var imo = y;
+
+        $.ajax({
+            type: 'GET',
+            url: '/MooringOperation/Operation/ViewDamageRecords?opid=' + opid + '&imo=' + imo,
+            cache: false,
+            contentType: false,
+            processData: false,
+            success: function (response) {
+                if (response.Result === true) {
+                    $('#ropeData').empty();
+
+
+                    var tr;
+                    for (var i = 0; i < response.Data.length; i++) {
+                        tr = $('<tr/>');
+                        tr.append("<td>" + response.Data[i].CertificateNumber + "</td>");
+                        tr.append("<td>" + response.Data[i].AssignedNumber + "</td>");
+                        tr.append("<td>" + response.Data[i].Location + "</td>");
+                        tr.append("<td>" + response.Data[i].IncidentReport + "</td>");
+                        tr.append("<td>" + response.Data[i].IncidentActlion + "</td>");
+                        tr.append("<td><a href='/Operation/DeleteDamage?Id=" + response.Data[i].Id + "&amp;MOPId=" + response.Data[i].MOPId + "' onclick='return confirm(&#39; Are you sure you want to delete this?&#39;); '>Delete</a></td >");
+                        $('#ropeData').append(tr);
+                        document.getElementById("AddDam").setAttribute("href", "/MooringOperation/Operation/AddDamage?OpId=" + response.Data[i].MOPId);
+                    }
+                    $('#DamageRopeModal').modal('show');
+                }
+                else {
+                    toastr["error"](response.Message);
+                }
+            },
+            failure: function (response) {
+                toastr["error"](response.Message);
+            }
+        });
+    }
+
+</script>
+
+
+<script>
+    window.onload = function () {
+
+        var portName = $("#PortName option:selected").text();
+
+        $.ajax({
+            type: 'GET',
+            url: '/MooringOperation/Operation/BindFacilityName?PortName=' + portName,
+            cache: false,
+            contentType: false,
+            processData: false,
+            success: function (response) {
+                if (response.Result === true) {
+                    $('#FacilityName').empty();
+
+                    $('#FacilityName').append('<option value="">None Selected</option>');
+                    for (var i = 0; i < response.Data.length; i++) {
+                        $('#FacilityName').append('<option value="' + response.Data[i] + '">' + response.Data[i] + '</option>');
+
+                    }
+                    $('#FacilityName').append('<option value="">Other</option>');
+
+                }
+                else {
+                    toastr["error"](response.Message);
+                }
+            },
+            failure: function (response) {
+                toastr["error"](response.Message);
+            }
+        });
+    };
+
+    function GetFacility() {
+        // alert('hi');
+        var portName = $("#PortName option:selected").text();
+
+        if (portName == "") {
+            $('#FacilityName').empty();
+        }
+        $.ajax({
+            type: 'GET',
+            url: '/MooringOperation/Operation/BindFacilityName?PortName=' + portName,
+            cache: false,
+            contentType: false,
+            processData: false,
+            success: function (response) {
+                if (response.Result === true) {
+                    $('#FacilityName').empty();
+
+                    $('#FacilityName').append('<option value="">None Selected</option>');
+                    for (var i = 0; i < response.Data.length; i++) {
+                        $('#FacilityName').append('<option value="' + response.Data[i] + '">' + response.Data[i] + '</option>');
+
+                    }
+                    $('#FacilityName').append('<option value="">Other</option>');
+
+                }
+                else {
+                    toastr["error"](response.Message);
+                }
+            },
+            failure: function (response) {
+                toastr["error"](response.Message);
+            }
+        });
+    };
+
+</script>
+
+<script type="text/javascript">
+
+    setTimeout(function () {
+
+        $('#successMessage').fadeOut('fast');
+        $('#errorMessage').fadeOut('fast');
+    }, 6000);
+
+
+</script>
+<script type="text/javascript">
+$('.datepicker').datepicker();
+</script>
